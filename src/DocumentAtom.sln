@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35527.113
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentAtom.Core", "DocumentAtom.Core\DocumentAtom.Core.csproj", "{5BFFE4F6-28DF-4CE3-B8DB-374BDCA331D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentAtom.Text", "DocumentAtom.Text\DocumentAtom.Text.csproj", "{DC0CF25D-275F-4C5F-87DF-0E0F4499D2BE}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5BFFE4F6-28DF-4CE3-B8DB-374BDCA331D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5BFFE4F6-28DF-4CE3-B8DB-374BDCA331D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5BFFE4F6-28DF-4CE3-B8DB-374BDCA331D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5BFFE4F6-28DF-4CE3-B8DB-374BDCA331D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC0CF25D-275F-4C5F-87DF-0E0F4499D2BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC0CF25D-275F-4C5F-87DF-0E0F4499D2BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC0CF25D-275F-4C5F-87DF-0E0F4499D2BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC0CF25D-275F-4C5F-87DF-0E0F4499D2BE}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

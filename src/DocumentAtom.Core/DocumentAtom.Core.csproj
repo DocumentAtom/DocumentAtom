@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<PackageId>DocumentAtom</PackageId>
+		<Title>DocumentAtom</Title>
+		<Product>DocumentAtom</Product>
+		<Authors>Joel Christner</Authors>
+		<Copyright>(c)2024 Joel Christner</Copyright>
+		<ApplicationIcon>icon.ico</ApplicationIcon>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<DocumentationFile>DocumentAtom.Core.xml</DocumentationFile>
+		<Version>1.0.0</Version>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Content Include="icon.ico" />
+	</ItemGroup>
+
+</Project>
