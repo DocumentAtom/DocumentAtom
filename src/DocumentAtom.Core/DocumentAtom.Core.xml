@@ -1,0 +1,861 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DocumentAtom.Core</name>
+    </assembly>
+    <members>
+        <member name="T:DocumentAtom.Core.Atoms.AtomBase`1">
+            <summary>
+            An atom is a small, self-contained unit of content from a document.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.AtomBase`1.GUID">
+            <summary>
+            GUID.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.AtomBase`1.Type">
+            <summary>
+            The type of the content for this atom.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.AtomBase`1.PageNumber">
+            <summary>
+            Page number.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.AtomBase`1.Position">
+            <summary>
+            The ordinal position of the atom.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.AtomBase`1.Length">
+            <summary>
+            The length of the atom content.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.AtomBase`1.MD5Hash">
+            <summary>
+            MD5 hash of the content.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.AtomBase`1.SHA1Hash">
+            <summary>
+            SHA1 hash of the content.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.AtomBase`1.SHA256Hash">
+            <summary>
+            SHA256 hash of the content.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.AtomBase`1.Quarks">
+            <summary>
+            A quark is a subset of the content from an atom, used when intentionally breaking content into smaller chunks.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.AtomBase`1.#ctor">
+            <summary>
+            An atom is a small, self-contained unit of content from a document.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.AtomBase`1.RemoveBinaryData(System.String)">
+            <summary>
+            Remove binary data from a string.
+            </summary>
+            <param name="input">String.</param>
+            <returns>String.</returns>
+        </member>
+        <member name="T:DocumentAtom.Core.Atoms.BinaryAtom">
+            <summary>
+            A binary atom is a self-contained unit of binary content from a document.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.BinaryAtom.Bytes">
+            <summary>
+            Binary content.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.BinaryAtom.#ctor">
+            <summary>
+            A binary atom is a self-contained unit of binary content from a document.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Core.Atoms.DocxAtom">
+            <summary>
+            A docx atom is a self-contained unit of information from a Microsoft Word .docx document.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.DocxAtom.Text">
+            <summary>
+            Text content.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.DocxAtom.HeaderLevel">
+            <summary>
+            Header level, that is, the number of hash marks found at the beginning of the text.
+            Minimum value is 1.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.DocxAtom.UnorderedList">
+            <summary>
+            Unordered list elements.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.DocxAtom.OrderedList">
+            <summary>
+            Ordered list elements.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.DocxAtom.Table">
+            <summary>
+            Data table.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.DocxAtom.Binary">
+            <summary>
+            Binary data.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.DocxAtom.#ctor">
+            <summary>
+            A docx atom is a self-contained unit of information from a Microsoft Word .docx document.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.DocxAtom.IsUnorderedListItem(System.String)">
+            <summary>
+            Determine if a text item is part of an unordered list.
+            </summary>
+            <param name="text">Text.</param>
+            <returns>True if the text represents an unordered list.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.DocxAtom.IsOrderedListItem(System.String)">
+            <summary>
+            Determine if a text item is part of an ordered list.
+            </summary>
+            <param name="text">Text.</param>
+            <returns>True if the text represents an ordered list.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.DocxAtom.IsTableItem(System.String)">
+            <summary>
+            Determine if a text item is part of a table.
+            </summary>
+            <param name="text">Text.</param>
+            <returns>True if item is part of a table.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.DocxAtom.TextToDataTable(System.String)">
+            <summary>
+            Convert a markdown table to a DataTable.
+            </summary>
+            <param name="text">Markdown table.</param>
+            <returns>DataTable.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.DocxAtom.TextToList(System.String)">
+            <summary>
+            Convert a markdown list to a list of strings.
+            </summary>
+            <param name="text">Text.</param>
+            <returns>List of strings.</returns>
+        </member>
+        <member name="T:DocumentAtom.Core.Atoms.ListAtom">
+            <summary>
+            A list atom is an atom that contains a list of some type, such as a bulleted or numbered list.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.ListAtom.#ctor">
+            <summary>
+            A list atom is an atom that contains a list of some type, such as a bulleted or numbered list.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Core.Atoms.MarkdownAtom">
+            <summary>
+            A markdown atom is a self-contained unit of information from a markdown document.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.MarkdownAtom.Formatting">
+            <summary>
+            Markdown formatting type for this atom.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.MarkdownAtom.Text">
+            <summary>
+            Text content.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.MarkdownAtom.HeaderLevel">
+            <summary>
+            Header level, that is, the number of hash marks found at the beginning of the text.
+            Minimum value is 1.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.MarkdownAtom.UnorderedList">
+            <summary>
+            Unordered list elements.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.MarkdownAtom.OrderedList">
+            <summary>
+            Ordered list elements.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.MarkdownAtom.Table">
+            <summary>
+            Data table.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.MarkdownAtom.#ctor">
+            <summary>
+            A markdown atom is a self-contained unit of information from a markdown document.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.MarkdownAtom.FromContent(System.String,System.Int32,DocumentAtom.Core.ChunkingSettings)">
+            <summary>
+            Produce an atom with quarks, if chunking is enabled.
+            </summary>
+            <param name="text">Text content.</param>
+            <param name="position">Atom position.</param>
+            <param name="settings">Chunking settings.</param>
+            <returns>Markdown atom.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.MarkdownAtom.IsUnorderedListItem(System.String)">
+            <summary>
+            Determine if a text item is part of an unordered list.
+            </summary>
+            <param name="text">Text.</param>
+            <returns>True if the text represents an unordered list.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.MarkdownAtom.IsOrderedListItem(System.String)">
+            <summary>
+            Determine if a text item is part of an ordered list.
+            </summary>
+            <param name="text">Text.</param>
+            <returns>True if the text represents an ordered list.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.MarkdownAtom.IsTableItem(System.String)">
+            <summary>
+            Determine if a text item is part of a table.
+            </summary>
+            <param name="text">Text.</param>
+            <returns>True if item is part of a table.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.MarkdownAtom.TextToDataTable(System.String)">
+            <summary>
+            Convert a markdown table to a DataTable.
+            </summary>
+            <param name="text">Markdown table.</param>
+            <returns>DataTable.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.MarkdownAtom.TextToList(System.String)">
+            <summary>
+            Convert a markdown list to a list of strings.
+            </summary>
+            <param name="text">Text.</param>
+            <returns>List of strings.</returns>
+        </member>
+        <member name="T:DocumentAtom.Core.Atoms.TableAtom">
+            <summary>
+            A table atom is an atom that contains a table with rows, columns, headers, and values.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.TableAtom.Rows">
+            <summary>
+            The number of rows.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.TableAtom.Columns">
+            <summary>
+            The number of columns.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.TableAtom.Irregular">
+            <summary>
+            Boolean indicating if the geometry of the table is irregular.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.TableAtom.Table">
+            <summary>
+            Data table.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.TableAtom.#ctor">
+            <summary>
+            A table atom is an atom that contains a table with rows, columns, headers, and values.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Core.Atoms.TextAtom">
+            <summary>
+            A text atom is a self-contained unit of text from a document.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.TextAtom.Text">
+            <summary>
+            Text content.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.TextAtom.#ctor">
+            <summary>
+            A text atom is a self-contained unit of text from a document.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.TextAtom.FromContent(System.String,System.Int32,DocumentAtom.Core.ChunkingSettings)">
+            <summary>
+            Produce an atom with quarks, if chunking is enabled.
+            </summary>
+            <param name="text">Text content.</param>
+            <param name="position">Atom position.</param>
+            <param name="settings">Chunking settings.</param>
+            <returns>Text atom.</returns>
+        </member>
+        <member name="T:DocumentAtom.Core.Atoms.XlsxAtom">
+            <summary>
+            An xlsx atom is a self-contained unit of information from a Microsoft Excel .xlsx workbook.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.XlsxAtom.SheetName">
+            <summary>
+            Sheet name, if any.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.XlsxAtom.CellIdentifier">
+            <summary>
+            Cell identifier.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.XlsxAtom.Text">
+            <summary>
+            Text content.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.XlsxAtom.Table">
+            <summary>
+            Data table.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.XlsxAtom.Binary">
+            <summary>
+            Binary data.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.XlsxAtom.#ctor">
+            <summary>
+            A docx atom is a self-contained unit of information from a Microsoft Word .docx document.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.XlsxAtom.IsUnorderedListItem(System.String)">
+            <summary>
+            Determine if a text item is part of an unordered list.
+            </summary>
+            <param name="text">Text.</param>
+            <returns>True if the text represents an unordered list.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.XlsxAtom.IsOrderedListItem(System.String)">
+            <summary>
+            Determine if a text item is part of an ordered list.
+            </summary>
+            <param name="text">Text.</param>
+            <returns>True if the text represents an ordered list.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.XlsxAtom.IsTableItem(System.String)">
+            <summary>
+            Determine if a text item is part of a table.
+            </summary>
+            <param name="text">Text.</param>
+            <returns>True if item is part of a table.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.XlsxAtom.TextToDataTable(System.String)">
+            <summary>
+            Convert a markdown table to a DataTable.
+            </summary>
+            <param name="text">Markdown table.</param>
+            <returns>DataTable.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.XlsxAtom.TextToList(System.String)">
+            <summary>
+            Convert a markdown list to a list of strings.
+            </summary>
+            <param name="text">Text.</param>
+            <returns>List of strings.</returns>
+        </member>
+        <member name="T:DocumentAtom.Core.ChunkingSettings">
+            <summary>
+            Chunking settings, that is, breaking atoms into quarks.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.ChunkingSettings.Enable">
+            <summary>
+            Enable or disable chunking, that is, breaking atoms into quarks.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.ChunkingSettings.MaximumLength">
+            <summary>
+            Maximum quark content length.  Minimum is 256 and maximum is 16384.  Default is 512.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.ChunkingSettings.ShiftSize">
+            <summary>
+            Shift size, used to determine overlap amongst neighboring quarks.
+            When set to the same value as the maximum quark content length, no overlap will exist amongst neighboring quarks.
+            When set to a smaller amount than the maximum quark content length, overlap will exist amongst neighboring quarks.
+            This value must be equal to or less than the maximum quark content length.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.ChunkingSettings.#ctor">
+            <summary>
+            Chunking settings, that is, breaking atoms into quarks.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Core.Enums.AtomTypeEnum">
+            <summary>
+            Atom type.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.AtomTypeEnum.Text">
+            <summary>
+            Text.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.AtomTypeEnum.Image">
+            <summary>
+            Image.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.AtomTypeEnum.Binary">
+            <summary>
+            Binary.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.AtomTypeEnum.Table">
+            <summary>
+            Table.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.AtomTypeEnum.List">
+            <summary>
+            List.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Core.Enums.MarkdownFormattingEnum">
+            <summary>
+            Markdown formatting type.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.MarkdownFormattingEnum.Text">
+            <summary>
+            Text.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.MarkdownFormattingEnum.Header">
+            <summary>
+            Header.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.MarkdownFormattingEnum.Code">
+            <summary>
+            Code.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.MarkdownFormattingEnum.UnorderedList">
+            <summary>
+            Unordered list.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.MarkdownFormattingEnum.OrderedList">
+            <summary>
+            Ordered list.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.MarkdownFormattingEnum.Link">
+            <summary>
+            Link.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.MarkdownFormattingEnum.Image">
+            <summary>
+            Image.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.MarkdownFormattingEnum.Url">
+            <summary>
+            URL.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.MarkdownFormattingEnum.Table">
+            <summary>
+            Table.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Core.Enums.MarkdownTableLineTypeEnum">
+            <summary>
+            Markdown table line type.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.MarkdownTableLineTypeEnum.Separator">
+            <summary>
+            A separator line (contains hyphens and optional colons)
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.MarkdownTableLineTypeEnum.Content">
+            <summary>
+            A content line (header or data)
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Core.Enums.SeverityEnum">
+            <summary>
+            Message severity.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.SeverityEnum.Debug">
+            <summary>
+            Debug messages.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.SeverityEnum.Info">
+            <summary>
+            Informational messages.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.SeverityEnum.Warn">
+            <summary>
+            Warning messages.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.SeverityEnum.Error">
+            <summary>
+            Error messages.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.SeverityEnum.Alert">
+            <summary>
+            Alert messages.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.SeverityEnum.Critical">
+            <summary>
+            Critical messages.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.SeverityEnum.Emergency">
+            <summary>
+            Emergency messages.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Core.Helpers.DataTableHelper">
+            <summary>
+            DataTable helpers.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Helpers.DataTableHelper.GetLength(System.Data.DataTable)">
+            <summary>
+            Calculate DataTable length.
+            This calculation adds the length of column names and row values.
+            </summary>
+            <param name="dt">DataTable.</param>
+            <returns>Length.</returns>
+        </member>
+        <member name="T:DocumentAtom.Core.Helpers.FileHelper">
+            <summary>
+            File helpers.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Helpers.FileHelper.RecursiveDelete(System.IO.DirectoryInfo,System.Boolean)">
+            <summary>
+            Recursively delete a directory.
+            </summary>
+            <param name="baseDir">Base directory.</param>
+            <param name="isRootDir">True to indicate the supplied directory is the root directory.</param>
+        </member>
+        <member name="T:DocumentAtom.Core.Helpers.HashHelper">
+            <summary>
+            Cryptographic hash helper.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Helpers.HashHelper.MD5Hash(System.Byte[])">
+            <summary>
+            Generate an MD5 hash.
+            </summary>
+            <param name="data">Data.</param>
+            <returns>MD5 hash.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Helpers.HashHelper.MD5Hash(System.IO.Stream)">
+            <summary>
+            Generate an MD5 hash.
+            </summary>
+            <param name="stream">Stream.</param>
+            <returns>MD5 hash.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Helpers.HashHelper.MD5Hash(System.String)">
+            <summary>
+            Generate an MD5 hash of a string.
+            </summary>
+            <param name="str">String.</param>
+            <returns>MD5 hash.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Helpers.HashHelper.MD5Hash(System.Collections.Generic.List{System.String})">
+            <summary>
+            Generate an MD5 hash of a list of strings.
+            </summary>
+            <param name="strings">Strings.</param>
+            <returns>MD5 hash.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Helpers.HashHelper.MD5Hash(System.Data.DataTable)">
+            <summary>
+            Generate an MD5 hash of a DataTable.
+            This method concatenates column names (separated by a null character) and all cell values (separated by a null character).  Any null cells have their value replaced with the string NULL.
+            </summary>
+            <param name="dt">DataTable. </param>
+            <returns>MD5 hash.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Helpers.HashHelper.SHA1Hash(System.Byte[])">
+            <summary>
+            Generate a SHA1 hash of a byte array.
+            </summary>
+            <param name="data">Data.</param>
+            <returns>SHA1 hash.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Helpers.HashHelper.SHA1Hash(System.IO.Stream)">
+            <summary>
+            Generate a SHA1 hash.
+            </summary>
+            <param name="stream">Stream.</param>
+            <returns>MD5 hash.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Helpers.HashHelper.SHA1Hash(System.String)">
+            <summary>
+            Generate a SHA1 hash of a string.
+            </summary>
+            <param name="str">String.</param>
+            <returns>SHA1 hash.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Helpers.HashHelper.SHA1Hash(System.Collections.Generic.List{System.String})">
+            <summary>
+            Generate a SHA1 hash of a list of strings.
+            </summary>
+            <param name="strings">Strings.</param>
+            <returns>SHA1 hash.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Helpers.HashHelper.SHA1Hash(System.Data.DataTable)">
+            <summary>
+            Generate a SHA1 hash of a DataTable.
+            This method concatenates column names (separated by a null character) and all cell values (separated by a null character).  Any null cells have their value replaced with the string NULL.
+            </summary>
+            <param name="dt">DataTable. </param>
+            <returns>SHA1 hash.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Helpers.HashHelper.SHA256Hash(System.Byte[])">
+            <summary>
+            Generate a SHA256 hash of a byte array.
+            </summary>
+            <param name="data">Data.</param>
+            <returns>SHA256 hash.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Helpers.HashHelper.SHA256Hash(System.IO.Stream)">
+            <summary>
+            Generate a SHA256 hash.
+            </summary>
+            <param name="stream">Stream.</param>
+            <returns>SHA256 hash.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Helpers.HashHelper.SHA256Hash(System.String)">
+            <summary>
+            Generate a SHA256 hash of a string.
+            </summary>
+            <param name="str">String.</param>
+            <returns>SHA256 hash.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Helpers.HashHelper.SHA256Hash(System.Collections.Generic.List{System.String})">
+            <summary>
+            Generate a SHA256 hash of a list of strings.
+            </summary>
+            <param name="strings">Strings.</param>
+            <returns>SHA256 hash.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Helpers.HashHelper.SHA256Hash(System.Data.DataTable)">
+            <summary>
+            Generate a SHA256 hash of a DataTable.
+            This method concatenates column names (separated by a null character) and all cell values (separated by a null character).  Any null cells have their value replaced with the string NULL.
+            </summary>
+            <param name="dt">DataTable. </param>
+            <returns>SHA256 hash.</returns>
+        </member>
+        <member name="T:DocumentAtom.Core.Helpers.OfficeFileHelper">
+            <summary>
+            Office file helper.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Helpers.OfficeFileHelper.GetRelationships(System.String)">
+            <summary>
+            Get relationships from relationships file.
+            </summary>
+            <param name="filename">Filename.</param>
+            <returns>Relationships.</returns>
+        </member>
+        <member name="T:DocumentAtom.Core.StringHelper">
+            <summary>
+            String helpers.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.StringHelper.RemoveBinaryData(System.String)">
+            <summary>
+            Remove binary data from a string.
+            </summary>
+            <param name="input">String.</param>
+            <returns>String.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.StringHelper.GetSubstringsFromString(System.String,System.Int32,System.Int32)">
+            <summary>
+            Extract substrings from a given string.
+            </summary>
+            <param name="str">String.</param>
+            <param name="maximumLength">Maximum length.</param>
+            <param name="shiftSize">Shift size.</param>
+            <returns>Substrings.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.StringHelper.GetFullWordsFromRange(System.String,System.Int32,System.Int32)">
+            <summary>
+            Retrieve full words from within a range within a supplied string.
+            </summary>
+            <param name="str">String.</param>
+            <param name="start">Start position.</param>
+            <param name="end">End position.</param>
+            <returns>String.</returns>
+        </member>
+        <member name="T:DocumentAtom.Core.Office.Relationship">
+            <summary>
+            Relationship.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Office.Relationship.Id">
+            <summary>
+            ID.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Office.Relationship.Type">
+            <summary>
+            Type.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Office.Relationship.Target">
+            <summary>
+            Target.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Office.Relationship.TargetMode">
+            <summary>
+            Target mode.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Office.Relationship.#ctor">
+            <summary>
+            Relationship.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Core.Office.Relationships">
+            <summary>
+            Office document relationships.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Office.Relationships.Items">
+            <summary>
+            Items.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Office.Relationships.#ctor">
+            <summary>
+            Office document relationships.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Office.Relationships.ToDictionary(DocumentAtom.Core.Office.Relationships)">
+            <summary>
+            Convert to a dictionary.
+            </summary>
+            <param name="relationships">Relationships.</param>
+            <returns>Dictionary. </returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Office.Relationships.ToDictionary">
+            <summary>
+            Convert to a dictionary.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:DocumentAtom.Core.ProcessorBase">
+            <summary>
+            Processor base class.  Do not use directly.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.ProcessorBase.Settings">
+            <summary>
+            Settings.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.ProcessorBase.Logger">
+            <summary>
+            Logger method.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.ProcessorBase.Header">
+            <summary>
+            Header to prepend to log messages.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.ProcessorBase.Serializer">
+            <summary>
+            Serializer.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.ProcessorBase.#ctor">
+            <summary>
+            Processor base class.  Do not use directly.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.ProcessorBase.Log(DocumentAtom.Core.Enums.SeverityEnum,System.String)">
+            <summary>
+            Emit a log message.
+            </summary>
+            <param name="sev">Severity.</param>
+            <param name="msg">Message.</param>
+        </member>
+        <member name="T:DocumentAtom.Core.ProcessorSettingsBase">
+            <summary>
+            Processor settings base class.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.ProcessorSettingsBase.TrimText">
+            <summary>
+            True to trim any text output.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.ProcessorSettingsBase.RemoveBinaryFromText">
+            <summary>
+            True to remove binary data from input text data.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.ProcessorSettingsBase.TempDirectoryInfo">
+            <summary>
+            Directory information for the temporary directory.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.ProcessorSettingsBase.TempDirectory">
+            <summary>
+            Temporary directory.  Default is ./temp/.
+            This directory will be created automatically.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.ProcessorSettingsBase.StreamBufferSize">
+            <summary>
+            Buffer size to use when reading to or writing from streams.
+            Default is 8192 bytes.
+            Value must be greater than zero.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.ProcessorSettingsBase.Chunking">
+            <summary>
+            Chunking settings, that is, breaking atoms into smaller, more manageable quarks.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.ProcessorSettingsBase.#ctor">
+            <summary>
+            Processor settings base class.
+            </summary>
+        </member>
+    </members>
+</doc>

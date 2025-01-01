@@ -23,3 +23,6 @@ Please feel free to start an issue or a discussion!
 
 Please refer to ```CHANGELOG.md``` for version history.
 
+## Thanks
+
+Special thanks to iconduck.com and the content authors for producing this [icon](https://iconduck.com/icons/27054/atom).

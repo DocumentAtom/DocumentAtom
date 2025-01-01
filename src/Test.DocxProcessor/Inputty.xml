@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GetSomeInput</name>
+    </assembly>
+    <members>
+        <member name="T:GetSomeInput.Inputty">
+            <summary>
+            Inputty is a helpful library for getting values from the console.
+            </summary>
+        </member>
+        <member name="M:GetSomeInput.Inputty.GetBoolean(System.String,System.Boolean)">
+            <summary>
+            Retrieve a Boolean value from the console.
+            </summary>
+            <param name="question">Question/prompt.</param>
+            <param name="trueDefault">Flag to indicate if the default response is true.</param>
+            <returns>Boolean.</returns>
+        </member>
+        <member name="M:GetSomeInput.Inputty.GetString(System.String,System.String,System.Boolean)">
+            <summary>
+            Retrieve a string value from the console.
+            </summary>
+            <param name="question">Question/prompt.</param>
+            <param name="defaultAnswer">The default answer to the question/prompt.</param>
+            <param name="allowNull">Flag to indicate if null values are allowed.</param>
+            <returns>String.</returns>
+        </member>
+        <member name="M:GetSomeInput.Inputty.GetInteger(System.String,System.Int32,System.Boolean,System.Boolean)">
+            <summary>
+            Retrieve an integer value from the console.
+            </summary>
+            <param name="question">Question/prompt.</param>
+            <param name="defaultAnswer">The default answer to the question/prompt.</param>
+            <param name="positiveOnly">Flag to indicate if only positive values are allowed.</param>
+            <param name="allowZero">Flag to indicate if zero values are allowed.</param>
+            <returns>Integer.</returns>
+        </member>
+        <member name="M:GetSomeInput.Inputty.GetStringList(System.String,System.Boolean)">
+            <summary>
+            Retrieve a string list value from the console.
+            </summary>
+            <param name="question">Question/prompt.</param>
+            <param name="allowEmpty">Flag to indicate if null or empty values should be allowed.</param>
+            <returns>List of String.</returns>
+        </member>
+        <member name="M:GetSomeInput.Inputty.GetDecimal(System.String,System.Decimal,System.Boolean,System.Boolean)">
+            <summary>
+            Retrieve a decimal value from the console.
+            </summary>
+            <param name="question">Question/prompt.</param>
+            <param name="defaultAnswer">The default answer to the question/prompt.</param>
+            <param name="positiveOnly">Flag to indicate if only positive values are allowed.</param>
+            <param name="allowZero">Flag to indicate if zero values are allowed.</param>
+            <returns>Decimal.</returns>
+        </member>
+        <member name="M:GetSomeInput.Inputty.GetDouble(System.String,System.Double,System.Boolean,System.Boolean)">
+            <summary>
+            Retrieve a double value from the console.
+            </summary>
+            <param name="question">Question/prompt.</param>
+            <param name="defaultAnswer">The default answer to the question/prompt.</param>
+            <param name="positiveOnly">Flag to indicate if only positive values are allowed.</param>
+            <param name="allowZero">Flag to indicate if zero values are allowed.</param>
+            <returns>Double.</returns>
+        </member>
+    </members>
+</doc>

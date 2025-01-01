@@ -1,0 +1,3 @@
+This is a very small document, meant only to make it easier to evaluate how text extraction is working.
+
+I'm repeating some words just so we have something nice to look at.  Document.  Text extraction.

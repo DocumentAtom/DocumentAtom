@@ -1,20 +1,25 @@
 ﻿namespace DocumentAtom.Text
 {
     using DocumentAtom.Core;
+    using DocumentAtom.Core.Atoms;
     using DocumentAtom.Core.Helpers;
     using System.Text;
 
     /// <summary>
     /// Create atoms from text documents.
     /// </summary>
-    public class TextProcessor
+    public class TextProcessor : ProcessorBase
     {
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+#pragma warning disable CS8602 // Dereference of a possibly null reference.
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
+
         #region Public-Members
 
         /// <summary>
-        /// Settings.
+        /// Text processor settings.
         /// </summary>
-        public TextProcessorSettings Settings
+        public new TextProcessorSettings Settings
         {
             get
             {
@@ -40,9 +45,13 @@
         /// <summary>
         /// Create atoms from text documents.
         /// </summary>
-        public TextProcessor()
+        public TextProcessor(TextProcessorSettings settings = null)
         {
+            if (settings == null) settings = new TextProcessorSettings();
 
+            Header = "[Text] ";
+
+            _Settings = settings;
         }
 
         #endregion
@@ -57,65 +66,90 @@
         public IEnumerable<TextAtom> Extract(string filename)
         {
             if (String.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
-            string text = File.ReadAllText(filename);
-            return ProcessText(text);
+            return ProcessFile(filename);
         }
 
         #endregion
 
         #region Private-Methods
 
-        private IEnumerable<TextAtom> ProcessText(string text)
+        private IEnumerable<TextAtom> ProcessFile(string filename)
         {
-            if (String.IsNullOrEmpty(text)) yield break;
-
-            int atomCount = 0;
-            int startIndex = 0;
-            int textLength = text.Length;
-
-            while (startIndex < textLength)
+            using (FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
             {
-                int nextDelimiterIndex = textLength;
-                string matchedDelimiter = null;
-
-                foreach (string delimiter in _Settings.Delimiters)
+                using (StreamReader reader = new StreamReader(fs))
                 {
-                    int index = text.IndexOf(delimiter, startIndex);
-                    if (index != -1 && index < nextDelimiterIndex)
+                    StringBuilder currentSegment = new StringBuilder();
+                    char[] buffer = new char[_Settings.StreamBufferSize]; 
+                    int charsRead;
+
+                    int atomCount = 0;
+
+                    while ((charsRead = reader.Read(buffer, 0, buffer.Length)) > 0)
                     {
-                        nextDelimiterIndex = index;
-                        matchedDelimiter = delimiter;
+                        string chunk = new string(buffer, 0, charsRead);
+                        currentSegment.Append(chunk);
+
+                        int startIndex = 0;
+                        while (startIndex < currentSegment.Length)
+                        {
+                            int nextDelimiterIndex = -1;
+                            string matchedDelimiter = null;
+
+                            foreach (string delimiter in Settings.Delimiters)
+                            {
+                                int index = currentSegment.ToString().IndexOf(delimiter, startIndex);
+                                if (index != -1 && (nextDelimiterIndex == -1 || index < nextDelimiterIndex))
+                                {
+                                    nextDelimiterIndex = index;
+                                    matchedDelimiter = delimiter;
+                                }
+                            }
+
+                            if (nextDelimiterIndex != -1)
+                            {
+                                string segment = currentSegment.ToString(startIndex, nextDelimiterIndex - startIndex).Trim();
+                                if (Settings.RemoveBinaryFromText) segment = StringHelper.RemoveBinaryData(segment);
+
+                                if (!string.IsNullOrEmpty(segment))
+                                {
+                                    yield return TextAtom.FromContent(segment, atomCount, _Settings.Chunking);
+                                    atomCount++;
+                                }
+
+                                startIndex = nextDelimiterIndex + matchedDelimiter.Length;
+                            }
+                            else
+                            {
+                                // No delimiter found in current buffer
+                                if (startIndex > 0)
+                                {
+                                    // Remove processed text from StringBuilder
+                                    currentSegment.Remove(0, startIndex);
+                                }
+
+                                break;
+                            }
+                        }
+                    }
+
+                    // Handle any remaining text
+                    string finalSegment = currentSegment.ToString().Trim();
+                    if (_Settings.RemoveBinaryFromText) finalSegment = StringHelper.RemoveBinaryData(finalSegment);
+
+                    if (!String.IsNullOrEmpty(finalSegment))
+                    {
+                        yield return TextAtom.FromContent(finalSegment, atomCount, _Settings.Chunking);
+                        atomCount++;
                     }
                 }
-
-                string segment = text.Substring(startIndex, nextDelimiterIndex - startIndex).Trim();
-                if (_Settings.RemoveBinary) segment = StringHelper.RemoveBinaryData(segment);
-
-                if (!string.IsNullOrEmpty(segment))
-                {
-                    byte[] bytes = Encoding.UTF8.GetBytes(segment);
-
-                    TextAtom atom = new TextAtom
-                    {
-                        Type = AtomTypeEnum.Text,
-                        Position = atomCount,
-                        Length = segment.Length,
-                        Text = segment,
-                        MD5Hash = HashHelper.MD5Hash(bytes),
-                        SHA1Hash = HashHelper.SHA1Hash(bytes),
-                        SHA256Hash = HashHelper.SHA256Hash(bytes)
-                    };
-
-                    yield return atom;
-                    atomCount++;
-                }
-
-                startIndex = matchedDelimiter != null ?
-                    nextDelimiterIndex + matchedDelimiter.Length :
-                    textLength;
             }
         }
 
         #endregion
+
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
+#pragma warning restore CS8602 // Dereference of a possibly null reference.
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
     }
 }

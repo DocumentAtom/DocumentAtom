@@ -1,21 +1,13 @@
 ﻿namespace DocumentAtom.Text
 {
+    using DocumentAtom.Core;
+
     /// <summary>
     /// Settings for text processor.
     /// </summary>
-    public class TextProcessorSettings
+    public class TextProcessorSettings : ProcessorSettingsBase
     {
         #region Public-Members
-
-        /// <summary>
-        /// True to trim the output.
-        /// </summary>
-        public bool Trim { get; set; } = true;
-
-        /// <summary>
-        /// True to remove binary data from input data.
-        /// </summary>
-        public bool RemoveBinary { get; set; } = true;
 
         /// <summary>
         /// Delimiters that indicate the beginning of a new atom.
@@ -55,6 +47,9 @@
 
         #region Constructors-and-Factories
 
+        /// <summary>
+        /// Settings for text processor.
+        /// </summary>
         public TextProcessorSettings() 
         { 
 

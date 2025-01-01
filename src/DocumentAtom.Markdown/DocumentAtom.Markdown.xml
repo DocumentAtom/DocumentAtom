@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DocumentAtom.Markdown</name>
+    </assembly>
+    <members>
+        <member name="T:DocumentAtom.Markdown.MarkdownProcessor">
+            <summary>
+            Create atoms from markdown documents.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Markdown.MarkdownProcessor.Settings">
+            <summary>
+            Markdown processor settings.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Markdown.MarkdownProcessor.#ctor(DocumentAtom.Markdown.MarkdownProcessorSettings)">
+            <summary>
+            Create atoms from markdown documents.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Markdown.MarkdownProcessor.Extract(System.String)">
+            <summary>
+            Extract atoms from a file.
+            </summary>
+            <param name="filename">Filename.</param>
+            <returns>Atoms.</returns>
+        </member>
+        <member name="T:DocumentAtom.Markdown.MarkdownProcessorSettings">
+            <summary>
+            Settings for markdown processor.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Markdown.MarkdownProcessorSettings.Delimiters">
+            <summary>
+            Delimiters that indicate the beginning of a new atom.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Markdown.MarkdownProcessorSettings.#ctor">
+            <summary>
+            Settings for markdown processor.
+            </summary>
+        </member>
+    </members>
+</doc>

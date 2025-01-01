@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DocumentAtom.Text</name>
+    </assembly>
+    <members>
+        <member name="T:DocumentAtom.Text.TextProcessor">
+            <summary>
+            Create atoms from text documents.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Text.TextProcessor.Settings">
+            <summary>
+            Text processor settings.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Text.TextProcessor.#ctor(DocumentAtom.Text.TextProcessorSettings)">
+            <summary>
+            Create atoms from text documents.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Text.TextProcessor.Extract(System.String)">
+            <summary>
+            Extract atoms from a file.
+            </summary>
+            <param name="filename">Filename.</param>
+            <returns>Atoms.</returns>
+        </member>
+        <member name="T:DocumentAtom.Text.TextProcessorSettings">
+            <summary>
+            Settings for text processor.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Text.TextProcessorSettings.Delimiters">
+            <summary>
+            Delimiters that indicate the beginning of a new atom.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Text.TextProcessorSettings.#ctor">
+            <summary>
+            Settings for text processor.
+            </summary>
+        </member>
+    </members>
+</doc>

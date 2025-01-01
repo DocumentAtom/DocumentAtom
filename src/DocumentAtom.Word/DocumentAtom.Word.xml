@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DocumentAtom.Word</name>
+    </assembly>
+    <members>
+        <member name="T:DocumentAtom.Word.DocxProcessor">
+            <summary>
+            Create atoms from Microsoft Word .docx documents.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Word.DocxProcessor.Settings">
+            <summary>
+            Docx processor settings.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Word.DocxProcessor.#ctor(DocumentAtom.Word.DocxProcessorSettings)">
+            <summary>
+            Create atoms from text documents.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Word.DocxProcessor.Extract(System.String)">
+            <summary>
+            Extract atoms from a file.
+            </summary>
+            <param name="filename">Filename.</param>
+            <returns>Atoms.</returns>
+        </member>
+        <member name="M:DocumentAtom.Word.DocxProcessor.GetMetadata(System.String)">
+            <summary>
+            Retrieve metadata from a file.
+            </summary>
+            <param name="filename">Filename.</param>
+            <returns>Dictionary.</returns>
+        </member>
+        <member name="T:DocumentAtom.Word.DocxProcessorSettings">
+            <summary>
+            Settings for Microsoft Word .docx processor.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Word.DocxProcessorSettings.#ctor">
+            <summary>
+            Settings for Microsoft Word .docx processor.
+            </summary>
+        </member>
+    </members>
+</doc>
