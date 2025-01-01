@@ -25,6 +25,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentAtom.PowerPoint", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.PptxProcessor", "Test.PptxProcessor\Test.PptxProcessor.csproj", "{57A7F970-7304-4308-8FDC-CC9B4EC0F44F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentAtom.Pdf", "DocumentAtom.Pdf\DocumentAtom.Pdf.csproj", "{DAE0C5DD-9B65-40EA-9C72-16664545362E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.PdfProcessor", "Test.PdfProcessor\Test.PdfProcessor.csproj", "{F8481B5E-F30C-4795-8EA0-F066C284AC92}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +79,14 @@ Global
 		{57A7F970-7304-4308-8FDC-CC9B4EC0F44F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{57A7F970-7304-4308-8FDC-CC9B4EC0F44F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{57A7F970-7304-4308-8FDC-CC9B4EC0F44F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DAE0C5DD-9B65-40EA-9C72-16664545362E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DAE0C5DD-9B65-40EA-9C72-16664545362E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DAE0C5DD-9B65-40EA-9C72-16664545362E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DAE0C5DD-9B65-40EA-9C72-16664545362E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F8481B5E-F30C-4795-8EA0-F066C284AC92}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F8481B5E-F30C-4795-8EA0-F066C284AC92}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F8481B5E-F30C-4795-8EA0-F066C284AC92}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F8481B5E-F30C-4795-8EA0-F066C284AC92}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

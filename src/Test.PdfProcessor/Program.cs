@@ -1,15 +1,15 @@
-﻿namespace Test.MarkdownProcessor
+﻿namespace Test.PdfProcessor
 {
     using System;
     using DocumentAtom.Core.Atoms;
-    using DocumentAtom.Markdown;
+    using DocumentAtom.Pdf;
     using GetSomeInput;
     using SerializationHelper;
 
     public static class Program
     {
         private static Serializer _Serializer = new SerializationHelper.Serializer();
-        private static MarkdownProcessorSettings _Settings = new MarkdownProcessorSettings();
+        private static PdfProcessorSettings _Settings = new PdfProcessorSettings();
 
         public static void Main(string[] args)
         {
@@ -22,10 +22,10 @@
                 string filename = Inputty.GetString("Filename (ENTER to end):", null, true);
                 if (String.IsNullOrEmpty(filename)) break;
 
-                MarkdownProcessor processor = new MarkdownProcessor(_Settings);
-                foreach (MarkdownAtom atom in processor.Extract(filename))
+                PdfProcessor processor = new PdfProcessor(_Settings);
+                foreach (PdfAtom atom in processor.Extract(filename))
                     Console.WriteLine(_Serializer.SerializeJson(atom, true));
-                
+
                 Console.WriteLine("End of file");
                 Console.WriteLine("");
             }

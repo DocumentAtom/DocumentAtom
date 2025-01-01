@@ -9,20 +9,20 @@
     public static class Program
     {
         private static Serializer _Serializer = new SerializationHelper.Serializer();
-        private static PptxProcessorSettings _PptxSettings = new PptxProcessorSettings();
+        private static PptxProcessorSettings _Settings = new PptxProcessorSettings();
 
         public static void Main(string[] args)
         {
-            _PptxSettings.Chunking.Enable = true;
-            _PptxSettings.Chunking.MaximumLength = 512;
-            _PptxSettings.Chunking.ShiftSize = 384;
+            _Settings.Chunking.Enable = true;
+            _Settings.Chunking.MaximumLength = 512;
+            _Settings.Chunking.ShiftSize = 384;
 
             while (true)
             {
                 string filename = Inputty.GetString("Filename (ENTER to end):", null, true);
                 if (String.IsNullOrEmpty(filename)) break;
 
-                PptxProcessor processor = new PptxProcessor(_PptxSettings);
+                PptxProcessor processor = new PptxProcessor(_Settings);
                 foreach (PptxAtom atom in processor.Extract(filename))
                     Console.WriteLine(_Serializer.SerializeJson(atom, true));
 

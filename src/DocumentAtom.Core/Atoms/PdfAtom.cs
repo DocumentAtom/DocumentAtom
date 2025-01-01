@@ -8,38 +8,21 @@
     using SerializableDataTables;
 
     /// <summary>
-    /// A markdown atom is a self-contained unit of information from a markdown document.
+    /// A PDF atom is a self-contained unit of information from a .pdf file.
     /// </summary>
-    public class MarkdownAtom : AtomBase<MarkdownAtom>
+    public class PdfAtom : AtomBase<MarkdownAtom>
     {
         #region Public-Members
 
         /// <summary>
-        /// Markdown formatting type for this atom.
+        /// Bounding box.
         /// </summary>
-        public MarkdownFormattingEnum Formatting { get; set; }
+        public BoundingBox BoundingBox { get; set; } = new BoundingBox();
 
         /// <summary>
         /// Text content.
         /// </summary>
-        public string Text { get; set; }
-
-        /// <summary>
-        /// Header level, that is, the number of hash marks found at the beginning of the text.
-        /// Minimum value is 1.
-        /// </summary>
-        public int? HeaderLevel
-        {
-            get
-            {
-                return _HeaderLevel;
-            }
-            set
-            {
-                if (value != null && value.Value < 1) throw new ArgumentOutOfRangeException(nameof(HeaderLevel));
-                _HeaderLevel = value;
-            }
-        }
+        public string Text { get; set; } = null;
 
         /// <summary>
         /// Unordered list elements.
@@ -56,167 +39,25 @@
         /// </summary>
         public SerializableDataTable Table { get; set; } = null;
 
+        /// <summary>
+        /// Binary data.
+        /// </summary>
+        public byte[] Binary { get; set; } = null;
+
         #endregion
 
         #region Private-Members
-
-        private int? _HeaderLevel = null;
 
         #endregion
 
         #region Constructors-and-Factories
 
         /// <summary>
-        /// A markdown atom is a self-contained unit of information from a markdown document.
+        /// A PDF atom is a self-contained unit of information from a .pdf file.
         /// </summary>
-        public MarkdownAtom()
+        public PdfAtom()
         {
 
-        }
-
-        /// <summary>
-        /// Produce an atom with quarks, if chunking is enabled.
-        /// </summary>
-        /// <param name="text">Text content.</param>
-        /// <param name="position">Atom position.</param>
-        /// <param name="settings">Chunking settings.</param>
-        /// <returns>Markdown atom.</returns>
-        public static MarkdownAtom FromContent(string text, int position, ChunkingSettings settings)
-        {
-            if (string.IsNullOrEmpty(text)) throw new ArgumentNullException(nameof(text));
-            if (position < 0) throw new ArgumentOutOfRangeException(nameof(position));
-            if (settings == null) settings = new ChunkingSettings();
-
-            byte[] bytes = Encoding.UTF8.GetBytes(text);
-
-            #region Preprocessing
-
-            int? headerLevel = null;
-            MarkdownFormattingEnum formatting = MarkdownFormattingEnum.Text;
-
-            if (text.Trim().StartsWith("#"))
-            {
-                formatting = MarkdownFormattingEnum.Header;
-                headerLevel = 0;
-                string header = text;
-
-                while (header.StartsWith("#"))
-                {
-                    headerLevel++;
-                    header = header.Substring(1);
-                }
-            }
-            else if (text.Trim().StartsWith("|"))
-            {
-                formatting = MarkdownFormattingEnum.Table;
-            }
-            else if (IsUnorderedListItem(text))
-            {
-                formatting = MarkdownFormattingEnum.UnorderedList;
-            }
-            else if (IsOrderedListItem(text))
-            {
-                formatting = MarkdownFormattingEnum.OrderedList;
-            }
-            else if (IsTableItem(text))
-            {
-                formatting = MarkdownFormattingEnum.Table;
-            }
-
-            #endregion
-
-            MarkdownAtom atom = new MarkdownAtom
-            {
-                Type = AtomTypeEnum.Text,
-                Position = position,
-                Length = text.Length,
-                Formatting = formatting,
-                HeaderLevel = headerLevel,
-                Text = text,
-                MD5Hash = HashHelper.MD5Hash(bytes),
-                SHA1Hash = HashHelper.SHA1Hash(bytes),
-                SHA256Hash = HashHelper.SHA256Hash(bytes)
-            };
-
-            /*
-        public MarkdownFormattingEnum Formatting { get; set; }
-        public string Text { get; set; }
-        public int? HeaderLevel { get; set; }
-        public List<string> List { get; set; } = null;
-        public DataTable Table { get; set; } = null;
-             */
-
-            if (settings.Enable && atom.Formatting == MarkdownFormattingEnum.Text)
-            {
-                #region Chunk-Text
-
-                if (text.Length >= settings.MaximumLength)
-                {
-                    int quarkPosition = 0;
-
-                    IEnumerable<string> subStrings = StringHelper.GetSubstringsFromString(text, settings.MaximumLength, settings.ShiftSize);
-
-                    atom.Quarks = new List<MarkdownAtom>();
-
-                    foreach (string substring in subStrings)
-                    {
-                        if (!string.IsNullOrEmpty(substring))
-                        {
-                            byte[] substringBytes = Encoding.UTF8.GetBytes(substring);
-
-                            MarkdownAtom quark = new MarkdownAtom
-                            {
-                                Type = AtomTypeEnum.Text,
-                                Position = quarkPosition,
-                                Length = substring.Length,
-                                Text = substring,
-                                MD5Hash = HashHelper.MD5Hash(substringBytes),
-                                SHA1Hash = HashHelper.SHA1Hash(substringBytes),
-                                SHA256Hash = HashHelper.SHA256Hash(substringBytes),
-                                Quarks = null
-                            };
-
-                            atom.Quarks.Add(quark);
-                            quarkPosition++;
-                        }
-                    }
-                }
-
-                #endregion
-            }
-
-            if (atom.Formatting == MarkdownFormattingEnum.Image)
-            {
-                #region Image
-
-                #endregion
-            }
-            else if (atom.Formatting == MarkdownFormattingEnum.Table)
-            {
-                #region Table
-
-                atom.Table = TextToDataTable(atom.Text);
-
-                #endregion
-            }
-            else if (atom.Formatting == MarkdownFormattingEnum.OrderedList)
-            {
-                #region Ordered-List
-
-                atom.OrderedList = TextToList(atom.Text);
-
-                #endregion
-            }
-            else if (atom.Formatting == MarkdownFormattingEnum.UnorderedList)
-            {
-                #region Unordered-List
-
-                atom.UnorderedList = TextToList(atom.Text);
-
-                #endregion
-            }
-
-            return atom;
         }
 
         #endregion

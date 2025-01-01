@@ -85,7 +85,7 @@ namespace DocumentAtom.Core.Atoms
         /// <summary>
         /// A quark is a subset of the content from an atom, used when intentionally breaking content into smaller chunks.
         /// </summary>
-        public List<T> Quarks { get; set; } = new List<T>();
+        public List<T> Quarks { get; set; } = null;
 
         #endregion
 

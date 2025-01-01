@@ -67,6 +67,8 @@
 
                     IEnumerable<string> subStrings = StringHelper.GetSubstringsFromString(text, settings.MaximumLength, settings.ShiftSize);
 
+                    atom.Quarks = new List<TextAtom>();
+
                     foreach (string substring in subStrings)
                     {
                         if (!string.IsNullOrEmpty(substring))

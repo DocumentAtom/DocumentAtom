@@ -81,6 +81,61 @@
             A binary atom is a self-contained unit of binary content from a document.
             </summary>
         </member>
+        <member name="T:DocumentAtom.Core.Atoms.BoundingBox">
+            <summary>
+            Bounding box.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.BoundingBox.UpperLeft">
+            <summary>
+            Upper left corner.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.BoundingBox.LowerLeft">
+            <summary>
+            Lower left corner.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.BoundingBox.UpperRight">
+            <summary>
+            Upper right corner.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.BoundingBox.LowerRight">
+            <summary>
+            Lower right corner.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.BoundingBox.Width">
+            <summary>
+            Width.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.BoundingBox.Height">
+            <summary>
+            Height.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.BoundingBox.#ctor">
+            <summary>
+            Bounding box.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.BoundingBox.Contains(System.Int32,System.Int32)">
+            <summary>
+            Check if a point is contained within the bounding box.
+            </summary>
+            <param name="pointX">Point X.</param>
+            <param name="pointY">Point Y.</param>
+            <returns>True if contained within the bounding box.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.BoundingBox.Intersects(DocumentAtom.Core.Atoms.BoundingBox)">
+            <summary>
+            Check if a bounding box intersects with this bounding box.
+            </summary>
+            <param name="other">Another bounding box.</param>
+            <returns>True if the other bounding box intersects with this bounding box.</returns>
+        </member>
         <member name="T:DocumentAtom.Core.Atoms.DocxAtom">
             <summary>
             A docx atom is a self-contained unit of information from a Microsoft Word .docx document.
@@ -246,6 +301,81 @@
             <returns>DataTable.</returns>
         </member>
         <member name="M:DocumentAtom.Core.Atoms.MarkdownAtom.TextToList(System.String)">
+            <summary>
+            Convert a markdown list to a list of strings.
+            </summary>
+            <param name="text">Text.</param>
+            <returns>List of strings.</returns>
+        </member>
+        <member name="T:DocumentAtom.Core.Atoms.PdfAtom">
+            <summary>
+            A PDF atom is a self-contained unit of information from a .pdf file.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.PdfAtom.BoundingBox">
+            <summary>
+            Bounding box.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.PdfAtom.Text">
+            <summary>
+            Text content.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.PdfAtom.UnorderedList">
+            <summary>
+            Unordered list elements.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.PdfAtom.OrderedList">
+            <summary>
+            Ordered list elements.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.PdfAtom.Table">
+            <summary>
+            Data table.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.PdfAtom.Binary">
+            <summary>
+            Binary data.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.PdfAtom.#ctor">
+            <summary>
+            A PDF atom is a self-contained unit of information from a .pdf file.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.PdfAtom.IsUnorderedListItem(System.String)">
+            <summary>
+            Determine if a text item is part of an unordered list.
+            </summary>
+            <param name="text">Text.</param>
+            <returns>True if the text represents an unordered list.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.PdfAtom.IsOrderedListItem(System.String)">
+            <summary>
+            Determine if a text item is part of an ordered list.
+            </summary>
+            <param name="text">Text.</param>
+            <returns>True if the text represents an ordered list.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.PdfAtom.IsTableItem(System.String)">
+            <summary>
+            Determine if a text item is part of a table.
+            </summary>
+            <param name="text">Text.</param>
+            <returns>True if item is part of a table.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.PdfAtom.TextToDataTable(System.String)">
+            <summary>
+            Convert a markdown table to a DataTable.
+            </summary>
+            <param name="text">Markdown table.</param>
+            <returns>DataTable.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.PdfAtom.TextToList(System.String)">
             <summary>
             Convert a markdown list to a list of strings.
             </summary>

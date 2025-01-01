@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DocumentAtom.Pdf</name>
+    </assembly>
+    <members>
+        <member name="T:DocumentAtom.Pdf.PdfProcessor">
+            <summary>
+            Create atoms from PDF documents.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Pdf.PdfProcessor.Settings">
+            <summary>
+            PDF processor settings.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Pdf.PdfProcessor.#ctor(DocumentAtom.Pdf.PdfProcessorSettings)">
+            <summary>
+            Create atoms from PDF documents.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Pdf.PdfProcessor.Extract(System.String)">
+            <summary>
+            Extract atoms from a file.
+            </summary>
+            <param name="filename">Filename.</param>
+            <returns>Atoms.</returns>
+        </member>
+        <member name="M:DocumentAtom.Pdf.PdfProcessor.GetMetadata(System.String)">
+            <summary>
+            Retrieve metadata from a file.
+            </summary>
+            <param name="filename">Filename.</param>
+            <returns>Dictionary.</returns>
+        </member>
+        <member name="T:DocumentAtom.Pdf.PdfProcessorSettings">
+            <summary>
+            Settings for PDF processor.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Pdf.PdfProcessorSettings.#ctor">
+            <summary>
+            Settings for PDF processor.
+            </summary>
+        </member>
+    </members>
+</doc>
