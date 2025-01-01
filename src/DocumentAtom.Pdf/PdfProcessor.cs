@@ -26,6 +26,7 @@
     public class PdfProcessor : ProcessorBase
     {
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
 
         #region Public-Members
 
@@ -208,7 +209,10 @@
                     // Process images (remains the same)
                     foreach (var image in page.GetImages())
                     {
-                        byte[] bytes = image.RawBytes.ToArray();
+                        byte[] bytes;
+                        if (image.TryGetPng(out byte[] pngBytes)) bytes = pngBytes;
+                        else bytes = image.RawBytes.ToArray();
+
                         yield return new PdfAtom
                         {
                             Type = AtomTypeEnum.Image,
@@ -236,6 +240,7 @@
         private class PdfTableRegion
         {
             public PdfRectangle BoundingBox { get; set; }
+
             public DataTable Table { get; set; } = null;
 
             public PdfTableRegion()
@@ -298,6 +303,7 @@
 
         #endregion
 
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
     }
 }
