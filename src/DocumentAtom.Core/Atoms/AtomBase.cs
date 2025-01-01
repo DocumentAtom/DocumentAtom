@@ -92,7 +92,7 @@ namespace DocumentAtom.Core.Atoms
         #region Private-Members
 
         private int? _PageNumber = null;
-        private int? _Position = 0;
+        private int? _Position = null;
         private int _Length = 0;
 
         #endregion

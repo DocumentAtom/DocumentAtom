@@ -6,12 +6,12 @@
 		<Nullable>enable</Nullable>
 		<ApplicationIcon>icon.ico</ApplicationIcon>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
-		<DocumentationFile>DocumentAtom.Word.xml</DocumentationFile>
+		<DocumentationFile>DocumentAtom.PowerPoint.xml</DocumentationFile>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Title>DocumentAtom.Word</Title>
+		<Title>DocumentAtom.PowerPoint</Title>
 		<Version>1.0.0</Version>
 		<Authors>Joel Christner</Authors>
-		<Description>DocumentAtom provides a light, fast library for breaking input Word (docx) documents into constituent parts (atoms), useful for AI, machine learning, processing, analytics, and general analysis.</Description>
+		<Description>DocumentAtom provides a light, fast library for breaking input PowerPoint (pptx) documents into constituent parts (atoms), useful for AI, machine learning, processing, analytics, and general analysis.</Description>
 		<Copyright>(c)2024 Joel Christner</Copyright>
 		<PackageProjectUrl>https://github.com/jchristn/DocumentAtom</PackageProjectUrl>
 		<PackageIcon>icon.png</PackageIcon>
@@ -43,7 +43,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="DocumentFormat.OpenXml" Version="3.2.0" />
+		<PackageReference Include="DocumentFormat.OpenXml" Version="3.2.0" />
 	</ItemGroup>
 
 	<ItemGroup>

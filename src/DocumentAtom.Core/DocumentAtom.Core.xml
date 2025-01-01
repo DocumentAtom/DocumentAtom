@@ -252,6 +252,86 @@
             <param name="text">Text.</param>
             <returns>List of strings.</returns>
         </member>
+        <member name="T:DocumentAtom.Core.Atoms.PptxAtom">
+            <summary>
+            A pptx atom is a self-contained unit of information from a Microsoft PowerPoint .pptx presentation.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.PptxAtom.Title">
+            <summary>
+            Title.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.PptxAtom.Subtitle">
+            <summary>
+            Subtitle.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.PptxAtom.Text">
+            <summary>
+            Text content.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.PptxAtom.UnorderedList">
+            <summary>
+            Unordered list elements.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.PptxAtom.OrderedList">
+            <summary>
+            Ordered list elements.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.PptxAtom.Table">
+            <summary>
+            Data table.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.PptxAtom.Binary">
+            <summary>
+            Binary data.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.PptxAtom.#ctor">
+            <summary>
+            A pptx atom is a self-contained unit of information from a Microsoft PowerPoint .pptx presentation.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.PptxAtom.IsUnorderedListItem(System.String)">
+            <summary>
+            Determine if a text item is part of an unordered list.
+            </summary>
+            <param name="text">Text.</param>
+            <returns>True if the text represents an unordered list.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.PptxAtom.IsOrderedListItem(System.String)">
+            <summary>
+            Determine if a text item is part of an ordered list.
+            </summary>
+            <param name="text">Text.</param>
+            <returns>True if the text represents an ordered list.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.PptxAtom.IsTableItem(System.String)">
+            <summary>
+            Determine if a text item is part of a table.
+            </summary>
+            <param name="text">Text.</param>
+            <returns>True if item is part of a table.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.PptxAtom.TextToDataTable(System.String)">
+            <summary>
+            Convert a markdown table to a DataTable.
+            </summary>
+            <param name="text">Markdown table.</param>
+            <returns>DataTable.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.PptxAtom.TextToList(System.String)">
+            <summary>
+            Convert a markdown list to a list of strings.
+            </summary>
+            <param name="text">Text.</param>
+            <returns>List of strings.</returns>
+        </member>
         <member name="T:DocumentAtom.Core.Atoms.TableAtom">
             <summary>
             A table atom is an atom that contains a table with rows, columns, headers, and values.

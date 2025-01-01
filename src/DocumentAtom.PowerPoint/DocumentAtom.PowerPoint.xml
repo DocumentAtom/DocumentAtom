@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DocumentAtom.PowerPoint</name>
+    </assembly>
+    <members>
+        <member name="T:DocumentAtom.PowerPoint.PptxProcessor">
+            <summary>
+            Create atoms from Microsoft PowerPoint .pptx documents.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.PowerPoint.PptxProcessor.Settings">
+            <summary>
+            Pptx processor settings.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.PowerPoint.PptxProcessor.#ctor(DocumentAtom.PowerPoint.PptxProcessorSettings)">
+            <summary>
+            Create atoms from PowerPoint presentations.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.PowerPoint.PptxProcessor.Extract(System.String)">
+            <summary>
+            Extract atoms from a file.
+            </summary>
+            <param name="filename">Filename.</param>
+            <returns>Atoms.</returns>
+        </member>
+        <member name="M:DocumentAtom.PowerPoint.PptxProcessor.GetMetadata(System.String)">
+            <summary>
+            Retrieve metadata from a file.
+            </summary>
+            <param name="filename">Filename.</param>
+            <returns>Dictionary.</returns>
+        </member>
+        <member name="T:DocumentAtom.PowerPoint.PptxProcessorSettings">
+            <summary>
+            Settings for Microsoft PowerPoint .pptx processor.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.PowerPoint.PptxProcessorSettings.#ctor">
+            <summary>
+            Settings for Microsoft PowerPoint .pptx processor.
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DocumentAtom.Excel</name>
+    </assembly>
+    <members>
+        <member name="T:DocumentAtom.Excel.XlsxProcessor">
+            <summary>
+            Create atoms from Microsoft Excel .xlsx documents.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Excel.XlsxProcessor.Settings">
+            <summary>
+            Xlsx processor settings.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Excel.XlsxProcessor.#ctor(DocumentAtom.Excel.XlsxProcessorSettings)">
+            <summary>
+            Create atoms from Excel documents.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Excel.XlsxProcessor.Extract(System.String)">
+            <summary>
+            Extract atoms from a file.
+            </summary>
+            <param name="filename">Filename.</param>
+            <returns>Atoms.</returns>
+        </member>
+        <member name="M:DocumentAtom.Excel.XlsxProcessor.GetMetadata(System.String)">
+            <summary>
+            Retrieve metadata from a file.
+            </summary>
+            <param name="filename">Filename.</param>
+            <returns>Dictionary.</returns>
+        </member>
+        <member name="T:DocumentAtom.Excel.XlsxProcessorSettings">
+            <summary>
+            Settings for Microsoft Excel .xlsx processor.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Excel.XlsxProcessorSettings.#ctor">
+            <summary>
+            Settings for Microsoft Excel .xlsx processor.
+            </summary>
+        </member>
+    </members>
+</doc>
