@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using DocumentAtom.Core.Image;
+using System.Data;
 
 namespace DocumentAtom.Core.Atoms
 {
@@ -67,6 +68,49 @@ namespace DocumentAtom.Core.Atoms
         /// </summary>
         public TableAtom()
         {
+        }
+
+        /// <summary>
+        /// Create a table atom from a table structure.
+        /// </summary>
+        /// <param name="table">Table structure.</param>
+        /// <returns>Table atom.</returns>
+        public static TableAtom FromTableStructure(TableStructure table)
+        {
+            if (table == null) throw new ArgumentNullException(nameof(table));
+            if (table == null) return null;
+
+            var dt = new DataTable();
+
+            // Add columns
+            for (int i = 0; i < table.Columns; i++)
+            {
+                dt.Columns.Add($"Column{i}", typeof(string));
+            }
+
+            // Add rows
+            if (table.Cells != null)
+            {
+                for (int i = 0; i < table.Rows && i < table.Cells.Count; i++)
+                {
+                    var row = dt.NewRow();
+                    if (table.Cells[i] != null)
+                    {
+                        for (int j = 0; j < table.Columns && j < table.Cells[i].Count; j++)
+                        {
+                            row[j] = table.Cells[i][j] ?? string.Empty;
+                        }
+                    }
+                    dt.Rows.Add(row);
+                }
+            }
+
+            return new TableAtom
+            {
+                Rows = table.Rows,
+                Columns = table.Columns,
+                Table = dt
+            };
         }
 
         #endregion

@@ -59,13 +59,6 @@
             An atom is a small, self-contained unit of content from a document.
             </summary>
         </member>
-        <member name="M:DocumentAtom.Core.Atoms.AtomBase`1.RemoveBinaryData(System.String)">
-            <summary>
-            Remove binary data from a string.
-            </summary>
-            <param name="input">String.</param>
-            <returns>String.</returns>
-        </member>
         <member name="T:DocumentAtom.Core.Atoms.BinaryAtom">
             <summary>
             A binary atom is a self-contained unit of binary content from a document.
@@ -120,6 +113,13 @@
             <summary>
             Bounding box.
             </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.BoundingBox.FromRectangle(System.Drawing.Rectangle)">
+            <summary>
+            Create a bounding box from a rectangle.
+            </summary>
+            <param name="rect">Rectangle.</param>
+            <returns>Bounding box.</returns>
         </member>
         <member name="M:DocumentAtom.Core.Atoms.BoundingBox.Contains(System.Int32,System.Int32)">
             <summary>
@@ -177,40 +177,45 @@
             A docx atom is a self-contained unit of information from a Microsoft Word .docx document.
             </summary>
         </member>
-        <member name="M:DocumentAtom.Core.Atoms.DocxAtom.IsUnorderedListItem(System.String)">
+        <member name="T:DocumentAtom.Core.Atoms.ImageAtom">
             <summary>
-            Determine if a text item is part of an unordered list.
+            An image atom is a self-contained unit of information from a .png file.
             </summary>
-            <param name="text">Text.</param>
-            <returns>True if the text represents an unordered list.</returns>
         </member>
-        <member name="M:DocumentAtom.Core.Atoms.DocxAtom.IsOrderedListItem(System.String)">
+        <member name="P:DocumentAtom.Core.Atoms.ImageAtom.BoundingBox">
             <summary>
-            Determine if a text item is part of an ordered list.
+            Bounding box.
             </summary>
-            <param name="text">Text.</param>
-            <returns>True if the text represents an ordered list.</returns>
         </member>
-        <member name="M:DocumentAtom.Core.Atoms.DocxAtom.IsTableItem(System.String)">
+        <member name="P:DocumentAtom.Core.Atoms.ImageAtom.Text">
             <summary>
-            Determine if a text item is part of a table.
+            Text content.
             </summary>
-            <param name="text">Text.</param>
-            <returns>True if item is part of a table.</returns>
         </member>
-        <member name="M:DocumentAtom.Core.Atoms.DocxAtom.TextToDataTable(System.String)">
+        <member name="P:DocumentAtom.Core.Atoms.ImageAtom.UnorderedList">
             <summary>
-            Convert a markdown table to a DataTable.
+            Unordered list elements.
             </summary>
-            <param name="text">Markdown table.</param>
-            <returns>DataTable.</returns>
         </member>
-        <member name="M:DocumentAtom.Core.Atoms.DocxAtom.TextToList(System.String)">
+        <member name="P:DocumentAtom.Core.Atoms.ImageAtom.OrderedList">
             <summary>
-            Convert a markdown list to a list of strings.
+            Ordered list elements.
             </summary>
-            <param name="text">Text.</param>
-            <returns>List of strings.</returns>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.ImageAtom.Table">
+            <summary>
+            Data table.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.ImageAtom.Binary">
+            <summary>
+            Binary data.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.ImageAtom.#ctor">
+            <summary>
+            An image atom is a self-contained unit of information from a .png file.
+            </summary>
         </member>
         <member name="T:DocumentAtom.Core.Atoms.ListAtom">
             <summary>
@@ -347,41 +352,6 @@
             A PDF atom is a self-contained unit of information from a .pdf file.
             </summary>
         </member>
-        <member name="M:DocumentAtom.Core.Atoms.PdfAtom.IsUnorderedListItem(System.String)">
-            <summary>
-            Determine if a text item is part of an unordered list.
-            </summary>
-            <param name="text">Text.</param>
-            <returns>True if the text represents an unordered list.</returns>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.PdfAtom.IsOrderedListItem(System.String)">
-            <summary>
-            Determine if a text item is part of an ordered list.
-            </summary>
-            <param name="text">Text.</param>
-            <returns>True if the text represents an ordered list.</returns>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.PdfAtom.IsTableItem(System.String)">
-            <summary>
-            Determine if a text item is part of a table.
-            </summary>
-            <param name="text">Text.</param>
-            <returns>True if item is part of a table.</returns>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.PdfAtom.TextToDataTable(System.String)">
-            <summary>
-            Convert a markdown table to a DataTable.
-            </summary>
-            <param name="text">Markdown table.</param>
-            <returns>DataTable.</returns>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.PdfAtom.TextToList(System.String)">
-            <summary>
-            Convert a markdown list to a list of strings.
-            </summary>
-            <param name="text">Text.</param>
-            <returns>List of strings.</returns>
-        </member>
         <member name="T:DocumentAtom.Core.Atoms.PptxAtom">
             <summary>
             A pptx atom is a self-contained unit of information from a Microsoft PowerPoint .pptx presentation.
@@ -427,41 +397,6 @@
             A pptx atom is a self-contained unit of information from a Microsoft PowerPoint .pptx presentation.
             </summary>
         </member>
-        <member name="M:DocumentAtom.Core.Atoms.PptxAtom.IsUnorderedListItem(System.String)">
-            <summary>
-            Determine if a text item is part of an unordered list.
-            </summary>
-            <param name="text">Text.</param>
-            <returns>True if the text represents an unordered list.</returns>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.PptxAtom.IsOrderedListItem(System.String)">
-            <summary>
-            Determine if a text item is part of an ordered list.
-            </summary>
-            <param name="text">Text.</param>
-            <returns>True if the text represents an ordered list.</returns>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.PptxAtom.IsTableItem(System.String)">
-            <summary>
-            Determine if a text item is part of a table.
-            </summary>
-            <param name="text">Text.</param>
-            <returns>True if item is part of a table.</returns>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.PptxAtom.TextToDataTable(System.String)">
-            <summary>
-            Convert a markdown table to a DataTable.
-            </summary>
-            <param name="text">Markdown table.</param>
-            <returns>DataTable.</returns>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.PptxAtom.TextToList(System.String)">
-            <summary>
-            Convert a markdown list to a list of strings.
-            </summary>
-            <param name="text">Text.</param>
-            <returns>List of strings.</returns>
-        </member>
         <member name="T:DocumentAtom.Core.Atoms.TableAtom">
             <summary>
             A table atom is an atom that contains a table with rows, columns, headers, and values.
@@ -491,6 +426,13 @@
             <summary>
             A table atom is an atom that contains a table with rows, columns, headers, and values.
             </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.TableAtom.FromTableStructure(DocumentAtom.Core.Image.TableStructure)">
+            <summary>
+            Create a table atom from a table structure.
+            </summary>
+            <param name="table">Table structure.</param>
+            <returns>Table atom.</returns>
         </member>
         <member name="T:DocumentAtom.Core.Atoms.TextAtom">
             <summary>
@@ -550,41 +492,6 @@
             <summary>
             A docx atom is a self-contained unit of information from a Microsoft Word .docx document.
             </summary>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.XlsxAtom.IsUnorderedListItem(System.String)">
-            <summary>
-            Determine if a text item is part of an unordered list.
-            </summary>
-            <param name="text">Text.</param>
-            <returns>True if the text represents an unordered list.</returns>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.XlsxAtom.IsOrderedListItem(System.String)">
-            <summary>
-            Determine if a text item is part of an ordered list.
-            </summary>
-            <param name="text">Text.</param>
-            <returns>True if the text represents an ordered list.</returns>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.XlsxAtom.IsTableItem(System.String)">
-            <summary>
-            Determine if a text item is part of a table.
-            </summary>
-            <param name="text">Text.</param>
-            <returns>True if item is part of a table.</returns>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.XlsxAtom.TextToDataTable(System.String)">
-            <summary>
-            Convert a markdown table to a DataTable.
-            </summary>
-            <param name="text">Markdown table.</param>
-            <returns>DataTable.</returns>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.XlsxAtom.TextToList(System.String)">
-            <summary>
-            Convert a markdown list to a list of strings.
-            </summary>
-            <param name="text">Text.</param>
-            <returns>List of strings.</returns>
         </member>
         <member name="T:DocumentAtom.Core.ChunkingSettings">
             <summary>
@@ -928,6 +835,106 @@
             <param name="start">Start position.</param>
             <param name="end">End position.</param>
             <returns>String.</returns>
+        </member>
+        <member name="T:DocumentAtom.Core.Image.ExtractionResult">
+            <summary>
+            Extraction result.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Image.ExtractionResult.TextElements">
+            <summary>
+            Text elements.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Image.ExtractionResult.Tables">
+            <summary>
+            Table elements.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Image.ExtractionResult.Lists">
+            <summary>
+            List elements.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Image.ExtractionResult.#ctor">
+            <summary>
+            Extraction result.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Core.Image.ListStructure">
+            <summary>
+            List structure.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Image.ListStructure.Items">
+            <summary>
+            List items.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Image.ListStructure.IsOrdered">
+            <summary>
+            Boolean indicating if the list is ordered.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Image.ListStructure.Bounds">
+            <summary>
+            Bounds for the list structure.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Image.ListStructure.#ctor">
+            <summary>
+            List structure.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Core.Image.TableStructure">
+            <summary>
+            Table structure.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Image.TableStructure.Cells">
+            <summary>
+            Table cells.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Image.TableStructure.Bounds">
+            <summary>
+            Bounds for the table structure.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Image.TableStructure.Rows">
+            <summary>
+            Number of rows.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Image.TableStructure.Columns">
+            <summary>
+            Number of columns.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Image.TableStructure.#ctor">
+            <summary>
+            Table structure.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Core.Image.TextElement">
+            <summary>
+            Text element.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Image.TextElement.Text">
+            <summary>
+            Text.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Image.TextElement.Bounds">
+            <summary>
+            Bounds for the text.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Image.TextElement.#ctor">
+            <summary>
+            Text element.
+            </summary>
         </member>
         <member name="T:DocumentAtom.Core.Office.Relationship">
             <summary>

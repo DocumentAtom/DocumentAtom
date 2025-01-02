@@ -77,8 +77,6 @@
         {
             using (FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
             {
-                Console.WriteLine("Opening file: " + filename);
-
                 using (StreamReader reader = new StreamReader(fs))
                 {
                     StringBuilder currentSegment = new StringBuilder();
@@ -91,8 +89,6 @@
                     {
                         string chunk = new string(buffer, 0, charsRead);
                         currentSegment.Append(chunk);
-
-                        Console.WriteLine("Processing: " + chunk);
 
                         int startIndex = 0;
                         while (startIndex < currentSegment.Length)

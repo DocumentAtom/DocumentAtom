@@ -8,21 +8,16 @@
     using SerializableDataTables;
 
     /// <summary>
-    /// A pptx atom is a self-contained unit of information from a Microsoft PowerPoint .pptx presentation.
+    /// An image atom is a self-contained unit of information from a .png file.
     /// </summary>
-    public class PptxAtom : AtomBase<MarkdownAtom>
+    public class ImageAtom : AtomBase<MarkdownAtom>
     {
         #region Public-Members
 
         /// <summary>
-        /// Title.
+        /// Bounding box.
         /// </summary>
-        public string Title { get; set; } = null;
-
-        /// <summary>
-        /// Subtitle.
-        /// </summary>
-        public string Subtitle { get; set; } = null;
+        public BoundingBox BoundingBox { get; set; } = new BoundingBox();
 
         /// <summary>
         /// Text content.
@@ -58,9 +53,9 @@
         #region Constructors-and-Factories
 
         /// <summary>
-        /// A pptx atom is a self-contained unit of information from a Microsoft PowerPoint .pptx presentation.
+        /// An image atom is a self-contained unit of information from a .png file.
         /// </summary>
-        public PptxAtom()
+        public ImageAtom()
         {
 
         }

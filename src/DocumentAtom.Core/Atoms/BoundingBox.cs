@@ -38,7 +38,6 @@
             }
         }
 
-
         /// <summary>
         /// Upper right corner.
         /// </summary>
@@ -52,7 +51,6 @@
                 _UpperRight = value;
             }
         }
-
 
         /// <summary>
         /// Lower right corner.
@@ -97,6 +95,22 @@
         public BoundingBox()
         {
 
+        }
+
+        /// <summary>
+        /// Create a bounding box from a rectangle.
+        /// </summary>
+        /// <param name="rect">Rectangle.</param>
+        /// <returns>Bounding box.</returns>
+        public static BoundingBox FromRectangle(Rectangle rect)
+        {
+            return new BoundingBox
+            {
+                UpperLeft = new Point(rect.Left, rect.Top),
+                LowerLeft = new Point(rect.Left, rect.Bottom),
+                UpperRight = new Point(rect.Right, rect.Top),
+                LowerRight = new Point(rect.Right, rect.Bottom)
+            };
         }
 
         #endregion

@@ -138,14 +138,6 @@
                 SHA256Hash = HashHelper.SHA256Hash(bytes)
             };
 
-            /*
-        public MarkdownFormattingEnum Formatting { get; set; }
-        public string Text { get; set; }
-        public int? HeaderLevel { get; set; }
-        public List<string> List { get; set; } = null;
-        public DataTable Table { get; set; } = null;
-             */
-
             if (settings.Enable && atom.Formatting == MarkdownFormattingEnum.Text)
             {
                 #region Chunk-Text
