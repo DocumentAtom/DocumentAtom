@@ -59,6 +59,12 @@
             An atom is a small, self-contained unit of content from a document.
             </summary>
         </member>
+        <member name="M:DocumentAtom.Core.Atoms.AtomBase`1.ToString">
+            <summary>
+            Produce a human-readable string of this object.
+            </summary>
+            <returns>String.</returns>
+        </member>
         <member name="T:DocumentAtom.Core.Atoms.BinaryAtom">
             <summary>
             A binary atom is a self-contained unit of binary content from a document.
@@ -73,6 +79,12 @@
             <summary>
             A binary atom is a self-contained unit of binary content from a document.
             </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.BinaryAtom.ToString">
+            <summary>
+            Produce a human-readable string of this object.
+            </summary>
+            <returns>String.</returns>
         </member>
         <member name="T:DocumentAtom.Core.Atoms.BoundingBox">
             <summary>
@@ -136,6 +148,12 @@
             <param name="other">Another bounding box.</param>
             <returns>True if the other bounding box intersects with this bounding box.</returns>
         </member>
+        <member name="M:DocumentAtom.Core.Atoms.BoundingBox.ToString">
+            <summary>
+            Produce a human-readable string of this object.
+            </summary>
+            <returns>String.</returns>
+        </member>
         <member name="T:DocumentAtom.Core.Atoms.DocxAtom">
             <summary>
             A docx atom is a self-contained unit of information from a Microsoft Word .docx document.
@@ -177,6 +195,12 @@
             A docx atom is a self-contained unit of information from a Microsoft Word .docx document.
             </summary>
         </member>
+        <member name="M:DocumentAtom.Core.Atoms.DocxAtom.ToString">
+            <summary>
+            Produce a human-readable string of this object.
+            </summary>
+            <returns>String.</returns>
+        </member>
         <member name="T:DocumentAtom.Core.Atoms.ImageAtom">
             <summary>
             An image atom is a self-contained unit of information from a .png file.
@@ -217,6 +241,12 @@
             An image atom is a self-contained unit of information from a .png file.
             </summary>
         </member>
+        <member name="M:DocumentAtom.Core.Atoms.ImageAtom.ToString">
+            <summary>
+            Produce a human-readable string of this object.
+            </summary>
+            <returns>String.</returns>
+        </member>
         <member name="T:DocumentAtom.Core.Atoms.ListAtom">
             <summary>
             A list atom is an atom that contains a list of some type, such as a bulleted or numbered list.
@@ -226,6 +256,12 @@
             <summary>
             A list atom is an atom that contains a list of some type, such as a bulleted or numbered list.
             </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.ListAtom.ToString">
+            <summary>
+            Produce a human-readable string of this object.
+            </summary>
+            <returns>String.</returns>
         </member>
         <member name="T:DocumentAtom.Core.Atoms.MarkdownAtom">
             <summary>
@@ -312,6 +348,12 @@
             <param name="text">Text.</param>
             <returns>List of strings.</returns>
         </member>
+        <member name="M:DocumentAtom.Core.Atoms.MarkdownAtom.ToString">
+            <summary>
+            Produce a human-readable string of this object.
+            </summary>
+            <returns>String.</returns>
+        </member>
         <member name="T:DocumentAtom.Core.Atoms.PdfAtom">
             <summary>
             A PDF atom is a self-contained unit of information from a .pdf file.
@@ -351,6 +393,12 @@
             <summary>
             A PDF atom is a self-contained unit of information from a .pdf file.
             </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.PdfAtom.ToString">
+            <summary>
+            Produce a human-readable string of this object.
+            </summary>
+            <returns>String.</returns>
         </member>
         <member name="T:DocumentAtom.Core.Atoms.PptxAtom">
             <summary>
@@ -397,6 +445,12 @@
             A pptx atom is a self-contained unit of information from a Microsoft PowerPoint .pptx presentation.
             </summary>
         </member>
+        <member name="M:DocumentAtom.Core.Atoms.PptxAtom.ToString">
+            <summary>
+            Produce a human-readable string of this object.
+            </summary>
+            <returns>String.</returns>
+        </member>
         <member name="T:DocumentAtom.Core.Atoms.TableAtom">
             <summary>
             A table atom is an atom that contains a table with rows, columns, headers, and values.
@@ -434,6 +488,12 @@
             <param name="table">Table structure.</param>
             <returns>Table atom.</returns>
         </member>
+        <member name="M:DocumentAtom.Core.Atoms.TableAtom.ToString">
+            <summary>
+            Produce a human-readable string of this object.
+            </summary>
+            <returns>String.</returns>
+        </member>
         <member name="T:DocumentAtom.Core.Atoms.TextAtom">
             <summary>
             A text atom is a self-contained unit of text from a document.
@@ -457,6 +517,12 @@
             <param name="position">Atom position.</param>
             <param name="settings">Chunking settings.</param>
             <returns>Text atom.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.TextAtom.ToString">
+            <summary>
+            Produce a human-readable string of this object.
+            </summary>
+            <returns>String.</returns>
         </member>
         <member name="T:DocumentAtom.Core.Atoms.XlsxAtom">
             <summary>
@@ -492,6 +558,12 @@
             <summary>
             A docx atom is a self-contained unit of information from a Microsoft Word .docx document.
             </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.XlsxAtom.ToString">
+            <summary>
+            Produce a human-readable string of this object.
+            </summary>
+            <returns>String.</returns>
         </member>
         <member name="T:DocumentAtom.Core.ChunkingSettings">
             <summary>

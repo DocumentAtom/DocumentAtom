@@ -2,6 +2,7 @@
 {
     using System;
     using System.Drawing;
+    using System.Text;
 
     /// <summary>
     /// Bounding box.
@@ -143,6 +144,12 @@
                    UpperLeft.Y < other.LowerLeft.Y &&
                    LowerLeft.Y > other.UpperLeft.Y;
         }
+
+        /// <summary>
+        /// Produce a human-readable string of this object.
+        /// </summary>
+        /// <returns>String.</returns>
+        public override string ToString() => $"UL({UpperLeft}), LL({LowerLeft}), UR({UpperRight}), LR({LowerRight})";
 
         #endregion
 

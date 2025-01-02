@@ -1,4 +1,5 @@
 ﻿using DocumentAtom.Core.Enums;
+using System.Text;
 
 namespace DocumentAtom.Core.Atoms
 {
@@ -110,6 +111,40 @@ namespace DocumentAtom.Core.Atoms
         #endregion
 
         #region Public-Methods
+
+        /// <summary>
+        /// Produce a human-readable string of this object.
+        /// </summary>
+        /// <returns>String.</returns>
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("Atom" + Environment.NewLine);
+            sb.Append("| GUID          : " + GUID.ToString() + Environment.NewLine);
+            sb.Append("| Type          : " + Type.ToString() + Environment.NewLine);
+
+            if (PageNumber != null)
+                sb.Append("| Page Number   : " + PageNumber.ToString() + Environment.NewLine);
+
+            if (Position != null)
+                sb.Append("| Position      : " + Position.ToString() + Environment.NewLine);
+
+            sb.Append("| Length        : " + Length.ToString() + Environment.NewLine);
+            sb.Append("| MD5 hash      : " + Convert.ToBase64String(MD5Hash) + Environment.NewLine);
+            sb.Append("| SHA1 hash     : " + Convert.ToBase64String(SHA1Hash) + Environment.NewLine);
+            sb.Append("| SHA256 hash   : " + Convert.ToBase64String(SHA256Hash) + Environment.NewLine);
+
+            if (Quarks != null && Quarks.Count > 0)
+            {
+                sb.Append("| Quarks        : " + Quarks.Count + Environment.NewLine);
+                foreach (T quark in Quarks)
+                {
+                    sb.Append(quark.ToString());
+                }
+            }
+
+            return sb.ToString();
+        }
 
         #endregion
 

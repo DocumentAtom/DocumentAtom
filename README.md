@@ -14,9 +14,31 @@ DocumentAtom provides a light, fast library for breaking input documents into co
 
 Please feel free to start an issue or a discussion!
 
+## Types Supported
+
+DocumentAtom supports the following input file types:
+- Text
+- Markdown
+- Microsoft Word (.docx)
+- Microsoft Excel (.xlsx)
+- Microsoft PowerPoint (.pptx)
+- PNG images
+- PDF
+
 ## Simple Example 
 
+Refer to the various `Test` projects for working examples.
+
+The following example shows processing a markdown (`.md`) file.
+
 ```csharp
+using DocumentAtom.Core.Atoms;
+using DocumentAtom.Markdown;
+
+MarkdownProcessorSettings settings = new MarkdownProcessorSettings();
+MarkdownProcessor processor = new MarkdownProcessor(_Settings);
+foreach (MarkdownAtom atom in processor.Extract(filename))
+    Console.WriteLine(atom.ToString());
 ```
 
 ## Version History

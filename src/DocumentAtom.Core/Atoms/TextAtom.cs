@@ -1,9 +1,11 @@
 ﻿namespace DocumentAtom.Core.Atoms
 {
     using System.Text;
+    using System.Xml;
     using DocumentAtom.Core;
     using DocumentAtom.Core.Enums;
     using DocumentAtom.Core.Helpers;
+    using SerializableDataTables;
 
     /// <summary>
     /// A text atom is a self-contained unit of text from a document.
@@ -100,6 +102,18 @@
         #endregion
 
         #region Public-Methods
+
+        /// <summary>
+        /// Produce a human-readable string of this object.
+        /// </summary>
+        /// <returns>String.</returns>
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(base.ToString());
+            sb.Append("| Text          : " + (!String.IsNullOrEmpty(Text) ? Text : "(null)") + Environment.NewLine);
+            return sb.ToString();
+        }
 
         #endregion
 

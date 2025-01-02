@@ -59,6 +59,47 @@
 
         #region Public-Methods
 
+        /// <summary>
+        /// Produce a human-readable string of this object.
+        /// </summary>
+        /// <returns>String.</returns>
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(base.ToString());
+            sb.Append("| Sheet name    : " + (!String.IsNullOrEmpty(SheetName) ? SheetName : "(null)") + Environment.NewLine);
+            sb.Append("| Cell          : " + (!String.IsNullOrEmpty(CellIdentifier) ? CellIdentifier : "(null)") + Environment.NewLine);
+            sb.Append("| Text          : " + (!String.IsNullOrEmpty(Text) ? Text : "(null)") + Environment.NewLine);
+
+            if (Table != null)
+            {
+                sb.Append("| Data table    : " + Environment.NewLine);
+                if (Table.Columns != null && Table.Columns.Count > 0)
+                {
+                    foreach (SerializableColumn item in Table.Columns)
+                        sb.Append("  | Column : " + item.Name + Environment.NewLine);
+                }
+
+                if (Table.Rows != null && Table.Rows.Count > 0)
+                {
+                    sb.Append("  | Rows" + Environment.NewLine);
+
+                    for (int i = 0; i < Table.Rows.Count; i++)
+                    {
+                        sb.Append("    | Row " + i + Environment.NewLine);
+
+                        foreach (KeyValuePair<string, object> row in Table.Rows[i])
+                            sb.Append("      | " + row.Key + " | " + (row.Value != null ? row.Value.ToString() : "(null)") + Environment.NewLine);
+                    }
+                }
+            }
+
+            if (Binary != null)
+                sb.Append("| Binary        : " + Convert.ToBase64String(Binary) + Environment.NewLine);
+
+            return sb.ToString();
+        }
+
         #endregion
 
         #region Private-Methods

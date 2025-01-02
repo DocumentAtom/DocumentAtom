@@ -1,5 +1,8 @@
 ﻿using DocumentAtom.Core.Image;
+using SerializableDataTables;
 using System.Data;
+using static System.Net.Mime.MediaTypeNames;
+using System.Text;
 
 namespace DocumentAtom.Core.Atoms
 {
@@ -116,6 +119,36 @@ namespace DocumentAtom.Core.Atoms
         #endregion
 
         #region Public-Methods
+
+        /// <summary>
+        /// Produce a human-readable string of this object.
+        /// </summary>
+        /// <returns>String.</returns>
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(base.ToString());
+            sb.Append("| Rows          : " + Rows.ToString() + Environment.NewLine);
+            sb.Append("| Columns       : " + Columns.ToString() + Environment.NewLine);
+            sb.Append("| Irregular     : " + Irregular.ToString() + Environment.NewLine);
+
+            if (Table != null)
+            {
+                sb.Append("| Data table    : " + Environment.NewLine);
+                if (Table.Columns != null && Table.Columns.Count > 0)
+                {
+                    foreach (DataColumn item in Table.Columns)
+                        sb.Append("  | Column : " + item.ColumnName + Environment.NewLine);
+                }
+
+                if (Table.Rows != null && Table.Rows.Count > 0)
+                {
+                    sb.Append("  | Rows   : " + Table.Rows.Count + Environment.NewLine);
+                }
+            }
+
+            return sb.ToString();
+        }
 
         #endregion
 
