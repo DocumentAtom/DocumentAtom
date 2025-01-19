@@ -8,7 +8,7 @@
 		<Title>DocumentAtom</Title>
 		<Product>DocumentAtom</Product>
 		<Authors>Joel Christner</Authors>
-		<Copyright>(c)2024 Joel Christner</Copyright>
+		<Copyright>(c)2025 Joel Christner</Copyright>
 		<ApplicationIcon>icon.ico</ApplicationIcon>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<DocumentationFile>DocumentAtom.Core.xml</DocumentationFile>
@@ -22,6 +22,8 @@
 		<PackageTags>semantic cell chunk text processing extract extraction doc docx xlsx pptx ppt keynote pages numbers text txt pdf ai llm rag parse parsing parser word excel powerpoint</PackageTags>
 		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
 		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<IncludeSymbols>True</IncludeSymbols>
 	</PropertyGroup>
 
 	<ItemGroup>

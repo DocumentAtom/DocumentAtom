@@ -247,22 +247,6 @@
             </summary>
             <returns>String.</returns>
         </member>
-        <member name="T:DocumentAtom.Core.Atoms.ListAtom">
-            <summary>
-            A list atom is an atom that contains a list of some type, such as a bulleted or numbered list.
-            </summary>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.ListAtom.#ctor">
-            <summary>
-            A list atom is an atom that contains a list of some type, such as a bulleted or numbered list.
-            </summary>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.ListAtom.ToString">
-            <summary>
-            Produce a human-readable string of this object.
-            </summary>
-            <returns>String.</returns>
-        </member>
         <member name="T:DocumentAtom.Core.Atoms.MarkdownAtom">
             <summary>
             A markdown atom is a self-contained unit of information from a markdown document.

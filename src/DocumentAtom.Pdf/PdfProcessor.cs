@@ -51,6 +51,7 @@
         #region Private-Members
 
         private PdfProcessorSettings _Settings = new PdfProcessorSettings();
+
         #endregion
 
         #region Constructors-and-Factories

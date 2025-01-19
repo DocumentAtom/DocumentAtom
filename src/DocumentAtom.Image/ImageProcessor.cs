@@ -119,12 +119,13 @@
             {
                 foreach (TableStructure table in result.Tables)
                 {
-                    DataTable dt = TableAtom.FromTableStructure(table).Table;
+                    SerializableDataTable sdt = TableAtom.FromTableStructure(table).Table;
+                    DataTable dt = sdt.ToDataTable();
 
                     yield return new ImageAtom
                     {
                         Type = AtomTypeEnum.Table,
-                        Table = SerializableDataTable.FromDataTable(dt),
+                        Table = sdt,
                         Length = DataTableHelper.GetLength(dt),
                         MD5Hash = HashHelper.MD5Hash(dt),
                         SHA1Hash = HashHelper.SHA1Hash(dt),

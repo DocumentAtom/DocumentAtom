@@ -7,10 +7,12 @@
     using System.Linq;
     using Tesseract;
     using SixLabors.ImageSharp;
-    using SixLabors.ImageSharp.Processing;
 
     using Rectangle = System.Drawing.Rectangle;
-
+    
+    /// <summary>
+    /// Image context entractor.  This library requires that you have Tesseract installed on the host and that you have awareness of the location of the tessdata directory.
+    /// </summary>
     public class ImageContentExtractor : IDisposable
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
@@ -19,17 +21,52 @@
 
         #region Public-Members
 
+        /// <summary>
+        /// Line threshold.
+        /// </summary>   
         public int LineThreshold { get; set; } = 5;
+
+        /// <summary>
+        /// Paragraph threshold.
+        /// </summary>
         public int ParagraphThreshold { get; set; } = 30;
+
+        /// <summary>
+        /// Horizontal line length.
+        /// </summary>
         public int HorizontalLineLength { get; set; } = 80;
+
+        /// <summary>
+        /// Vertical line length.
+        /// </summary>
         public int VerticalLineLength { get; set; } = 40;
-        public int TableMinArea { get; set; } = 5000;
+
+        /// <summary>
+        /// Table minimum area.
+        /// </summary>
+        public int TableMinimumArea { get; set; } = 5000;
+
+        /// <summary>
+        /// Column alignment tolerance.
+        /// </summary>
         public int ColumnAlignmentTolerance { get; set; } = 10;
+
+        /// <summary>
+        /// Proximity threshold.
+        /// </summary>
         public int ProximityThreshold { get; set; } = 20;
+
+        /// <summary>
+        /// List markers.
+        /// </summary>
         public HashSet<string> ListMarkers { get; set; } = new HashSet<string> { "-", "•", "*", "○", "●", "■", "□", "→", "▪", "▫", "♦", "⚫" };
+
+        /// <summary>
+        /// List numbering patterns.
+        /// </summary>
         public HashSet<string> ListNumberingPatterns { get; set; } = new HashSet<string>
         {
-            @"^\d+\.",             // 1.
+            @"^\d+\.",            // 1.
             @"^[a-z]\)",          // a)
             @"^[A-Z]\)",          // A)
             @"^\(\d+\)",          // (1)
@@ -43,38 +80,98 @@
 
         #region Private-Members
 
-        private readonly TesseractEngine _engine;
+        private readonly TesseractEngine _Tesseract;
 
         #endregion
 
         #region Embedded-Classes
 
+        /// <summary>
+        /// Text element.
+        /// </summary>
         public class TextElement
         {
+            /// <summary>
+            /// Text.
+            /// </summary>
             public string Text { get; set; }
+
+            /// <summary>
+            /// Bounds.
+            /// </summary>
             public Rectangle Bounds { get; set; }
+
+            /// <summary>
+            /// Confidence.
+            /// </summary>
             public float Confidence { get; set; }
         }
 
+        /// <summary>
+        /// Table structure.
+        /// </summary>
         public class TableStructure
         {
+            /// <summary>
+            /// Cells.
+            /// </summary>
             public List<List<string>> Cells { get; set; }
+
+            /// <summary>
+            /// Bounds.
+            /// </summary>
             public Rectangle Bounds { get; set; }
+
+            /// <summary>
+            /// Rows.
+            /// </summary>
             public int Rows { get; set; }
+
+            /// <summary>
+            /// Counts.
+            /// </summary>
             public int Columns { get; set; }
         }
 
+        /// <summary>
+        /// List structure.
+        /// </summary>
         public class ListStructure
         {
+            /// <summary>
+            /// List items.
+            /// </summary>
             public List<string> Items { get; set; }
+
+            /// <summary>
+            /// Boolean indicating if the list is ordered.
+            /// </summary>
             public bool IsOrdered { get; set; }
+
+            /// <summary>
+            /// Bounds.
+            /// </summary>
             public Rectangle Bounds { get; set; }
         }
 
+        /// <summary>
+        /// Extraction result.
+        /// </summary>
         public class ExtractionResult
         {
+            /// <summary>
+            /// Text elements.
+            /// </summary>
             public List<TextElement> TextElements { get; set; }
+
+            /// <summary>
+            /// Tables.
+            /// </summary>
             public List<TableStructure> Tables { get; set; }
+
+            /// <summary>
+            /// Lists.
+            /// </summary>
             public List<ListStructure> Lists { get; set; }
         }
 
@@ -82,22 +179,49 @@
 
         #region Constructors-and-Factories
 
-        public ImageContentExtractor(string tessdataPath)
+        /// <summary>
+        /// Image context entractor.  This library requires that you have Tesseract installed on the host and that you have awareness of the location of the tessdata directory.
+        /// </summary>
+        /// <param name="tessdataPath">Tesseract data folder.  
+        /// For Windows, the folder is generally C:\Program Files\Tesseract-OCR\tessdata.
+        /// For MacOS, the folder is generally /usr/local/share/tessdata or /opt/local/share/tessdata.
+        /// For Linux, the folder is generally /usr/share/tessdata or /usr/local/share/tessdata.
+        /// </param>
+        /// <param name="languageFile">The default language file to use.  Defaults to eng.  This file, with extension .traineddata, must exist in the data directory.</param>
+        public ImageContentExtractor(string tessdataPath, string languageFile = "eng")
         {
-            _engine = new TesseractEngine(tessdataPath, "eng", EngineMode.Default);
-            _engine.SetVariable("debug_file", "/dev/null");
-            _engine.SetVariable("quiet_mode", "1");
+            if (String.IsNullOrEmpty(tessdataPath)) throw new ArgumentNullException(nameof(tessdataPath));
+            if (String.IsNullOrEmpty(languageFile)) throw new ArgumentNullException(nameof(languageFile));
+
+            string dirPath = Path.GetFullPath(tessdataPath);
+            string fullFile = Path.Join(dirPath, (languageFile + ".traineddata"));
+
+            if (!Directory.Exists(dirPath)) throw new DirectoryNotFoundException("The specified tessdata directory does not exist.");
+            if (!File.Exists(fullFile))
+                throw new FileNotFoundException("The specified language file " + languageFile + ".traineddata does not exist in the specified tessdata directory.");
+
+            _Tesseract = new TesseractEngine(tessdataPath, "eng", EngineMode.Default);
+            _Tesseract.SetVariable("debug_file", "/dev/null");
+            _Tesseract.SetVariable("quiet_mode", "1");
         }
 
         #endregion
 
         #region Public-Methods
 
+        /// <summary>
+        /// Dispose.
+        /// </summary>
         public void Dispose()
         {
-            _engine?.Dispose();
+            _Tesseract?.Dispose();
         }
 
+        /// <summary>
+        /// Extract content from PNG data.
+        /// </summary>
+        /// <param name="pngData">PNG data.</param>
+        /// <returns>Extraction result.</returns>
         public ExtractionResult ExtractContent(byte[] pngData)
         {
             if (pngData == null || pngData.Length == 0)
@@ -119,14 +243,14 @@
                 List<TextElement> allElements;
 
                 // First pass: Get all elements
-                using (var page = _engine.Process(img))
+                using (var page = _Tesseract.Process(img))
                 {
                     allElements = GetTextElements(page);
                 }
 
                 // Step 1: Process tables first and get masked regions
                 var tableRegions = DetectTableRegionsFromElements(allElements);
-                using (var page = _engine.Process(img))
+                using (var page = _Tesseract.Process(img))
                 {
                     foreach (var region in tableRegions)
                     {

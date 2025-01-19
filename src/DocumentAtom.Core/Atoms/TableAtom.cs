@@ -53,7 +53,7 @@ namespace DocumentAtom.Core.Atoms
         /// <summary>
         /// Data table.
         /// </summary>
-        public DataTable Table { get; set; } = null;
+        public SerializableDataTable Table { get; set; } = null;
 
         #endregion
 
@@ -112,7 +112,7 @@ namespace DocumentAtom.Core.Atoms
             {
                 Rows = table.Rows,
                 Columns = table.Columns,
-                Table = dt
+                Table = SerializableDataTable.FromDataTable(dt)
             };
         }
 
@@ -137,8 +137,8 @@ namespace DocumentAtom.Core.Atoms
                 sb.Append("| Data table    : " + Environment.NewLine);
                 if (Table.Columns != null && Table.Columns.Count > 0)
                 {
-                    foreach (DataColumn item in Table.Columns)
-                        sb.Append("  | Column : " + item.ColumnName + Environment.NewLine);
+                    foreach (SerializableColumn item in Table.Columns)
+                        sb.Append("  | Column : " + item.Name + Environment.NewLine);
                 }
 
                 if (Table.Rows != null && Table.Rows.Count > 0)

@@ -12,7 +12,7 @@
 		<Version>1.0.0</Version>
 		<Authors>Joel Christner</Authors>
 		<Description>DocumentAtom provides a light, fast library for breaking input markdown documents into constituent parts (atoms), useful for AI, machine learning, processing, analytics, and general analysis.</Description>
-		<Copyright>(c)2024 Joel Christner</Copyright>
+		<Copyright>(c)2025 Joel Christner</Copyright>
 		<PackageProjectUrl>https://github.com/jchristn/DocumentAtom</PackageProjectUrl>
 		<PackageIcon>icon.png</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
@@ -21,6 +21,8 @@
 		<PackageTags>semantic cell chunk text processing extract extraction doc docx xlsx pptx ppt keynote pages numbers text txt pdf ai llm rag parse parsing parser word excel powerpoint</PackageTags>
 		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
 		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<IncludeSymbols>True</IncludeSymbols>
 	</PropertyGroup>
 
 	<ItemGroup>
