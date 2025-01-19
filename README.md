@@ -20,7 +20,7 @@ DocumentAtom provides a light, fast library for breaking input documents into co
 
 ## Motivation
 
-Parsing documents and extracting constituent parts is one part science and one part black magic.  I make no claims about the accuracy of extraction, but rather, aims for perfection and hopefully fails to excellence.  If you find ways to improve processing and extraction in any way, we would love your feedback so we can make this library more accurate, faster, and overall better.  My goal in building this library is to make it easier to analyze input data assets and make them more consumable by other systems including analytics and artificial intelligence.
+Parsing documents and extracting constituent parts is one part science and one part black magic.  If you find ways to improve processing and extraction in any way that is horizontally useful, I'd would love your feedback on ways to make this library more accurate, more useful, faster, and overall better.  My goal in building this library is to make it easier to analyze input data assets and make them more consumable by other systems including analytics and artificial intelligence.
 
 ## Bugs, Quality, Feedback, or Enhancement Requests
 
@@ -34,7 +34,7 @@ DocumentAtom supports the following input file types:
 - Microsoft Word (.docx)
 - Microsoft Excel (.xlsx)
 - Microsoft PowerPoint (.pptx)
-- PNG images **requires Tesseract on the host**
+- PNG images (**requires Tesseract on the host**)
 - PDF
 
 ## Simple Example 
