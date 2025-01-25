@@ -18,6 +18,11 @@
         public bool RemoveBinaryFromText { get; set; } = true;
 
         /// <summary>
+        /// True to extract atoms from images using OCR.
+        /// </summary>
+        public bool ExtractAtomsFromImages { get; set; } = true;
+
+        /// <summary>
         /// Directory information for the temporary directory.
         /// </summary>
         public DirectoryInfo TempDirectoryInfo

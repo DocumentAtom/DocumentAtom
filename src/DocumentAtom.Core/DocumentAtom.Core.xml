@@ -1102,6 +1102,11 @@
             True to remove binary data from input text data.
             </summary>
         </member>
+        <member name="P:DocumentAtom.Core.ProcessorSettingsBase.ExtractAtomsFromImages">
+            <summary>
+            True to extract atoms from images using OCR.
+            </summary>
+        </member>
         <member name="P:DocumentAtom.Core.ProcessorSettingsBase.TempDirectoryInfo">
             <summary>
             Directory information for the temporary directory.

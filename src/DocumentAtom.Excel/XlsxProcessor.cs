@@ -296,6 +296,8 @@
                                     SHA256Hash = HashHelper.SHA256Hash(bytes),
                                     Length = bytes.Length
                                 };
+
+
                             }
                         }
                     }
