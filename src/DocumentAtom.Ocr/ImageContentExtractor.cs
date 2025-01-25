@@ -1,4 +1,4 @@
-﻿namespace Ocr
+﻿namespace DocumentAtom.Ocr
 {
     using System;
     using System.Collections.Generic;

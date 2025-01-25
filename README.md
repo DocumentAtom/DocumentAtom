@@ -11,6 +11,7 @@ DocumentAtom provides a light, fast library for breaking input documents into co
 | DocumentAtom.Markdown | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Markdown.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Markdown/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Markdown.svg)](https://www.nuget.org/packages/DocumentAtom.Markdown)  |
 | DocumentAtom.Pdf | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Pdf.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Pdf/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Pdf.svg)](https://www.nuget.org/packages/DocumentAtom.Pdf)  |
 | DocumentAtom.PowerPoint | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.PowerPoint.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.PowerPoint/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.PowerPoint.svg)](https://www.nuget.org/packages/DocumentAtom.PowerPoint)  |
+| DocumentAtom.Ocr | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Ocr.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Ocr/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Ocr.svg)](https://www.nuget.org/packages/DocumentAtom.Ocr)  |
 | DocumentAtom.Text | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Text.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Text/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Text.svg)](https://www.nuget.org/packages/DocumentAtom.Text)  |
 | DocumentAtom.Word | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Word.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Word/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Word.svg)](https://www.nuget.org/packages/DocumentAtom.Word)  |
 
@@ -49,8 +50,10 @@ using DocumentAtom.Markdown;
 
 MarkdownProcessorSettings settings = new MarkdownProcessorSettings();
 MarkdownProcessor processor = new MarkdownProcessor(_Settings);
-foreach (MarkdownAtom atom in processor.Extract(filename))
+foreach (Atom atom in processor.Extract(filename))
+{
     Console.WriteLine(atom.ToString());
+}
 ```
 
 ## Atom Types

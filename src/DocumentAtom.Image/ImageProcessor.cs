@@ -1,6 +1,7 @@
 ﻿namespace DocumentAtom.Image
 {
     using System.Data;
+    using System.IO;
     using System.Security.Cryptography;
     using System.Text;
     using DocumentAtom.Core;
@@ -47,7 +48,7 @@
         #region Private-Members
 
         private ImageProcessorSettings _Settings = new ImageProcessorSettings();
-        private readonly TesseractEngine _engine;
+        private readonly TesseractEngine _Engine;
 
 
         #endregion
@@ -64,13 +65,13 @@
             Header = "[Image] ";
 
             _Settings = settings;
-            _engine = new TesseractEngine(
+            _Engine = new TesseractEngine(
                 _Settings.TesseractDataDirectory,
                 _Settings.TesseractLanguage,
                 EngineMode.Default);
 
-            _engine.SetVariable("debug_file", "/dev/null");
-            _engine.SetVariable("quiet_mode", "1");
+            _Engine.SetVariable("debug_file", "/dev/null");
+            _Engine.SetVariable("quiet_mode", "1");
         }
 
         #endregion
@@ -82,17 +83,40 @@
         /// </summary>
         /// <param name="filename">Filename.</param>
         /// <returns>Atoms.</returns>
-        public IEnumerable<ImageAtom> Extract(string filename)
+        public IEnumerable<Atom> Extract(string filename)
         {
             if (String.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
             return ProcessFile(filename);
+        }
+
+        /// <summary>
+        /// Extract atoms from a byte array.
+        /// </summary>
+        /// <param name="data">Byte data.</param>
+        /// <returns>Atoms.</returns>
+        public IEnumerable<Atom> Extract(byte[] data)
+        {
+            string filename = Path.Join(_Settings.TempDirectory, Guid.NewGuid().ToString());
+            
+            try
+            {
+                File.WriteAllBytes(filename, data);
+                foreach (Atom atom in Extract(filename))
+                {
+                    yield return atom;
+                }
+            }
+            finally
+            {
+                if (File.Exists(filename)) File.Delete(filename);
+            }
         }
 
         #endregion
 
         #region Private-Methods
 
-        private IEnumerable<ImageAtom> ProcessFile(string filename)
+        private IEnumerable<Atom> ProcessFile(string filename)
         {
             byte[] bytes = File.ReadAllBytes(filename);
             ExtractionResult result = ExtractContent(bytes);
@@ -102,7 +126,7 @@
                 {
                     if (!String.IsNullOrEmpty(text.Text))
                     {
-                        yield return new ImageAtom
+                        yield return new Atom
                         {
                             Type = AtomTypeEnum.Text,
                             Text = text.Text,
@@ -119,10 +143,10 @@
             {
                 foreach (TableStructure table in result.Tables)
                 {
-                    SerializableDataTable sdt = TableAtom.FromTableStructure(table).Table;
+                    SerializableDataTable sdt = Atom.FromTableStructure(table).Table;
                     DataTable dt = sdt.ToDataTable();
 
-                    yield return new ImageAtom
+                    yield return new Atom
                     {
                         Type = AtomTypeEnum.Table,
                         Table = sdt,
@@ -140,7 +164,7 @@
                 {
                     if (list.Items != null && list.Items.Count > 0)
                     {
-                        yield return new ImageAtom
+                        yield return new Atom
                         {
                             Type = AtomTypeEnum.List,
                             UnorderedList = (list.IsOrdered ? list.Items : null),
@@ -175,14 +199,14 @@
             List<TextElement> allElements;
 
             // First pass: Get all elements
-            using (var page = _engine.Process(img))
+            using (var page = _Engine.Process(img))
             {
                 allElements = GetTextElements(page);
             }
 
             // Step 1: Process tables first and get masked regions
             var tableRegions = DetectTableRegionsFromElements(allElements);
-            using (var page = _engine.Process(img))
+            using (var page = _Engine.Process(img))
             {
                 foreach (var region in tableRegions)
                 {

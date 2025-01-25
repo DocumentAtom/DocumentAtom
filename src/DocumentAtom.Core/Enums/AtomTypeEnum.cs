@@ -10,10 +10,6 @@
         /// </summary>
         Text,
         /// <summary>
-        /// Image.
-        /// </summary>
-        Image,
-        /// <summary>
         /// Binary.
         /// </summary>
         Binary,

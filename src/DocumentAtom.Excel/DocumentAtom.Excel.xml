@@ -14,10 +14,12 @@
             Xlsx processor settings.
             </summary>
         </member>
-        <member name="M:DocumentAtom.Excel.XlsxProcessor.#ctor(DocumentAtom.Excel.XlsxProcessorSettings)">
+        <member name="M:DocumentAtom.Excel.XlsxProcessor.#ctor(DocumentAtom.Excel.XlsxProcessorSettings,DocumentAtom.Image.ImageProcessorSettings)">
             <summary>
             Create atoms from Excel documents.
             </summary>
+            <param name="settings">Processor settings.</param>
+            <param name="imageSettings">Image processor settings.</param>
         </member>
         <member name="M:DocumentAtom.Excel.XlsxProcessor.Extract(System.String)">
             <summary>

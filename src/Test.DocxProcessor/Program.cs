@@ -23,7 +23,7 @@
                 if (String.IsNullOrEmpty(filename)) break;
 
                 DocxProcessor processor = new DocxProcessor(_Settings);
-                foreach (DocxAtom atom in processor.Extract(filename))
+                foreach (Atom atom in processor.Extract(filename))
                     Console.WriteLine(_Serializer.SerializeJson(atom, true));
 
                 Console.WriteLine("End of file");

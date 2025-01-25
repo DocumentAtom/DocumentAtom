@@ -13,6 +13,7 @@
     using DocumentAtom.Core.Enums;
     using DocumentAtom.Core.Helpers;
     using DocumentAtom.Core.Office;
+    using DocumentAtom.Image;
     using DocumentFormat.OpenXml;
     using DocumentFormat.OpenXml.Packaging;
     using DocumentFormat.OpenXml.Wordprocessing;
@@ -75,7 +76,9 @@
         /// <summary>
         /// Create atoms from text documents.
         /// </summary>
-        public DocxProcessor(DocxProcessorSettings settings = null)
+        /// <param name="settings">Processor settings.</param>
+        /// <param name="imageSettings">Image processor settings.</param>
+        public DocxProcessor(DocxProcessorSettings settings = null, ImageProcessorSettings imageSettings = null)
         {
             if (settings == null) settings = new DocxProcessorSettings();
 
@@ -93,7 +96,7 @@
         /// </summary>
         /// <param name="filename">Filename.</param>
         /// <returns>Atoms.</returns>
-        public IEnumerable<DocxAtom> Extract(string filename)
+        public IEnumerable<Atom> Extract(string filename)
         {
             if (String.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
             return ProcessFile(filename);
@@ -154,7 +157,7 @@
 
         #region Private-Methods
 
-        private IEnumerable<DocxAtom> ProcessFile(string filename)
+        private IEnumerable<Atom> ProcessFile(string filename)
         {
             if (String.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
 
@@ -186,7 +189,7 @@
                         {
                             if (currentList != null)
                             {
-                                yield return new DocxAtom
+                                yield return new Atom
                                 {
                                     Type = AtomTypeEnum.List,
                                     OrderedList = isOrderedList ? currentList : null,
@@ -203,7 +206,7 @@
                             string paragraphText = ExtractTextFromParagraph(paragraph);
                             if (!string.IsNullOrWhiteSpace(paragraphText))
                             {
-                                yield return new DocxAtom
+                                yield return new Atom
                                 {
                                     Type = AtomTypeEnum.Text,
                                     Text = paragraphText,
@@ -219,7 +222,7 @@
                     {
                         if (currentList != null)
                         {
-                            yield return new DocxAtom
+                            yield return new Atom
                             {
                                 Type = AtomTypeEnum.List,
                                 OrderedList = isOrderedList ? currentList : null,
@@ -235,7 +238,7 @@
 
                         DataTable dt = ConvertToDataTable(table);
 
-                        yield return new DocxAtom
+                        yield return new Atom
                         {
                             Type = AtomTypeEnum.Table,
                             Table = SerializableDataTable.FromDataTable(dt),
@@ -249,7 +252,7 @@
 
                 if (currentList != null)
                 {
-                    yield return new DocxAtom
+                    yield return new Atom
                     {
                         Type = AtomTypeEnum.List,
                         OrderedList = isOrderedList ? currentList : null,
@@ -275,9 +278,9 @@
                         var drawing = doc.MainDocumentPart.Document.Descendants<DocumentFormat.OpenXml.Drawing.Blip>()
                             .FirstOrDefault(b => b.Embed?.Value == imageId);
 
-                        yield return new DocxAtom
+                        yield return new Atom
                         {
-                            Type = AtomTypeEnum.Image,
+                            Type = AtomTypeEnum.Binary,
                             Binary = bytes,
                             MD5Hash = HashHelper.MD5Hash(bytes),
                             SHA1Hash = HashHelper.SHA1Hash(bytes),

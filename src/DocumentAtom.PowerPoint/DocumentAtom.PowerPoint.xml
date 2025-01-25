@@ -14,10 +14,12 @@
             Pptx processor settings.
             </summary>
         </member>
-        <member name="M:DocumentAtom.PowerPoint.PptxProcessor.#ctor(DocumentAtom.PowerPoint.PptxProcessorSettings)">
+        <member name="M:DocumentAtom.PowerPoint.PptxProcessor.#ctor(DocumentAtom.PowerPoint.PptxProcessorSettings,DocumentAtom.Image.ImageProcessorSettings)">
             <summary>
             Create atoms from PowerPoint presentations.
             </summary>
+            <param name="settings">Processor settings.</param>
+            <param name="imageSettings">Image processor settings.</param>
         </member>
         <member name="M:DocumentAtom.PowerPoint.PptxProcessor.Extract(System.String)">
             <summary>

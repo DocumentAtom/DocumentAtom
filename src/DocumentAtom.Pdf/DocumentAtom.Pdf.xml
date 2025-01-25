@@ -14,10 +14,12 @@
             PDF processor settings.
             </summary>
         </member>
-        <member name="M:DocumentAtom.Pdf.PdfProcessor.#ctor(DocumentAtom.Pdf.PdfProcessorSettings)">
+        <member name="M:DocumentAtom.Pdf.PdfProcessor.#ctor(DocumentAtom.Pdf.PdfProcessorSettings,DocumentAtom.Image.ImageProcessorSettings)">
             <summary>
             Create atoms from PDF documents.
             </summary>
+            <param name="settings">Processor settings.</param>
+            <param name="imageSettings">Image processor settings.</param>
         </member>
         <member name="M:DocumentAtom.Pdf.PdfProcessor.Extract(System.String)">
             <summary>

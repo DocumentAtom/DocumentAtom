@@ -26,6 +26,13 @@
             <param name="filename">Filename.</param>
             <returns>Atoms.</returns>
         </member>
+        <member name="M:DocumentAtom.Image.ImageProcessor.Extract(System.Byte[])">
+            <summary>
+            Extract atoms from a byte array.
+            </summary>
+            <param name="data">Byte data.</param>
+            <returns>Atoms.</returns>
+        </member>
         <member name="T:DocumentAtom.Image.ImageProcessorSettings">
             <summary>
             Settings for image processor.  Use of this processor requires that Tesseract be installed on the host.

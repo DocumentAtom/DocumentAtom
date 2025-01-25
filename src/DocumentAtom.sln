@@ -33,7 +33,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentAtom.Image", "Docum
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.ImageProcessor", "Test.ImageProcessor\Test.ImageProcessor.csproj", "{74E15FE8-D4E1-41E3-B636-3A0F0399FFF6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ocr", "Ocr\Ocr.csproj", "{D3E9CDAF-3E61-4C78-98FD-5A96BCB95568}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentAtom.Ocr", "DocumentAtom.Ocr\DocumentAtom.Ocr.csproj", "{D3E9CDAF-3E61-4C78-98FD-5A96BCB95568}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.OcrProcessor", "Test.OcrProcessor\Test.OcrProcessor.csproj", "{81023983-EC09-47D8-A887-32CF14AEE449}"
 EndProject

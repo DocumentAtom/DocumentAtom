@@ -14,10 +14,12 @@
             Docx processor settings.
             </summary>
         </member>
-        <member name="M:DocumentAtom.Word.DocxProcessor.#ctor(DocumentAtom.Word.DocxProcessorSettings)">
+        <member name="M:DocumentAtom.Word.DocxProcessor.#ctor(DocumentAtom.Word.DocxProcessorSettings,DocumentAtom.Image.ImageProcessorSettings)">
             <summary>
             Create atoms from text documents.
             </summary>
+            <param name="settings">Processor settings.</param>
+            <param name="imageSettings">Image processor settings.</param>
         </member>
         <member name="M:DocumentAtom.Word.DocxProcessor.Extract(System.String)">
             <summary>

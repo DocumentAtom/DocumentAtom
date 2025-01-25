@@ -63,7 +63,7 @@
         /// </summary>
         /// <param name="filename">Filename.</param>
         /// <returns>Atoms.</returns>
-        public IEnumerable<TextAtom> Extract(string filename)
+        public IEnumerable<Atom> Extract(string filename)
         {
             if (String.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
             return ProcessFile(filename);
@@ -73,7 +73,7 @@
 
         #region Private-Methods
 
-        private IEnumerable<TextAtom> ProcessFile(string filename)
+        private IEnumerable<Atom> ProcessFile(string filename)
         {
             using (FileStream fs = new FileStream(filename, FileMode.Open, FileAccess.Read))
             {
@@ -113,7 +113,7 @@
 
                                 if (!string.IsNullOrEmpty(segment))
                                 {
-                                    yield return TextAtom.FromContent(segment, atomCount, _Settings.Chunking);
+                                    yield return Atom.FromTextContent(segment, atomCount, _Settings.Chunking);
                                     atomCount++;
                                 }
 
@@ -139,7 +139,7 @@
 
                     if (!String.IsNullOrEmpty(finalSegment))
                     {
-                        yield return TextAtom.FromContent(finalSegment, atomCount, _Settings.Chunking);
+                        yield return Atom.FromTextContent(finalSegment, atomCount, _Settings.Chunking);
                         atomCount++;
                     }
                 }

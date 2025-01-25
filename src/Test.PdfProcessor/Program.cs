@@ -23,7 +23,7 @@
                 if (String.IsNullOrEmpty(filename)) break;
 
                 PdfProcessor processor = new PdfProcessor(_Settings);
-                foreach (PdfAtom atom in processor.Extract(filename))
+                foreach (Atom atom in processor.Extract(filename))
                     Console.WriteLine(_Serializer.SerializeJson(atom, true));
 
                 Console.WriteLine("End of file");

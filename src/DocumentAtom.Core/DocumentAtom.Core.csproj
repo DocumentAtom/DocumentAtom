@@ -12,14 +12,14 @@
 		<ApplicationIcon>icon.ico</ApplicationIcon>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<DocumentationFile>DocumentAtom.Core.xml</DocumentationFile>
-		<Version>1.0.3</Version>
+		<Version>1.0.10</Version>
 		<Description>Core classes for DocumentAtom.  Download the DocumentAtom package specific to the content types you wish to process.  DocumentAtom provides a light, fast library for breaking input documents into constituent parts (atoms), useful for AI, machine learning, processing, analytics, and general analysis.</Description>
 		<PackageProjectUrl>https://github.com/jchristn/DocumentAtom</PackageProjectUrl>
 		<PackageIcon>icon.png</PackageIcon>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/jchristn/DocumentAtom</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>semantic cell chunk text processing extract extraction doc docx xlsx pptx ppt keynote pages numbers text txt pdf ai llm rag parse parsing parser word excel powerpoint</PackageTags>
+		<PackageTags>semantic cell chunk text processing extract extraction doc docx xlsx pptx ppt png keynote pages numbers text txt pdf ai llm rag parse parsing parser word excel powerpoint</PackageTags>
 		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
 		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>

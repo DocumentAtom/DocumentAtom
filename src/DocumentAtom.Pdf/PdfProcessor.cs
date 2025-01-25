@@ -10,6 +10,7 @@
     using DocumentAtom.Core.Atoms;
     using DocumentAtom.Core.Enums;
     using DocumentAtom.Core.Helpers;
+    using DocumentAtom.Image;
     using UglyToad.PdfPig;
     using UglyToad.PdfPig.Content;
     using UglyToad.PdfPig.DocumentLayoutAnalysis;
@@ -59,7 +60,9 @@
         /// <summary>
         /// Create atoms from PDF documents.
         /// </summary>
-        public PdfProcessor(PdfProcessorSettings settings = null)
+        /// <param name="settings">Processor settings.</param>
+        /// <param name="imageSettings">Image processor settings.</param>
+        public PdfProcessor(PdfProcessorSettings settings = null, ImageProcessorSettings imageSettings = null)
         {
             if (settings == null) settings = new PdfProcessorSettings();
 
@@ -76,7 +79,7 @@
         /// </summary>
         /// <param name="filename">Filename.</param>
         /// <returns>Atoms.</returns>
-        public IEnumerable<PdfAtom> Extract(string filename)
+        public IEnumerable<Atom> Extract(string filename)
         {
             if (String.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
             return ProcessFile(filename);
@@ -111,7 +114,7 @@
 
         #region Private-Methods
 
-        private IEnumerable<PdfAtom> ProcessFile(string filename)
+        private IEnumerable<Atom> ProcessFile(string filename)
         {
             if (String.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
 
@@ -140,7 +143,7 @@
                             });
 
                             // Emit table atom
-                            yield return new PdfAtom
+                            yield return new Atom
                             {
                                 Type = AtomTypeEnum.Table,
                                 Table = SerializableDataTable.FromDataTable(dt),
@@ -187,7 +190,7 @@
                         string text = sb.ToString().Trim();
                         if (!string.IsNullOrWhiteSpace(text))
                         {
-                            yield return new PdfAtom
+                            yield return new Atom
                             {
                                 Type = AtomTypeEnum.Text,
                                 Text = text,
@@ -214,9 +217,9 @@
                         if (image.TryGetPng(out byte[] pngBytes)) bytes = pngBytes;
                         else bytes = image.RawBytes.ToArray();
 
-                        yield return new PdfAtom
+                        yield return new Atom
                         {
-                            Type = AtomTypeEnum.Image,
+                            Type = AtomTypeEnum.Binary,
                             Binary = bytes,
                             BoundingBox = new BoundingBox
                             {

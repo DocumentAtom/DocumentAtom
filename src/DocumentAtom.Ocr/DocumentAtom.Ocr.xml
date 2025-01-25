@@ -1,0 +1,166 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DocumentAtom.Ocr</name>
+    </assembly>
+    <members>
+        <member name="T:DocumentAtom.Ocr.ImageContentExtractor">
+            <summary>
+            Image context entractor.  This library requires that you have Tesseract installed on the host and that you have awareness of the location of the tessdata directory.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.LineThreshold">
+            <summary>
+            Line threshold.
+            </summary>   
+        </member>
+        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.ParagraphThreshold">
+            <summary>
+            Paragraph threshold.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.HorizontalLineLength">
+            <summary>
+            Horizontal line length.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.VerticalLineLength">
+            <summary>
+            Vertical line length.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.TableMinimumArea">
+            <summary>
+            Table minimum area.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.ColumnAlignmentTolerance">
+            <summary>
+            Column alignment tolerance.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.ProximityThreshold">
+            <summary>
+            Proximity threshold.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.ListMarkers">
+            <summary>
+            List markers.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.ListNumberingPatterns">
+            <summary>
+            List numbering patterns.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Ocr.ImageContentExtractor.TextElement">
+            <summary>
+            Text element.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.TextElement.Text">
+            <summary>
+            Text.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.TextElement.Bounds">
+            <summary>
+            Bounds.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.TextElement.Confidence">
+            <summary>
+            Confidence.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Ocr.ImageContentExtractor.TableStructure">
+            <summary>
+            Table structure.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.TableStructure.Cells">
+            <summary>
+            Cells.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.TableStructure.Bounds">
+            <summary>
+            Bounds.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.TableStructure.Rows">
+            <summary>
+            Rows.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.TableStructure.Columns">
+            <summary>
+            Counts.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Ocr.ImageContentExtractor.ListStructure">
+            <summary>
+            List structure.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.ListStructure.Items">
+            <summary>
+            List items.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.ListStructure.IsOrdered">
+            <summary>
+            Boolean indicating if the list is ordered.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.ListStructure.Bounds">
+            <summary>
+            Bounds.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Ocr.ImageContentExtractor.ExtractionResult">
+            <summary>
+            Extraction result.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.ExtractionResult.TextElements">
+            <summary>
+            Text elements.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.ExtractionResult.Tables">
+            <summary>
+            Tables.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.ExtractionResult.Lists">
+            <summary>
+            Lists.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Ocr.ImageContentExtractor.#ctor(System.String,System.String)">
+            <summary>
+            Image context entractor.  This library requires that you have Tesseract installed on the host and that you have awareness of the location of the tessdata directory.
+            </summary>
+            <param name="tessdataPath">Tesseract data folder.  
+            For Windows, the folder is generally C:\Program Files\Tesseract-OCR\tessdata.
+            For MacOS, the folder is generally /usr/local/share/tessdata or /opt/local/share/tessdata.
+            For Linux, the folder is generally /usr/share/tessdata or /usr/local/share/tessdata.
+            </param>
+            <param name="languageFile">The default language file to use.  Defaults to eng.  This file, with extension .traineddata, must exist in the data directory.</param>
+        </member>
+        <member name="M:DocumentAtom.Ocr.ImageContentExtractor.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Ocr.ImageContentExtractor.ExtractContent(System.Byte[])">
+            <summary>
+            Extract content from PNG data.
+            </summary>
+            <param name="pngData">PNG data.</param>
+            <returns>Extraction result.</returns>
+        </member>
+    </members>
+</doc>

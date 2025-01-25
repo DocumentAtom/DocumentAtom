@@ -9,7 +9,7 @@
 		<DocumentationFile>DocumentAtom.Excel.xml</DocumentationFile>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>DocumentAtom.Excel</Title>
-		<Version>1.0.3</Version>
+		<Version>1.0.10</Version>
 		<Authors>Joel Christner</Authors>
 		<Description>DocumentAtom provides a light, fast library for breaking input Excel (xlsx) documents into constituent parts (atoms), useful for AI, machine learning, processing, analytics, and general analysis.</Description>
 		<Copyright>(c)2025 Joel Christner</Copyright>
@@ -18,7 +18,7 @@
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/jchristn/DocumentAtom</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageTags>semantic cell chunk text processing extract extraction doc docx xlsx pptx ppt keynote pages numbers text txt pdf ai llm rag parse parsing parser word excel powerpoint</PackageTags>
+		<PackageTags>semantic cell chunk text processing extract extraction doc docx xlsx pptx ppt png keynote pages numbers text txt pdf ai llm rag parse parsing parser word excel powerpoint</PackageTags>
 		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
 		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
@@ -45,7 +45,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="DocumentAtom" Version="1.0.2" />
+		<PackageReference Include="DocumentAtom" Version="1.0.9" />
+		<PackageReference Include="DocumentAtom.Image" Version="1.0.9" />
 		<PackageReference Include="DocumentFormat.OpenXml" Version="3.2.0" />
 	</ItemGroup>
 

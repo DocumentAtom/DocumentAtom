@@ -11,6 +11,7 @@
     using DocumentAtom.Core.Atoms;
     using DocumentAtom.Core.Enums;
     using DocumentAtom.Core.Helpers;
+    using DocumentAtom.Image;
     using DocumentFormat.OpenXml;
     using DocumentFormat.OpenXml.Packaging;
     using DocumentFormat.OpenXml.Spreadsheet;
@@ -59,7 +60,9 @@
         /// <summary>
         /// Create atoms from Excel documents.
         /// </summary>
-        public XlsxProcessor(XlsxProcessorSettings settings = null)
+        /// <param name="settings">Processor settings.</param>
+        /// <param name="imageSettings">Image processor settings.</param>
+        public XlsxProcessor(XlsxProcessorSettings settings = null, ImageProcessorSettings imageSettings = null)
         {
             if (settings == null) settings = new XlsxProcessorSettings();
 
@@ -76,7 +79,7 @@
         /// </summary>
         /// <param name="filename">Filename.</param>
         /// <returns>Atoms.</returns>
-        public IEnumerable<XlsxAtom> Extract(string filename)
+        public IEnumerable<Atom> Extract(string filename)
         {
             if (String.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
             return ProcessFile(filename);
@@ -132,7 +135,7 @@
 
         #region Private-Methods
 
-        private IEnumerable<XlsxAtom> ProcessFile(string filename)
+        private IEnumerable<Atom> ProcessFile(string filename)
         {
             if (String.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
 
@@ -194,7 +197,7 @@
                             foreach (var cellData in columnData.Value)
                             {
                                 string cellIdentifier = $"{columnRef}{cellData.RowIndex}";
-                                yield return new XlsxAtom
+                                yield return new Atom
                                 {
                                     Type = AtomTypeEnum.Text,
                                     Text = cellData.Value,
@@ -258,7 +261,7 @@
                         var lastCell = lastRowCells.Last().CellReference;
                         string tableRange = $"{firstCell}:{lastCell}";
 
-                        yield return new XlsxAtom
+                        yield return new Atom
                         {
                             Type = AtomTypeEnum.Table,
                             Table = SerializableDataTable.FromDataTable(dt),
@@ -284,9 +287,9 @@
                                 byte[] bytes = ms.ToArray();
                                 string imageLocation = GetImageLocation(worksheetPart, imagePart) ?? "Unknown";
 
-                                yield return new XlsxAtom
+                                Atom atom = new Atom
                                 {
-                                    Type = AtomTypeEnum.Image,
+                                    Type = AtomTypeEnum.Binary,
                                     Binary = bytes,
                                     PageNumber = sheetNumber,
                                     SheetName = sheet.Name,
@@ -297,7 +300,7 @@
                                     Length = bytes.Length
                                 };
 
-
+                                yield return atom;
                             }
                         }
                     }

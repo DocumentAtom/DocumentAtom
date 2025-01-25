@@ -3,7 +3,7 @@
     using System;
     using System.IO;
     using GetSomeInput;
-    using Ocr;
+    using DocumentAtom.Ocr;
     using SerializationHelper;
 
     public static class Program

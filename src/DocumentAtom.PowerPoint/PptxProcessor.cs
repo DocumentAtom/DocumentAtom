@@ -12,6 +12,7 @@
     using DocumentAtom.Core.Atoms;
     using DocumentAtom.Core.Enums;
     using DocumentAtom.Core.Helpers;
+    using DocumentAtom.Image;
     using DocumentFormat.OpenXml;
     using DocumentFormat.OpenXml.Packaging;
     using DocumentFormat.OpenXml.Presentation;
@@ -62,7 +63,9 @@
         /// <summary>
         /// Create atoms from PowerPoint presentations.
         /// </summary>
-        public PptxProcessor(PptxProcessorSettings settings = null)
+        /// <param name="settings">Processor settings.</param>
+        /// <param name="imageSettings">Image processor settings.</param>
+        public PptxProcessor(PptxProcessorSettings settings = null, ImageProcessorSettings imageSettings = null)
         {
             if (settings == null) settings = new PptxProcessorSettings();
 
@@ -79,7 +82,7 @@
         /// </summary>
         /// <param name="filename">Filename.</param>
         /// <returns>Atoms.</returns>
-        public IEnumerable<PptxAtom> Extract(string filename)
+        public IEnumerable<Atom> Extract(string filename)
         {
             if (String.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
             return ProcessFile(filename);
@@ -135,7 +138,7 @@
 
         #region Private-Methods
 
-        private IEnumerable<PptxAtom> ProcessFile(string filename)
+        private IEnumerable<Atom> ProcessFile(string filename)
         {
             if (String.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
 
@@ -155,7 +158,7 @@
                     var titleAndSubtitle = ExtractTitleAndSubtitle(slide);
                     if (!string.IsNullOrEmpty(titleAndSubtitle.title))
                     {
-                        yield return new PptxAtom
+                        yield return new Atom
                         {
                             Type = AtomTypeEnum.Text,
                             Title = titleAndSubtitle.title,
@@ -169,7 +172,7 @@
 
                     if (!string.IsNullOrEmpty(titleAndSubtitle.subtitle))
                     {
-                        yield return new PptxAtom
+                        yield return new Atom
                         {
                             Type = AtomTypeEnum.Text,
                             Subtitle = titleAndSubtitle.subtitle,
@@ -186,7 +189,7 @@
                     {
                         if (!string.IsNullOrWhiteSpace(textContent))
                         {
-                            yield return new PptxAtom
+                            yield return new Atom
                             {
                                 Type = AtomTypeEnum.Text,
                                 Text = textContent,
@@ -203,7 +206,7 @@
                     var lists = ExtractLists(slide);
                     foreach (var list in lists)
                     {
-                        yield return new PptxAtom
+                        yield return new Atom
                         {
                             Type = AtomTypeEnum.List,
                             UnorderedList = list,
@@ -220,7 +223,7 @@
                     var tables = ExtractTables(slide);
                     foreach (var table in tables)
                     {
-                        yield return new PptxAtom
+                        yield return new Atom
                         {
                             Type = AtomTypeEnum.Table,
                             Table = SerializableDataTable.FromDataTable(table),
@@ -241,9 +244,9 @@
                             stream.CopyTo(ms);
                             byte[] bytes = ms.ToArray();
 
-                            yield return new PptxAtom
+                            yield return new Atom
                             {
-                                Type = AtomTypeEnum.Image,
+                                Type = AtomTypeEnum.Binary,
                                 Binary = bytes,
                                 PageNumber = slideNumber,
                                 MD5Hash = HashHelper.MD5Hash(bytes),

@@ -23,7 +23,7 @@
                 if (String.IsNullOrEmpty(filename)) break;
 
                 PptxProcessor processor = new PptxProcessor(_Settings);
-                foreach (PptxAtom atom in processor.Extract(filename))
+                foreach (Atom atom in processor.Extract(filename))
                     Console.WriteLine(_Serializer.SerializeJson(atom, true));
 
                 Console.WriteLine("End of file");

@@ -4,87 +4,197 @@
         <name>DocumentAtom.Core</name>
     </assembly>
     <members>
-        <member name="T:DocumentAtom.Core.Atoms.AtomBase`1">
+        <member name="T:DocumentAtom.Core.Atoms.Atom">
             <summary>
             An atom is a small, self-contained unit of content from a document.
             </summary>
         </member>
-        <member name="P:DocumentAtom.Core.Atoms.AtomBase`1.GUID">
+        <member name="P:DocumentAtom.Core.Atoms.Atom.GUID">
             <summary>
             GUID.
             </summary>
         </member>
-        <member name="P:DocumentAtom.Core.Atoms.AtomBase`1.Type">
+        <member name="P:DocumentAtom.Core.Atoms.Atom.Type">
             <summary>
             The type of the content for this atom.
             </summary>
         </member>
-        <member name="P:DocumentAtom.Core.Atoms.AtomBase`1.PageNumber">
+        <member name="P:DocumentAtom.Core.Atoms.Atom.SheetName">
+            <summary>
+            Sheet name.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.Atom.CellIdentifier">
+            <summary>
+            Cell identifier.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.Atom.PageNumber">
             <summary>
             Page number.
             </summary>
         </member>
-        <member name="P:DocumentAtom.Core.Atoms.AtomBase`1.Position">
+        <member name="P:DocumentAtom.Core.Atoms.Atom.Position">
             <summary>
             The ordinal position of the atom.
             </summary>
         </member>
-        <member name="P:DocumentAtom.Core.Atoms.AtomBase`1.Length">
+        <member name="P:DocumentAtom.Core.Atoms.Atom.Length">
             <summary>
             The length of the atom content.
             </summary>
         </member>
-        <member name="P:DocumentAtom.Core.Atoms.AtomBase`1.MD5Hash">
+        <member name="P:DocumentAtom.Core.Atoms.Atom.Rows">
+            <summary>
+            The number of rows.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.Atom.Columns">
+            <summary>
+            The number of columns.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.Atom.Title">
+            <summary>
+            Title.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.Atom.Subtitle">
+            <summary>
+            Subtitle.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.Atom.MD5Hash">
             <summary>
             MD5 hash of the content.
             </summary>
         </member>
-        <member name="P:DocumentAtom.Core.Atoms.AtomBase`1.SHA1Hash">
+        <member name="P:DocumentAtom.Core.Atoms.Atom.SHA1Hash">
             <summary>
             SHA1 hash of the content.
             </summary>
         </member>
-        <member name="P:DocumentAtom.Core.Atoms.AtomBase`1.SHA256Hash">
+        <member name="P:DocumentAtom.Core.Atoms.Atom.SHA256Hash">
             <summary>
             SHA256 hash of the content.
             </summary>
         </member>
-        <member name="P:DocumentAtom.Core.Atoms.AtomBase`1.Quarks">
+        <member name="P:DocumentAtom.Core.Atoms.Atom.HeaderLevel">
+            <summary>
+            Header level, that is, the number of hash marks found at the beginning of the text.
+            Minimum value is 1.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.Atom.Formatting">
+            <summary>
+            Markdown formatting type for this atom.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.Atom.BoundingBox">
+            <summary>
+            Bounding box.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.Atom.Text">
+            <summary>
+            Text content.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.Atom.UnorderedList">
+            <summary>
+            Unordered list elements.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.Atom.OrderedList">
+            <summary>
+            Ordered list elements.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.Atom.Table">
+            <summary>
+            Data table.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.Atom.Binary">
+            <summary>
+            Binary data.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.Atom.Quarks">
             <summary>
             A quark is a subset of the content from an atom, used when intentionally breaking content into smaller chunks.
             </summary>
         </member>
-        <member name="M:DocumentAtom.Core.Atoms.AtomBase`1.#ctor">
+        <member name="M:DocumentAtom.Core.Atoms.Atom.#ctor">
             <summary>
             An atom is a small, self-contained unit of content from a document.
             </summary>
         </member>
-        <member name="M:DocumentAtom.Core.Atoms.AtomBase`1.ToString">
+        <member name="M:DocumentAtom.Core.Atoms.Atom.ToString">
             <summary>
             Produce a human-readable string of this object.
             </summary>
             <returns>String.</returns>
         </member>
-        <member name="T:DocumentAtom.Core.Atoms.BinaryAtom">
+        <member name="M:DocumentAtom.Core.Atoms.Atom.FromTableStructure(DocumentAtom.Core.Image.TableStructure)">
             <summary>
-            A binary atom is a self-contained unit of binary content from a document.
+            Create a table atom from a table structure.
             </summary>
+            <param name="table">Table structure.</param>
+            <returns>Table atom.</returns>
         </member>
-        <member name="P:DocumentAtom.Core.Atoms.BinaryAtom.Bytes">
+        <member name="M:DocumentAtom.Core.Atoms.Atom.FromTextContent(System.String,System.Int32,DocumentAtom.Core.ChunkingSettings)">
             <summary>
-            Binary content.
+            Create an atom from text content.
             </summary>
+            <param name="text">Text.</param>
+            <param name="position">Position.</param>
+            <param name="settings">Settings.</param>
+            <returns></returns>
         </member>
-        <member name="M:DocumentAtom.Core.Atoms.BinaryAtom.#ctor">
+        <member name="M:DocumentAtom.Core.Atoms.Atom.FromMarkdownContent(System.String,System.Int32,DocumentAtom.Core.ChunkingSettings)">
             <summary>
-            A binary atom is a self-contained unit of binary content from a document.
+            Produce an atom with quarks, if chunking is enabled.
             </summary>
+            <param name="text">Text content.</param>
+            <param name="position">Atom position.</param>
+            <param name="settings">Chunking settings.</param>
+            <returns>Markdown atom.</returns>
         </member>
-        <member name="M:DocumentAtom.Core.Atoms.BinaryAtom.ToString">
+        <member name="M:DocumentAtom.Core.Atoms.Atom.IsMarkdownUnorderedListItem(System.String)">
             <summary>
-            Produce a human-readable string of this object.
+            Determine if a text item is part of a markdown unordered list.
             </summary>
-            <returns>String.</returns>
+            <param name="text">Text.</param>
+            <returns>True if the text represents an unordered list.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.Atom.IsMarkdownOrderedListItem(System.String)">
+            <summary>
+            Determine if a text item is part of a markdown ordered list.
+            </summary>
+            <param name="text">Text.</param>
+            <returns>True if the text represents an ordered list.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.Atom.IsMarkdownTableItem(System.String)">
+            <summary>
+            Determine if a text item is part of a markdown table.
+            </summary>
+            <param name="text">Text.</param>
+            <returns>True if item is part of a table.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.Atom.MarkdownTextToDataTable(System.String)">
+            <summary>
+            Convert a markdown table to a DataTable.
+            </summary>
+            <param name="text">Markdown table.</param>
+            <returns>DataTable.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.Atom.MarkdownTextToList(System.String)">
+            <summary>
+            Convert a markdown list to a list of strings.
+            </summary>
+            <param name="text">Text.</param>
+            <returns>List of strings.</returns>
         </member>
         <member name="T:DocumentAtom.Core.Atoms.BoundingBox">
             <summary>
@@ -154,401 +264,6 @@
             </summary>
             <returns>String.</returns>
         </member>
-        <member name="T:DocumentAtom.Core.Atoms.DocxAtom">
-            <summary>
-            A docx atom is a self-contained unit of information from a Microsoft Word .docx document.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.DocxAtom.Text">
-            <summary>
-            Text content.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.DocxAtom.HeaderLevel">
-            <summary>
-            Header level, that is, the number of hash marks found at the beginning of the text.
-            Minimum value is 1.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.DocxAtom.UnorderedList">
-            <summary>
-            Unordered list elements.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.DocxAtom.OrderedList">
-            <summary>
-            Ordered list elements.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.DocxAtom.Table">
-            <summary>
-            Data table.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.DocxAtom.Binary">
-            <summary>
-            Binary data.
-            </summary>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.DocxAtom.#ctor">
-            <summary>
-            A docx atom is a self-contained unit of information from a Microsoft Word .docx document.
-            </summary>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.DocxAtom.ToString">
-            <summary>
-            Produce a human-readable string of this object.
-            </summary>
-            <returns>String.</returns>
-        </member>
-        <member name="T:DocumentAtom.Core.Atoms.ImageAtom">
-            <summary>
-            An image atom is a self-contained unit of information from a .png file.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.ImageAtom.BoundingBox">
-            <summary>
-            Bounding box.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.ImageAtom.Text">
-            <summary>
-            Text content.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.ImageAtom.UnorderedList">
-            <summary>
-            Unordered list elements.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.ImageAtom.OrderedList">
-            <summary>
-            Ordered list elements.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.ImageAtom.Table">
-            <summary>
-            Data table.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.ImageAtom.Binary">
-            <summary>
-            Binary data.
-            </summary>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.ImageAtom.#ctor">
-            <summary>
-            An image atom is a self-contained unit of information from a .png file.
-            </summary>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.ImageAtom.ToString">
-            <summary>
-            Produce a human-readable string of this object.
-            </summary>
-            <returns>String.</returns>
-        </member>
-        <member name="T:DocumentAtom.Core.Atoms.MarkdownAtom">
-            <summary>
-            A markdown atom is a self-contained unit of information from a markdown document.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.MarkdownAtom.Formatting">
-            <summary>
-            Markdown formatting type for this atom.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.MarkdownAtom.Text">
-            <summary>
-            Text content.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.MarkdownAtom.HeaderLevel">
-            <summary>
-            Header level, that is, the number of hash marks found at the beginning of the text.
-            Minimum value is 1.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.MarkdownAtom.UnorderedList">
-            <summary>
-            Unordered list elements.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.MarkdownAtom.OrderedList">
-            <summary>
-            Ordered list elements.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.MarkdownAtom.Table">
-            <summary>
-            Data table.
-            </summary>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.MarkdownAtom.#ctor">
-            <summary>
-            A markdown atom is a self-contained unit of information from a markdown document.
-            </summary>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.MarkdownAtom.FromContent(System.String,System.Int32,DocumentAtom.Core.ChunkingSettings)">
-            <summary>
-            Produce an atom with quarks, if chunking is enabled.
-            </summary>
-            <param name="text">Text content.</param>
-            <param name="position">Atom position.</param>
-            <param name="settings">Chunking settings.</param>
-            <returns>Markdown atom.</returns>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.MarkdownAtom.IsUnorderedListItem(System.String)">
-            <summary>
-            Determine if a text item is part of an unordered list.
-            </summary>
-            <param name="text">Text.</param>
-            <returns>True if the text represents an unordered list.</returns>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.MarkdownAtom.IsOrderedListItem(System.String)">
-            <summary>
-            Determine if a text item is part of an ordered list.
-            </summary>
-            <param name="text">Text.</param>
-            <returns>True if the text represents an ordered list.</returns>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.MarkdownAtom.IsTableItem(System.String)">
-            <summary>
-            Determine if a text item is part of a table.
-            </summary>
-            <param name="text">Text.</param>
-            <returns>True if item is part of a table.</returns>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.MarkdownAtom.TextToDataTable(System.String)">
-            <summary>
-            Convert a markdown table to a DataTable.
-            </summary>
-            <param name="text">Markdown table.</param>
-            <returns>DataTable.</returns>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.MarkdownAtom.TextToList(System.String)">
-            <summary>
-            Convert a markdown list to a list of strings.
-            </summary>
-            <param name="text">Text.</param>
-            <returns>List of strings.</returns>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.MarkdownAtom.ToString">
-            <summary>
-            Produce a human-readable string of this object.
-            </summary>
-            <returns>String.</returns>
-        </member>
-        <member name="T:DocumentAtom.Core.Atoms.PdfAtom">
-            <summary>
-            A PDF atom is a self-contained unit of information from a .pdf file.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.PdfAtom.BoundingBox">
-            <summary>
-            Bounding box.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.PdfAtom.Text">
-            <summary>
-            Text content.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.PdfAtom.UnorderedList">
-            <summary>
-            Unordered list elements.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.PdfAtom.OrderedList">
-            <summary>
-            Ordered list elements.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.PdfAtom.Table">
-            <summary>
-            Data table.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.PdfAtom.Binary">
-            <summary>
-            Binary data.
-            </summary>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.PdfAtom.#ctor">
-            <summary>
-            A PDF atom is a self-contained unit of information from a .pdf file.
-            </summary>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.PdfAtom.ToString">
-            <summary>
-            Produce a human-readable string of this object.
-            </summary>
-            <returns>String.</returns>
-        </member>
-        <member name="T:DocumentAtom.Core.Atoms.PptxAtom">
-            <summary>
-            A pptx atom is a self-contained unit of information from a Microsoft PowerPoint .pptx presentation.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.PptxAtom.Title">
-            <summary>
-            Title.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.PptxAtom.Subtitle">
-            <summary>
-            Subtitle.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.PptxAtom.Text">
-            <summary>
-            Text content.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.PptxAtom.UnorderedList">
-            <summary>
-            Unordered list elements.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.PptxAtom.OrderedList">
-            <summary>
-            Ordered list elements.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.PptxAtom.Table">
-            <summary>
-            Data table.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.PptxAtom.Binary">
-            <summary>
-            Binary data.
-            </summary>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.PptxAtom.#ctor">
-            <summary>
-            A pptx atom is a self-contained unit of information from a Microsoft PowerPoint .pptx presentation.
-            </summary>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.PptxAtom.ToString">
-            <summary>
-            Produce a human-readable string of this object.
-            </summary>
-            <returns>String.</returns>
-        </member>
-        <member name="T:DocumentAtom.Core.Atoms.TableAtom">
-            <summary>
-            A table atom is an atom that contains a table with rows, columns, headers, and values.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.TableAtom.Rows">
-            <summary>
-            The number of rows.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.TableAtom.Columns">
-            <summary>
-            The number of columns.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.TableAtom.Irregular">
-            <summary>
-            Boolean indicating if the geometry of the table is irregular.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.TableAtom.Table">
-            <summary>
-            Data table.
-            </summary>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.TableAtom.#ctor">
-            <summary>
-            A table atom is an atom that contains a table with rows, columns, headers, and values.
-            </summary>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.TableAtom.FromTableStructure(DocumentAtom.Core.Image.TableStructure)">
-            <summary>
-            Create a table atom from a table structure.
-            </summary>
-            <param name="table">Table structure.</param>
-            <returns>Table atom.</returns>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.TableAtom.ToString">
-            <summary>
-            Produce a human-readable string of this object.
-            </summary>
-            <returns>String.</returns>
-        </member>
-        <member name="T:DocumentAtom.Core.Atoms.TextAtom">
-            <summary>
-            A text atom is a self-contained unit of text from a document.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.TextAtom.Text">
-            <summary>
-            Text content.
-            </summary>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.TextAtom.#ctor">
-            <summary>
-            A text atom is a self-contained unit of text from a document.
-            </summary>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.TextAtom.FromContent(System.String,System.Int32,DocumentAtom.Core.ChunkingSettings)">
-            <summary>
-            Produce an atom with quarks, if chunking is enabled.
-            </summary>
-            <param name="text">Text content.</param>
-            <param name="position">Atom position.</param>
-            <param name="settings">Chunking settings.</param>
-            <returns>Text atom.</returns>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.TextAtom.ToString">
-            <summary>
-            Produce a human-readable string of this object.
-            </summary>
-            <returns>String.</returns>
-        </member>
-        <member name="T:DocumentAtom.Core.Atoms.XlsxAtom">
-            <summary>
-            An xlsx atom is a self-contained unit of information from a Microsoft Excel .xlsx workbook.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.XlsxAtom.SheetName">
-            <summary>
-            Sheet name, if any.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.XlsxAtom.CellIdentifier">
-            <summary>
-            Cell identifier.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.XlsxAtom.Text">
-            <summary>
-            Text content.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.XlsxAtom.Table">
-            <summary>
-            Data table.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Core.Atoms.XlsxAtom.Binary">
-            <summary>
-            Binary data.
-            </summary>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.XlsxAtom.#ctor">
-            <summary>
-            A docx atom is a self-contained unit of information from a Microsoft Word .docx document.
-            </summary>
-        </member>
-        <member name="M:DocumentAtom.Core.Atoms.XlsxAtom.ToString">
-            <summary>
-            Produce a human-readable string of this object.
-            </summary>
-            <returns>String.</returns>
-        </member>
         <member name="T:DocumentAtom.Core.ChunkingSettings">
             <summary>
             Chunking settings, that is, breaking atoms into quarks.
@@ -585,11 +300,6 @@
         <member name="F:DocumentAtom.Core.Enums.AtomTypeEnum.Text">
             <summary>
             Text.
-            </summary>
-        </member>
-        <member name="F:DocumentAtom.Core.Enums.AtomTypeEnum.Image">
-            <summary>
-            Image.
             </summary>
         </member>
         <member name="F:DocumentAtom.Core.Enums.AtomTypeEnum.Binary">
