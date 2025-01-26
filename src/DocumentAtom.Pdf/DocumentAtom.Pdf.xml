@@ -45,5 +45,105 @@
             Settings for PDF processor.
             </summary>
         </member>
+        <member name="T:DocumentAtom.Pdf.PdfRegion">
+            <summary>
+            PDF region.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Pdf.PdfRegion.BoundingBox">
+            <summary>
+            Bounding box.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Pdf.PdfRegion.Type">
+            <summary>
+            Type.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Pdf.PdfRegion.Processed">
+            <summary>
+            Boolean indicating if the region was processed.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Pdf.PdfRegion.#ctor">
+            <summary>
+            PDF region.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Pdf.PdfTableRegion">
+            <summary>
+            PDF table region.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Pdf.PdfTableRegion.Table">
+            <summary>
+            Table..
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Pdf.PdfTableRegion.#ctor">
+            <summary>
+            PDF table region.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Pdf.PdfListRegion">
+            <summary>
+            PDF list region.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Pdf.PdfListRegion.Items">
+            <summary>
+            Items.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Pdf.PdfListRegion.IsOrdered">
+            <summary>
+            Boolean indicating if the list is ordered.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Pdf.PdfListRegion.#ctor">
+            <summary>
+            PDF list region.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Pdf.SectionHeader">
+            <summary>
+            Section header.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Pdf.SectionHeader.Text">
+            <summary>
+            Text.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Pdf.SectionHeader.#ctor">
+            <summary>
+            Section header.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Pdf.PdfRegionTypeEnum">
+            <summary>
+            PDF region type.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Pdf.PdfRegionTypeEnum.Header">
+            <summary>
+            HEader.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Pdf.PdfRegionTypeEnum.Table">
+            <summary>
+            Table.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Pdf.PdfRegionTypeEnum.List">
+            <summary>
+            List.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Pdf.PdfRegionTypeEnum.Text">
+            <summary>
+            Text.
+            </summary>
+        </member>
     </members>
 </doc>
