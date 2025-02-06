@@ -1,0 +1,272 @@
+{
+	"info": {
+		"_postman_id": "30e67384-f5bf-442f-b093-5257bf797c91",
+		"name": "DocumentAtom",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "720438"
+	},
+	"item": [
+		{
+			"name": "Validate connectivity",
+			"request": {
+				"method": "HEAD",
+				"header": [],
+				"url": {
+					"raw": "{{protocol}}://{{hostname}}:{{port}}",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "{{port}}"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Type detection",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "file",
+					"file": {
+						"src": "/C:/Code/LiteGraph/LiteGraph-3.1/CHANGELOG.md"
+					}
+				},
+				"url": {
+					"raw": "{{protocol}}://{{hostname}}:{{port}}/typedetect",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"typedetect"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Extract atoms (PDF)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "file",
+					"file": {
+						"src": "/G:/Shared drives/View Systems/Test Files/Botox/1.pdf"
+					}
+				},
+				"url": {
+					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/pdf",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"atom",
+						"pdf"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Extract atoms (Excel)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "file",
+					"file": {
+						"src": "/G:/Shared drives/View Systems/Test Files/SampleFilesByType/Excel/3.xlsx"
+					}
+				},
+				"url": {
+					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/excel",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"atom",
+						"excel"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Extract atoms (Markdown)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "file",
+					"file": {
+						"src": "/C:/Code/DocumentAtom/README.md"
+					}
+				},
+				"url": {
+					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/markdown",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"atom",
+						"markdown"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Extract atoms (PNG)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "file",
+					"file": {
+						"src": "/G:/Shared drives/View Systems/Test Files/Ocr/1.png"
+					}
+				},
+				"url": {
+					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/png",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"atom",
+						"png"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Extract atoms (PowerPoint)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "file",
+					"file": {
+						"src": "/G:/Shared drives/View Systems/Test Files/SampleFilesByType/Ppt/2.pptx"
+					}
+				},
+				"url": {
+					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/powerpoint",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"atom",
+						"powerpoint"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Extract atoms (Text)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "file",
+					"file": {
+						"src": "/G:/Shared drives/View Systems/Test Files/SampleFilesByType/Text/3.txt"
+					}
+				},
+				"url": {
+					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/text",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"atom",
+						"text"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Extract atoms (Word)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "file",
+					"file": {
+						"src": "/G:/Shared drives/View Systems/Test Files/SampleFilesByType/Word/3.docx"
+					}
+				},
+				"url": {
+					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/word",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"atom",
+						"word"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "protocol",
+			"value": "http",
+			"type": "string"
+		},
+		{
+			"key": "hostname",
+			"value": "localhost",
+			"type": "string"
+		},
+		{
+			"key": "port",
+			"value": "8000",
+			"type": "string"
+		}
+	]
+}

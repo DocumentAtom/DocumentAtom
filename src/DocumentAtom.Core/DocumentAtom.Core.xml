@@ -797,6 +797,20 @@
             <param name="sev">Severity.</param>
             <param name="msg">Message.</param>
         </member>
+        <member name="M:DocumentAtom.Core.ProcessorBase.Extract(System.Byte[])">
+            <summary>
+            Extract atoms from a byte array.
+            </summary>
+            <param name="bytes">Byte array.</param>
+            <returns>Atoms.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.ProcessorBase.Extract(System.String)">
+            <summary>
+            Extract atoms from a file.
+            </summary>
+            <param name="filename">Filename.</param>
+            <returns>Atoms.</returns>
+        </member>
         <member name="T:DocumentAtom.Core.ProcessorSettingsBase">
             <summary>
             Processor settings base class.

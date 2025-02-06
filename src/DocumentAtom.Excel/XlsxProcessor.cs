@@ -79,7 +79,7 @@
         /// </summary>
         /// <param name="filename">Filename.</param>
         /// <returns>Atoms.</returns>
-        public IEnumerable<Atom> Extract(string filename)
+        public override IEnumerable<Atom> Extract(string filename)
         {
             if (String.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
             return ProcessFile(filename);
