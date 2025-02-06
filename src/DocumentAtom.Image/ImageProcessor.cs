@@ -83,33 +83,10 @@
         /// </summary>
         /// <param name="filename">Filename.</param>
         /// <returns>Atoms.</returns>
-        public IEnumerable<Atom> Extract(string filename)
+        public override IEnumerable<Atom> Extract(string filename)
         {
             if (String.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
             return ProcessFile(filename);
-        }
-
-        /// <summary>
-        /// Extract atoms from a byte array.
-        /// </summary>
-        /// <param name="data">Byte data.</param>
-        /// <returns>Atoms.</returns>
-        public IEnumerable<Atom> Extract(byte[] data)
-        {
-            string filename = Path.Join(_Settings.TempDirectory, Guid.NewGuid().ToString());
-            
-            try
-            {
-                File.WriteAllBytes(filename, data);
-                foreach (Atom atom in Extract(filename))
-                {
-                    yield return atom;
-                }
-            }
-            finally
-            {
-                if (File.Exists(filename)) File.Delete(filename);
-            }
         }
 
         #endregion

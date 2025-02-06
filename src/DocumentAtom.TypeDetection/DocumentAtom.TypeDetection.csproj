@@ -2,16 +2,14 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
 		<ApplicationIcon>icon.ico</ApplicationIcon>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
-		<DocumentationFile>DocumentAtom.Image.xml</DocumentationFile>
+		<DocumentationFile>DocumentAtom.TypeDetection.xml</DocumentationFile>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Title>DocumentAtom.Image</Title>
+		<Title>DocumentAtom.TypeDetection</Title>
 		<Version>1.0.15</Version>
 		<Authors>Joel Christner</Authors>
-		<Description>DocumentAtom provides a light, fast library for breaking input images into constituent text parts (atoms), useful for AI, machine learning, processing, analytics, and general analysis.</Description>
+		<Description>DocumentAtom provides a light, fast library for breaking input documents into constituent parts (atoms), useful for AI, machine learning, processing, analytics, and general analysis.</Description>
 		<Copyright>(c)2025 Joel Christner</Copyright>
 		<PackageProjectUrl>https://github.com/jchristn/DocumentAtom</PackageProjectUrl>
 		<PackageIcon>icon.png</PackageIcon>
@@ -26,13 +24,20 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<Content Include="icon.ico" />
+	  <Content Remove="C:\Users\joelc\.nuget\packages\documentatom\1.0.10\contentFiles\any\net8.0\icon.ico" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Include="icon.ico">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </Content>
 	</ItemGroup>
 
 	<ItemGroup>
 		<None Include="..\..\assets\icon.png">
 			<Pack>True</Pack>
 			<PackagePath>\</PackagePath>
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</None>
 		<None Include="..\..\LICENSE.md">
 			<Pack>True</Pack>
@@ -45,10 +50,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="DocumentAtom" Version="1.0.15" />
-	  <PackageReference Include="DocumentAtom.Ocr" Version="1.0.15" />
-	  <PackageReference Include="SixLabors.ImageSharp" Version="3.1.6" />
-	  <PackageReference Include="Tesseract" Version="5.2.0" />
+		<PackageReference Include="DocumentAtom" Version="1.0.15" />
 	</ItemGroup>
 
 </Project>

@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net8.0</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="SerializationHelper" Version="2.0.2" />
+	  <PackageReference Include="SyslogLogging" Version="2.0.8" />
+	  <PackageReference Include="Watson" Version="6.3.5" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\DocumentAtom.Excel\DocumentAtom.Excel.csproj" />
+	  <ProjectReference Include="..\DocumentAtom.Image\DocumentAtom.Image.csproj" />
+	  <ProjectReference Include="..\DocumentAtom.Markdown\DocumentAtom.Markdown.csproj" />
+	  <ProjectReference Include="..\DocumentAtom.Pdf\DocumentAtom.Pdf.csproj" />
+	  <ProjectReference Include="..\DocumentAtom.PowerPoint\DocumentAtom.PowerPoint.csproj" />
+	  <ProjectReference Include="..\DocumentAtom.Text\DocumentAtom.Text.csproj" />
+	  <ProjectReference Include="..\DocumentAtom.TypeDetection\DocumentAtom.TypeDetection.csproj" />
+	  <ProjectReference Include="..\DocumentAtom.Word\DocumentAtom.Word.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="assets\icon.ico">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="assets\icon.png">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="clean.bat">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="clean.sh">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Dockerbuild.bat">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Dockerfile">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Dockerrun.bat">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Dockerrun.sh">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
+</Project>

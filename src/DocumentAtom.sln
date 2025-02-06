@@ -37,6 +37,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentAtom.Ocr", "Documen
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.OcrProcessor", "Test.OcrProcessor\Test.OcrProcessor.csproj", "{81023983-EC09-47D8-A887-32CF14AEE449}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentAtom.TypeDetection", "DocumentAtom.TypeDetection\DocumentAtom.TypeDetection.csproj", "{37EA2B3D-CBD3-40D2-A6D4-3EFD2382D5F6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentAtom.Server", "DocumentAtom.Server\DocumentAtom.Server.csproj", "{50AA2AF7-992D-4005-BA0B-24727C559C6F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -111,6 +115,14 @@ Global
 		{81023983-EC09-47D8-A887-32CF14AEE449}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81023983-EC09-47D8-A887-32CF14AEE449}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81023983-EC09-47D8-A887-32CF14AEE449}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37EA2B3D-CBD3-40D2-A6D4-3EFD2382D5F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37EA2B3D-CBD3-40D2-A6D4-3EFD2382D5F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37EA2B3D-CBD3-40D2-A6D4-3EFD2382D5F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37EA2B3D-CBD3-40D2-A6D4-3EFD2382D5F6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50AA2AF7-992D-4005-BA0B-24727C559C6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50AA2AF7-992D-4005-BA0B-24727C559C6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50AA2AF7-992D-4005-BA0B-24727C559C6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50AA2AF7-992D-4005-BA0B-24727C559C6F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
