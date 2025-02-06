@@ -1,7 +1,6 @@
 ﻿namespace DocumentAtom.Core
 {
-    using System.Reflection.Metadata.Ecma335;
-    using System.Runtime;
+    using System.IO;
     using DocumentAtom.Core.Atoms;
     using DocumentAtom.Core.Enums;
     using SerializationHelper;
@@ -90,6 +89,7 @@
             finally
             {
                 Helpers.FileHelper.RecursiveDelete(new DirectoryInfo(directory), true);
+                Directory.Delete(directory, true);
             }
         }
 

@@ -45,7 +45,7 @@
         /// <summary>
         /// Log filename.
         /// </summary>
-        public static string LogFilename = "./view.log";
+        public static string LogFilename = "./documentatom.log";
 
         /// <summary>
         /// Log directory.

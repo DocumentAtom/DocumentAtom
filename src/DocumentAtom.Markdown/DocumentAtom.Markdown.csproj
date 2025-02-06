@@ -9,7 +9,7 @@
 		<DocumentationFile>DocumentAtom.Markdown.xml</DocumentationFile>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>DocumentAtom.Markdown</Title>
-		<Version>1.0.11</Version>
+		<Version>1.0.15</Version>
 		<Authors>Joel Christner</Authors>
 		<Description>DocumentAtom provides a light, fast library for breaking input markdown documents into constituent parts (atoms), useful for AI, machine learning, processing, analytics, and general analysis.</Description>
 		<Copyright>(c)2025 Joel Christner</Copyright>
@@ -45,7 +45,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="DocumentAtom" Version="1.0.11" />
+	  <PackageReference Include="DocumentAtom" Version="1.0.15" />
 	</ItemGroup>
 
 </Project>

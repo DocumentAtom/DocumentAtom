@@ -14,6 +14,7 @@
 
     using DocumentAtom.Core;
     using DocumentAtom.Core.Atoms;
+    using DocumentAtom.Core.Helpers;
     using DocumentAtom.Excel;
     using DocumentAtom.Image;
     using DocumentAtom.Markdown;
@@ -24,6 +25,7 @@
     using DocumentAtom.Word;
     using System.Linq;
     using System.Collections.Specialized;
+    using System.Runtime.CompilerServices;
 
     /// <summary>
     /// DocumentAtom server.
@@ -199,6 +201,7 @@
             _RestServer = new Webserver(_Settings.Webserver, DefaultRoute);
             _RestServer.Routes.PreRouting = PreRoutingRoute;
             _RestServer.Routes.Preflight = OptionsHandler;
+            _RestServer.Routes.PostRouting = PostRoutingRoute;
 
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.HEAD, "/", LoopbackRoute, ExceptionRoute);
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.GET, "/", RootRoute, ExceptionRoute);
@@ -222,12 +225,7 @@
             Console.WriteLine("");
         }
 
-        /// <summary>
-        /// Options handler.
-        /// </summary>
-        /// <param name="ctx">HTTP context.</param>
-        /// <returns>Task.</returns>
-        public static async Task OptionsHandler(HttpContextBase ctx)
+        private static async Task OptionsHandler(HttpContextBase ctx)
         {
             NameValueCollection responseHeaders = new NameValueCollection(StringComparer.InvariantCultureIgnoreCase);
 
@@ -273,36 +271,31 @@
             return;
         }
 
-        /// <summary>
-        /// Get root.
-        /// </summary>
-        /// <param name="ctx">HTTP context.</param>
-        /// <returns>Task.</returns>
-        public static async Task RootRoute(HttpContextBase ctx)
+        private static async Task PreRoutingRoute(HttpContextBase ctx)
+        {
+            ctx.Response.ContentType = Constants.JsonContentType;
+        }
+
+        private static async Task PostRoutingRoute(HttpContextBase ctx)
+        {
+            _Logging.Debug(_Header + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress + ": " + ctx.Response.StatusCode);
+        }
+
+        private static async Task RootRoute(HttpContextBase ctx)
         {
             ctx.Response.StatusCode = 200;
             ctx.Response.ContentType = Constants.HtmlContentType;
             await ctx.Response.Send(Constants.HtmlHomepage);
         }
 
-        /// <summary>
-        /// Get favicon.
-        /// </summary>
-        /// <param name="ctx">HTTP context.</param>
-        /// <returns>Task.</returns>
-        public static async Task GetFavicon(HttpContextBase ctx)
+        private static async Task GetFavicon(HttpContextBase ctx)
         {
             ctx.Response.StatusCode = 200;
             ctx.Response.ContentType = Constants.FaviconContentType;
             await ctx.Response.Send(File.ReadAllBytes(Constants.FaviconFilename));
         }
 
-        /// <summary>
-        /// Head favicon.
-        /// </summary>
-        /// <param name="ctx">HTTP context.</param>
-        /// <returns>Task.</returns>
-        public static async Task HeadFavicon(HttpContextBase ctx)
+        private static async Task HeadFavicon(HttpContextBase ctx)
         {
             ctx.Response.StatusCode = 200;
             ctx.Response.ContentType = Constants.FaviconContentType;
@@ -311,6 +304,13 @@
 
         private static async Task ExceptionRoute(HttpContextBase ctx, Exception e)
         {
+            _Logging.Warn(
+                _Header +
+                "handling exception for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " " +
+                "from " + ctx.Request.Source.IpAddress +
+                Environment.NewLine +
+                e.ToString());
+
             ctx.Response.StatusCode = 500;
             await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.InternalError, null, e.Message), true));
             return;
@@ -318,7 +318,7 @@
 
         private static async Task DefaultRoute(HttpContextBase ctx)
         {
-            _Logging.Warn(_Header + "unknown verb or endpoint " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery);
+            _Logging.Warn(_Header + "unknown verb or endpoint " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress);
             ctx.Response.StatusCode = 400;
             await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.BadRequest, null, "Unknown verb or endpoint."), true));
             return;
@@ -333,16 +333,15 @@
 
         private static async Task ExcelAtomRoute(HttpContextBase ctx)
         {
-            if (ctx.Request.Data == null && ctx.Request.ContentLength < 1)
+            if (ctx.Request.DataAsBytes == null && ctx.Request.ContentLength < 1)
             {
-                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery);
+                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress + " from " + ctx.Request.Source.IpAddress);
                 ctx.Response.StatusCode = 400;
                 await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.RequestBodyMissing, null, "No request body found."), true));
                 return;
             }
 
             XlsxProcessorSettings settings = new XlsxProcessorSettings();
-            settings.TempDirectory = "./" + Guid.NewGuid() + "/";
             settings.ExtractAtomsFromImages = ctx.Request.QuerystringExists(Constants.OcrQuerystring);
 
             ImageProcessorSettings imageSettings = null;
@@ -350,58 +349,55 @@
             {
                 imageSettings = new ImageProcessorSettings
                 {
-                    TempDirectory = settings.TempDirectory,
                     TesseractDataDirectory = _Settings.Tesseract.DataDirectory,
                     TesseractLanguage = _Settings.Tesseract.Language,
 
                 };
             }
 
-            XlsxProcessor processor = new XlsxProcessor(settings, imageSettings);
             List<Atom> ret = new List<Atom>();
+
+            XlsxProcessor processor = new XlsxProcessor(settings, imageSettings);
             IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
             if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
 
             ctx.Response.StatusCode = 200;
-            await ctx.Response.Send(_Serializer.SerializeJson(atoms, true));
+            await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
             return;
         }
 
         private static async Task MarkdownAtomRoute(HttpContextBase ctx)
         {
-            if (ctx.Request.Data == null && ctx.Request.ContentLength < 1)
+            if (ctx.Request.DataAsBytes == null && ctx.Request.ContentLength < 1)
             {
-                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery);
+                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress);
                 ctx.Response.StatusCode = 400;
                 await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.RequestBodyMissing, null, "No request body found."), true));
                 return;
             }
 
-            MarkdownProcessorSettings settings = new MarkdownProcessorSettings();
-            settings.TempDirectory = "./" + Guid.NewGuid() + "/";
-
-            MarkdownProcessor processor = new MarkdownProcessor(settings);
             List<Atom> ret = new List<Atom>();
+
+            MarkdownProcessor processor = new MarkdownProcessor(new MarkdownProcessorSettings());
             IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
             if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
 
             ctx.Response.StatusCode = 200;
-            await ctx.Response.Send(_Serializer.SerializeJson(atoms, true));
+            await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
             return;
         }
 
         private static async Task PdfAtomRoute(HttpContextBase ctx)
         {
-            if (ctx.Request.Data == null && ctx.Request.ContentLength < 1)
+            if (ctx.Request.DataAsBytes == null && ctx.Request.ContentLength < 1)
             {
-                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery);
+                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress);
                 ctx.Response.StatusCode = 400;
                 await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.RequestBodyMissing, null, "No request body found."), true));
                 return;
             }
 
             PdfProcessorSettings settings = new PdfProcessorSettings();
-            settings.TempDirectory = "./" + Guid.NewGuid() + "/";
             settings.ExtractAtomsFromImages = ctx.Request.QuerystringExists(Constants.OcrQuerystring);
 
             ImageProcessorSettings imageSettings = null;
@@ -409,28 +405,28 @@
             {
                 imageSettings = new ImageProcessorSettings
                 {
-                    TempDirectory = settings.TempDirectory,
                     TesseractDataDirectory = _Settings.Tesseract.DataDirectory,
                     TesseractLanguage = _Settings.Tesseract.Language,
 
                 };
             }
 
-            PdfProcessor processor = new PdfProcessor(settings, imageSettings);
             List<Atom> ret = new List<Atom>();
+
+            PdfProcessor processor = new PdfProcessor(settings, imageSettings);
             IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
             if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
 
             ctx.Response.StatusCode = 200;
-            await ctx.Response.Send(_Serializer.SerializeJson(atoms, true));
+            await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
             return;
         }
 
         private static async Task PngAtomRoute(HttpContextBase ctx)
         {
-            if (ctx.Request.Data == null && ctx.Request.ContentLength < 1)
+            if (ctx.Request.DataAsBytes == null && ctx.Request.ContentLength < 1)
             {
-                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery);
+                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress);
                 ctx.Response.StatusCode = 400;
                 await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.RequestBodyMissing, null, "No request body found."), true));
                 return;
@@ -438,33 +434,32 @@
 
             ImageProcessorSettings settings = new ImageProcessorSettings
             {
-                TempDirectory = "./" + Guid.NewGuid() + "/",
                 TesseractDataDirectory = _Settings.Tesseract.DataDirectory,
                 TesseractLanguage = _Settings.Tesseract.Language,
             };
 
-            ImageProcessor processor = new ImageProcessor(settings);
             List<Atom> ret = new List<Atom>();
+
+            ImageProcessor processor = new ImageProcessor(settings);
             IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
             if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
 
             ctx.Response.StatusCode = 200;
-            await ctx.Response.Send(_Serializer.SerializeJson(atoms, true));
+            await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
             return;
         }
 
         private static async Task PowerPointAtomRoute(HttpContextBase ctx)
         {
-            if (ctx.Request.Data == null && ctx.Request.ContentLength < 1)
+            if (ctx.Request.DataAsBytes == null && ctx.Request.ContentLength < 1)
             {
-                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery);
+                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress);
                 ctx.Response.StatusCode = 400;
                 await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.RequestBodyMissing, null, "No request body found."), true));
                 return;
             }
 
             PptxProcessorSettings settings = new PptxProcessorSettings();
-            settings.TempDirectory = "./" + Guid.NewGuid() + "/";
             settings.ExtractAtomsFromImages = ctx.Request.QuerystringExists(Constants.OcrQuerystring);
 
             ImageProcessorSettings imageSettings = null;
@@ -472,58 +467,55 @@
             {
                 imageSettings = new ImageProcessorSettings
                 {
-                    TempDirectory = settings.TempDirectory,
                     TesseractDataDirectory = _Settings.Tesseract.DataDirectory,
                     TesseractLanguage = _Settings.Tesseract.Language,
 
                 };
             }
 
-            PptxProcessor processor = new PptxProcessor(settings, imageSettings);
             List<Atom> ret = new List<Atom>();
+
+            PptxProcessor processor = new PptxProcessor(settings, imageSettings);
             IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
             if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
 
             ctx.Response.StatusCode = 200;
-            await ctx.Response.Send(_Serializer.SerializeJson(atoms, true));
-            return; 
+            await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
+            return;
         }
 
         private static async Task TextAtomRoute(HttpContextBase ctx)
         {
-            if (ctx.Request.Data == null && ctx.Request.ContentLength < 1)
+            if (ctx.Request.DataAsBytes == null && ctx.Request.ContentLength < 1)
             {
-                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery);
+                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress);
                 ctx.Response.StatusCode = 400;
                 await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.RequestBodyMissing, null, "No request body found."), true));
                 return;
             }
 
-            TextProcessorSettings settings = new TextProcessorSettings();
-            settings.TempDirectory = "./" + Guid.NewGuid() + "/";
-
-            TextProcessor processor = new TextProcessor(settings);
             List<Atom> ret = new List<Atom>();
+
+            TextProcessor processor = new TextProcessor(new TextProcessorSettings());
             IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
             if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
 
             ctx.Response.StatusCode = 200;
-            await ctx.Response.Send(_Serializer.SerializeJson(atoms, true));
+            await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
             return;
         }
 
         private static async Task WordAtomRoute(HttpContextBase ctx)
         {
-            if (ctx.Request.Data == null && ctx.Request.ContentLength < 1)
+            if (ctx.Request.DataAsBytes == null && ctx.Request.ContentLength < 1)
             {
-                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery);
+                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress);
                 ctx.Response.StatusCode = 400;
                 await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.RequestBodyMissing, null, "No request body found."), true));
                 return;
             }
 
             DocxProcessorSettings settings = new DocxProcessorSettings();
-            settings.TempDirectory = "./" + Guid.NewGuid() + "/";
             settings.ExtractAtomsFromImages = ctx.Request.QuerystringExists(Constants.OcrQuerystring);
 
             ImageProcessorSettings imageSettings = null;
@@ -531,45 +523,54 @@
             {
                 imageSettings = new ImageProcessorSettings
                 {
-                    TempDirectory = settings.TempDirectory,
                     TesseractDataDirectory = _Settings.Tesseract.DataDirectory,
                     TesseractLanguage = _Settings.Tesseract.Language,
 
                 };
             }
 
-            DocxProcessor processor = new DocxProcessor(settings, imageSettings);
             List<Atom> ret = new List<Atom>();
+
+            DocxProcessor processor = new DocxProcessor(settings, imageSettings);
             IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
             if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
 
             ctx.Response.StatusCode = 200;
-            await ctx.Response.Send(_Serializer.SerializeJson(atoms, true));
+            await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
             return;
-        }
-
-        private static async Task PreRoutingRoute(HttpContextBase ctx)
-        {
-            ctx.Response.ContentType = Constants.JsonContentType;
         }
 
         private static async Task TypeDetectionRoute(HttpContextBase ctx)
         {
-            if (ctx.Request.Data == null && ctx.Request.ContentLength < 1)
+            if (ctx.Request.DataAsBytes == null && ctx.Request.ContentLength < 1)
             {
-                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery);
+                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress);
                 ctx.Response.StatusCode = 400;
                 await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.RequestBodyMissing, null, "No request body found."), true));
                 return;
             }
 
-            Guid guid = Guid.NewGuid();
-            string dir = "./" + guid + "/";
-            TypeDetector td = new TypeDetector(dir);
-            TypeResult tr = td.Process(ctx.Request.DataAsBytes, ctx.Request.ContentType);
+            string dir = "./" + Guid.NewGuid() + "/";
+            TypeResult tr = new TypeResult();
+
+            try
+            {
+                TypeDetector td = new TypeDetector(dir);
+                tr = td.Process(ctx.Request.DataAsBytes, ctx.Request.ContentType);
+            }
+            finally
+            {
+                FileHelper.RecursiveDelete(new DirectoryInfo(dir), true);
+                Directory.Delete(dir);
+            }
 
             ctx.Response.StatusCode = 200;
             await ctx.Response.Send(_Serializer.SerializeJson(tr, true));
+        }
+
+        private static void LogSubdirectories(string msg)
+        {
+            _Logging.Debug(_Header + msg + ":" + Environment.NewLine + string.Join("\n", Directory.GetDirectories(Directory.GetCurrentDirectory())));
         }
 
         #endregion
