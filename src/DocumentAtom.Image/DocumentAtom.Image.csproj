@@ -46,7 +46,7 @@
 
 	<ItemGroup>
 	  <PackageReference Include="DocumentAtom" Version="1.0.10" />
-	  <PackageReference Include="DocumentAtom.Ocr" Version="1.0.3" />
+	  <PackageReference Include="DocumentAtom.Ocr" Version="1.0.10" />
 	  <PackageReference Include="SixLabors.ImageSharp" Version="3.1.6" />
 	  <PackageReference Include="Tesseract" Version="5.2.0" />
 	</ItemGroup>
