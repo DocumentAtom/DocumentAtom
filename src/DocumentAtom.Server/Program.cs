@@ -23,6 +23,7 @@
     using DocumentAtom.TypeDetection;
     using DocumentAtom.Word;
     using System.Linq;
+    using System.Collections.Specialized;
 
     /// <summary>
     /// DocumentAtom server.
@@ -197,8 +198,13 @@
 
             _RestServer = new Webserver(_Settings.Webserver, DefaultRoute);
             _RestServer.Routes.PreRouting = PreRoutingRoute;
+            _RestServer.Routes.Preflight = OptionsHandler;
 
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.HEAD, "/", LoopbackRoute, ExceptionRoute);
+            _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.GET, "/", RootRoute, ExceptionRoute);
+            _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.HEAD, "/favicon.ico", HeadFavicon, ExceptionRoute);
+            _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.GET, "/favicon.ico", GetFavicon, ExceptionRoute);
+
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/typedetect", TypeDetectionRoute, ExceptionRoute);
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/excel", ExcelAtomRoute, ExceptionRoute);
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/markdown", MarkdownAtomRoute, ExceptionRoute);
@@ -214,6 +220,93 @@
             #endregion
 
             Console.WriteLine("");
+        }
+
+        /// <summary>
+        /// Options handler.
+        /// </summary>
+        /// <param name="ctx">HTTP context.</param>
+        /// <returns>Task.</returns>
+        public static async Task OptionsHandler(HttpContextBase ctx)
+        {
+            NameValueCollection responseHeaders = new NameValueCollection(StringComparer.InvariantCultureIgnoreCase);
+
+            string[] requestedHeaders = null;
+            string headers = "";
+
+            if (ctx.Request.Headers != null)
+            {
+                for (int i = 0; i < ctx.Request.Headers.Count; i++)
+                {
+                    string key = ctx.Request.Headers.GetKey(i);
+                    string value = ctx.Request.Headers.Get(i);
+                    if (String.IsNullOrEmpty(key)) continue;
+                    if (String.IsNullOrEmpty(value)) continue;
+                    if (String.Compare(key.ToLower(), "access-control-request-headers") == 0)
+                    {
+                        requestedHeaders = value.Split(',');
+                        break;
+                    }
+                }
+            }
+
+            if (requestedHeaders != null)
+            {
+                foreach (string curr in requestedHeaders)
+                {
+                    headers += ", " + curr;
+                }
+            }
+
+            responseHeaders.Add("Access-Control-Allow-Methods", "OPTIONS, HEAD, GET, PUT, POST, DELETE");
+            responseHeaders.Add("Access-Control-Allow-Headers", "*, Content-Type, X-Requested-With, " + headers);
+            responseHeaders.Add("Access-Control-Expose-Headers", "Content-Type, X-Requested-With, " + headers);
+            responseHeaders.Add("Access-Control-Allow-Origin", "*");
+            responseHeaders.Add("Accept", "*/*");
+            responseHeaders.Add("Accept-Language", "en-US, en");
+            responseHeaders.Add("Accept-Charset", "ISO-8859-1, utf-8");
+            responseHeaders.Add("Connection", "keep-alive");
+
+            ctx.Response.StatusCode = 200;
+            ctx.Response.Headers = responseHeaders;
+            await ctx.Response.Send();
+            return;
+        }
+
+        /// <summary>
+        /// Get root.
+        /// </summary>
+        /// <param name="ctx">HTTP context.</param>
+        /// <returns>Task.</returns>
+        public static async Task RootRoute(HttpContextBase ctx)
+        {
+            ctx.Response.StatusCode = 200;
+            ctx.Response.ContentType = Constants.HtmlContentType;
+            await ctx.Response.Send(Constants.HtmlHomepage);
+        }
+
+        /// <summary>
+        /// Get favicon.
+        /// </summary>
+        /// <param name="ctx">HTTP context.</param>
+        /// <returns>Task.</returns>
+        public static async Task GetFavicon(HttpContextBase ctx)
+        {
+            ctx.Response.StatusCode = 200;
+            ctx.Response.ContentType = Constants.FaviconContentType;
+            await ctx.Response.Send(File.ReadAllBytes(Constants.FaviconFilename));
+        }
+
+        /// <summary>
+        /// Head favicon.
+        /// </summary>
+        /// <param name="ctx">HTTP context.</param>
+        /// <returns>Task.</returns>
+        public static async Task HeadFavicon(HttpContextBase ctx)
+        {
+            ctx.Response.StatusCode = 200;
+            ctx.Response.ContentType = Constants.FaviconContentType;
+            await ctx.Response.Send();
         }
 
         private static async Task ExceptionRoute(HttpContextBase ctx, Exception e)

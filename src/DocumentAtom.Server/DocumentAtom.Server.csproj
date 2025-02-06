@@ -22,4 +22,13 @@
 	  <ProjectReference Include="..\DocumentAtom.Word\DocumentAtom.Word.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Update="assets\icon.ico">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="assets\icon.png">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+
 </Project>
