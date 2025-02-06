@@ -100,7 +100,7 @@ My libraries used within DocumentAtom:
 
 ## RESTful API and Docker
 
-Run the `DocumentAtom.Server` project to start a RESTful server listening on `localhost:8000`.  Modify the `documentatom.json` file to change the webserver, logging, or Tesseract settings.  Alternatively, you can pull `jchristn/documentatom` from Docker Hub.
+Run the `DocumentAtom.Server` project to start a RESTful server listening on `localhost:8000`.  Modify the `documentatom.json` file to change the webserver, logging, or Tesseract settings.  Alternatively, you can pull `jchristn/documentatom` from [Docker Hub](https://hub.docker.com/repository/docker/jchristn/documentatom/general).
 
 Refer to the Postman collection for examples exercising the APIs.
 
