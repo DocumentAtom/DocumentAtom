@@ -9,7 +9,7 @@
 		<DocumentationFile>DocumentAtom.PowerPoint.xml</DocumentationFile>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>DocumentAtom.PowerPoint</Title>
-		<Version>1.0.15</Version>
+		<Version>1.0.16</Version>
 		<Authors>Joel Christner</Authors>
 		<Description>DocumentAtom provides a light, fast library for breaking input PowerPoint (pptx) documents into constituent parts (atoms), useful for AI, machine learning, processing, analytics, and general analysis.</Description>
 		<Copyright>(c)2025 Joel Christner</Copyright>
@@ -25,6 +25,10 @@
 		<IncludeSymbols>True</IncludeSymbols>
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	</PropertyGroup>
+	
 	<ItemGroup>
 		<Content Include="icon.ico" />
 	</ItemGroup>
@@ -45,9 +49,24 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="DocumentAtom" Version="1.0.15" />
-		<PackageReference Include="DocumentAtom.Image" Version="1.0.15" />
+		<PackageReference Include="DocumentAtom" Version="1.0.16" />
+		<PackageReference Include="DocumentAtom.Image" Version="1.0.16" />
 		<PackageReference Include="DocumentFormat.OpenXml" Version="3.2.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="x64\leptonica-1.82.0.dll">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="x64\tesseract50.dll">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="x86\leptonica-1.82.0.dll">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
+	  <None Update="x86\tesseract50.dll">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

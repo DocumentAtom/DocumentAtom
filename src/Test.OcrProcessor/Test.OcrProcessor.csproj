@@ -5,6 +5,10 @@
 		<TargetFramework>net8.0</TargetFramework>
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<RuntimeIdentifiers>win-x64;win-x86;win-arm;win-arm64;linux-x64;linux-arm;linux-arm64;osx-x64;osx-arm64</RuntimeIdentifiers>
+	</PropertyGroup>
+	
 	<ItemGroup>
 		<PackageReference Include="Inputty" Version="1.0.12" />
 		<PackageReference Include="SerializationHelper" Version="2.0.2" />

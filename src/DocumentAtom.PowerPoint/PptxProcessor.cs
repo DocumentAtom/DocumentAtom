@@ -38,12 +38,12 @@
         {
             get
             {
-                return _Settings;
+                return _ProcessorSettings;
             }
             set
             {
                 if (value == null) throw new ArgumentNullException(nameof(Settings));
-                _Settings = value;
+                _ProcessorSettings = value;
             }
         }
 
@@ -51,7 +51,9 @@
 
         #region Private-Members
 
-        private PptxProcessorSettings _Settings = new PptxProcessorSettings();
+        private PptxProcessorSettings _ProcessorSettings = new PptxProcessorSettings();
+        private ImageProcessorSettings _ImageProcessorSettings = null;
+        private ImageProcessor _ImageProcessor = null;
 
         private const string _MetadataFile = "docProps/core.xml";
         private const string _MetadataXPath = "/cp:coreProperties";
@@ -70,7 +72,11 @@
             if (settings == null) settings = new PptxProcessorSettings();
 
             Header = "[Pptx] ";
-            _Settings = settings;
+
+            _ProcessorSettings = settings;
+            _ImageProcessorSettings = imageSettings;
+
+            if (_ImageProcessorSettings != null) _ImageProcessor = new ImageProcessor(_ImageProcessorSettings);
         }
 
         #endregion
@@ -103,12 +109,12 @@
             {
                 using (ZipArchive archive = ZipFile.OpenRead(filename))
                 {
-                    archive.ExtractToDirectory(_Settings.TempDirectory);
-                    if (File.Exists(_Settings.TempDirectory + _MetadataFile))
+                    archive.ExtractToDirectory(_ProcessorSettings.TempDirectory);
+                    if (File.Exists(_ProcessorSettings.TempDirectory + _MetadataFile))
                     {
                         XmlDocument xmlDoc = new XmlDocument();
                         xmlDoc.PreserveWhitespace = true;
-                        xmlDoc.Load(_Settings.TempDirectory + _MetadataFile);
+                        xmlDoc.Load(_ProcessorSettings.TempDirectory + _MetadataFile);
 
                         foreach (XmlNode node in xmlDoc.ChildNodes)
                         {
@@ -129,8 +135,8 @@
             }
             finally
             {
-                FileHelper.RecursiveDelete(_Settings.TempDirectoryInfo, true);
-                Directory.Delete(_Settings.TempDirectory, true);
+                FileHelper.RecursiveDelete(_ProcessorSettings.TempDirectoryInfo, true);
+                Directory.Delete(_ProcessorSettings.TempDirectory, true);
             }
         }
 
@@ -244,7 +250,7 @@
                             stream.CopyTo(ms);
                             byte[] bytes = ms.ToArray();
 
-                            yield return new Atom
+                            Atom atom = new Atom
                             {
                                 Type = AtomTypeEnum.Binary,
                                 Binary = bytes,
@@ -254,6 +260,10 @@
                                 SHA256Hash = HashHelper.SHA256Hash(bytes),
                                 Length = bytes.Length
                             };
+
+                            if (_ImageProcessor != null) atom.Quarks = _ImageProcessor.Extract(bytes).ToList();
+
+                            yield return atom;
                         }
                     }
 

@@ -74,6 +74,11 @@
         [EnumMember(Value = "Png")]
         Png,
         /// <summary>
+        /// PostScript.
+        /// </summary>
+        [EnumMember(Value = "PostScript")]
+        PostScript,
+        /// <summary>
         /// PPTX, PowerPoint presentation.
         /// </summary>
         [EnumMember(Value = "Pptx")]

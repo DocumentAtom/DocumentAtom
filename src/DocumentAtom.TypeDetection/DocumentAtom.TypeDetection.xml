@@ -74,6 +74,11 @@
             PNG.
             </summary>
         </member>
+        <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.PostScript">
+            <summary>
+            PostScript.
+            </summary>
+        </member>
         <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Pptx">
             <summary>
             PPTX, PowerPoint presentation.

@@ -38,12 +38,12 @@
         {
             get
             {
-                return _Settings;
+                return _ProcessorSettings;
             }
             set
             {
                 if (value == null) throw new ArgumentNullException(nameof(Settings));
-                _Settings = value;
+                _ProcessorSettings = value;
             }
         }
 
@@ -51,7 +51,9 @@
 
         #region Private-Members
 
-        private DocxProcessorSettings _Settings = new DocxProcessorSettings();
+        private DocxProcessorSettings _ProcessorSettings = new DocxProcessorSettings();
+        private ImageProcessorSettings _ImageProcessorSettings = null;
+        private ImageProcessor _ImageProcessor = null;
 
         private const string _WXmlNamespace = @"http://schemas.openxmlformats.org/wordprocessingml/2006/main";
         private const string _CpXmlNamespace = @"http://schemas.openxmlformats.org/wordprocessingml/2006/main";
@@ -84,7 +86,10 @@
 
             Header = "[Docx] ";
 
-            _Settings = settings;
+            _ProcessorSettings = settings;
+            _ImageProcessorSettings = imageSettings;
+
+            if (_ImageProcessorSettings != null) _ImageProcessor = new ImageProcessor(_ImageProcessorSettings);
         }
 
         #endregion
@@ -117,10 +122,10 @@
             {
                 using (ZipArchive archive = ZipFile.OpenRead(filename))
                 {
-                    archive.ExtractToDirectory(_Settings.TempDirectory);
+                    archive.ExtractToDirectory(_ProcessorSettings.TempDirectory);
                     XmlDocument xmlDoc = new XmlDocument();
                     xmlDoc.PreserveWhitespace = true;
-                    xmlDoc.Load(_Settings.TempDirectory + _MetadataFile);
+                    xmlDoc.Load(_ProcessorSettings.TempDirectory + _MetadataFile);
 
                     XmlNamespaceManager nsmgr = new XmlNamespaceManager(xmlDoc.NameTable);
                     nsmgr.AddNamespace("w", _WXmlNamespace);
@@ -148,8 +153,8 @@
             }
             finally
             {
-                FileHelper.RecursiveDelete(_Settings.TempDirectoryInfo, true);
-                Directory.Delete(_Settings.TempDirectory, true);
+                FileHelper.RecursiveDelete(_ProcessorSettings.TempDirectoryInfo, true);
+                Directory.Delete(_ProcessorSettings.TempDirectory, true);
             }
         }
 
@@ -278,7 +283,7 @@
                         var drawing = doc.MainDocumentPart.Document.Descendants<DocumentFormat.OpenXml.Drawing.Blip>()
                             .FirstOrDefault(b => b.Embed?.Value == imageId);
 
-                        yield return new Atom
+                        Atom atom = new Atom
                         {
                             Type = AtomTypeEnum.Binary,
                             Binary = bytes,
@@ -287,6 +292,10 @@
                             SHA256Hash = HashHelper.SHA256Hash(bytes),
                             Length = bytes.Length
                         };
+
+                        if (_ImageProcessor != null) atom.Quarks = _ImageProcessor.Extract(bytes).ToList();
+
+                        yield return atom;
                     }
                 }
             }

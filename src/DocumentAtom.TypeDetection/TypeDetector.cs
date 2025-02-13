@@ -62,6 +62,9 @@
         private string _PngMimeType = "image/png";
         private string _PngExtension = "png";
 
+        private string _PostScriptMimeType = "application/postscript";
+        private string _PostScriptExtension = "ps";
+
         private string _PptxMimeType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
         private string _PptxExtension = "pptx";
 
@@ -143,6 +146,13 @@
                         tr.MimeType = _PdfMimeType;
                         tr.Extension = _PdfExtension;
                         tr.Type = DocumentTypeEnum.Pdf;
+                        return tr;
+                    }
+                    else if (IsPostScript(data))
+                    {
+                        tr.MimeType = _PostScriptMimeType;
+                        tr.Extension = _PostScriptExtension;
+                        tr.Type = DocumentTypeEnum.PostScript;
                         return tr;
                     }
                     else if (IsSqlite(data))
@@ -331,6 +341,14 @@
                    data[5] == 0x0A &&
                    data[6] == 0x1A &&
                    data[7] == 0x0A;
+        }
+
+        private bool IsPostScript(byte[] data)
+        {
+            if (data == null || data.Length < 4) return false;
+
+            return (data[0] == 0x25 && data[1] == 0x21 && data[2] == 0x50 && data[3] == 0x53) || // %!PS
+                   (data[0] == 0xC5 && data[1] == 0xD0 && data[2] == 0xD3 && data[3] == 0xC6);   // DOS EPS Binary
         }
 
         private bool IsParquet(byte[] data)

@@ -1,8 +1,10 @@
-<img src="https://github.com/jchristn/DocumentAtom/blob/main/assets/icon.png" width="256" height="256">
+<img src="https://raw.githubusercontent.com/jchristn/DocumentAtom/refs/heads/main/assets/icon.png" width="256" height="256">
 
 # DocumentAtom
 
 DocumentAtom provides a light, fast library for breaking input documents into constituent parts (atoms), useful for text processing, analysis, and artificial intelligence.
+
+DocumentAtom requires that Tesseract v5.0 be installed on the host.  This is required as certain document types can have embedded images which are parsed using OCR via Tesseract.
 
 | Package | Version | Downloads |
 |---------|---------|-----------|

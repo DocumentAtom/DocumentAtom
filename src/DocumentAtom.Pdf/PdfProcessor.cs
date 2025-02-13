@@ -39,12 +39,12 @@
         {
             get
             {
-                return _Settings;
+                return _ProcessorSettings;
             }
             set
             {
                 if (value == null) throw new ArgumentNullException(nameof(Settings));
-                _Settings = value;
+                _ProcessorSettings = value;
             }
         }
 
@@ -52,7 +52,9 @@
 
         #region Private-Members
 
-        private PdfProcessorSettings _Settings = new PdfProcessorSettings();
+        private PdfProcessorSettings _ProcessorSettings = new PdfProcessorSettings();
+        private ImageProcessorSettings _ImageProcessorSettings = null;
+        private ImageProcessor _ImageProcessor = null;
 
         #endregion
 
@@ -68,7 +70,11 @@
             if (settings == null) settings = new PdfProcessorSettings();
 
             Header = "[Pdf] ";
-            _Settings = settings;
+
+            _ProcessorSettings = settings;
+            _ImageProcessorSettings = imageSettings;
+
+            if (_ImageProcessorSettings != null) _ImageProcessor = new ImageProcessor(_ImageProcessorSettings);
         }
 
         #endregion
@@ -265,7 +271,7 @@
                         }
                         else
                         {
-                            yield return new Atom
+                            Atom atom = new Atom
                             {
                                 Type = AtomTypeEnum.Binary,
                                 Binary = bytes,
@@ -282,6 +288,10 @@
                                 SHA256Hash = HashHelper.SHA256Hash(bytes),
                                 Length = bytes.Length
                             };
+
+                            if (_ImageProcessor != null) atom.Quarks = _ImageProcessor.Extract(bytes).ToList();
+
+                            yield return atom;
                         }
                     }
 
