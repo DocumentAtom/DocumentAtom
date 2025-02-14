@@ -32,3 +32,6 @@ System.Reflection.TargetInvocationException: Exception has been thrown by the ta
 2025-02-13 20:54:06 b14f421bf04c Info [DocumentAtom] starting at 02/13/2025 20:54:06 using process ID 1
 2025-02-13 20:54:10 b14f421bf04c Debug [DocumentAtom] POST /atom/pdf?ocr from 172.17.0.1: 200
 2025-02-13 20:54:18 b14f421bf04c Info [DocumentAtom] stopping at 02/13/2025 20:54:18
+2025-02-13 20:56:06 085d8261e4de Debug [DocumentAtom] logging initialized
+2025-02-13 20:56:06 085d8261e4de Info [DocumentAtom] starting at 02/13/2025 20:56:06 using process ID 1
+2025-02-13 20:56:14 085d8261e4de Debug [DocumentAtom] POST /atom/excel?ocr from 172.17.0.1: 200

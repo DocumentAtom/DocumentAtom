@@ -49,6 +49,13 @@
 
         private static Webserver _RestServer = null;
 
+        private static List<string> _Localhost = new List<string>
+        {
+            "127.0.0.1",
+            "localhost",
+            "::1"
+        };
+
         private static CancellationTokenSource _TokenSource = new CancellationTokenSource();
         private static CancellationToken _Token;
 
@@ -104,6 +111,11 @@
                 Environment.NewLine +
                 Constants.Copyright +
                 Environment.NewLine);
+
+            Console.WriteLine(
+                "NOTICE" + Environment.NewLine +
+                "------" + Environment.NewLine +
+                "DocumentAtom requires that Tesseract v5.0.0 be installed on the host." + Environment.NewLine);
         }
 
         private static List<string> EnumerateFiles(string root, List<string> list = null)
@@ -219,6 +231,15 @@
 
             Console.WriteLine("Starting REST server on       : " + _Settings.Webserver.Prefix);
             _RestServer.Start();
+
+            if (_Localhost.Contains(_Settings.Webserver.Hostname))
+            {
+                _Logging.Alert(_Header + Environment.NewLine + Environment.NewLine
+                    + "NOTICE" + Environment.NewLine
+                    + "------" + Environment.NewLine
+                    + "DocumentAtom is configured to listen on localhost and will not be externally accessible." + Environment.NewLine
+                    + "Modify " + Constants.SettingsFile + " to change the REST listener hostname to make externally accessible." + Environment.NewLine);
+            }
 
             #endregion
 
