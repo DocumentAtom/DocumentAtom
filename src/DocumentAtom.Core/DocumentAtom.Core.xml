@@ -287,6 +287,12 @@
             This value must be equal to or less than the maximum quark content length.
             </summary>
         </member>
+        <member name="P:DocumentAtom.Core.ChunkingSettings.MaximumWords">
+            <summary>
+            The maximum number of words to retrieve.
+            Default value is 256.
+            </summary>
+        </member>
         <member name="M:DocumentAtom.Core.ChunkingSettings.#ctor">
             <summary>
             Chunking settings, that is, breaking atoms into quarks.
@@ -584,22 +590,24 @@
             <param name="input">String.</param>
             <returns>String.</returns>
         </member>
-        <member name="M:DocumentAtom.Core.StringHelper.GetSubstringsFromString(System.String,System.Int32,System.Int32)">
+        <member name="M:DocumentAtom.Core.StringHelper.GetSubstringsFromString(System.String,System.Int32,System.Int32,System.Int32)">
             <summary>
             Extract substrings from a given string.
             </summary>
             <param name="str">String.</param>
             <param name="maximumLength">Maximum length.</param>
             <param name="shiftSize">Shift size.</param>
+            <param name="maxWords">Maximum number of words to retrieve.</param>
             <returns>Substrings.</returns>
         </member>
-        <member name="M:DocumentAtom.Core.StringHelper.GetFullWordsFromRange(System.String,System.Int32,System.Int32)">
+        <member name="M:DocumentAtom.Core.StringHelper.GetFullWordsFromRange(System.String,System.Int32,System.Int32,System.Int32)">
             <summary>
             Retrieve full words from within a range within a supplied string.
             </summary>
             <param name="str">String.</param>
             <param name="start">Start position.</param>
             <param name="end">End position.</param>
+            <param name="maxWords">Maximum number of words to retrieve.</param>
             <returns>String.</returns>
         </member>
         <member name="T:DocumentAtom.Core.Image.ExtractionResult">

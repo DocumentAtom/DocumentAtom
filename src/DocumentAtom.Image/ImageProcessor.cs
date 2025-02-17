@@ -157,12 +157,24 @@
             }
         }
 
+        private bool IsPng(byte[] data)
+        {
+            // PNG signature: 89 50 4E 47 0D 0A 1A 0A
+            if (data.Length < 8) return false;
+
+            return data[0] == 0x89 &&
+                   data[1] == 0x50 &&
+                   data[2] == 0x4E &&
+                   data[3] == 0x47 &&
+                   data[4] == 0x0D &&
+                   data[5] == 0x0A &&
+                   data[6] == 0x1A &&
+                   data[7] == 0x0A;
+        }
+
         private ExtractionResult ExtractContent(byte[] pngData)
         {
-            if (pngData == null || pngData.Length == 0)
-            {
-                throw new ArgumentException("Input image data cannot be null or empty", nameof(pngData));
-            }
+            if (pngData == null || pngData.Length == 0) throw new ArgumentNullException(nameof(pngData));
 
             var result = new ExtractionResult
             {
@@ -170,6 +182,12 @@
                 Tables = new List<TableStructure>(),
                 Lists = new List<ListStructure>()
             };
+
+            if (!IsPng(pngData))
+            {
+                Log(SeverityEnum.Warn, "supplied image data is not of type PNG");
+                return result;
+            }
 
             using var memStream = new MemoryStream(pngData);
             using var img = Pix.LoadFromMemory(memStream.ToArray());

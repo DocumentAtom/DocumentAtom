@@ -47,12 +47,30 @@
             }
         }
 
+        /// <summary>
+        /// The maximum number of words to retrieve.
+        /// Default value is 256.
+        /// </summary>
+        public int MaximumWords
+        {
+            get
+            {
+                return _MaximumWords;
+            }
+            set
+            {
+                if (value < 1) throw new ArgumentOutOfRangeException(nameof(MaximumWords));
+                _MaximumWords = value;
+            }
+        }
+
         #endregion
 
         #region Private-Members
 
         private int _MaximumLength = 512;
         private int _ShiftSize = 512;
+        private int _MaximumWords = 256;
 
         #endregion
 

@@ -332,7 +332,7 @@
                 {
                     int quarkPosition = 0;
 
-                    IEnumerable<string> subStrings = StringHelper.GetSubstringsFromString(text, settings.MaximumLength, settings.ShiftSize);
+                    IEnumerable<string> subStrings = StringHelper.GetSubstringsFromString(text, settings.MaximumLength, settings.ShiftSize, settings.MaximumWords);
 
                     atom.Quarks = new List<Atom>();
 
@@ -436,7 +436,7 @@
                 {
                     int quarkPosition = 0;
 
-                    IEnumerable<string> subStrings = StringHelper.GetSubstringsFromString(text, settings.MaximumLength, settings.ShiftSize);
+                    IEnumerable<string> subStrings = StringHelper.GetSubstringsFromString(text, settings.MaximumLength, settings.ShiftSize, settings.MaximumWords);
 
                     atom.Quarks = new List<Atom>();
 

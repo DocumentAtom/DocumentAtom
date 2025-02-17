@@ -31,8 +31,9 @@ namespace DocumentAtom.Core
         /// <param name="str">String.</param>
         /// <param name="maximumLength">Maximum length.</param>
         /// <param name="shiftSize">Shift size.</param>
+        /// <param name="maxWords">Maximum number of words to retrieve.</param>
         /// <returns>Substrings.</returns>
-        public static IEnumerable<string> GetSubstringsFromString(string str, int maximumLength, int shiftSize)
+        public static IEnumerable<string> GetSubstringsFromString(string str, int maximumLength, int shiftSize, int maxWords)
         {
             if (String.IsNullOrEmpty(str)) yield break;
             str = str.Trim();
@@ -57,7 +58,7 @@ namespace DocumentAtom.Core
                 int endPosition = Math.Min(startPosition + maximumLength, str.Length);
 
                 // Get substring that ends on a word boundary
-                string substring = GetFullWordsFromRange(str, startPosition, endPosition);
+                string substring = GetFullWordsFromRange(str, startPosition, endPosition, maxWords);
 
                 if (!String.IsNullOrEmpty(substring))
                 {
@@ -97,35 +98,63 @@ namespace DocumentAtom.Core
         /// <param name="str">String.</param>
         /// <param name="start">Start position.</param>
         /// <param name="end">End position.</param>
+        /// <param name="maxWords">Maximum number of words to retrieve.</param>
         /// <returns>String.</returns>
         public static string GetFullWordsFromRange(
             string str,
             int start,
-            int end)
+            int end,
+            int maxWords)
         {
             if (String.IsNullOrEmpty(str)) return null;
 
-            // Ensure positions are within bounds
-            start = Math.Max(0, start);
-            end = Math.Min(str.Length, end);
+            start = Math.Max(0, Math.Min(str.Length - 1, start));
+            end = Math.Max(start, Math.Min(str.Length - 1, end));
 
-            // If start is mid-word, move to the beginning of the word
-            while (start > 0 && !IsSafeWhitespace(str[start - 1]))
-                start--;
+            // Adjust start position to include whole words
+            while (start > 0 && !IsSafeWhitespace(str[start - 1])) start--;
 
-            // If end is mid-word, move back to the end of the previous word
-            if (end < str.Length)
+            // Track word count while scanning
+            int wordCount = 0;
+            bool inWord = false;
+            int adjustedEnd = start;
+
+            // Scan forward from start to count words and find adjusted end position
+            for (int i = start; i <= end && i < str.Length; i++)
             {
-                while (end > start && !IsSafeWhitespace(str[end - 1]))
-                    end--;
+                if (!IsSafeWhitespace(str[i]))
+                {
+                    if (!inWord)
+                    {
+                        inWord = true;
+                        wordCount++;
+                        if (wordCount > maxWords)
+                        {
+                            while (adjustedEnd > start && !IsSafeWhitespace(str[adjustedEnd])) adjustedEnd--;
+                            break;
+                        }
+                    }
+                    adjustedEnd = i;
+                }
+                else
+                {
+                    inWord = false;
+                }
             }
 
-            // Ensure we have a valid range
-            if (start >= end)
-                return string.Empty;
+            // If we hit the end without exceeding maxWords, adjust end position for partial words
+            if (wordCount <= maxWords && adjustedEnd == end && adjustedEnd < str.Length - 1)
+            {
+                while (adjustedEnd > start && !IsSafeWhitespace(str[adjustedEnd + 1])) adjustedEnd--;
+            }
 
-            // Extract and clean the substring
-            return str.Substring(start, end - start).Trim();
+            // Additional safety checks before substring
+            if (start > adjustedEnd || start >= str.Length) return string.Empty;
+
+            int length = adjustedEnd - start + 1;
+            if (length <= 0 || start + length > str.Length) return string.Empty;
+
+            return str.Substring(start, length);
         }
 
         #endregion
