@@ -1,0 +1,4 @@
+2025-02-21 17:22:33 230fcd689da2 Debug [DocumentAtom] logging initialized
+2025-02-21 17:22:33 230fcd689da2 Info [DocumentAtom] starting at 02/21/2025 17:22:33 using process ID 1
+2025-02-21 17:23:14 230fcd689da2 Debug [DocumentAtom] POST /typedetect from 172.17.0.1: 200
+2025-02-21 17:23:23 230fcd689da2 Info [DocumentAtom] stopping at 02/21/2025 17:23:23

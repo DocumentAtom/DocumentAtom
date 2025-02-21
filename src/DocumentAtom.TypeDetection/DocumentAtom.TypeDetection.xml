@@ -120,6 +120,16 @@
             </summary>
             <param name="tempDirectory">Temporary directory.</param>
         </member>
+        <member name="M:DocumentAtom.TypeDetection.TypeDetector.Process(System.String,System.String)">
+            <summary>
+            Determine the type of a given file.  CSV file types are inferred from the supplied content type header.
+            </summary>
+            <param name="filename">Filename.</param>
+            <param name="contentType">Content-type header value, if any.
+            The content-type header is used to infer the content-type for certain difficult types, including CSV.
+            </param>
+            <returns>TypeResult.</returns>
+        </member>
         <member name="M:DocumentAtom.TypeDetection.TypeDetector.Process(System.Byte[],System.String)">
             <summary>
             Determine the type of supplied data.  CSV file types are inferred from the supplied content type header.

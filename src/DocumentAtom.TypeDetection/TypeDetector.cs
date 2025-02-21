@@ -100,6 +100,20 @@
         #region Public-Methods
 
         /// <summary>
+        /// Determine the type of a given file.  CSV file types are inferred from the supplied content type header.
+        /// </summary>
+        /// <param name="filename">Filename.</param>
+        /// <param name="contentType">Content-type header value, if any.
+        /// The content-type header is used to infer the content-type for certain difficult types, including CSV.
+        /// </param>
+        /// <returns>TypeResult.</returns>
+        public TypeResult Process(string filename, string contentType = null)
+        {
+            if (String.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
+            return Process(File.ReadAllBytes(filename), contentType);
+        }
+
+        /// <summary>
         /// Determine the type of supplied data.  CSV file types are inferred from the supplied content type header.
         /// </summary>
         /// <param name="data">Data.</param>

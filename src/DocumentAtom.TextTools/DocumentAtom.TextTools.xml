@@ -1,0 +1,213 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DocumentAtom.TextTools</name>
+    </assembly>
+    <members>
+        <member name="T:DocumentAtom.TextTools.Lemmatizer">
+            <summary>
+            Reduces words to their base or dictionary form by removing inflectional endings and returning the base or dictionary form of a word.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.TextTools.Lemmatizer.IrregularVerbs">
+            <summary>
+            Irregular verbs.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.TextTools.Lemmatizer.IrregularNouns">
+            <summary>
+            Irregular nouns.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.TextTools.Lemmatizer.MorphologicalForms">
+            <summary>
+            Dictionary for morphological transformations (comparative/superlative adjectives, adverbs).
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.TextTools.Lemmatizer.PreservedTerms">
+            <summary>
+            Terms that should be preserved in their original form.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.TextTools.Lemmatizer.CommonPrefixes">
+            <summary>
+            Common prefixes used in word formation.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.TextTools.Lemmatizer.CommonSuffixes">
+            <summary>
+            Common suffixes used in word formation.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.TextTools.Lemmatizer.PreservedEndingForms">
+            <summary>
+            Words with preserved endings (e.g., -ment, -ant, -ent).
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.TextTools.Lemmatizer.#ctor">
+            <summary>
+            Instantiates a new lemmatizer.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.TextTools.Lemmatizer.Process(System.String)">
+            <summary>
+            Process a single word.
+            </summary>
+            <param name="word">Word to process.</param>
+            <returns>Lemmatized word.</returns>
+        </member>
+        <member name="M:DocumentAtom.TextTools.Lemmatizer.Process(System.String[])">
+            <summary>
+            Process multiple words.
+            </summary>
+            <param name="words">Words to process.</param>
+            <returns>Lemmatized words.</returns>
+        </member>
+        <member name="T:DocumentAtom.TextTools.StringSequenceReplacer">
+            <summary>
+            String sequence replacer.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.TextTools.StringSequenceReplacer.Replacements">
+            <summary>
+            Replacer sequences.  Dictionary where the key is the match value, and the value is the value to use for in-place replacement.
+            The default value for this dictionary includes whitespace, newline characters, braces, dashes, apostrophes and quotes, 
+            mathematical operators, and other common non-word-forming characters.
+            Each key-value pair is evaluated any instances of the keys found in the supplied input will be replaced with the specified values.
+            Replacements are evaluated in the order in which they are added to the dictionary.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.TextTools.StringSequenceReplacer.#ctor(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            String sequence replacer.  This class is used to replace specific substrings with replacement values, and is often useful for
+            removing punctuation, reducing whitespace, and removal of special characters.
+            </summary>
+            <param name="replacements">
+            Replacer sequences.  Dictionary where the key is the match value, and the value is the value to use for in-place replacement.
+            The default value for this dictionary includes whitespace, newline characters, braces, dashes, apostrophes and quotes, 
+            mathematical operators, and other common non-word-forming characters.
+            Each key-value pair is evaluated any instances of the keys found in the supplied input will be replaced with the specified values.
+            </param>
+        </member>
+        <member name="M:DocumentAtom.TextTools.StringSequenceReplacer.Process(System.String,System.Boolean)">
+            <summary>
+            Process a string of text.
+            </summary>
+            <param name="str">String.</param>
+            <param name="reduceWhitespace">True to reduce whitespace in the returned string.</param>
+            <returns>Input string with replacements as specified in the replacements dictionary.</returns>
+        </member>
+        <member name="M:DocumentAtom.TextTools.StringSequenceReplacer.Process(System.String[],System.Boolean,System.Boolean)">
+            <summary>
+            Process an array of text strings.
+            </summary>
+            <param name="strings">Strings.</param>
+            <param name="removeEmptyEntries">True to remove empty entries after processing.  If set to true, the dimensions of the returned array may be different than the input array.</param>
+            <param name="reduceWhitespace">True to reduce whitespace in the returned string.</param>
+            <returns>Input string with replacements as specified in the replacements dictionary.</returns>
+        </member>
+        <member name="T:DocumentAtom.TextTools.StringSplitter">
+            <summary>
+            String splitter.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.TextTools.StringSplitter.SplitCharacters">
+            <summary>
+            Split characters.  Input strings will be split using these characters.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.TextTools.StringSplitter.#ctor">
+            <summary>
+            String splitter.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.TextTools.StringSplitter.Process(System.String)">
+            <summary>
+            Process an input string.
+            </summary>
+            <param name="str">String.</param>
+            <returns>Enumerable string.</returns>
+        </member>
+        <member name="T:DocumentAtom.TextTools.TokenExtractor">
+            <summary>
+            Token extractor.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.TextTools.TokenExtractor.StringSequenceReplacer">
+            <summary>
+            String sequence replacer.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.TextTools.TokenExtractor.WordRemover">
+            <summary>
+            Word remover.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.TextTools.TokenExtractor.StringSplitter">
+            <summary>
+            String splitter.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.TextTools.TokenExtractor.Lemmatizer">
+            <summary>
+            Lemmatizer.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.TextTools.TokenExtractor.MinimumTokenLength">
+            <summary>
+            Minimum token length.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.TextTools.TokenExtractor.MaximumTokenLength">
+            <summary>
+            Maximum token length.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.TextTools.TokenExtractor.#ctor">
+            <summary>
+            Token extractor.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.TextTools.TokenExtractor.Process(System.String)">
+            <summary>
+            Extract tokens from an input string.
+            </summary>
+            <param name="str">Input string.</param>
+            <returns>Enumerable string.</returns>
+        </member>
+        <member name="T:DocumentAtom.TextTools.WordRemover">
+            <summary>
+            Removes stop words and other specified words from text while preserving word boundaries.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.TextTools.WordRemover.WordsToRemove">
+            <summary>
+            Words to remove. When any of these words are encountered as complete words, they will be removed.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.TextTools.WordRemover.WordSeparators">
+            <summary>
+            Characters used to separate words during processing.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.TextTools.WordRemover.#ctor">
+            <summary>
+            Initializes a new instance of the WordRemover class.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.TextTools.WordRemover.Process(System.String[])">
+            <summary>
+            Process an array of tokens, removing specified words.
+            </summary>
+            <param name="tokens">Array of tokens to process.</param>
+            <returns>Array with specified words removed.</returns>
+        </member>
+        <member name="M:DocumentAtom.TextTools.WordRemover.Process(System.String)">
+            <summary>
+            Process a single string, removing specified words.
+            </summary>
+            <param name="input">String to process.</param>
+            <returns>Input string with specified words removed.</returns>
+        </member>
+    </members>
+</doc>
