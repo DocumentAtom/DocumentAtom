@@ -347,16 +347,28 @@
 
         private static List<Table> ExtractTables(PageArea pageArea)
         {
-            var tables = new List<Table>();
+            var basicTables = new List<Table>();
+            var spreadsheetTables = new List<Table>();
 
-            // Try both algorithms and combine results
-            IExtractionAlgorithm basicAlgorithm = new BasicExtractionAlgorithm();
-            IExtractionAlgorithm spreadsheetAlgorithm = new SpreadsheetExtractionAlgorithm();
+            try
+            {
+                IExtractionAlgorithm basicAlgorithm = new BasicExtractionAlgorithm();
+                basicTables = basicAlgorithm.Extract(pageArea).Where(IsTable).ToList();
+            }
+            catch (Exception)
+            {
+            }
 
-            tables.AddRange(basicAlgorithm.Extract(pageArea).Where(IsTable));
-            tables.AddRange(spreadsheetAlgorithm.Extract(pageArea).Where(IsTable));
+            try
+            {
+                IExtractionAlgorithm spreadsheetAlgorithm = new SpreadsheetExtractionAlgorithm();
+                spreadsheetTables = spreadsheetAlgorithm.Extract(pageArea).Where(IsTable).ToList();
+            }
+            catch (Exception)
+            {
+            }
 
-            return tables.Distinct().ToList();
+            return MergeTables(basicTables, spreadsheetTables);
         }
 
         private static bool IsTable(Table table)
@@ -460,6 +472,84 @@
             }
 
             return dt;
+        }
+
+        private static List<Table> MergeTables(List<Table> basicTables, List<Table> spreadsheetTables)
+        {
+            if (basicTables == null) basicTables = new List<Table>();
+
+            var mergedTables = new List<Table>(basicTables);
+
+            if (spreadsheetTables != null)
+            {
+                foreach (var spreadsheetTable in spreadsheetTables)
+                {
+                    bool isDuplicate = false;
+
+                    // Compare this spreadsheet table with each basic table
+                    foreach (var basicTable in basicTables)
+                    {
+                        if (AreTablesEqual(spreadsheetTable, basicTable))
+                        {
+                            isDuplicate = true;
+                            break;
+                        }
+                    }
+
+                    // If it's not a duplicate, add it to the merged list
+                    if (!isDuplicate)
+                    {
+                        mergedTables.Add(spreadsheetTable);
+                    }
+                }
+            }
+
+            return mergedTables;
+        }
+
+        private static bool AreTablesEqual(Table table1, Table table2)
+        {
+            // Exit early if tables have different dimensions
+            if (table1.RowCount != table2.RowCount || table1.ColumnCount != table2.ColumnCount)
+            {
+                return false;
+            }
+
+            // Get the bounding boxes
+            var bbox1 = table1.BoundingBox;
+            var bbox2 = table2.BoundingBox;
+
+            // Calculate the overlap percentage
+            double overlapPercentage = CalculateOverlapPercentage(bbox1, bbox2);
+
+            // If the tables overlap by more than 80%, consider them the same table
+            return overlapPercentage > 0.8;
+        }
+
+        private static double CalculateOverlapPercentage(PdfRectangle bbox1, PdfRectangle bbox2)
+        {
+            // Calculate intersection dimensions
+            double leftIntersection = Math.Max(bbox1.TopLeft.X, bbox2.TopLeft.X);
+            double topIntersection = Math.Max(bbox1.TopLeft.Y, bbox2.TopLeft.Y);
+            double rightIntersection = Math.Min(bbox1.TopLeft.X + bbox1.Width, bbox2.TopLeft.X + bbox2.Width);
+            double bottomIntersection = Math.Min(bbox1.TopLeft.Y + bbox1.Height, bbox2.TopLeft.Y + bbox2.Height);
+
+            // Check if there is an intersection
+            if (rightIntersection <= leftIntersection || bottomIntersection <= topIntersection)
+            {
+                return 0.0; // No overlap
+            }
+
+            // Calculate area of intersection
+            double intersectionArea = (rightIntersection - leftIntersection) * (bottomIntersection - topIntersection);
+
+            // Calculate areas of both bounding boxes
+            double area1 = bbox1.Width * bbox1.Height;
+            double area2 = bbox2.Width * bbox2.Height;
+
+            // Return the overlap as a percentage of the smaller area
+            double smallerArea = Math.Min(area1, area2);
+            return intersectionArea / smallerArea;
         }
 
         #endregion
