@@ -7,7 +7,7 @@
 		<DocumentationFile>DocumentAtom.TypeDetection.xml</DocumentationFile>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>DocumentAtom.TypeDetection</Title>
-		<Version>1.0.17</Version>
+		<Version>1.0.18</Version>
 		<Authors>Joel Christner</Authors>
 		<Description>DocumentAtom provides a light, fast library for breaking input documents into constituent parts (atoms), useful for AI, machine learning, processing, analytics, and general analysis.</Description>
 		<Copyright>(c)2025 Joel Christner</Copyright>

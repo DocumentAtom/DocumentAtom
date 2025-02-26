@@ -328,16 +328,129 @@
 
         #region Private-Methods
 
-        private bool IsBinary(byte[] data, int maxNullCount = 1, int maxBytesToRead = 8000)
+        private bool IsBinary(byte[] data, int maxBytesToRead = 8000)
         {
-            int nullCount = 0;
-
-            for (int i = 0; i < data.Length; i++)
+            // Check for known binary file signatures first
+            if (data.Length >= 8)
             {
-                if (data[i] == 0x00) nullCount++;
-                if (nullCount >= maxNullCount) return true;
-                if (i >= maxBytesToRead) break;
+                // PDF signature: %PDF
+                if (data[0] == 0x25 && data[1] == 0x50 && data[2] == 0x44 && data[3] == 0x46)
+                    return true;
+
+                // PNG signature: 89 50 4E 47 0D 0A 1A 0A
+                if (data[0] == 0x89 && data[1] == 0x50 && data[2] == 0x4E && data[3] == 0x47 &&
+                    data[4] == 0x0D && data[5] == 0x0A && data[6] == 0x1A && data[7] == 0x0A)
+                    return true;
+
+                // JPEG signatures: FF D8 FF
+                if (data[0] == 0xFF && data[1] == 0xD8 && data[2] == 0xFF)
+                    return true;
+
+                // GIF signatures: GIF87a or GIF89a
+                if (data[0] == 0x47 && data[1] == 0x49 && data[2] == 0x46 &&
+                    data[3] == 0x38 && (data[4] == 0x37 || data[4] == 0x39) && data[5] == 0x61)
+                    return true;
+
+                // ZIP signatures (also used by docx, xlsx, jar, etc.): PK
+                if (data[0] == 0x50 && data[1] == 0x4B &&
+                    ((data[2] == 0x03 && data[3] == 0x04) || (data[2] == 0x05 && data[3] == 0x06)))
+                    return true;
+
+                // RAR signature: Rar!
+                if (data[0] == 0x52 && data[1] == 0x61 && data[2] == 0x72 && data[3] == 0x21)
+                    return true;
+
+                // TIFF signature: 49 49 2A 00 or 4D 4D 00 2A
+                if ((data[0] == 0x49 && data[1] == 0x49 && data[2] == 0x2A && data[3] == 0x00) ||
+                    (data[0] == 0x4D && data[1] == 0x4D && data[2] == 0x00 && data[3] == 0x2A))
+                    return true;
+
+                // BMP signature: BM
+                if (data[0] == 0x42 && data[1] == 0x4D)
+                    return true;
+
+                // EXE/DLL signature: MZ
+                if (data[0] == 0x4D && data[1] == 0x5A)
+                    return true;
+
+                // MP3 signature: ID3 or starting with 0xFF 0xFB
+                if ((data[0] == 0x49 && data[1] == 0x44 && data[2] == 0x33) ||
+                    (data[0] == 0xFF && (data[1] == 0xFB || data[1] == 0xF3 || data[1] == 0xF2)))
+                    return true;
+
+                // MP4/MOV/QuickTime signature: ftyp or moov
+                if ((data[4] == 0x66 && data[5] == 0x74 && data[6] == 0x79 && data[7] == 0x70) ||
+                    (data[4] == 0x6D && data[5] == 0x6F && data[6] == 0x6F && data[7] == 0x76))
+                    return true;
+
+                // WebP signature: RIFF + ????WEBP
+                if (data[0] == 0x52 && data[1] == 0x49 && data[2] == 0x46 && data[3] == 0x46 &&
+                    data[8] == 0x57 && data[9] == 0x45 && data[10] == 0x42 && data[11] == 0x50 && data.Length >= 12)
+                    return true;
+
+                // 7z signature: 7z
+                if (data[0] == 0x37 && data[1] == 0x7A && data[2] == 0xBC && data[3] == 0xAF &&
+                    data[4] == 0x27 && data[5] == 0x1C)
+                    return true;
+
+                // SQL Lite Database: SQLite format 3
+                if (data[0] == 0x53 && data[1] == 0x51 && data[2] == 0x4C && data[3] == 0x69 &&
+                    data[4] == 0x74 && data[5] == 0x65)
+                    return true;
             }
+
+            // Limit the number of bytes to check
+            int bytesToCheck = Math.Min(data.Length, maxBytesToRead);
+
+            // Count of characters that are likely to appear in binary files
+            int binaryCharCount = 0;
+            int nullByteCount = 0;
+
+            for (int i = 0; i < bytesToCheck; i++)
+            {
+                byte b = data[i];
+
+                // Null bytes are definitely binary
+                if (b == 0x00)
+                {
+                    nullByteCount++;
+                    if (nullByteCount >= 3) // Allow a couple of null bytes in text files
+                        return true;
+                }
+
+                // Control characters (except common text file characters like CR, LF, tab)
+                if (b < 0x08 || (b > 0x0D && b < 0x20 && b != 0x1B)) // Excluding ESC character (0x1B) which can appear in text terminals
+                    binaryCharCount++;
+
+                // If we've seen enough binary characters, consider it binary
+                if (binaryCharCount > 10) // Threshold can be adjusted
+                    return true;
+            }
+
+            // For UTF-16 / UTF-32 detection (common patterns with null bytes alternating with text)
+            if (data.Length >= 4)
+            {
+                // UTF-16 BOM check
+                if ((data[0] == 0xFE && data[1] == 0xFF) || (data[0] == 0xFF && data[1] == 0xFE))
+                    return true;
+
+                // UTF-32 BOM check
+                if ((data[0] == 0x00 && data[1] == 0x00 && data[2] == 0xFE && data[3] == 0xFF) ||
+                    (data[0] == 0xFF && data[1] == 0xFE && data[2] == 0x00 && data[3] == 0x00))
+                    return true;
+            }
+
+            // Final check for high concentration of bytes outside ASCII printable range
+            int nonPrintableCount = 0;
+            for (int i = 0; i < bytesToCheck; i++)
+            {
+                if (data[i] < 0x20 || data[i] > 0x7E)
+                    nonPrintableCount++;
+            }
+
+            // If more than 30% of content is non-printable, likely binary
+            if (bytesToCheck > 0 && (double)nonPrintableCount / bytesToCheck > 0.3)
+                return true;
 
             return false;
         }
