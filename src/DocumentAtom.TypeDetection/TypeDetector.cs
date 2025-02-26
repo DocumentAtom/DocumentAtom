@@ -333,6 +333,34 @@
             // Check for known binary file signatures first
             if (data.Length >= 8)
             {
+                // PostScript signature: %!PS or just %!
+                if (data.Length >= 3 && data[0] == 0x25 && data[1] == 0x21)
+                {
+                    // Check for complete "%!PS" signature
+                    if (data.Length >= 4 && data[2] == 0x50 && data[3] == 0x53)
+                        return true;
+
+                    // For PostScript files that might start with just "%!"
+                    // Scan a bit further for "PostScript" or "EPSF" markers
+                    if (data.Length >= 20)
+                    {
+                        string header = System.Text.Encoding.ASCII.GetString(data, 0, Math.Min(data.Length, 100));
+                        if (header.IndexOf("PostScript", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                            header.IndexOf("EPSF", StringComparison.OrdinalIgnoreCase) >= 0)
+                            return true;
+                    }
+                }
+
+                // Some EPS files might have the PS signature slightly offset
+                // Scan the first few hundred bytes
+                int scanLength = Math.Min(data.Length, 500);
+                for (int i = 0; i < scanLength - 3; i++)
+                {
+                    if (data[i] == 0x25 && data[i + 1] == 0x21 &&
+                        data[i + 2] == 0x50 && data[i + 3] == 0x53)
+                        return true;
+                }
+
                 // PDF signature: %PDF
                 if (data[0] == 0x25 && data[1] == 0x50 && data[2] == 0x44 && data[3] == 0x46)
                     return true;
