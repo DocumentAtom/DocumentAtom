@@ -665,6 +665,9 @@
 
         private static bool IsListMarker(string text)
         {
+            if (string.IsNullOrEmpty(text))
+                return false;
+
             text = text.Trim();
 
             // Check for bullet-style markers
@@ -675,20 +678,19 @@
             if (text.Length <= 4)  // Reasonable length for a marker
             {
                 // Handle parenthesized markers: (1), (a), etc.
-                if (text.StartsWith("(") && text.EndsWith(")"))
+                if (text.StartsWith("(") && text.EndsWith(")") && text.Length >= 3)
                 {
                     var inner = text.Substring(1, text.Length - 2);
-                    return char.IsLetterOrDigit(inner[0]);
+                    return inner.Length > 0 && char.IsLetterOrDigit(inner[0]);
                 }
 
                 // Handle dot-suffixed markers: 1., a., etc.
-                if (text.EndsWith("."))
+                if (text.EndsWith(".") && text.Length >= 2)
                 {
                     var prefix = text.Substring(0, text.Length - 1);
-                    return prefix.All(c => char.IsLetterOrDigit(c));
+                    return prefix.Length > 0 && prefix.All(c => char.IsLetterOrDigit(c));
                 }
             }
-
             return false;
         }
 
