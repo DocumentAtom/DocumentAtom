@@ -130,8 +130,7 @@
                 {
                     #region Variables-and-State
 
-                    ObjectExtractor oe = new ObjectExtractor(document);
-                    PageArea pageArea = oe.Extract(pageNumber);
+                    PageArea pageArea = ObjectExtractor.Extract(document, pageNumber);
                     List<PdfRegion> regions = new List<PdfRegion>();
                     List<string> imageHashes = new List<string>();
 
