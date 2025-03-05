@@ -120,6 +120,17 @@
             </summary>
             <param name="tempDirectory">Temporary directory.</param>
         </member>
+        <member name="M:DocumentAtom.TypeDetection.TypeDetector.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.TypeDetection.TypeDetector.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
         <member name="M:DocumentAtom.TypeDetection.TypeDetector.Process(System.String,System.String)">
             <summary>
             Determine the type of a given file.  CSV file types are inferred from the supplied content type header.

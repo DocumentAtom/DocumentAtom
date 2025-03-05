@@ -12,7 +12,7 @@
     /// <summary>
     /// DocumentAtom type detector.
     /// </summary>
-    public class TypeDetector
+    public class TypeDetector : IDisposable
     {
         #region Public-Members
 
@@ -80,6 +80,8 @@
         private string _XmlMimeType = "text/xml";
         private string _XmlExtension = "xml";
 
+        private bool _Disposed = false;
+
         #endregion
 
         #region Constructors-and-Factories
@@ -98,6 +100,85 @@
         #endregion
 
         #region Public-Methods
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        /// <param name="disposing">Disposing.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_Disposed)
+            {
+                if (disposing)
+                {
+                    _Header = null;
+                    _TempDirectory = null;
+                    _DirInfo = null;
+
+                    _CsvMimeType = null;
+                    _CsvExtension = null;
+
+                    _DocxMimeType = null;
+                    _DocxExtension = null;
+
+                    _HtmlMimeType = null;
+                    _HtmlExtension = null;
+
+                    _JsonMimeType = null;
+                    _JsonExtension = null;
+
+                    _KeynoteMimeType = null;
+                    _KeynoteExtension = null;
+
+                    _MarkdownMimeType = null;
+                    _MarkdownExtension = null;
+
+                    _NumbersMimeType = null;
+                    _NumbersExtension = null;
+
+                    _PagesMimeType = null;
+                    _PagesExtension = null;
+
+                    _ParquetMimeType = null;
+                    _ParquetExtension = null;
+
+                    _PdfMimeType = null;
+                    _PdfExtension = null;
+
+                    _PngMimeType = null;
+                    _PngExtension = null;
+
+                    _PostScriptMimeType = null;
+                    _PostScriptExtension = null;
+
+                    _PptxMimeType = null;
+                    _PptxExtension = null;
+
+                    _SqliteMimeType = null;
+                    _SqliteExtension = null;
+
+                    _TextMimeType = null;
+                    _TextExtension = null;
+
+                    _XlsxMimeType = null;
+                    _XlsxExtension = null;
+
+                    _XmlMimeType = null;
+                    _XmlExtension = null;
+                }
+
+                _Disposed = true;
+            }
+        }
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
 
         /// <summary>
         /// Determine the type of a given file.  CSV file types are inferred from the supplied content type header.
@@ -524,7 +605,7 @@
 
         private bool IsSqlite(byte[] data)
         {
-            byte[] expectedMagicNumber = new byte[] 
+            byte[] expectedMagicNumber = new byte[]
             {
                 0x53, 0x51, 0x4C, 0x69, 0x74, 0x65, 0x20, 0x66,
                 0x6F, 0x72, 0x6D, 0x61, 0x74, 0x20, 0x33, 0x00
