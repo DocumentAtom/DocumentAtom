@@ -8,7 +8,7 @@
     /// <summary>
     /// Processor base class.  Do not use directly.
     /// </summary>
-    public abstract class ProcessorBase
+    public abstract class ProcessorBase : IDisposable
     {
         #region Public-Members
 
@@ -30,11 +30,25 @@
         /// <summary>
         /// Serializer.
         /// </summary>
-        public Serializer Serializer { get; } = new Serializer();
+        public Serializer Serializer
+        {
+            get
+            {
+                return _Serializer;
+            }
+            set
+            {
+                if (value == null) throw new ArgumentNullException(nameof(Serializer));
+                _Serializer = value;
+            }
+        }
 
         #endregion
 
         #region Private-Members
+
+        private Serializer _Serializer = new Serializer();
+        private bool _Disposed = false;
 
         #endregion
 
@@ -51,6 +65,35 @@
         #endregion
 
         #region Public-Methods
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        /// <param name="disposing">Disposing.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_Disposed)
+            {
+                if (disposing)
+                {
+                    Logger = null;
+                    Header = null;
+
+                    _Serializer = null;
+                }
+
+                _Disposed = true;
+            }
+        }
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
 
         /// <summary>
         /// Emit a log message.

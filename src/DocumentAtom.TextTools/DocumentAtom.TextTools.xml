@@ -49,6 +49,17 @@
             Instantiates a new lemmatizer.
             </summary>
         </member>
+        <member name="M:DocumentAtom.TextTools.Lemmatizer.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.TextTools.Lemmatizer.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
         <member name="M:DocumentAtom.TextTools.Lemmatizer.Process(System.String)">
             <summary>
             Process a single word.
@@ -89,6 +100,17 @@
             Each key-value pair is evaluated any instances of the keys found in the supplied input will be replaced with the specified values.
             </param>
         </member>
+        <member name="M:DocumentAtom.TextTools.StringSequenceReplacer.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.TextTools.StringSequenceReplacer.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
         <member name="M:DocumentAtom.TextTools.StringSequenceReplacer.Process(System.String,System.Boolean)">
             <summary>
             Process a string of text.
@@ -119,6 +141,17 @@
         <member name="M:DocumentAtom.TextTools.StringSplitter.#ctor">
             <summary>
             String splitter.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.TextTools.StringSplitter.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.TextTools.StringSplitter.Dispose">
+            <summary>
+            Dispose.
             </summary>
         </member>
         <member name="M:DocumentAtom.TextTools.StringSplitter.Process(System.String)">
@@ -168,6 +201,17 @@
             Token extractor.
             </summary>
         </member>
+        <member name="M:DocumentAtom.TextTools.TokenExtractor.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.TextTools.TokenExtractor.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
         <member name="M:DocumentAtom.TextTools.TokenExtractor.Process(System.String)">
             <summary>
             Extract tokens from an input string.
@@ -193,6 +237,17 @@
         <member name="M:DocumentAtom.TextTools.WordRemover.#ctor">
             <summary>
             Initializes a new instance of the WordRemover class.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.TextTools.WordRemover.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.TextTools.WordRemover.Dispose">
+            <summary>
+            Dispose.
             </summary>
         </member>
         <member name="M:DocumentAtom.TextTools.WordRemover.Process(System.String[])">

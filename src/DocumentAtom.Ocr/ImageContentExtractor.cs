@@ -9,7 +9,7 @@
     using SixLabors.ImageSharp;
 
     using Rectangle = System.Drawing.Rectangle;
-    
+
     /// <summary>
     /// Image context entractor.  This library requires that you have Tesseract installed on the host and that you have awareness of the location of the tessdata directory.
     /// </summary>
@@ -81,6 +81,7 @@
         #region Private-Members
 
         private readonly TesseractEngine _Tesseract;
+        private bool _Disposed = false;
 
         #endregion
 
@@ -212,9 +213,30 @@
         /// <summary>
         /// Dispose.
         /// </summary>
+        /// <param name="disposing">Disposing.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_Disposed)
+            {
+                if (disposing)
+                {
+                    ListMarkers?.Clear();
+                    ListNumberingPatterns?.Clear();
+
+                    _Tesseract?.Dispose();
+                }
+
+                _Disposed = true;
+            }
+        }
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
         public void Dispose()
         {
-            _Tesseract?.Dispose();
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>

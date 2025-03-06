@@ -14,8 +14,6 @@
 
         public static void Main(string[] args)
         {
-            TokenExtractor extractor = new TokenExtractor();
-
             while (true)
             {
                 string filename = Inputty.GetString("Filename (ENTER to end):", null, true);
@@ -26,8 +24,12 @@
                 foreach (string line in lines)
                 {
                     Console.WriteLine(Environment.NewLine + Environment.NewLine + "Line: " + line);
-                    foreach (string token in extractor.Process(line))
-                        Console.Write(token + " ");
+
+                    using (TokenExtractor extractor = new TokenExtractor())
+                    {
+                        foreach (string token in extractor.Process(line))
+                            Console.Write(token + " ");
+                    }
                 }
 
                 Console.WriteLine("");

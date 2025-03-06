@@ -19,6 +19,17 @@
             Create atoms from images.  Use of this processor requires that Tesseract be installed on the host.
             </summary>
         </member>
+        <member name="M:DocumentAtom.Image.ImageProcessor.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.Image.ImageProcessor.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
         <member name="M:DocumentAtom.Image.ImageProcessor.Extract(System.String)">
             <summary>
             Extract atoms from a file.

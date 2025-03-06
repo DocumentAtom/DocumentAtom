@@ -22,9 +22,11 @@
                 string filename = Inputty.GetString("Filename (ENTER to end):", null, true);
                 if (String.IsNullOrEmpty(filename)) break;
 
-                TextProcessor processor = new TextProcessor(_Settings);
-                foreach (Atom atom in processor.Extract(filename))
-                    Console.WriteLine(_Serializer.SerializeJson(atom, true));
+                using (TextProcessor processor = new TextProcessor(_Settings))
+                {
+                    foreach (Atom atom in processor.Extract(filename))
+                        Console.WriteLine(_Serializer.SerializeJson(atom, true));
+                }
 
                 Console.WriteLine("End of file");
                 Console.WriteLine("");

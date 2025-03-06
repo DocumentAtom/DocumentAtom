@@ -22,7 +22,7 @@
     /// <summary>
     /// Create atoms from Microsoft Word .docx documents.
     /// </summary>
-    public class DocxProcessor : ProcessorBase
+    public class DocxProcessor : ProcessorBase, IDisposable
     {
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
@@ -71,9 +71,40 @@
         private const string _DocumentBodyFile = "word/document.xml";
         private const string _DocumentBodyXPath = "/w:document/w:body";
 
+        private bool _Disposed = false;
+
         #endregion
 
         #region Constructors-and-Factories
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        /// <param name="disposing">Disposing.</param>
+        protected new void Dispose(bool disposing)
+        {
+            if (!_Disposed)
+            {
+                if (disposing)
+                {
+                    _ImageProcessor?.Dispose();
+                    _ImageProcessor = null;
+                    _Relationships = null;
+                }
+
+                base.Dispose(disposing);
+                _Disposed = true;
+            }
+        }
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        public new void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
 
         /// <summary>
         /// Create atoms from text documents.

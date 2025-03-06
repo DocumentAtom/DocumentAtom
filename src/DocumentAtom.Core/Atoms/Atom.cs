@@ -10,7 +10,7 @@
     /// <summary>
     /// An atom is a small, self-contained unit of content from a document.
     /// </summary>
-    public class Atom
+    public class Atom : IDisposable
     {
         #region Public-Members
 
@@ -207,6 +207,8 @@
         private int? _Position = null;
         private int _Length = 0;
 
+        private bool _Disposed = false;
+
         #endregion
 
         #region Constructors-and-Factories
@@ -222,6 +224,31 @@
         #endregion
 
         #region Public-Methods
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        /// <param name="disposing">Disposing.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_Disposed)
+            {
+                if (disposing)
+                {
+                }
+
+                _Disposed = true;
+            }
+        }
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
 
         /// <summary>
         /// Produce a human-readable string of this object.

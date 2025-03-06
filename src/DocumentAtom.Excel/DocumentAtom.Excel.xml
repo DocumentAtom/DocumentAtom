@@ -21,6 +21,17 @@
             <param name="settings">Processor settings.</param>
             <param name="imageSettings">Image processor settings.</param>
         </member>
+        <member name="M:DocumentAtom.Excel.XlsxProcessor.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.Excel.XlsxProcessor.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
         <member name="M:DocumentAtom.Excel.XlsxProcessor.Extract(System.String)">
             <summary>
             Extract atoms from a file.

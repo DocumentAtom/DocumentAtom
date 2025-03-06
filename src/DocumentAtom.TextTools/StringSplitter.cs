@@ -9,8 +9,10 @@
     /// <summary>
     /// String splitter.
     /// </summary>
-    public class StringSplitter
+    public class StringSplitter : IDisposable
     {
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+
         #region Public-Members
 
         /// <summary>
@@ -56,6 +58,8 @@
             ']'
         };
 
+        private bool _Disposed = false;
+
         #endregion
 
         #region Constructors-and-Factories
@@ -71,6 +75,32 @@
         #endregion
 
         #region Public-Methods
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        /// <param name="disposing">Disposing.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_Disposed)
+            {
+                if (disposing)
+                {
+                    _SplitCharacters = null;
+                }
+
+                _Disposed = true;
+            }
+        }
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
 
         /// <summary>
         /// Process an input string.
@@ -93,5 +123,7 @@
         #region Private-Methods
 
         #endregion
+
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
     }
 }

@@ -4,12 +4,11 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text.RegularExpressions;
-    using LemmaSharp;
 
     /// <summary>
     /// Reduces words to their base or dictionary form by removing inflectional endings and returning the base or dictionary form of a word.
     /// </summary>
-    public class Lemmatizer
+    public class Lemmatizer : IDisposable
     {
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
@@ -246,6 +245,8 @@
         private string[] _CommonSuffixes;
         private Dictionary<string, string> _PreservedEndingForms;
 
+        private bool _Disposed = false;
+
         #endregion
 
         #region Constructors-and-Factories
@@ -268,6 +269,31 @@
         #endregion
 
         #region Public-Methods
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        /// <param name="disposing">Disposing.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_Disposed)
+            {
+                if (disposing)
+                {
+                }
+
+                _Disposed = true;
+            }
+        }
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
 
         /// <summary>
         /// Process a single word.

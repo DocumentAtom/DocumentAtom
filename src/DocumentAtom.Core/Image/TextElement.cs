@@ -6,7 +6,7 @@
     /// <summary>
     /// Text element.
     /// </summary>
-    public class TextElement
+    public class TextElement : IDisposable
     {
         #region Public-Members
 
@@ -24,6 +24,8 @@
 
         #region Private-Members
 
+        private bool _Disposed = false;
+
         #endregion
 
         #region Constructors-and-Factories
@@ -39,6 +41,31 @@
         #endregion
 
         #region Public-Methods
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        /// <param name="disposing">Disposing.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_Disposed)
+            {
+                if (disposing)
+                {
+                }
+
+                _Disposed = true;
+            }
+        }
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
 
         #endregion
 

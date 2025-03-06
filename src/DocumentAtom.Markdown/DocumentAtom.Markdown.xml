@@ -19,6 +19,17 @@
             Create atoms from markdown documents.
             </summary>
         </member>
+        <member name="M:DocumentAtom.Markdown.MarkdownProcessor.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.Markdown.MarkdownProcessor.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
         <member name="M:DocumentAtom.Markdown.MarkdownProcessor.Extract(System.String)">
             <summary>
             Extract atoms from a file.

@@ -8,7 +8,7 @@
     /// <summary>
     /// Create atoms from markdown documents.
     /// </summary>
-    public class MarkdownProcessor : ProcessorBase
+    public class MarkdownProcessor : ProcessorBase, IDisposable
     {
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
@@ -38,6 +38,8 @@
 
         private MarkdownProcessorSettings _Settings = new MarkdownProcessorSettings();
 
+        private bool _Disposed = false;
+
         #endregion
 
         #region Constructors-and-Factories
@@ -57,6 +59,32 @@
         #endregion
 
         #region Public-Methods
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        /// <param name="disposing">Disposing.</param>
+        protected new void Dispose(bool disposing)
+        {
+            if (!_Disposed)
+            {
+                if (disposing)
+                {
+                }
+
+                base.Dispose(disposing);
+                _Disposed = true;
+            }
+        }
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        public new void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
 
         /// <summary>
         /// Extract atoms from a file.

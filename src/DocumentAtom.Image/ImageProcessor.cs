@@ -18,7 +18,7 @@
     /// <summary>
     /// Create atoms from images.  Use of this processor requires that Tesseract be installed on the host.
     /// </summary>
-    public class ImageProcessor : ProcessorBase
+    public class ImageProcessor : ProcessorBase, IDisposable
     {
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
@@ -48,8 +48,9 @@
         #region Private-Members
 
         private ImageProcessorSettings _Settings = new ImageProcessorSettings();
-        private readonly TesseractEngine _Engine;
+        private TesseractEngine _Engine;
 
+        private bool _Disposed = false;
 
         #endregion
 
@@ -77,6 +78,34 @@
         #endregion
 
         #region Public-Methods
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        /// <param name="disposing">Disposing.</param>
+        protected new void Dispose(bool disposing)
+        {
+            if (!_Disposed)
+            {
+                if (disposing)
+                {
+                    _Engine?.Dispose();
+                    _Engine = null;
+                }
+
+                base.Dispose(disposing);
+                _Disposed = true;
+            }
+        }
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        public new void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
 
         /// <summary>
         /// Extract atoms from a file.

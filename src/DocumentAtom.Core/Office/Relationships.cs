@@ -12,7 +12,7 @@ namespace DocumentAtom.Core.Office
     /// Office document relationships.
     /// </summary>
     [XmlRoot("Relationships", Namespace = "http://schemas.openxmlformats.org/package/2006/relationships")]
-    public class Relationships
+    public class Relationships : IDisposable
     {
         #region Public-Members
 
@@ -38,6 +38,8 @@ namespace DocumentAtom.Core.Office
         #region Private-Members
 
         private List<Relationship> _Items = new List<Relationship>();
+
+        private bool _Disposed = false;
 
         #endregion
 
@@ -66,6 +68,32 @@ namespace DocumentAtom.Core.Office
         #endregion
 
         #region Public-Methods
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        /// <param name="disposing">Disposing.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_Disposed)
+            {
+                if (disposing)
+                {
+                    _Items = null;
+                }
+                
+                _Disposed = true;
+            }
+        }
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
 
         /// <summary>
         /// Convert to a dictionary.

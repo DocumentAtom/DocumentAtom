@@ -130,6 +130,17 @@
             An atom is a small, self-contained unit of content from a document.
             </summary>
         </member>
+        <member name="M:DocumentAtom.Core.Atoms.Atom.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.Atom.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
         <member name="M:DocumentAtom.Core.Atoms.Atom.ToString">
             <summary>
             Produce a human-readable string of this object.
@@ -635,6 +646,17 @@
             Extraction result.
             </summary>
         </member>
+        <member name="M:DocumentAtom.Core.Image.ExtractionResult.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.Core.Image.ExtractionResult.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
         <member name="T:DocumentAtom.Core.Image.ListStructure">
             <summary>
             List structure.
@@ -658,6 +680,17 @@
         <member name="M:DocumentAtom.Core.Image.ListStructure.#ctor">
             <summary>
             List structure.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Image.ListStructure.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.Core.Image.ListStructure.Dispose">
+            <summary>
+            Dispose.
             </summary>
         </member>
         <member name="T:DocumentAtom.Core.Image.TableStructure">
@@ -690,6 +723,17 @@
             Table structure.
             </summary>
         </member>
+        <member name="M:DocumentAtom.Core.Image.TableStructure.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.Core.Image.TableStructure.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
         <member name="T:DocumentAtom.Core.Image.TextElement">
             <summary>
             Text element.
@@ -708,6 +752,17 @@
         <member name="M:DocumentAtom.Core.Image.TextElement.#ctor">
             <summary>
             Text element.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Image.TextElement.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.Core.Image.TextElement.Dispose">
+            <summary>
+            Dispose.
             </summary>
         </member>
         <member name="T:DocumentAtom.Core.Office.Relationship">
@@ -762,6 +817,17 @@
             <param name="relationships">Relationships.</param>
             <returns>Dictionary. </returns>
         </member>
+        <member name="M:DocumentAtom.Core.Office.Relationships.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.Core.Office.Relationships.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
         <member name="M:DocumentAtom.Core.Office.Relationships.ToDictionary">
             <summary>
             Convert to a dictionary.
@@ -796,6 +862,17 @@
         <member name="M:DocumentAtom.Core.ProcessorBase.#ctor">
             <summary>
             Processor base class.  Do not use directly.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.ProcessorBase.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.Core.ProcessorBase.Dispose">
+            <summary>
+            Dispose.
             </summary>
         </member>
         <member name="M:DocumentAtom.Core.ProcessorBase.Log(DocumentAtom.Core.Enums.SeverityEnum,System.String)">

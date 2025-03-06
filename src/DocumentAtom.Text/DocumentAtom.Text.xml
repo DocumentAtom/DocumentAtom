@@ -19,6 +19,17 @@
             Create atoms from text documents.
             </summary>
         </member>
+        <member name="M:DocumentAtom.Text.TextProcessor.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.Text.TextProcessor.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
         <member name="M:DocumentAtom.Text.TextProcessor.Extract(System.String)">
             <summary>
             Extract atoms from a file.

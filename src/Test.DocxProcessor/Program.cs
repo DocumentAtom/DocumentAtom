@@ -29,9 +29,11 @@
                 string filename = Inputty.GetString("Filename (ENTER to end):", null, true);
                 if (String.IsNullOrEmpty(filename)) break;
 
-                DocxProcessor processor = new DocxProcessor(_ProcessorSettings, _ImageProcessorSettings);
-                foreach (Atom atom in processor.Extract(filename))
-                    Console.WriteLine(_Serializer.SerializeJson(atom, true));
+                using (DocxProcessor processor = new DocxProcessor(_ProcessorSettings, _ImageProcessorSettings))
+                {
+                    foreach (Atom atom in processor.Extract(filename))
+                        Console.WriteLine(_Serializer.SerializeJson(atom, true));
+                }
 
                 Console.WriteLine("End of file");
                 Console.WriteLine("");

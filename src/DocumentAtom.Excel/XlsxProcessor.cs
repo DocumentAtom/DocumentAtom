@@ -20,7 +20,7 @@
     /// <summary>
     /// Create atoms from Microsoft Excel .xlsx documents.
     /// </summary>
-    public class XlsxProcessor : ProcessorBase
+    public class XlsxProcessor : ProcessorBase, IDisposable
     {
 #pragma warning disable CS8604 // Possible null reference argument.
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
@@ -56,6 +56,8 @@
         private const string _MetadataFile = "docProps/core.xml";
         private const string _MetadataXPath = "/cp:coreProperties";
 
+        private bool _Disposed = false;
+
         #endregion
 
         #region Constructors-and-Factories
@@ -80,6 +82,34 @@
         #endregion
 
         #region Public-Methods
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        /// <param name="disposing">Disposing.</param>
+        protected new void Dispose(bool disposing)
+        {
+            if (!_Disposed)
+            {
+                if (disposing)
+                {
+                    _ImageProcessor?.Dispose();
+                    _ImageProcessor = null;
+                }
+
+                base.Dispose(disposing);
+                _Disposed = true;
+            }
+        }
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        public new void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
 
         /// <summary>
         /// Extract atoms from a file.

@@ -29,12 +29,14 @@
                 string filename = Inputty.GetString("Filename (ENTER to end):", null, true);
                 if (String.IsNullOrEmpty(filename)) break;
 
-                XlsxProcessor processor = new XlsxProcessor(_ProcessorSettings);
-                foreach (Atom atom in processor.Extract(filename))
-                    Console.WriteLine(_Serializer.SerializeJson(atom, true));
+                using (XlsxProcessor processor = new XlsxProcessor(_ProcessorSettings))
+                {
+                    foreach (Atom atom in processor.Extract(filename))
+                        Console.WriteLine(_Serializer.SerializeJson(atom, true));
 
-                Console.WriteLine("End of file");
-                Console.WriteLine("");
+                    Console.WriteLine("End of file");
+                    Console.WriteLine("");
+                }
             }
 
             Console.WriteLine("");

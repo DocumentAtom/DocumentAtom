@@ -7,8 +7,10 @@
     /// <summary>
     /// Removes stop words and other specified words from text while preserving word boundaries.
     /// </summary>
-    public class WordRemover
+    public class WordRemover : IDisposable
     {
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+
         #region Public-Members
 
         /// <summary>
@@ -77,6 +79,8 @@
             ' ', '\t', '\r', '\n', '.', ',', ';', ':', '!', '?'
         };
 
+        private bool _Disposed = false;
+
         #endregion
 
         #region Constructors-and-Factories
@@ -91,6 +95,33 @@
         #endregion
 
         #region Public-Methods
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        /// <param name="disposing">Disposing.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_Disposed)
+            {
+                if (disposing)
+                {
+                    _WordsToRemove = null;
+                    _WordSeparators = null;
+                }
+
+                _Disposed = true;
+            }
+        }
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
 
         /// <summary>
         /// Process an array of tokens, removing specified words.
@@ -143,5 +174,7 @@
         }
 
         #endregion
+
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
     }
 }

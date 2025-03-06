@@ -5,8 +5,10 @@
     /// <summary>
     /// Token extractor.
     /// </summary>
-    public class TokenExtractor
+    public class TokenExtractor : IDisposable
     {
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+
         #region Public-Members
 
         /// <summary>
@@ -80,6 +82,8 @@
         private int _MinimumTokenLength = 3;
         private int _MaximumTokenLength = 64;
 
+        private bool _Disposed = false;
+
         #endregion
 
         #region Constructors-and-Factories
@@ -95,6 +99,33 @@
         #endregion
 
         #region Public-Methods
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        /// <param name="disposing">Disposing.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_Disposed)
+            {
+                if (disposing)
+                {
+                    _StringSplitter?.Dispose();
+                    _StringSplitter = null;
+                }
+
+                _Disposed = true;
+            }
+        }
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
 
         /// <summary>
         /// Extract tokens from an input string.
@@ -127,5 +158,7 @@
         #region Private-Methods
 
         #endregion
+
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
     }
 }

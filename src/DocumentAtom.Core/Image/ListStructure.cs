@@ -6,7 +6,7 @@
     /// <summary>
     /// List structure.
     /// </summary>
-    public class ListStructure
+    public class ListStructure : IDisposable
     {
         #region Public-Members
 
@@ -29,6 +29,8 @@
 
         #region Private-Members
 
+        private bool _Disposed = false;
+
         #endregion
 
         #region Constructors-and-Factories
@@ -44,6 +46,32 @@
         #endregion
 
         #region Public-Methods
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        /// <param name="disposing">Disposing.</param>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_Disposed)
+            {
+                if (disposing)
+                {
+                    Items = null;
+                }
+
+                _Disposed = true;
+            }
+        }
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        public void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
 
         #endregion
 

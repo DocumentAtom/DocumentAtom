@@ -21,7 +21,7 @@
     /// <summary>
     /// Create atoms from Microsoft PowerPoint .pptx documents.
     /// </summary>
-    public class PptxProcessor : ProcessorBase
+    public class PptxProcessor : ProcessorBase, IDisposable
     {
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
@@ -58,9 +58,39 @@
         private const string _MetadataFile = "docProps/core.xml";
         private const string _MetadataXPath = "/cp:coreProperties";
 
+        private bool _Disposed = false;
+
         #endregion
 
         #region Constructors-and-Factories
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        /// <param name="disposing">Disposing.</param>
+        protected new void Dispose(bool disposing)
+        {
+            if (!_Disposed)
+            {
+                if (disposing)
+                {
+                    _ImageProcessor?.Dispose();
+                    _ImageProcessor = null;
+                }
+
+                base.Dispose(disposing);
+                _Disposed = true;
+            }
+        }
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        public new void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
 
         /// <summary>
         /// Create atoms from PowerPoint presentations.

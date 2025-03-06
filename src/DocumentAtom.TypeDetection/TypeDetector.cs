@@ -111,60 +111,9 @@
             {
                 if (disposing)
                 {
-                    _Header = null;
-                    _TempDirectory = null;
+                    Logger = null;
+
                     _DirInfo = null;
-
-                    _CsvMimeType = null;
-                    _CsvExtension = null;
-
-                    _DocxMimeType = null;
-                    _DocxExtension = null;
-
-                    _HtmlMimeType = null;
-                    _HtmlExtension = null;
-
-                    _JsonMimeType = null;
-                    _JsonExtension = null;
-
-                    _KeynoteMimeType = null;
-                    _KeynoteExtension = null;
-
-                    _MarkdownMimeType = null;
-                    _MarkdownExtension = null;
-
-                    _NumbersMimeType = null;
-                    _NumbersExtension = null;
-
-                    _PagesMimeType = null;
-                    _PagesExtension = null;
-
-                    _ParquetMimeType = null;
-                    _ParquetExtension = null;
-
-                    _PdfMimeType = null;
-                    _PdfExtension = null;
-
-                    _PngMimeType = null;
-                    _PngExtension = null;
-
-                    _PostScriptMimeType = null;
-                    _PostScriptExtension = null;
-
-                    _PptxMimeType = null;
-                    _PptxExtension = null;
-
-                    _SqliteMimeType = null;
-                    _SqliteExtension = null;
-
-                    _TextMimeType = null;
-                    _TextExtension = null;
-
-                    _XlsxMimeType = null;
-                    _XlsxExtension = null;
-
-                    _XmlMimeType = null;
-                    _XmlExtension = null;
                 }
 
                 _Disposed = true;

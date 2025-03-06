@@ -14,6 +14,17 @@
             Docx processor settings.
             </summary>
         </member>
+        <member name="M:DocumentAtom.Word.DocxProcessor.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.Word.DocxProcessor.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
         <member name="M:DocumentAtom.Word.DocxProcessor.#ctor(DocumentAtom.Word.DocxProcessorSettings,DocumentAtom.Image.ImageProcessorSettings)">
             <summary>
             Create atoms from text documents.

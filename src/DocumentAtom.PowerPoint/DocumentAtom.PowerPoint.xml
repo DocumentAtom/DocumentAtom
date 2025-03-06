@@ -14,6 +14,17 @@
             Pptx processor settings.
             </summary>
         </member>
+        <member name="M:DocumentAtom.PowerPoint.PptxProcessor.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.PowerPoint.PptxProcessor.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
         <member name="M:DocumentAtom.PowerPoint.PptxProcessor.#ctor(DocumentAtom.PowerPoint.PptxProcessorSettings,DocumentAtom.Image.ImageProcessorSettings)">
             <summary>
             Create atoms from PowerPoint presentations.

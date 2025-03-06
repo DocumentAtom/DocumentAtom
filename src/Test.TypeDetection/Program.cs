@@ -14,8 +14,6 @@
 
         public static void Main(string[] args)
         {
-            TypeDetector typeDetector = new TypeDetector();
-
             while (true)
             {
                 string filename =    Inputty.GetString("Filename (ENTER to end):", null, true);
@@ -24,9 +22,12 @@
                 Console.WriteLine("Content-type is required for detection of CSV files, in such cases use text/csv");
                 string contentType = Inputty.GetString("Content type           :", null, true);
 
-                TypeResult tr = typeDetector.Process(filename, contentType);
-                Console.WriteLine(_Serializer.SerializeJson(tr, true));
-                Console.WriteLine("");
+                using (TypeDetector typeDetector = new TypeDetector())
+                {
+                    TypeResult tr = typeDetector.Process(filename, contentType);
+                    Console.WriteLine(_Serializer.SerializeJson(tr, true));
+                    Console.WriteLine("");
+                }
             }
 
             Console.WriteLine("");

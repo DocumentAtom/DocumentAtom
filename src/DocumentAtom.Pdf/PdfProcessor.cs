@@ -25,7 +25,7 @@
     /// <summary>
     /// Create atoms from PDF documents.
     /// </summary>
-    public class PdfProcessor : ProcessorBase
+    public class PdfProcessor : ProcessorBase, IDisposable
     {
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
@@ -56,6 +56,8 @@
         private ImageProcessorSettings _ImageProcessorSettings = null;
         private ImageProcessor _ImageProcessor = null;
 
+        private bool _Disposed = false;
+
         #endregion
 
         #region Constructors-and-Factories
@@ -80,6 +82,34 @@
         #endregion
 
         #region Public-Methods
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        /// <param name="disposing">Disposing.</param>
+        protected new void Dispose(bool disposing)
+        {
+            if (!_Disposed)
+            {
+                if (disposing)
+                {
+                    _ImageProcessor?.Dispose();
+                    _ImageProcessor = null;
+                }
+
+                base.Dispose(disposing);
+                _Disposed = true;
+            }
+        }
+
+        /// <summary>
+        /// Dispose.
+        /// </summary>
+        public new void Dispose()
+        {
+            Dispose(disposing: true);
+            GC.SuppressFinalize(this);
+        }
 
         /// <summary>
         /// Extract atoms from a file.

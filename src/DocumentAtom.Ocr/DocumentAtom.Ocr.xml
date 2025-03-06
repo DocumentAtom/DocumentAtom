@@ -150,6 +150,12 @@
             </param>
             <param name="languageFile">The default language file to use.  Defaults to eng.  This file, with extension .traineddata, must exist in the data directory.</param>
         </member>
+        <member name="M:DocumentAtom.Ocr.ImageContentExtractor.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
         <member name="M:DocumentAtom.Ocr.ImageContentExtractor.Dispose">
             <summary>
             Dispose.
