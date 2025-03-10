@@ -12,6 +12,7 @@
 
 	<ItemGroup>
 		<PackageReference Include="Inputty" Version="1.0.12" />
+		<PackageReference Include="SerializableDataTable" Version="1.0.1" />
 		<PackageReference Include="SerializationHelper" Version="2.0.2" />
 	</ItemGroup>
 

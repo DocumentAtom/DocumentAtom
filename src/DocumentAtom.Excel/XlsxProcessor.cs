@@ -26,6 +26,7 @@
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
 #pragma warning disable CS8603 // Possible null reference return.
+#pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
 
         #region Public-Members
 
@@ -52,6 +53,7 @@
         private XlsxProcessorSettings _ProcessorSettings = new XlsxProcessorSettings();
         private ImageProcessorSettings _ImageProcessorSettings = null;
         private ImageProcessor _ImageProcessor = null;
+        private HeaderRowDetector _HeaderRowDetector = null;
 
         private const string _MetadataFile = "docProps/core.xml";
         private const string _MetadataXPath = "/cp:coreProperties";
@@ -75,6 +77,7 @@
 
             _ProcessorSettings = settings;
             _ImageProcessorSettings = imageSettings;
+            _HeaderRowDetector = new HeaderRowDetector(_ProcessorSettings);
 
             if (_ImageProcessorSettings != null) _ImageProcessor = new ImageProcessor(_ImageProcessorSettings);
         }
@@ -95,6 +98,8 @@
                 {
                     _ImageProcessor?.Dispose();
                     _ImageProcessor = null;
+                    _HeaderRowDetector?.Dispose();
+                    _HeaderRowDetector = null;
                 }
 
                 base.Dispose(disposing);
@@ -276,14 +281,26 @@
                         foreach (var row in rows.Skip(1))
                         {
                             DataRow dataRow = dt.NewRow();
-                            int columnIndex = 0;
 
+                            // Initialize all columns to empty string or null
+                            for (int i = 0; i < dt.Columns.Count; i++)
+                            {
+                                dataRow[i] = DBNull.Value;
+                            }
+
+                            // Process each cell by its reference
                             foreach (var cell in row.Elements<Cell>())
                             {
+                                // Get the column reference from the cell's reference (e.g., "B5" -> "B")
+                                string cellReference = cell.CellReference.ToString();
+                                string columnReference = GetColumnReference(cellReference);
+
+                                // Convert column reference to index (e.g., "A" -> 0, "B" -> 1)
+                                int columnIndex = GetColumnIndex(columnReference);
+
                                 if (columnIndex < dt.Columns.Count)
                                 {
                                     dataRow[columnIndex] = GetCellValue(cell, sharedStringTable);
-                                    columnIndex++;
                                 }
                             }
 
@@ -367,6 +384,16 @@
         private string GetColumnReference(string cellReference)
         {
             return string.Concat(cellReference.TakeWhile(c => !char.IsDigit(c)));
+        }
+
+        private int GetColumnIndex(string columnReference)
+        {
+            int columnIndex = 0;
+            foreach (char c in columnReference)
+            {
+                columnIndex = columnIndex * 26 + (c - 'A' + 1);
+            }
+            return columnIndex - 1; // Zero-based index
         }
 
         private int GetRowIndex(string cellReference)
@@ -482,6 +509,7 @@
 
         #endregion
 
+#pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
 #pragma warning restore CS8603 // Possible null reference return.
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
 #pragma warning restore CS8602 // Dereference of a possibly null reference.
