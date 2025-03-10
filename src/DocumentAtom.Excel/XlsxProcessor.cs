@@ -290,11 +290,28 @@
                             dt.Rows.Add(dataRow);
                         }
 
-                        // Create atom for the sheet
-                        var firstCell = headerRow.Elements<Cell>().First().CellReference;
-                        var lastRowCells = rows.Last().Elements<Cell>().ToList();
-                        var lastCell = lastRowCells.Last().CellReference;
-                        string tableRange = $"{firstCell}:{lastCell}";
+                        // Create atom for the sheet - FIXED SECTION
+                        string tableRange;
+                        if (headerRow.Elements<Cell>().Any())
+                        {
+                            var firstCell = headerRow.Elements<Cell>().First().CellReference;
+
+                            if (rows.Any() && rows.Last().Elements<Cell>().Any())
+                            {
+                                var lastCell = rows.Last().Elements<Cell>().Last().CellReference;
+                                tableRange = $"{firstCell}:{lastCell}";
+                            }
+                            else
+                            {
+                                // Last row has no cells, use first cell as range
+                                tableRange = $"{firstCell}:{firstCell}";
+                            }
+                        }
+                        else
+                        {
+                            // No cells in header row, use sheet name
+                            tableRange = sheet.Name;
+                        }
 
                         yield return new Atom
                         {

@@ -4,6 +4,97 @@
         <name>DocumentAtom.Excel</name>
     </assembly>
     <members>
+        <member name="T:DocumentAtom.Excel.HeaderRowDetector">
+            <summary>
+            Improved header row detector with a more modular pattern evaluation system.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Excel.HeaderRowDetector.#ctor(DocumentAtom.Excel.XlsxProcessorSettings)">
+            <summary>
+            Header row detector.
+            </summary>
+            <param name="settings">Settings.</param>
+        </member>
+        <member name="M:DocumentAtom.Excel.HeaderRowDetector.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Excel.HeaderRowDetector.IsHeaderRow(System.Collections.Generic.List{DocumentFormat.OpenXml.Spreadsheet.Row},DocumentFormat.OpenXml.Spreadsheet.SharedStringTable,System.Int32)">
+            <summary>
+            Determines if the first row of a sheet is a header row by analyzing patterns in the data.
+            </summary>
+            <param name="rows">List of rows from the sheet</param>
+            <param name="sharedStringTable">The shared string table for the workbook</param>
+            <param name="maxRowsToAnalyze">Maximum number of rows to analyze (default 10)</param>
+            <returns>True if the first row is likely a header row, false otherwise</returns>
+        </member>
+        <member name="M:DocumentAtom.Excel.HeaderRowDetector.Dispose(System.Boolean)">
+            <summary>
+            Dispose pattern.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="T:DocumentAtom.Excel.HeaderRowPatternWeights">
+            <summary>
+            Header row pattern weights.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Excel.HeaderRowPatternWeights.SequentialFirstColumn">
+            <summary>
+            Sequential first column.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Excel.HeaderRowPatternWeights.HigherTextRatio">
+            <summary>
+            Higher text ratio.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Excel.HeaderRowPatternWeights.DistinctFormat">
+            <summary>
+            Distinct format.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Excel.HeaderRowPatternWeights.ConsistentDataColumns">
+            <summary>
+            Consistent data columns.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Excel.HeaderRowPatternWeights.HeaderTerms">
+            <summary>
+            Header terms.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Excel.HeaderRowPatternWeights.ColumnHeaders">
+            <summary>
+            Column headers.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Excel.HeaderRowPatternWeights.Row1Differs">
+            <summary>
+            Row one differs.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Excel.HeaderRowPatternWeights.AllRowsSimilar">
+            <summary>
+            All rows similar.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Excel.HeaderRowPatternWeights.ColumnNumbers">
+            <summary>
+            Column numbers.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Excel.HeaderRowPatternWeights.NumericSequence">
+            <summary>
+            Numeric sequence.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Excel.HeaderRowPatternWeights.#ctor">
+            <summary>
+            Header row pattern weights.
+            </summary>
+        </member>
         <member name="T:DocumentAtom.Excel.XlsxProcessor">
             <summary>
             Create atoms from Microsoft Excel .xlsx documents.
@@ -49,6 +140,21 @@
         <member name="T:DocumentAtom.Excel.XlsxProcessorSettings">
             <summary>
             Settings for Microsoft Excel .xlsx processor.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Excel.XlsxProcessorSettings.CommonHeaderRowTerms">
+            <summary>
+            Terms to search for when identifying header rows.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Excel.XlsxProcessorSettings.HeaderRowWeights">
+            <summary>
+            Pattern weights for header row detection.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Excel.XlsxProcessorSettings.HeaderRowScoreThreshold">
+            <summary>
+            Header row score threshold.
             </summary>
         </member>
         <member name="M:DocumentAtom.Excel.XlsxProcessorSettings.#ctor">
