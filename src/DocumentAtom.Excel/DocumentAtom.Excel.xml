@@ -168,48 +168,6 @@
             <param name="filename">Filename.</param>
             <returns>Dictionary.</returns>
         </member>
-        <member name="T:DocumentAtom.Excel.XlsxProcessorGold">
-            <summary>
-            Create atoms from Microsoft Excel .xlsx documents.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Excel.XlsxProcessorGold.Settings">
-            <summary>
-            Xlsx processor settings.
-            </summary>
-        </member>
-        <member name="M:DocumentAtom.Excel.XlsxProcessorGold.#ctor(DocumentAtom.Excel.XlsxProcessorSettings,DocumentAtom.Image.ImageProcessorSettings)">
-            <summary>
-            Create atoms from Excel documents.
-            </summary>
-            <param name="settings">Processor settings.</param>
-            <param name="imageSettings">Image processor settings.</param>
-        </member>
-        <member name="M:DocumentAtom.Excel.XlsxProcessorGold.Dispose(System.Boolean)">
-            <summary>
-            Dispose.
-            </summary>
-            <param name="disposing">Disposing.</param>
-        </member>
-        <member name="M:DocumentAtom.Excel.XlsxProcessorGold.Dispose">
-            <summary>
-            Dispose.
-            </summary>
-        </member>
-        <member name="M:DocumentAtom.Excel.XlsxProcessorGold.Extract(System.String)">
-            <summary>
-            Extract atoms from a file.
-            </summary>
-            <param name="filename">Filename.</param>
-            <returns>Atoms.</returns>
-        </member>
-        <member name="M:DocumentAtom.Excel.XlsxProcessorGold.GetMetadata(System.String)">
-            <summary>
-            Retrieve metadata from a file.
-            </summary>
-            <param name="filename">Filename.</param>
-            <returns>Dictionary.</returns>
-        </member>
         <member name="T:DocumentAtom.Excel.XlsxProcessorSettings">
             <summary>
             Settings for Microsoft Excel .xlsx processor.
