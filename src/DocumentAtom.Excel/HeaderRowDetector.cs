@@ -53,45 +53,32 @@
         /// <summary>
         /// Determines if the first row of a sheet is a header row by analyzing patterns in the data.
         /// </summary>
-        /// <param name="rows">List of rows from the sheet</param>
-        /// <param name="sharedStringTable">The shared string table for the workbook</param>
-        /// <param name="maxRowsToAnalyze">Maximum number of rows to analyze (default 10)</param>
-        /// <returns>True if the first row is likely a header row, false otherwise</returns>
-        public bool IsHeaderRow(List<Row> rows, SharedStringTable sharedStringTable, int maxRowsToAnalyze = 10)
+        /// <param name="rows">List of rows from the sheet.</param>
+        /// <param name="sharedStringTable">The shared string table for the workbook.</param>
+        /// <param name="maxRowsToAnalyze">Maximum number of rows to analyze (default 10).</param>
+        /// <returns>Header row result.</returns>
+        public HeaderRowResult Process(List<Row> rows, SharedStringTable sharedStringTable, int maxRowsToAnalyze = 10)
         {
-            // Early validation
-            if (rows == null || rows.Count <= 1)
-                return false; // Need at least two rows to compare
+            HeaderRowResult ret = new HeaderRowResult();
+            ret.IsHeaderRow = false;
+
+            if (rows == null || rows.Count <= 1) return ret;
 
             // Extract and prepare data
             var rowData = PrepareRowData(rows, sharedStringTable, maxRowsToAnalyze);
-            if (rowData == null || rowData.Count <= 1)
-                return false;
+            if (rowData == null || rowData.Count <= 1) return ret;
 
             // Check if first column is just sequential numbers matching row position
             bool isSimpleRowNumbering = IsSimpleRowNumbering(rowData);
 
             // If we have strong evidence of simple row numbering, and enough rows to be confident
-            if (isSimpleRowNumbering && rowData.Count >= 5)
-            {
-                LogPatternScores(new Dictionary<string, double>
-                {
-                    { "SimpleRowNumbering", -5.0 }
-                }, -5.0);
+            if (isSimpleRowNumbering && rowData.Count >= 5) return ret; 
 
-                return false;
-            }
+            ret.Scores = EvaluatePatterns(rowData);
+            double totalScore = ret.Scores.Sum(s => s.Value);
 
-            // Apply the pattern detectors and calculate the score
-            var patternScores = EvaluatePatterns(rowData);
-
-            // Calculate final score
-            double totalScore = patternScores.Sum(s => s.Value);
-
-            // Log the results if needed
-            LogPatternScores(patternScores, totalScore);
-
-            return totalScore >= _Settings.HeaderRowScoreThreshold;
+            ret.IsHeaderRow = totalScore >= _Settings.HeaderRowScoreThreshold;
+            return ret;
         }
 
         #endregion
@@ -108,7 +95,6 @@
             {
                 if (disposing)
                 {
-                    // No managed resources to dispose
                 }
 
                 _Disposed = true;
@@ -756,16 +742,6 @@
             if (IsNumeric(value)) return "numeric";
             if (DateTime.TryParse(value, out _)) return "date";
             return "text";
-        }
-
-        private void LogPatternScores(Dictionary<string, double> scores, double totalScore)
-        {
-            Console.WriteLine($"Header detection scores:");
-            foreach (var score in scores)
-            {
-                Console.WriteLine($"  {score.Key} = {score.Value}");
-            }
-            Console.WriteLine($"  Total Score = {totalScore}");
         }
 
         #endregion

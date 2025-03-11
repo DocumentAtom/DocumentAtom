@@ -14,6 +14,8 @@ RUN apt-get update && apt-get install -y \
     wget \
     dnsutils \
     iproute2 \
+    vim \
+    file \
     python3-full \
     pip \
     libleptonica-dev \

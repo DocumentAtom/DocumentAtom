@@ -20,7 +20,7 @@
     /// <summary>
     /// Create atoms from Microsoft Excel .xlsx documents.
     /// </summary>
-    public class XlsxProcessor : ProcessorBase, IDisposable
+    public class XlsxProcessorGold : ProcessorBase, IDisposable
     {
 #pragma warning disable CS8604 // Possible null reference argument.
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
@@ -69,7 +69,7 @@
         /// </summary>
         /// <param name="settings">Processor settings.</param>
         /// <param name="imageSettings">Image processor settings.</param>
-        public XlsxProcessor(XlsxProcessorSettings settings = null, ImageProcessorSettings imageSettings = null)
+        public XlsxProcessorGold(XlsxProcessorSettings settings = null, ImageProcessorSettings imageSettings = null)
         {
             if (settings == null) settings = new XlsxProcessorSettings();
 
@@ -195,10 +195,8 @@
                     var rows = sheetData.Elements<Row>().ToList();
 
                     HeaderRowResult headerRowResult = _HeaderRowDetector.Process(rows, sharedStringTable);
-                    bool hasHeaderRow = headerRowResult.IsHeaderRow;
-
                     Log(SeverityEnum.Debug,
-                        "header row detection result: " + hasHeaderRow + Environment.NewLine +
+                        "header row detection result: " + headerRowResult.IsHeaderRow + Environment.NewLine +
                         Serializer.SerializeJson(headerRowResult, false));
 
                     // Find all used cells to determine the actual range
@@ -262,135 +260,81 @@
                         }
                     }
 
-                    // Create DataTable for the current worksheet
                     var dt = new DataTable(sheet.Name);
                     if (rows.Any())
                     {
-                        // Determine the maximum column index across all rows to ensure we capture all columns
-                        int maxColumnIndex = 0;
-                        HashSet<string> columnReferences = new HashSet<string>();
-
-                        // Gather all column references from all rows to determine the maximum column index
-                        foreach (var row in rows)
+                        // Process header row
+                        var headerRow = rows.First();
+                        foreach (var cell in headerRow.Elements<Cell>())
                         {
-                            foreach (var cell in row.Elements<Cell>())
+                            string columnName = GetCellValue(cell, sharedStringTable);
+                            if (string.IsNullOrEmpty(columnName))
+                                columnName = $"Column{dt.Columns.Count + 1}";
+
+                            // Handle duplicate column names
+                            string uniqueColumnName = columnName;
+                            int counter = 1;
+                            while (dt.Columns.Contains(uniqueColumnName))
                             {
-                                string colRef = GetColumnReference(cell.CellReference);
-                                columnReferences.Add(colRef);
-                                int colIdx = GetColumnIndex(colRef);
-                                maxColumnIndex = Math.Max(maxColumnIndex, colIdx);
-                            }
-                        }
-
-                        // Ensure we have enough columns in the DataTable
-                        for (int i = 0; i <= maxColumnIndex; i++)
-                        {
-                            dt.Columns.Add($"Column{i + 1}");
-                        }
-
-                        // If we have a header row, use the first row values as column names
-                        if (hasHeaderRow && rows.Count > 0)
-                        {
-                            var headerRow = rows.First();
-
-                            // Map from column index to column name
-                            Dictionary<int, string> columnNames = new Dictionary<int, string>();
-
-                            // Process header row cells to get column names
-                            foreach (var cell in headerRow.Elements<Cell>())
-                            {
-                                string colRef = GetColumnReference(cell.CellReference);
-                                int colIdx = GetColumnIndex(colRef);
-                                string columnName = GetCellValue(cell, sharedStringTable);
-
-                                // Use default column name if header cell is empty
-                                if (string.IsNullOrEmpty(columnName))
-                                {
-                                    columnName = $"Column{colIdx + 1}";
-                                }
-
-                                columnNames[colIdx] = columnName;
+                                uniqueColumnName = $"{columnName}_{counter++}";
                             }
 
-                            // Rename columns in DataTable based on header row
-                            foreach (int colIdx in columnNames.Keys)
-                            {
-                                if (colIdx < dt.Columns.Count)
-                                {
-                                    string uniqueColumnName = columnNames[colIdx];
-                                    int counter = 1;
-
-                                    // Handle duplicate column names
-                                    while (dt.Columns.Cast<DataColumn>()
-                                             .Any(c => c.ColumnName != dt.Columns[colIdx].ColumnName &&
-                                                       c.ColumnName == uniqueColumnName))
-                                    {
-                                        uniqueColumnName = $"{columnNames[colIdx]}_{counter++}";
-                                    }
-
-                                    dt.Columns[colIdx].ColumnName = uniqueColumnName;
-                                }
-                            }
+                            dt.Columns.Add(uniqueColumnName);
                         }
 
-                        // Process data rows - skip the first row if it's a header
-                        IEnumerable<Row> dataRows = hasHeaderRow ? rows.Skip(1) : rows;
-
-                        foreach (var row in dataRows)
+                        // Process data rows
+                        foreach (var row in rows.Skip(1))
                         {
                             DataRow dataRow = dt.NewRow();
 
-                            // Initialize all columns to DBNull.Value
+                            // Initialize all columns to empty string or null
                             for (int i = 0; i < dt.Columns.Count; i++)
                             {
                                 dataRow[i] = DBNull.Value;
                             }
 
-                            // Process each cell in the row
+                            // Process each cell by its reference
                             foreach (var cell in row.Elements<Cell>())
                             {
-                                string cellRef = cell.CellReference.ToString();
-                                string colRef = GetColumnReference(cellRef);
-                                int colIdx = GetColumnIndex(colRef);
+                                // Get the column reference from the cell's reference (e.g., "B5" -> "B")
+                                string cellReference = cell.CellReference.ToString();
+                                string columnReference = GetColumnReference(cellReference);
 
-                                if (colIdx < dt.Columns.Count)
+                                // Convert column reference to index (e.g., "A" -> 0, "B" -> 1)
+                                int columnIndex = GetColumnIndex(columnReference);
+
+                                if (columnIndex < dt.Columns.Count)
                                 {
-                                    // Get and assign cell value
-                                    dataRow[colIdx] = GetCellValue(cell, sharedStringTable);
+                                    dataRow[columnIndex] = GetCellValue(cell, sharedStringTable);
                                 }
                             }
 
                             dt.Rows.Add(dataRow);
                         }
 
-                        // Determine table range for cell identifier
+                        // Create atom for the sheet - FIXED SECTION
                         string tableRange;
-
-                        // Get the first and last cells to define the range
-                        if (rows.Any() && rows.First().Elements<Cell>().Any())
+                        if (headerRow.Elements<Cell>().Any())
                         {
-                            var firstRow = rows.First();
-                            var lastRow = rows.Last();
+                            var firstCell = headerRow.Elements<Cell>().First().CellReference;
 
-                            if (firstRow.Elements<Cell>().Any() && lastRow.Elements<Cell>().Any())
+                            if (rows.Any() && rows.Last().Elements<Cell>().Any())
                             {
-                                var firstCell = firstRow.Elements<Cell>().First().CellReference;
-                                var lastCell = lastRow.Elements<Cell>().Last().CellReference;
+                                var lastCell = rows.Last().Elements<Cell>().Last().CellReference;
                                 tableRange = $"{firstCell}:{lastCell}";
                             }
                             else
                             {
-                                // Fallback if we can't get both first and last cell
-                                tableRange = sheet.Name;
+                                // Last row has no cells, use first cell as range
+                                tableRange = $"{firstCell}:{firstCell}";
                             }
                         }
                         else
                         {
-                            // No cells in any row, use sheet name
+                            // No cells in header row, use sheet name
                             tableRange = sheet.Name;
                         }
 
-                        // Create and return the table atom
                         yield return new Atom
                         {
                             Type = AtomTypeEnum.Table,

@@ -20,14 +20,14 @@
             Dispose.
             </summary>
         </member>
-        <member name="M:DocumentAtom.Excel.HeaderRowDetector.IsHeaderRow(System.Collections.Generic.List{DocumentFormat.OpenXml.Spreadsheet.Row},DocumentFormat.OpenXml.Spreadsheet.SharedStringTable,System.Int32)">
+        <member name="M:DocumentAtom.Excel.HeaderRowDetector.Process(System.Collections.Generic.List{DocumentFormat.OpenXml.Spreadsheet.Row},DocumentFormat.OpenXml.Spreadsheet.SharedStringTable,System.Int32)">
             <summary>
             Determines if the first row of a sheet is a header row by analyzing patterns in the data.
             </summary>
-            <param name="rows">List of rows from the sheet</param>
-            <param name="sharedStringTable">The shared string table for the workbook</param>
-            <param name="maxRowsToAnalyze">Maximum number of rows to analyze (default 10)</param>
-            <returns>True if the first row is likely a header row, false otherwise</returns>
+            <param name="rows">List of rows from the sheet.</param>
+            <param name="sharedStringTable">The shared string table for the workbook.</param>
+            <param name="maxRowsToAnalyze">Maximum number of rows to analyze (default 10).</param>
+            <returns>Header row result.</returns>
         </member>
         <member name="M:DocumentAtom.Excel.HeaderRowDetector.Dispose(System.Boolean)">
             <summary>
@@ -95,6 +95,37 @@
             Header row pattern weights.
             </summary>
         </member>
+        <member name="T:DocumentAtom.Excel.HeaderRowResult">
+            <summary>
+            Result object from detection of existence of a header row.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Excel.HeaderRowResult.IsHeaderRow">
+            <summary>
+            Boolean indicating whether the first row is a header row.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Excel.HeaderRowResult.Scores">
+            <summary>
+            Scores.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Excel.HeaderRowResult.#ctor">
+            <summary>
+            Result object from detection of existence of a header row.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Excel.HeaderRowResult.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.Excel.HeaderRowResult.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
         <member name="T:DocumentAtom.Excel.XlsxProcessor">
             <summary>
             Create atoms from Microsoft Excel .xlsx documents.
@@ -131,6 +162,48 @@
             <returns>Atoms.</returns>
         </member>
         <member name="M:DocumentAtom.Excel.XlsxProcessor.GetMetadata(System.String)">
+            <summary>
+            Retrieve metadata from a file.
+            </summary>
+            <param name="filename">Filename.</param>
+            <returns>Dictionary.</returns>
+        </member>
+        <member name="T:DocumentAtom.Excel.XlsxProcessorGold">
+            <summary>
+            Create atoms from Microsoft Excel .xlsx documents.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Excel.XlsxProcessorGold.Settings">
+            <summary>
+            Xlsx processor settings.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Excel.XlsxProcessorGold.#ctor(DocumentAtom.Excel.XlsxProcessorSettings,DocumentAtom.Image.ImageProcessorSettings)">
+            <summary>
+            Create atoms from Excel documents.
+            </summary>
+            <param name="settings">Processor settings.</param>
+            <param name="imageSettings">Image processor settings.</param>
+        </member>
+        <member name="M:DocumentAtom.Excel.XlsxProcessorGold.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.Excel.XlsxProcessorGold.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Excel.XlsxProcessorGold.Extract(System.String)">
+            <summary>
+            Extract atoms from a file.
+            </summary>
+            <param name="filename">Filename.</param>
+            <returns>Atoms.</returns>
+        </member>
+        <member name="M:DocumentAtom.Excel.XlsxProcessorGold.GetMetadata(System.String)">
             <summary>
             Retrieve metadata from a file.
             </summary>
