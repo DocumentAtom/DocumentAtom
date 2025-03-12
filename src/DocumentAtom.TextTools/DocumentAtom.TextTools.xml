@@ -219,6 +219,15 @@
             <param name="str">Input string.</param>
             <returns>Enumerable string.</returns>
         </member>
+        <member name="M:DocumentAtom.TextTools.TokenExtractor.Chunk(System.String,System.Int32,System.Int32)">
+            <summary>
+            Break an input string into chunks given the specified constraints.
+            </summary>
+            <param name="str">Input string.</param>
+            <param name="maxTokenCount">Maximum number of tokens per chunk.  Minimum is 1.</param>
+            <param name="maxChunkLength">Maximum chunk length.  Minimum is 32.</param>
+            <returns>Enumerable string, where each string contains one or more tokens.</returns>
+        </member>
         <member name="T:DocumentAtom.TextTools.WordRemover">
             <summary>
             Removes stop words and other specified words from text while preserving word boundaries.

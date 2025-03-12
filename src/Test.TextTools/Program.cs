@@ -21,6 +21,8 @@
 
                 string[] lines = File.ReadAllLines(filename);
 
+                Console.WriteLine("");
+                Console.WriteLine("Token extraction");
                 foreach (string line in lines)
                 {
                     Console.WriteLine(Environment.NewLine + Environment.NewLine + "Line: " + line);
@@ -29,6 +31,22 @@
                     {
                         foreach (string token in extractor.Process(line))
                             Console.Write(token + " ");
+                    }
+                }
+
+                Console.WriteLine("");
+                Console.WriteLine("");
+                Console.WriteLine("Chunk extraction (max words 10, max length 60)");
+                foreach (string line in lines)
+                {
+                    Console.WriteLine(Environment.NewLine + Environment.NewLine + "Line: " + line);
+
+                    using (TokenExtractor extractor = new TokenExtractor())
+                    {
+                        foreach (string chunk in extractor.Chunk(line, 10, 60))
+                        {
+                            Console.WriteLine(chunk);
+                        }
                     }
                 }
 

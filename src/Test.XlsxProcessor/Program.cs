@@ -8,15 +8,19 @@
     using DocumentAtom.Image;
     using GetSomeInput;
     using SerializationHelper;
+    using Timestamps;
 
     public static class Program
     {
         private static Serializer _Serializer = new SerializationHelper.Serializer();
         private static XlsxProcessorSettings _ProcessorSettings = new XlsxProcessorSettings();
         private static ImageProcessorSettings _ImageProcessorSettings = null;
+        private static bool _ThroughputOnly = false;
 
         public static void Main(string[] args)
         {
+            if (args != null && args.Length > 0 && args[0].Equals("q")) _ThroughputOnly = true;
+
             _ProcessorSettings.Chunking.Enable = true;
             _ProcessorSettings.Chunking.MaximumLength = 512;
             _ProcessorSettings.Chunking.ShiftSize = 384;
@@ -29,13 +33,22 @@
                 string filename = Inputty.GetString("Filename (ENTER to end):", null, true);
                 if (String.IsNullOrEmpty(filename)) break;
 
-                using (XlsxProcessor processor = new XlsxProcessor(_ProcessorSettings))
+                using (Timestamp ts = new Timestamp())
                 {
-                    foreach (Atom atom in processor.Extract(filename))
-                        Console.WriteLine(_Serializer.SerializeJson(atom, true));
+                    ts.Start = DateTime.UtcNow;
 
-                    Console.WriteLine("End of file");
-                    Console.WriteLine("");
+                    using (XlsxProcessor processor = new XlsxProcessor(_ProcessorSettings))
+                    {
+                        foreach (Atom atom in processor.Extract(filename))
+                        {
+                            if (!_ThroughputOnly)
+                                Console.WriteLine(_Serializer.SerializeJson(atom, true));
+                        }
+
+                        ts.End = DateTime.UtcNow;
+                        Console.WriteLine("End of file: " + ts.TotalMs + "ms");
+                        Console.WriteLine("");
+                    }
                 }
             }
 

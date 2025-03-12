@@ -153,6 +153,44 @@
             }
         }
 
+        /// <summary>
+        /// Break an input string into chunks given the specified constraints.
+        /// </summary>
+        /// <param name="str">Input string.</param>
+        /// <param name="maxTokenCount">Maximum number of tokens per chunk.  Minimum is 1.</param>
+        /// <param name="maxChunkLength">Maximum chunk length.  Minimum is 32.</param>
+        /// <returns>Enumerable string, where each string contains one or more tokens.</returns>
+        public IEnumerable<string> Chunk(string str, int maxTokenCount, int maxChunkLength)
+        {
+            if (String.IsNullOrEmpty(str)) yield break;
+            if (maxTokenCount < 1) throw new ArgumentOutOfRangeException(nameof(maxTokenCount));
+            if (maxChunkLength < 32) throw new ArgumentOutOfRangeException(nameof(maxChunkLength));
+
+            string chunk = "";
+            int tokenCount = 0;
+
+            foreach (string token in Process(str))
+            {
+                if (chunk.Length >= maxChunkLength
+                    || tokenCount >= maxTokenCount)
+                {
+                    yield return chunk;
+                    chunk = token + " ";
+                    tokenCount = 1;
+                }
+                else
+                { 
+                    chunk += token + " ";
+                    tokenCount++;
+                }
+            }
+
+            if (!String.IsNullOrEmpty(chunk) && tokenCount > 0)
+            {
+                yield return chunk;
+            }
+        }
+
         #endregion
 
         #region Private-Methods

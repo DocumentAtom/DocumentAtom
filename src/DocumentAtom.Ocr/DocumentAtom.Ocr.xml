@@ -4,6 +4,31 @@
         <name>DocumentAtom.Ocr</name>
     </assembly>
     <members>
+        <member name="T:DocumentAtom.Ocr.ExtractionResult">
+            <summary>
+            Extraction result.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.ExtractionResult.TextElements">
+            <summary>
+            Text elements.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.ExtractionResult.Tables">
+            <summary>
+            Tables.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.ExtractionResult.Lists">
+            <summary>
+            Lists.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Ocr.ExtractionResult.#ctor">
+            <summary>
+            Extraction result.
+            </summary>
+        </member>
         <member name="T:DocumentAtom.Ocr.ImageContentExtractor">
             <summary>
             Image context entractor.  This library requires that you have Tesseract installed on the host and that you have awareness of the location of the tessdata directory.
@@ -54,91 +79,6 @@
             List numbering patterns.
             </summary>
         </member>
-        <member name="T:DocumentAtom.Ocr.ImageContentExtractor.TextElement">
-            <summary>
-            Text element.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.TextElement.Text">
-            <summary>
-            Text.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.TextElement.Bounds">
-            <summary>
-            Bounds.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.TextElement.Confidence">
-            <summary>
-            Confidence.
-            </summary>
-        </member>
-        <member name="T:DocumentAtom.Ocr.ImageContentExtractor.TableStructure">
-            <summary>
-            Table structure.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.TableStructure.Cells">
-            <summary>
-            Cells.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.TableStructure.Bounds">
-            <summary>
-            Bounds.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.TableStructure.Rows">
-            <summary>
-            Rows.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.TableStructure.Columns">
-            <summary>
-            Counts.
-            </summary>
-        </member>
-        <member name="T:DocumentAtom.Ocr.ImageContentExtractor.ListStructure">
-            <summary>
-            List structure.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.ListStructure.Items">
-            <summary>
-            List items.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.ListStructure.IsOrdered">
-            <summary>
-            Boolean indicating if the list is ordered.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.ListStructure.Bounds">
-            <summary>
-            Bounds.
-            </summary>
-        </member>
-        <member name="T:DocumentAtom.Ocr.ImageContentExtractor.ExtractionResult">
-            <summary>
-            Extraction result.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.ExtractionResult.TextElements">
-            <summary>
-            Text elements.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.ExtractionResult.Tables">
-            <summary>
-            Tables.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Ocr.ImageContentExtractor.ExtractionResult.Lists">
-            <summary>
-            Lists.
-            </summary>
-        </member>
         <member name="M:DocumentAtom.Ocr.ImageContentExtractor.#ctor(System.String,System.String)">
             <summary>
             Image context entractor.  This library requires that you have Tesseract installed on the host and that you have awareness of the location of the tessdata directory.
@@ -167,6 +107,86 @@
             </summary>
             <param name="pngData">PNG data.</param>
             <returns>Extraction result.</returns>
+        </member>
+        <member name="T:DocumentAtom.Ocr.ListStructure">
+            <summary>
+            List structure.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.ListStructure.Items">
+            <summary>
+            List items.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.ListStructure.IsOrdered">
+            <summary>
+            Boolean indicating if the list is ordered.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.ListStructure.Bounds">
+            <summary>
+            Bounds.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Ocr.ListStructure.#ctor">
+            <summary>
+            List structure.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Ocr.TableStructure">
+            <summary>
+            Table structure.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.TableStructure.Cells">
+            <summary>
+            Cells.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.TableStructure.Bounds">
+            <summary>
+            Bounds.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.TableStructure.Rows">
+            <summary>
+            Rows.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.TableStructure.Columns">
+            <summary>
+            Counts.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Ocr.TableStructure.#ctor">
+            <summary>
+            Table structure.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Ocr.TextElement">
+            <summary>
+            Text element.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.TextElement.Text">
+            <summary>
+            Text.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.TextElement.Bounds">
+            <summary>
+            Bounds.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Ocr.TextElement.Confidence">
+            <summary>
+            Confidence.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Ocr.TextElement.#ctor">
+            <summary>
+            Text element.
+            </summary>
         </member>
     </members>
 </doc>
