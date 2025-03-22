@@ -503,7 +503,7 @@
             for (int i = 0; i < bytesToCheck; i++)
             {
                 if ((data[i] < 0x20 || data[i] > 0x7E)
-                    && (data[i] != 0x0A && data[i] != 0x0D))
+                    && (data[i] != 0x09 && data[i] != 0x0A && data[i] != 0x0D))
                 {
                     nonPrintableCount++;
                 }
