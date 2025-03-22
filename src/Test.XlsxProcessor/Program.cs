@@ -15,7 +15,7 @@
         private static Serializer _Serializer = new SerializationHelper.Serializer();
         private static XlsxProcessorSettings _ProcessorSettings = new XlsxProcessorSettings();
         private static ImageProcessorSettings _ImageProcessorSettings = null;
-        private static bool _ThroughputOnly = false;
+        private static bool _ThroughputOnly = true;
 
         public static void Main(string[] args)
         {

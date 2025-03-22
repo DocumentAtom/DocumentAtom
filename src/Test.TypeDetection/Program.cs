@@ -24,6 +24,7 @@
 
                 using (TypeDetector typeDetector = new TypeDetector())
                 {
+                    typeDetector.Logger = Console.WriteLine;
                     TypeResult tr = typeDetector.Process(filename, contentType);
                     Console.WriteLine(_Serializer.SerializeJson(tr, true));
                     Console.WriteLine("");

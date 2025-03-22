@@ -502,8 +502,11 @@
             int nonPrintableCount = 0;
             for (int i = 0; i < bytesToCheck; i++)
             {
-                if (data[i] < 0x20 || data[i] > 0x7E)
+                if ((data[i] < 0x20 || data[i] > 0x7E)
+                    && (data[i] != 0x0A && data[i] != 0x0D))
+                {
                     nonPrintableCount++;
+                }
             }
 
             // If more than 30% of content is non-printable, likely binary
