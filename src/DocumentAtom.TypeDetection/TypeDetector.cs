@@ -336,6 +336,13 @@
                             return tr;
                         }
                     }
+                    if (IsHtml(data))
+                    {
+                        tr.MimeType = _HtmlMimeType;
+                        tr.Extension = _HtmlExtension;
+                        tr.Type = DocumentTypeEnum.Html;
+                        return tr;
+                    }
                     else
                     {
                         tr.MimeType = _TextMimeType;
