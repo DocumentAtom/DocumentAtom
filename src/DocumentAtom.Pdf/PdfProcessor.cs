@@ -153,7 +153,13 @@
 
         private IEnumerable<Atom> ProcessFile(string filename)
         {
-            using (PdfDocument document = PdfDocument.Open(filename))
+            ParsingOptions options = new ParsingOptions
+            {
+                SkipMissingFonts = true,
+                UseLenientParsing = true
+            };
+
+            using (PdfDocument document = PdfDocument.Open(filename, options))
             {
                 int pageNumber = 1;
                 foreach (var page in document.GetPages())

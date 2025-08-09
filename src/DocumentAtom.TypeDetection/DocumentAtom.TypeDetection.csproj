@@ -2,12 +2,12 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
+		<Version>1.0.30</Version>
 		<ApplicationIcon>icon.ico</ApplicationIcon>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<DocumentationFile>DocumentAtom.TypeDetection.xml</DocumentationFile>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>DocumentAtom.TypeDetection</Title>
-		<Version>1.0.29</Version>
 		<Authors>Joel Christner</Authors>
 		<Description>DocumentAtom provides a light, fast library for breaking input documents into constituent parts (atoms), useful for AI, machine learning, processing, analytics, and general analysis.</Description>
 		<Copyright>(c)2025 Joel Christner</Copyright>
@@ -50,8 +50,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="DocumentAtom" Version="1.0.21" />
-		<PackageReference Include="SerializableDataTable" Version="1.0.1" />
+		<PackageReference Include="DocumentAtom" Version="1.0.30" />
+		<PackageReference Include="SerializableDataTable" Version="1.0.2" />
 	</ItemGroup>
 
 </Project>

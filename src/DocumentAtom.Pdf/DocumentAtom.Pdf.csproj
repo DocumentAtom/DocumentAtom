@@ -2,6 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
+		<Version>1.0.30</Version>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<ApplicationIcon>icon.ico</ApplicationIcon>
@@ -9,7 +10,6 @@
 		<DocumentationFile>DocumentAtom.Pdf.xml</DocumentationFile>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Title>DocumentAtom.Pdf</Title>
-		<Version>1.0.26</Version>
 		<Authors>Joel Christner</Authors>
 		<Description>DocumentAtom provides a light, fast library for breaking input PDF documents into constituent parts (atoms), useful for AI, machine learning, processing, analytics, and general analysis.</Description>
 		<Copyright>(c)2025 Joel Christner</Copyright>
@@ -49,11 +49,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="DocumentAtom" Version="1.0.21" />
-	  <PackageReference Include="DocumentAtom.Image" Version="1.0.25" />
-	  <PackageReference Include="PdfPig" Version="0.1.9" />
-	  <PackageReference Include="SerializableDataTable" Version="1.0.1" />
-	  <PackageReference Include="Tabula" Version="0.1.4" />
+	  <PackageReference Include="DocumentAtom" Version="1.0.30" />
+	  <PackageReference Include="DocumentAtom.Image" Version="1.0.30" />
+	  <PackageReference Include="PdfPig" Version="0.1.11" />
+	  <PackageReference Include="SerializableDataTable" Version="1.0.2" />
+	  <PackageReference Include="Tabula" Version="0.1.5" />
 	</ItemGroup>
 
 	<ItemGroup>
