@@ -9,6 +9,7 @@ DocumentAtom requires that Tesseract v5.0 be installed on the host.  This is req
 | Package | Version | Downloads |
 |---------|---------|-----------|
 | DocumentAtom.Excel | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Excel.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Excel/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Excel.svg)](https://www.nuget.org/packages/DocumentAtom.Excel)  |
+| DocumentAtom.Html | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Html.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Html/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Html.svg)](https://www.nuget.org/packages/DocumentAtom.Html)  |
 | DocumentAtom.Image | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Image.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Image/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Image.svg)](https://www.nuget.org/packages/DocumentAtom.Image)  |
 | DocumentAtom.Markdown | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Markdown.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Markdown/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Markdown.svg)](https://www.nuget.org/packages/DocumentAtom.Markdown)  |
 | DocumentAtom.Pdf | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Pdf.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Pdf/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Pdf.svg)](https://www.nuget.org/packages/DocumentAtom.Pdf)  |
@@ -34,6 +35,7 @@ Please feel free to file issues, enhancement requests, or start discussions abou
 
 DocumentAtom supports the following input file types:
 - Text
+- HTML
 - Markdown
 - Microsoft Word (.docx)
 - Microsoft Excel (.xlsx)
@@ -88,6 +90,7 @@ The `AtomBase` class provides the aforementioned metadata, and several type-spec
 DocumentAtom is built on the shoulders of several libraries, without which, this work would not be possible.
 
 - [DocumentFormat.OpenXml](https://github.com/dotnet/Open-XML-SDK)
+- [HTML Agility Pack](https://github.com/zzzprojects/html-agility-pack)
 - [SixLabors.ImageSharp](https://github.com/SixLabors/ImageSharp)
 - [Tesseract](https://github.com/charlesw/tesseract/)
 - [PdfPig](https://github.com/UglyToad/PdfPig)

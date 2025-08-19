@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net8.0</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\DocumentAtom.Html\DocumentAtom.Html.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Sample\" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="Sample\**">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+</Project>

@@ -316,22 +316,47 @@
         </member>
         <member name="F:DocumentAtom.Core.Enums.AtomTypeEnum.Text">
             <summary>
-            Text.
-            </summary>
-        </member>
-        <member name="F:DocumentAtom.Core.Enums.AtomTypeEnum.Binary">
-            <summary>
-            Binary.
-            </summary>
-        </member>
-        <member name="F:DocumentAtom.Core.Enums.AtomTypeEnum.Table">
-            <summary>
-            Table.
+            Text atom.
             </summary>
         </member>
         <member name="F:DocumentAtom.Core.Enums.AtomTypeEnum.List">
             <summary>
-            List.
+            List atom.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.AtomTypeEnum.Binary">
+            <summary>
+            Binary atom.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.AtomTypeEnum.Table">
+            <summary>
+            Table atom.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.AtomTypeEnum.Unknown">
+            <summary>
+            Unknown atom type.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.AtomTypeEnum.Image">
+            <summary>
+            Image atom.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.AtomTypeEnum.Hyperlink">
+            <summary>
+            Hyperlink atom.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.AtomTypeEnum.Code">
+            <summary>
+            Code atom.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.AtomTypeEnum.Meta">
+            <summary>
+            Meta atom.
             </summary>
         </member>
         <member name="T:DocumentAtom.Core.Enums.MarkdownFormattingEnum">

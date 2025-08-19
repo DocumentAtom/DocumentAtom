@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
-		<Version>1.0.30</Version>
+		<Version>1.0.32</Version>
 		<ApplicationIcon>icon.ico</ApplicationIcon>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 		<DocumentationFile>DocumentAtom.TypeDetection.xml</DocumentationFile>
@@ -50,7 +50,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="DocumentAtom" Version="1.0.30" />
+		<PackageReference Include="DocumentAtom" Version="1.0.32" />
 		<PackageReference Include="SerializableDataTable" Version="1.0.2" />
 	</ItemGroup>
 

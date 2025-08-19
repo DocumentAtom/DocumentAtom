@@ -7,11 +7,11 @@
 		<Nullable>enable</Nullable>
 		<ApplicationIcon>icon.ico</ApplicationIcon>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
-		<DocumentationFile>DocumentAtom.Pdf.xml</DocumentationFile>
+		<DocumentationFile>DocumentAtom.Html.xml</DocumentationFile>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-		<Title>DocumentAtom.Pdf</Title>
+		<Title>DocumentAtom.Html</Title>
 		<Authors>Joel Christner</Authors>
-		<Description>DocumentAtom provides a light, fast library for breaking input PDF documents into constituent parts (atoms), useful for AI, machine learning, processing, analytics, and general analysis.</Description>
+		<Description>DocumentAtom provides a light, fast library for breaking input HTML documents into constituent parts (atoms), useful for AI, machine learning, processing, analytics, and general analysis.</Description>
 		<Copyright>(c)2025 Joel Christner</Copyright>
 		<PackageProjectUrl>https://github.com/jchristn/DocumentAtom</PackageProjectUrl>
 		<PackageIcon>icon.png</PackageIcon>
@@ -49,26 +49,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="DocumentAtom" Version="1.0.32" />
-	  <PackageReference Include="DocumentAtom.Image" Version="1.0.32" />
-	  <PackageReference Include="PdfPig" Version="0.1.11" />
-	  <PackageReference Include="SerializableDataTable" Version="1.0.2" />
-	  <PackageReference Include="Tabula" Version="0.1.5" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Update="x64\leptonica-1.82.0.dll">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="x64\tesseract50.dll">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="x86\leptonica-1.82.0.dll">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="x86\tesseract50.dll">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
+		<PackageReference Include="DocumentAtom" Version="1.0.32" />
+		<PackageReference Include="HtmlAgilityPack" Version="1.12.2" />
+		<PackageReference Include="SerializableDataTable" Version="1.0.2" />
 	</ItemGroup>
 
 </Project>

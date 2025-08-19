@@ -4,22 +4,50 @@
     /// Atom type.
     /// </summary>
     public enum AtomTypeEnum
-    {
+    { 
         /// <summary>
-        /// Text.
+        /// Text atom.
         /// </summary>
-        Text,
+        Text = 0,
+
         /// <summary>
-        /// Binary.
+        /// List atom.
         /// </summary>
-        Binary,
+        List = 1,
+
         /// <summary>
-        /// Table.
+        /// Binary atom.
         /// </summary>
-        Table,
+        Binary = 2,
+
         /// <summary>
-        /// List.
+        /// Table atom.
         /// </summary>
-        List
+        Table = 3,
+
+        /// <summary>
+        /// Unknown atom type.
+        /// </summary>
+        Unknown = 4,
+
+        /// <summary>
+        /// Image atom.
+        /// </summary>
+        Image = 5,
+
+        /// <summary>
+        /// Hyperlink atom.
+        /// </summary>
+        Hyperlink = 6,
+
+        /// <summary>
+        /// Code atom.
+        /// </summary>
+        Code = 7,
+
+        /// <summary>
+        /// Meta atom.
+        /// </summary>
+        Meta = 8
     }
 }
