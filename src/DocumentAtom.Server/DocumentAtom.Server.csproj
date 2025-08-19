@@ -14,6 +14,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\DocumentAtom.Excel\DocumentAtom.Excel.csproj" />
+	  <ProjectReference Include="..\DocumentAtom.Html\DocumentAtom.Html.csproj" />
 	  <ProjectReference Include="..\DocumentAtom.Image\DocumentAtom.Image.csproj" />
 	  <ProjectReference Include="..\DocumentAtom.Markdown\DocumentAtom.Markdown.csproj" />
 	  <ProjectReference Include="..\DocumentAtom.Pdf\DocumentAtom.Pdf.csproj" />

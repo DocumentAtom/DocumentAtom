@@ -16,6 +16,7 @@
     using DocumentAtom.Core.Atoms;
     using DocumentAtom.Core.Helpers;
     using DocumentAtom.Excel;
+    using DocumentAtom.Html;
     using DocumentAtom.Image;
     using DocumentAtom.Markdown;
     using DocumentAtom.Pdf;
@@ -222,6 +223,7 @@
 
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/typedetect", TypeDetectionRoute, ExceptionRoute);
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/excel", ExcelAtomRoute, ExceptionRoute);
+            _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/html", HtmlAtomRoute, ExceptionRoute);
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/markdown", MarkdownAtomRoute, ExceptionRoute);
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/pdf", PdfAtomRoute, ExceptionRoute);
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/png", PngAtomRoute, ExceptionRoute);
@@ -379,6 +381,28 @@
             List<Atom> ret = new List<Atom>();
 
             XlsxProcessor processor = new XlsxProcessor(settings, imageSettings);
+            IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
+            if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
+
+            ctx.Response.StatusCode = 200;
+            await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
+            return;
+        }
+
+        private static async Task HtmlAtomRoute(HttpContextBase ctx)
+        {
+            if (ctx.Request.DataAsBytes == null && ctx.Request.ContentLength < 1)
+            {
+                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress + " from " + ctx.Request.Source.IpAddress);
+                ctx.Response.StatusCode = 400;
+                await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.RequestBodyMissing, null, "No request body found."), true));
+                return;
+            }
+
+            HtmlProcessorSettings settings = new HtmlProcessorSettings();
+
+            List<Atom> ret = new List<Atom>();
+            HtmlProcessor processor = new HtmlProcessor(settings);
             IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
             if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
 

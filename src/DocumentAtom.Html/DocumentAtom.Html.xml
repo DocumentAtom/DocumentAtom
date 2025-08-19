@@ -9,41 +9,6 @@
             HTML atom.
             </summary>
         </member>
-        <member name="P:DocumentAtom.Html.HtmlAtom.Text">
-            <summary>
-            Text content.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Html.HtmlAtom.HeaderLevel">
-            <summary>
-            Header level (1-6 for H1-H6 tags).
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Html.HtmlAtom.UnorderedList">
-            <summary>
-            Unordered list items.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Html.HtmlAtom.OrderedList">
-            <summary>
-            Ordered list items.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Html.HtmlAtom.Table">
-            <summary>
-            Table data.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Html.HtmlAtom.Rows">
-            <summary>
-            Number of rows in a table.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Html.HtmlAtom.Columns">
-            <summary>
-            Number of columns in a table.
-            </summary>
-        </member>
         <member name="P:DocumentAtom.Html.HtmlAtom.Tag">
             <summary>
             HTML tag name.
@@ -57,11 +22,6 @@
         <member name="P:DocumentAtom.Html.HtmlAtom.Class">
             <summary>
             HTML element class attribute.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Html.HtmlAtom.Binary">
-            <summary>
-            Binary data.
             </summary>
         </member>
         <member name="M:DocumentAtom.Html.HtmlAtom.#ctor">
@@ -90,11 +50,6 @@
             Alternative text for the image.
             </summary>
         </member>
-        <member name="P:DocumentAtom.Html.ImageAtom.Title">
-            <summary>
-            Title attribute of the image.
-            </summary>
-        </member>
         <member name="P:DocumentAtom.Html.ImageAtom.Width">
             <summary>
             Width attribute of the image.
@@ -103,11 +58,6 @@
         <member name="P:DocumentAtom.Html.ImageAtom.Height">
             <summary>
             Height attribute of the image.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Html.ImageAtom.Binary">
-            <summary>
-            Binary image data if embedded.
             </summary>
         </member>
         <member name="M:DocumentAtom.Html.ImageAtom.#ctor">
@@ -129,16 +79,6 @@
         <member name="P:DocumentAtom.Html.HyperlinkAtom.Href">
             <summary>
             Hyperlink URL.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Html.HyperlinkAtom.Text">
-            <summary>
-            Link text.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.Html.HyperlinkAtom.Title">
-            <summary>
-            Title attribute of the link.
             </summary>
         </member>
         <member name="P:DocumentAtom.Html.HyperlinkAtom.Target">

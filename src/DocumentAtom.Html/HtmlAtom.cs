@@ -1,7 +1,6 @@
 ﻿namespace DocumentAtom.Html
 {
-#pragma warning disable CS0108 // Member hides inherited member; missing new keyword
-#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+#pragma warning disable CS8625
 
     using System;
     using System.Collections.Generic;
@@ -17,41 +16,6 @@
         #region Public-Members
 
         /// <summary>
-        /// Text content.
-        /// </summary>
-        public string Text { get; set; } = null;
-
-        /// <summary>
-        /// Header level (1-6 for H1-H6 tags).
-        /// </summary>
-        public int? HeaderLevel { get; set; } = null;
-
-        /// <summary>
-        /// Unordered list items.
-        /// </summary>
-        public List<string> UnorderedList { get; set; } = null;
-
-        /// <summary>
-        /// Ordered list items.
-        /// </summary>
-        public List<string> OrderedList { get; set; } = null;
-
-        /// <summary>
-        /// Table data.
-        /// </summary>
-        public SerializableDataTable Table { get; set; } = null;
-
-        /// <summary>
-        /// Number of rows in a table.
-        /// </summary>
-        public int? Rows { get; set; } = null;
-
-        /// <summary>
-        /// Number of columns in a table.
-        /// </summary>
-        public int? Columns { get; set; } = null;
-
-        /// <summary>
         /// HTML tag name.
         /// </summary>
         public string Tag { get; set; } = null;
@@ -65,11 +29,6 @@
         /// HTML element class attribute.
         /// </summary>
         public string Class { get; set; } = null;
-
-        /// <summary>
-        /// Binary data.
-        /// </summary>
-        public byte[] Binary { get; set; } = null;
 
         #endregion
 
@@ -168,11 +127,6 @@
         public string Alt { get; set; } = null;
 
         /// <summary>
-        /// Title attribute of the image.
-        /// </summary>
-        public string Title { get; set; } = null;
-
-        /// <summary>
         /// Width attribute of the image.
         /// </summary>
         public string Width { get; set; } = null;
@@ -181,11 +135,6 @@
         /// Height attribute of the image.
         /// </summary>
         public string Height { get; set; } = null;
-
-        /// <summary>
-        /// Binary image data if embedded.
-        /// </summary>
-        public byte[] Binary { get; set; } = null;
 
         #endregion
 
@@ -251,16 +200,6 @@
         /// Hyperlink URL.
         /// </summary>
         public string Href { get; set; } = null;
-
-        /// <summary>
-        /// Link text.
-        /// </summary>
-        public string Text { get; set; } = null;
-
-        /// <summary>
-        /// Title attribute of the link.
-        /// </summary>
-        public string Title { get; set; } = null;
 
         /// <summary>
         /// Target attribute of the link.
@@ -487,6 +426,5 @@
         #endregion
     }
 
-#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
-#pragma warning restore CS0108 // Member hides inherited member; missing new keyword
+#pragma warning restore CS8625
 }
