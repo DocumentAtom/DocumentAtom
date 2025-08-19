@@ -48,32 +48,6 @@
 			"response": []
 		},
 		{
-			"name": "Extract atoms (PDF)",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "file",
-					"file": {
-						"src": "/G:/Shared drives/View Systems/Test Files/Botox/1.pdf"
-					}
-				},
-				"url": {
-					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/pdf",
-					"protocol": "{{protocol}}",
-					"host": [
-						"{{hostname}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"atom",
-						"pdf"
-					]
-				}
-			},
-			"response": []
-		},
-		{
 			"name": "Extract atoms (Excel)",
 			"request": {
 				"method": "POST",
@@ -100,6 +74,32 @@
 			"response": []
 		},
 		{
+			"name": "Extract atoms (HTML)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "file",
+					"file": {
+						"src": "/G:/Shared drives/View Systems/Test Files/SampleFilesByType/Excel/3.xlsx"
+					}
+				},
+				"url": {
+					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/html",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"atom",
+						"html"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Extract atoms (Markdown)",
 			"request": {
 				"method": "POST",
@@ -120,6 +120,38 @@
 					"path": [
 						"atom",
 						"markdown"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Extract atoms (PDF)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "file",
+					"file": {
+						"src": "/G:/Shared drives/View Systems/Test Files/SampleFilesByType/PDF/3.pdf"
+					}
+				},
+				"url": {
+					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/pdf?ocr",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"atom",
+						"pdf"
+					],
+					"query": [
+						{
+							"key": "ocr",
+							"value": null
+						}
 					]
 				}
 			},
@@ -159,11 +191,11 @@
 				"body": {
 					"mode": "file",
 					"file": {
-						"src": "/G:/Shared drives/View Systems/Test Files/SampleFilesByType/Ppt/2.pptx"
+						"src": "/G:/Shared drives/View Systems/Test Files/SampleFilesByType/Ppt/3.pptx"
 					}
 				},
 				"url": {
-					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/powerpoint",
+					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/powerpoint?ocr",
 					"protocol": "{{protocol}}",
 					"host": [
 						"{{hostname}}"
@@ -172,6 +204,12 @@
 					"path": [
 						"atom",
 						"powerpoint"
+					],
+					"query": [
+						{
+							"key": "ocr",
+							"value": null
+						}
 					]
 				}
 			},
