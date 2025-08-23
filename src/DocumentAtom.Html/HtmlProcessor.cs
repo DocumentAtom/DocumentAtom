@@ -75,6 +75,14 @@
                 HtmlDocument doc = new HtmlDocument();
                 doc.Load(filename, Encoding.UTF8);
 
+                // Check if DocumentNode exists
+                if (doc?.DocumentNode == null)
+                {
+                    if (_Settings?.DebugLogging == true)
+                        Console.WriteLine("Document node is null");
+                    return atoms;
+                }
+
                 // Process the document body
                 HtmlNode body = doc.DocumentNode.SelectSingleNode("//body") ?? doc.DocumentNode;
 
@@ -82,7 +90,8 @@
             }
             catch (Exception e)
             {
-                if (_Settings.DebugLogging) Console.WriteLine($"Error processing HTML file: {e.Message}");
+                if (_Settings?.DebugLogging == true)
+                    Console.WriteLine($"Error processing HTML file: {e.Message}");
                 throw;
             }
 
@@ -113,7 +122,10 @@
         {
             if (node == null) return;
 
-            switch (node.Name.ToLower())
+            // Null-safe name check
+            string nodeName = node.Name?.ToLower() ?? string.Empty;
+
+            switch (nodeName)
             {
                 case "p":
                 case "div":
@@ -168,9 +180,12 @@
 
                 default:
                     // Recursively process child nodes for unhandled elements
-                    foreach (HtmlNode child in node.ChildNodes)
+                    if (node.ChildNodes != null)
                     {
-                        ProcessNode(child, atoms, ref position, pageNumber);
+                        foreach (HtmlNode child in node.ChildNodes)
+                        {
+                            ProcessNode(child, atoms, ref position, pageNumber);
+                        }
                     }
                     break;
             }
@@ -181,6 +196,8 @@
         /// </summary>
         private void ProcessTextContainer(HtmlNode node, List<Atom> atoms, ref int position, int pageNumber)
         {
+            if (node == null) return;
+
             string text = GetCleanText(node);
             if (!String.IsNullOrWhiteSpace(text))
             {
@@ -191,7 +208,7 @@
                     Position = position++,
                     PageNumber = pageNumber,
                     Text = text,
-                    Tag = node.Name.ToLower(),
+                    Tag = node.Name?.ToLower() ?? string.Empty,
                     Id = node.GetAttributeValue("id", null),
                     Class = node.GetAttributeValue("class", null)
                 };
@@ -200,9 +217,12 @@
             }
 
             // Process child nodes that aren't pure text
-            foreach (HtmlNode child in node.ChildNodes.Where(n => n.Name != "#text"))
+            if (node.ChildNodes != null)
             {
-                ProcessNode(child, atoms, ref position, pageNumber);
+                foreach (HtmlNode child in node.ChildNodes.Where(n => n?.Name != "#text"))
+                {
+                    ProcessNode(child, atoms, ref position, pageNumber);
+                }
             }
         }
 
@@ -211,10 +231,20 @@
         /// </summary>
         private void ProcessHeading(HtmlNode node, List<Atom> atoms, ref int position, int pageNumber)
         {
+            if (node == null) return;
+
             string text = GetCleanText(node);
             if (!String.IsNullOrWhiteSpace(text))
             {
-                int headerLevel = int.Parse(node.Name.Substring(1));
+                // Safely parse header level
+                int headerLevel = 1;
+                if (!String.IsNullOrEmpty(node.Name) && node.Name.Length > 1)
+                {
+                    if (int.TryParse(node.Name.Substring(1), out int level))
+                    {
+                        headerLevel = level;
+                    }
+                }
 
                 HtmlAtom atom = new HtmlAtom
                 {
@@ -224,7 +254,7 @@
                     PageNumber = pageNumber,
                     Text = text,
                     HeaderLevel = headerLevel,
-                    Tag = node.Name.ToLower(),
+                    Tag = node.Name?.ToLower() ?? string.Empty,
                     Id = node.GetAttributeValue("id", null),
                     Class = node.GetAttributeValue("class", null)
                 };
@@ -238,13 +268,24 @@
         /// </summary>
         private void ProcessUnorderedList(HtmlNode node, List<Atom> atoms, ref int position, int pageNumber)
         {
+            if (node == null) return;
+
             List<string> items = new List<string>();
-            foreach (HtmlNode li in node.SelectNodes(".//li"))
+
+            // FIX: Check for null before iterating
+            HtmlNodeCollection liNodes = node.SelectNodes(".//li");
+            if (liNodes != null)
             {
-                string itemText = GetCleanText(li);
-                if (!String.IsNullOrWhiteSpace(itemText))
+                foreach (HtmlNode li in liNodes)
                 {
-                    items.Add(itemText);
+                    if (li != null)
+                    {
+                        string itemText = GetCleanText(li);
+                        if (!String.IsNullOrWhiteSpace(itemText))
+                        {
+                            items.Add(itemText);
+                        }
+                    }
                 }
             }
 
@@ -271,13 +312,24 @@
         /// </summary>
         private void ProcessOrderedList(HtmlNode node, List<Atom> atoms, ref int position, int pageNumber)
         {
+            if (node == null) return;
+
             List<string> items = new List<string>();
-            foreach (HtmlNode li in node.SelectNodes(".//li"))
+
+            // FIX: Check for null before iterating
+            HtmlNodeCollection liNodes = node.SelectNodes(".//li");
+            if (liNodes != null)
             {
-                string itemText = GetCleanText(li);
-                if (!String.IsNullOrWhiteSpace(itemText))
+                foreach (HtmlNode li in liNodes)
                 {
-                    items.Add(itemText);
+                    if (li != null)
+                    {
+                        string itemText = GetCleanText(li);
+                        if (!String.IsNullOrWhiteSpace(itemText))
+                        {
+                            items.Add(itemText);
+                        }
+                    }
                 }
             }
 
@@ -304,6 +356,8 @@
         /// </summary>
         private void ProcessTable(HtmlNode node, List<Atom> atoms, ref int position, int pageNumber)
         {
+            if (node == null) return;
+
             SerializableDataTable table = new SerializableDataTable();
 
             // Get headers from thead or first row
@@ -318,25 +372,28 @@
             {
                 foreach (HtmlNode header in headerNodes)
                 {
-                    string headerText = GetCleanText(header);
-                    if (String.IsNullOrWhiteSpace(headerText))
+                    if (header != null)
                     {
-                        headerText = $"Column{headers.Count + 1}";
-                    }
+                        string headerText = GetCleanText(header);
+                        if (String.IsNullOrWhiteSpace(headerText))
+                        {
+                            headerText = $"Column{headers.Count + 1}";
+                        }
 
-                    // Make header unique if it's a duplicate
-                    string uniqueHeader = headerText;
-                    if (headerCounts.ContainsKey(headerText))
-                    {
-                        headerCounts[headerText]++;
-                        uniqueHeader = $"{headerText}_{headerCounts[headerText]}";
-                    }
-                    else
-                    {
-                        headerCounts[headerText] = 1;
-                    }
+                        // Make header unique if it's a duplicate
+                        string uniqueHeader = headerText;
+                        if (headerCounts.ContainsKey(headerText))
+                        {
+                            headerCounts[headerText]++;
+                            uniqueHeader = $"{headerText}_{headerCounts[headerText]}";
+                        }
+                        else
+                        {
+                            headerCounts[headerText] = 1;
+                        }
 
-                    headers.Add(uniqueHeader);
+                        headers.Add(uniqueHeader);
+                    }
                 }
             }
 
@@ -344,7 +401,8 @@
             HtmlNode firstRow = node.SelectSingleNode(".//tr");
             if (headers.Count == 0 && firstRow != null)
             {
-                int colCount = firstRow.SelectNodes(".//td")?.Count ?? 0;
+                HtmlNodeCollection firstRowCells = firstRow.SelectNodes(".//td");
+                int colCount = firstRowCells?.Count ?? 0;
                 for (int i = 0; i < colCount; i++)
                 {
                     headers.Add($"Column{i + 1}");
@@ -369,22 +427,25 @@
 
                 foreach (HtmlNode row in rows.Skip(skipFirst ? 1 : 0))
                 {
-                    HtmlNodeCollection cells = row.SelectNodes(".//td");
-                    if (cells != null)
+                    if (row != null)
                     {
-                        Dictionary<string, object> rowData = new Dictionary<string, object>();
-                        for (int i = 0; i < headers.Count; i++)
+                        HtmlNodeCollection cells = row.SelectNodes(".//td");
+                        if (cells != null)
                         {
-                            if (i < cells.Count)
+                            Dictionary<string, object> rowData = new Dictionary<string, object>();
+                            for (int i = 0; i < headers.Count; i++)
                             {
-                                rowData[headers[i]] = GetCleanText(cells[i]);
+                                if (i < cells.Count && cells[i] != null)
+                                {
+                                    rowData[headers[i]] = GetCleanText(cells[i]);
+                                }
+                                else
+                                {
+                                    rowData[headers[i]] = "";
+                                }
                             }
-                            else
-                            {
-                                rowData[headers[i]] = "";
-                            }
+                            table.Rows.Add(rowData);
                         }
-                        table.Rows.Add(rowData);
                     }
                 }
             }
@@ -407,22 +468,35 @@
 
                 // Create a string representation for hashing
                 StringBuilder tableContent = new StringBuilder();
-                foreach (var col in table.Columns)
-                {
-                    tableContent.Append(col.Name + "\t");
-                }
-                tableContent.AppendLine();
-                foreach (var row in table.Rows)
+                if (table.Columns != null)
                 {
                     foreach (var col in table.Columns)
                     {
-                        if (row.ContainsKey(col.Name))
+                        if (col != null && col.Name != null)
                         {
-                            tableContent.Append(row[col.Name]?.ToString() ?? "");
+                            tableContent.Append(col.Name + "\t");
                         }
-                        tableContent.Append("\t");
                     }
                     tableContent.AppendLine();
+                }
+
+                if (table.Rows != null)
+                {
+                    foreach (var row in table.Rows)
+                    {
+                        if (row != null && table.Columns != null)
+                        {
+                            foreach (var col in table.Columns)
+                            {
+                                if (col != null && col.Name != null && row.ContainsKey(col.Name))
+                                {
+                                    tableContent.Append(row[col.Name]?.ToString() ?? "");
+                                }
+                                tableContent.Append("\t");
+                            }
+                            tableContent.AppendLine();
+                        }
+                    }
                 }
 
                 SetAtomHashes(atom, tableContent.ToString());
@@ -435,6 +509,8 @@
         /// </summary>
         private void ProcessImage(HtmlNode node, List<Atom> atoms, ref int position, int pageNumber)
         {
+            if (node == null) return;
+
             string src = node.GetAttributeValue("src", null);
             string alt = node.GetAttributeValue("alt", null);
             string title = node.GetAttributeValue("title", null);
@@ -466,6 +542,8 @@
         /// </summary>
         private void ProcessHyperlink(HtmlNode node, List<Atom> atoms, ref int position, int pageNumber)
         {
+            if (node == null) return;
+
             string href = node.GetAttributeValue("href", null);
             string text = GetCleanText(node);
             string title = node.GetAttributeValue("title", null);
@@ -496,6 +574,8 @@
         /// </summary>
         private void ProcessCodeBlock(HtmlNode node, List<Atom> atoms, ref int position, int pageNumber)
         {
+            if (node == null) return;
+
             string code = node.InnerText;
             if (!String.IsNullOrWhiteSpace(code))
             {
@@ -504,9 +584,10 @@
 
                 if (!String.IsNullOrEmpty(classAttribute))
                 {
-                    language = classAttribute
-                        .Split(' ')
-                        .FirstOrDefault(c => c.StartsWith("language-"))
+                    // Safely split and process class attribute
+                    string[] classes = classAttribute.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                    language = classes
+                        .FirstOrDefault(c => c != null && c.StartsWith("language-"))
                         ?.Replace("language-", "");
                 }
 
@@ -529,6 +610,8 @@
         /// </summary>
         private void ProcessTextNode(HtmlNode node, List<Atom> atoms, ref int position, int pageNumber)
         {
+            if (node == null) return;
+
             string text = GetCleanText(node);
             if (!String.IsNullOrWhiteSpace(text))
             {
@@ -552,7 +635,9 @@
         {
             if (node == null) return String.Empty;
 
-            string text = HtmlEntity.DeEntitize(node.InnerText);
+            // Safely get inner text
+            string innerText = node.InnerText ?? String.Empty;
+            string text = HtmlEntity.DeEntitize(innerText);
             text = text?.Trim() ?? String.Empty;
 
             // Remove excessive whitespace
@@ -576,17 +661,26 @@
 
             using (var md5 = System.Security.Cryptography.MD5.Create())
             {
-                atom.MD5Hash = md5.ComputeHash(bytes);
+                if (md5 != null)
+                {
+                    atom.MD5Hash = md5.ComputeHash(bytes);
+                }
             }
 
             using (var sha1 = System.Security.Cryptography.SHA1.Create())
             {
-                atom.SHA1Hash = sha1.ComputeHash(bytes);
+                if (sha1 != null)
+                {
+                    atom.SHA1Hash = sha1.ComputeHash(bytes);
+                }
             }
 
             using (var sha256 = System.Security.Cryptography.SHA256.Create())
             {
-                atom.SHA256Hash = sha256.ComputeHash(bytes);
+                if (sha256 != null)
+                {
+                    atom.SHA256Hash = sha256.ComputeHash(bytes);
+                }
             }
         }
 
