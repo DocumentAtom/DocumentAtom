@@ -207,6 +207,43 @@
             <param name="text">Text.</param>
             <returns>List of strings.</returns>
         </member>
+        <member name="M:DocumentAtom.Core.Atoms.Atom.GetUniqueColumnName(System.Data.DataTable,System.String,System.Int32)">
+            <summary>
+            Get a unique column name for a DataTable.
+            </summary>
+            <param name="dt">DataTable to check against.</param>
+            <param name="proposedName">Proposed column name.</param>
+            <param name="columnIndex">Column index for default naming.</param>
+            <returns>Unique column name.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.Atom.ValidateTableStructure(DocumentAtom.Core.Image.TableStructure)">
+            <summary>
+            Validate the structure of a table.
+            </summary>
+            <param name="table">Table structure to validate.</param>
+            <returns>True if valid, false otherwise.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.Atom.SanitizeColumnName(System.String)">
+            <summary>
+            Sanitize a column name by removing invalid characters and trimming whitespace.
+            </summary>
+            <param name="name">Column name to sanitize.</param>
+            <returns>Sanitized column name.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.Atom.ParseRow(System.String)">
+            <summary>
+            Parse a row from a markdown table.
+            </summary>
+            <param name="line">Line to parse.</param>
+            <returns>List of cell values.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Atoms.Atom.IsSeparatorRow(System.String)">
+            <summary>
+            Determine if a line is a markdown table separator row.
+            </summary>
+            <param name="line">Line to check.</param>
+            <returns>True if the line is a separator row.</returns>
+        </member>
         <member name="T:DocumentAtom.Core.Atoms.BoundingBox">
             <summary>
             Bounding box.

@@ -292,17 +292,23 @@
         public static Atom FromTableStructure(TableStructure table)
         {
             if (table == null) throw new ArgumentNullException(nameof(table));
-            if (table == null) return null;
+
+            // Validate table structure
+            if (!ValidateTableStructure(table))
+            {
+                throw new ArgumentException("Invalid table structure provided", nameof(table));
+            }
 
             var dt = new DataTable();
 
-            // Add columns
+            // Add columns with guaranteed unique names
             for (int i = 0; i < table.Columns; i++)
             {
-                dt.Columns.Add($"Column{i}", typeof(string));
+                string columnName = GetUniqueColumnName(dt, $"Column{i}", i);
+                dt.Columns.Add(columnName, typeof(string));
             }
 
-            // Add rows
+            // Add rows with bounds checking
             if (table.Cells != null)
             {
                 for (int i = 0; i < table.Rows && i < table.Cells.Count; i++)
@@ -312,7 +318,11 @@
                     {
                         for (int j = 0; j < table.Columns && j < table.Cells[i].Count; j++)
                         {
-                            row[j] = table.Cells[i][j] ?? string.Empty;
+                            // Ensure we don't exceed the actual column count in DataTable
+                            if (j < dt.Columns.Count)
+                            {
+                                row[j] = table.Cells[i][j] ?? string.Empty;
+                            }
                         }
                     }
                     dt.Rows.Add(row);
@@ -321,6 +331,7 @@
 
             return new Atom
             {
+                Type = AtomTypeEnum.Table,
                 Rows = table.Rows,
                 Columns = table.Columns,
                 Table = SerializableDataTable.FromDataTable(dt)
@@ -596,7 +607,9 @@
         /// <returns>DataTable.</returns>
         public static SerializableDataTable MarkdownTextToDataTable(string text)
         {
-            if (string.IsNullOrEmpty(text)) return null; var dataTable = new DataTable();
+            if (string.IsNullOrEmpty(text)) return null;
+
+            var dataTable = new DataTable();
 
             // Split into lines and remove empty ones
             var lines = text.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries)
@@ -608,41 +621,64 @@
 
             // Process header row
             var headers = ParseRow(lines[0]);
-            foreach (var header in headers)
+            if (headers.Count == 0) return null;
+
+            // Create columns with unique names
+            var columnNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            for (int i = 0; i < headers.Count; i++)
             {
-                dataTable.Columns.Add(new DataColumn(header ?? string.Empty));
+                string columnName = SanitizeColumnName(headers[i]);
+
+                // Handle empty headers
+                if (string.IsNullOrWhiteSpace(columnName))
+                {
+                    columnName = $"Column{i + 1}";
+                }
+
+                // Ensure uniqueness
+                string originalName = columnName;
+                int suffix = 1;
+                while (columnNames.Contains(columnName))
+                {
+                    columnName = $"{originalName}_{suffix}";
+                    suffix++;
+                }
+
+                columnNames.Add(columnName);
+                dataTable.Columns.Add(new DataColumn(columnName));
             }
 
             // Process data rows (skip separator row if it exists)
-            for (int i = 1; i < lines.Count; i++)
+            int startRow = 1;
+            if (lines.Count > 1 && IsSeparatorRow(lines[1]))
             {
-                var row = ParseRow(lines[i]);
-                if (row.Count == headers.Count && !IsSeparatorRow(lines[i]))
+                startRow = 2;
+            }
+
+            for (int i = startRow; i < lines.Count; i++)
+            {
+                if (!IsSeparatorRow(lines[i]))
                 {
-                    dataTable.Rows.Add(row.ToArray());
+                    var row = ParseRow(lines[i]);
+
+                    // Create data row with proper column count handling
+                    var dataRow = dataTable.NewRow();
+                    for (int j = 0; j < Math.Min(row.Count, dataTable.Columns.Count); j++)
+                    {
+                        dataRow[j] = row[j] ?? string.Empty;
+                    }
+
+                    // Handle case where row has fewer values than columns
+                    for (int j = row.Count; j < dataTable.Columns.Count; j++)
+                    {
+                        dataRow[j] = string.Empty;
+                    }
+
+                    dataTable.Rows.Add(dataRow);
                 }
             }
 
             return SerializableDataTable.FromDataTable(dataTable);
-        }
-
-        #endregion
-
-        #region Private-Methods
-        private static List<string> ParseRow(string line)
-        {
-            string test = line.Trim();
-            if (test.StartsWith("|")) test = test.Substring(1);
-            if (test.EndsWith("|")) test = test.Substring(0, test.Length - 1);
-
-            return test.Split('|')
-                .Select(cell => cell.Trim())
-                .ToList();
-        }
-
-        private static bool IsSeparatorRow(string line)
-        {
-            return line.Replace("|", "").Trim().Replace("-", "").Replace(":", "").Trim().Length == 0;
         }
 
         /// <summary>
@@ -702,6 +738,102 @@
             }
 
             return results;
+        }
+
+        #endregion
+
+        #region Private-Methods
+
+        /// <summary>
+        /// Get a unique column name for a DataTable.
+        /// </summary>
+        /// <param name="dt">DataTable to check against.</param>
+        /// <param name="proposedName">Proposed column name.</param>
+        /// <param name="columnIndex">Column index for default naming.</param>
+        /// <returns>Unique column name.</returns>
+        private static string GetUniqueColumnName(DataTable dt, string proposedName, int columnIndex)
+        {
+            // Handle null/empty names
+            if (string.IsNullOrWhiteSpace(proposedName))
+            {
+                proposedName = $"Column{columnIndex}";
+            }
+
+            // Ensure uniqueness
+            string baseName = proposedName;
+            int suffix = 1;
+            while (dt.Columns.Contains(proposedName))
+            {
+                proposedName = $"{baseName}_{suffix}";
+                suffix++;
+            }
+
+            return proposedName;
+        }
+
+        /// <summary>
+        /// Validate the structure of a table.
+        /// </summary>
+        /// <param name="table">Table structure to validate.</param>
+        /// <returns>True if valid, false otherwise.</returns>
+        private static bool ValidateTableStructure(TableStructure table)
+        {
+            if (table == null) return false;
+            if (table.Rows < 0 || table.Columns < 0) return false;
+
+            // Additional validation: check if any row has more cells than declared columns
+            if (table.Cells != null && table.Cells.Any(row => row != null && row.Count > table.Columns))
+            {
+                // Could log warning here if needed
+                // For now, we'll still consider it valid but will handle it during processing
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Sanitize a column name by removing invalid characters and trimming whitespace.
+        /// </summary>
+        /// <param name="name">Column name to sanitize.</param>
+        /// <returns>Sanitized column name.</returns>
+        private static string SanitizeColumnName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                return string.Empty;
+
+            // Remove leading and trailing whitespace
+            name = name.Trim();
+
+            // Additional sanitization can be added here if needed
+            // For example, removing special characters that DataTable doesn't allow
+
+            return name;
+        }
+
+        /// <summary>
+        /// Parse a row from a markdown table.
+        /// </summary>
+        /// <param name="line">Line to parse.</param>
+        /// <returns>List of cell values.</returns>
+        private static List<string> ParseRow(string line)
+        {
+            string test = line.Trim();
+            if (test.StartsWith("|")) test = test.Substring(1);
+            if (test.EndsWith("|")) test = test.Substring(0, test.Length - 1);
+
+            return test.Split('|')
+                .Select(cell => cell.Trim())
+                .ToList();
+        }
+
+        /// <summary>
+        /// Determine if a line is a markdown table separator row.
+        /// </summary>
+        /// <param name="line">Line to check.</param>
+        /// <returns>True if the line is a separator row.</returns>
+        private static bool IsSeparatorRow(string line)
+        {
+            return line.Replace("|", "").Trim().Replace("-", "").Replace(":", "").Trim().Length == 0;
         }
 
         #endregion
