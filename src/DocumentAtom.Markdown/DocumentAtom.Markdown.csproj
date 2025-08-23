@@ -2,7 +2,7 @@
 
 	<PropertyGroup>
 		<TargetFramework>net8.0</TargetFramework>
-		<Version>1.0.32</Version>
+		<Version>1.0.33</Version>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<ApplicationIcon>icon.ico</ApplicationIcon>
@@ -45,7 +45,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="DocumentAtom" Version="1.0.32" />
+	  <PackageReference Include="DocumentAtom" Version="1.0.33" />
 	  <PackageReference Include="SerializableDataTable" Version="1.0.2" />
 	</ItemGroup>
 
