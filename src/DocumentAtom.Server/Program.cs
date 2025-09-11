@@ -2,7 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.Specialized;
     using System.IO;
+    using System.Linq;
     using System.Runtime.Loader;
     using System.Text;
     using System.Threading;
@@ -19,14 +21,12 @@
     using DocumentAtom.Html;
     using DocumentAtom.Image;
     using DocumentAtom.Markdown;
+    using DocumentAtom.Ocr;
     using DocumentAtom.Pdf;
     using DocumentAtom.PowerPoint;
     using DocumentAtom.Text;
     using DocumentAtom.TypeDetection;
     using DocumentAtom.Word;
-    using System.Linq;
-    using System.Collections.Specialized;
-    using System.Runtime.CompilerServices;
 
     /// <summary>
     /// DocumentAtom server.
@@ -225,6 +225,7 @@
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/excel", ExcelAtomRoute, ExceptionRoute);
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/html", HtmlAtomRoute, ExceptionRoute);
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/markdown", MarkdownAtomRoute, ExceptionRoute);
+            _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/ocr", OcrAtomRoute, ExceptionRoute);
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/pdf", PdfAtomRoute, ExceptionRoute);
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/png", PngAtomRoute, ExceptionRoute);
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/powerpoint", PowerPointAtomRoute, ExceptionRoute);
@@ -430,6 +431,31 @@
             ctx.Response.StatusCode = 200;
             await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
             return;
+        }
+
+        private static async Task OcrAtomRoute(HttpContextBase ctx)
+        {
+            if (ctx.Request.DataAsBytes == null && ctx.Request.ContentLength < 1)
+            {
+                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress);
+                ctx.Response.StatusCode = 400;
+                await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.RequestBodyMissing, null, "No request body found."), true));
+                return;
+            }
+
+            ImageProcessorSettings settings = new ImageProcessorSettings
+            {
+                TesseractDataDirectory = _Settings.Tesseract.DataDirectory,
+                TesseractLanguage = _Settings.Tesseract.Language,
+            };
+
+            using (ImageContentExtractor ice = new ImageContentExtractor(_Settings.Tesseract.DataDirectory, _Settings.Tesseract.Language))
+            {
+                ExtractionResult er = ice.ExtractContent(ctx.Request.DataAsBytes);
+                ctx.Response.StatusCode = 200;
+                await ctx.Response.Send(_Serializer.SerializeJson(er, true));
+                return;
+            }
         }
 
         private static async Task PdfAtomRoute(HttpContextBase ctx)

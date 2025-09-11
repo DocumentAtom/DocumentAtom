@@ -1,0 +1,5 @@
+2025-08-26 17:11:19 4aa882a662c4 Debug [DocumentAtom] logging initialized
+2025-08-26 17:11:19 4aa882a662c4 Info [DocumentAtom] starting at 08/26/2025 17:11:19 using process ID 1
+2025-08-26 17:13:05 4aa882a662c4 Warn [DocumentAtom] unknown verb or endpoint POST /atom/ocr from 172.17.0.1
+2025-08-26 17:13:05 4aa882a662c4 Debug [DocumentAtom] POST /atom/ocr from 172.17.0.1: 400
+2025-08-26 17:16:40 4aa882a662c4 Info [DocumentAtom] stopping at 08/26/2025 17:16:40

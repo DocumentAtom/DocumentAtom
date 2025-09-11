@@ -1,0 +1,4 @@
+2025-08-23 03:25:24 7e4c8ce5576b Debug [DocumentAtom] logging initialized
+2025-08-23 03:25:24 7e4c8ce5576b Info [DocumentAtom] starting at 08/23/2025 03:25:24 using process ID 1
+2025-08-23 03:25:32 7e4c8ce5576b Debug [DocumentAtom] POST /atom/html from 172.17.0.1: 200
+2025-08-23 03:25:38 7e4c8ce5576b Info [DocumentAtom] stopping at 08/23/2025 03:25:38
