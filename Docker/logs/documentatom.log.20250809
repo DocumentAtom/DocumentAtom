@@ -1,9 +1,0 @@
-2025-08-09 02:40:05 1dd3e4f7a8b1 Debug [DocumentAtom] logging initialized
-2025-08-09 02:40:05 1dd3e4f7a8b1 Info [DocumentAtom] starting at 08/09/2025 02:40:05 using process ID 1
-2025-08-09 02:40:33 1dd3e4f7a8b1 Warn [DocumentAtom] handling exception for POST /atom/pdf?ocr from 172.17.0.1
-System.IO.DirectoryNotFoundException: The specified Tesseract data directory (tessdata) does not exist.
-   at DocumentAtom.Image.ImageProcessorSettings.set_TesseractDataDirectory(String value) in C:\Code\DocumentAtom\src\DocumentAtom.Image\ImageProcessorSettings.cs:line 27
-   at DocumentAtom.Server.Program.PdfAtomRoute(HttpContextBase ctx) in C:\Code\DocumentAtom\src\DocumentAtom.Server\Program.cs:line 427
-   at WatsonWebserver.Webserver.<>c__DisplayClass16_0.<<AcceptConnections>b__0>d.MoveNext()
-2025-08-09 02:40:33 1dd3e4f7a8b1 Debug [DocumentAtom] POST /atom/pdf?ocr from 172.17.0.1: 500
-2025-08-09 02:40:38 1dd3e4f7a8b1 Info [DocumentAtom] stopping at 08/09/2025 02:40:38
