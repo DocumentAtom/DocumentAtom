@@ -1,4 +1,3 @@
-﻿using DocumentAtom.Core.Helpers;
 using System.Text;
 
 namespace DocumentAtom.Core

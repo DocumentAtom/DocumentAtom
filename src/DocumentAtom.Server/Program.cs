@@ -24,6 +24,7 @@
     using DocumentAtom.Ocr;
     using DocumentAtom.Pdf;
     using DocumentAtom.PowerPoint;
+    using DocumentAtom.RichText;
     using DocumentAtom.Text;
     using DocumentAtom.TypeDetection;
     using DocumentAtom.Word;
@@ -229,6 +230,7 @@
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/pdf", PdfAtomRoute, ExceptionRoute);
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/png", PngAtomRoute, ExceptionRoute);
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/powerpoint", PowerPointAtomRoute, ExceptionRoute);
+            _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/rtf", RtfAtomRoute, ExceptionRoute);
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/text", TextAtomRoute, ExceptionRoute);
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/word", WordAtomRoute, ExceptionRoute);
 
@@ -547,6 +549,41 @@
             List<Atom> ret = new List<Atom>();
 
             PptxProcessor processor = new PptxProcessor(settings, imageSettings);
+            IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
+            if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
+
+            ctx.Response.StatusCode = 200;
+            await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
+            return;
+        }
+
+        private static async Task RtfAtomRoute(HttpContextBase ctx)
+        {
+            if (ctx.Request.DataAsBytes == null && ctx.Request.ContentLength < 1)
+            {
+                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress);
+                ctx.Response.StatusCode = 400;
+                await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.RequestBodyMissing, null, "No request body found."), true));
+                return;
+            }
+
+            RtfProcessorSettings settings = new RtfProcessorSettings();
+            settings.ExtractAtomsFromImages = ctx.Request.QuerystringExists(Constants.OcrQuerystring);
+
+            ImageProcessorSettings imageSettings = null;
+            if (settings.ExtractAtomsFromImages)
+            {
+                imageSettings = new ImageProcessorSettings
+                {
+                    TesseractDataDirectory = _Settings.Tesseract.DataDirectory,
+                    TesseractLanguage = _Settings.Tesseract.Language,
+
+                };
+            }
+
+            List<Atom> ret = new List<Atom>();
+
+            RtfProcessor processor = new RtfProcessor(settings, imageSettings);
             IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
             if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
 

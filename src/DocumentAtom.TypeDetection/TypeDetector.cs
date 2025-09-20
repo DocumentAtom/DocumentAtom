@@ -80,6 +80,87 @@
         private string _XmlMimeType = "text/xml";
         private string _XmlExtension = "xml";
 
+        // Image formats
+        private string _JpegMimeType = "image/jpeg";
+        private string _JpegExtension = "jpg";
+
+        private string _GifMimeType = "image/gif";
+        private string _GifExtension = "gif";
+
+        private string _TiffMimeType = "image/tiff";
+        private string _TiffExtension = "tiff";
+
+        private string _BmpMimeType = "image/bmp";
+        private string _BmpExtension = "bmp";
+
+        private string _WebPMimeType = "image/webp";
+        private string _WebPExtension = "webp";
+
+        private string _IcoMimeType = "image/x-icon";
+        private string _IcoExtension = "ico";
+
+        private string _SvgMimeType = "image/svg+xml";
+        private string _SvgExtension = "svg";
+
+        // Document formats
+        private string _RtfMimeType = "application/rtf";
+        private string _RtfExtension = "rtf";
+
+        private string _EpubMimeType = "application/epub+zip";
+        private string _EpubExtension = "epub";
+
+        private string _DocMimeType = "application/msword";
+        private string _DocExtension = "doc";
+
+        private string _XlsMimeType = "application/vnd.ms-excel";
+        private string _XlsExtension = "xls";
+
+        private string _PptMimeType = "application/vnd.ms-powerpoint";
+        private string _PptExtension = "ppt";
+
+        // OpenDocument formats
+        private string _OdtMimeType = "application/vnd.oasis.opendocument.text";
+        private string _OdtExtension = "odt";
+
+        private string _OdsMimeType = "application/vnd.oasis.opendocument.spreadsheet";
+        private string _OdsExtension = "ods";
+
+        private string _OdpMimeType = "application/vnd.oasis.opendocument.presentation";
+        private string _OdpExtension = "odp";
+
+        // Data formats
+        private string _TsvMimeType = "text/tab-separated-values";
+        private string _TsvExtension = "tsv";
+
+        // Multimedia formats
+        private string _Mp3MimeType = "audio/mpeg";
+        private string _Mp3Extension = "mp3";
+
+        private string _Mp4MimeType = "video/mp4";
+        private string _Mp4Extension = "mp4";
+
+        private string _MovMimeType = "video/quicktime";
+        private string _MovExtension = "mov";
+
+        // Archive formats
+        private string _SevenZMimeType = "application/x-7z-compressed";
+        private string _SevenZExtension = "7z";
+
+        private string _RarMimeType = "application/vnd.rar";
+        private string _RarExtension = "rar";
+
+        private string _TarMimeType = "application/x-tar";
+        private string _TarExtension = "tar";
+
+        private string _GzipMimeType = "application/gzip";
+        private string _GzipExtension = "gz";
+
+
+
+        // Misc formats
+        private string _GpxMimeType = "application/gpx+xml";
+        private string _GpxExtension = "gpx";
+
         private bool _Disposed = false;
 
         #endregion
@@ -171,6 +252,7 @@
                 {
                     #region Binary
 
+                    // Images
                     if (IsPng(data))
                     {
                         tr.MimeType = _PngMimeType;
@@ -178,6 +260,49 @@
                         tr.Type = DocumentTypeEnum.Png;
                         return tr;
                     }
+                    else if (IsJpeg(data))
+                    {
+                        tr.MimeType = _JpegMimeType;
+                        tr.Extension = _JpegExtension;
+                        tr.Type = DocumentTypeEnum.Jpeg;
+                        return tr;
+                    }
+                    else if (IsGif(data))
+                    {
+                        tr.MimeType = _GifMimeType;
+                        tr.Extension = _GifExtension;
+                        tr.Type = DocumentTypeEnum.Gif;
+                        return tr;
+                    }
+                    else if (IsTiff(data))
+                    {
+                        tr.MimeType = _TiffMimeType;
+                        tr.Extension = _TiffExtension;
+                        tr.Type = DocumentTypeEnum.Tiff;
+                        return tr;
+                    }
+                    else if (IsBmp(data))
+                    {
+                        tr.MimeType = _BmpMimeType;
+                        tr.Extension = _BmpExtension;
+                        tr.Type = DocumentTypeEnum.Bmp;
+                        return tr;
+                    }
+                    else if (IsWebP(data))
+                    {
+                        tr.MimeType = _WebPMimeType;
+                        tr.Extension = _WebPExtension;
+                        tr.Type = DocumentTypeEnum.WebP;
+                        return tr;
+                    }
+                    else if (IsIco(data))
+                    {
+                        tr.MimeType = _IcoMimeType;
+                        tr.Extension = _IcoExtension;
+                        tr.Type = DocumentTypeEnum.Ico;
+                        return tr;
+                    }
+                    // Documents and Data
                     else if (IsParquet(data))
                     {
                         tr.MimeType = _ParquetMimeType;
@@ -206,6 +331,93 @@
                         tr.Type = DocumentTypeEnum.Sqlite;
                         return tr;
                     }
+                    // Legacy Office formats
+                    else if (IsDoc(data))
+                    {
+                        tr.MimeType = _DocMimeType;
+                        tr.Extension = _DocExtension;
+                        tr.Type = DocumentTypeEnum.Doc;
+                        return tr;
+                    }
+                    else if (IsXls(data))
+                    {
+                        tr.MimeType = _XlsMimeType;
+                        tr.Extension = _XlsExtension;
+                        tr.Type = DocumentTypeEnum.Xls;
+                        return tr;
+                    }
+                    else if (IsPpt(data))
+                    {
+                        tr.MimeType = _PptMimeType;
+                        tr.Extension = _PptExtension;
+                        tr.Type = DocumentTypeEnum.Ppt;
+                        return tr;
+                    }
+                    // Multimedia
+                    else if (IsMp3(data))
+                    {
+                        tr.MimeType = _Mp3MimeType;
+                        tr.Extension = _Mp3Extension;
+                        tr.Type = DocumentTypeEnum.Mp3;
+                        return tr;
+                    }
+                    else if (IsMp4OrMov(data))
+                    {
+                        // Need to distinguish between MP4 and MOV
+                        // Check for quicktime specific markers
+                        try
+                        {
+                            string content = Encoding.ASCII.GetString(data, 0, Math.Min(data.Length, 100));
+                            if (content.Contains("qt") || content.Contains("moov"))
+                            {
+                                tr.MimeType = _MovMimeType;
+                                tr.Extension = _MovExtension;
+                                tr.Type = DocumentTypeEnum.Mov;
+                            }
+                            else
+                            {
+                                tr.MimeType = _Mp4MimeType;
+                                tr.Extension = _Mp4Extension;
+                                tr.Type = DocumentTypeEnum.Mp4;
+                            }
+                        }
+                        catch
+                        {
+                            tr.MimeType = _Mp4MimeType;
+                            tr.Extension = _Mp4Extension;
+                            tr.Type = DocumentTypeEnum.Mp4;
+                        }
+                        return tr;
+                    }
+                    // Archives
+                    else if (IsSevenZ(data))
+                    {
+                        tr.MimeType = _SevenZMimeType;
+                        tr.Extension = _SevenZExtension;
+                        tr.Type = DocumentTypeEnum.SevenZip;
+                        return tr;
+                    }
+                    else if (IsRar(data))
+                    {
+                        tr.MimeType = _RarMimeType;
+                        tr.Extension = _RarExtension;
+                        tr.Type = DocumentTypeEnum.Rar;
+                        return tr;
+                    }
+                    else if (IsTar(data))
+                    {
+                        tr.MimeType = _TarMimeType;
+                        tr.Extension = _TarExtension;
+                        tr.Type = DocumentTypeEnum.Tar;
+                        return tr;
+                    }
+                    else if (IsGzip(data))
+                    {
+                        tr.MimeType = _GzipMimeType;
+                        tr.Extension = _GzipExtension;
+                        tr.Type = DocumentTypeEnum.Gzip;
+                        return tr;
+                    }
                     else if (IsZipArchive(data))
                     {
                         #region Zip-Archive
@@ -220,7 +432,35 @@
 
                         try
                         {
-                            if (IsIworkArchive(dir.FullName))
+                            if (IsEpub(dir.FullName))
+                            {
+                                tr.MimeType = _EpubMimeType;
+                                tr.Extension = _EpubExtension;
+                                tr.Type = DocumentTypeEnum.Epub;
+                                return tr;
+                            }
+                            else if (IsOdt(dir.FullName))
+                            {
+                                tr.MimeType = _OdtMimeType;
+                                tr.Extension = _OdtExtension;
+                                tr.Type = DocumentTypeEnum.Odt;
+                                return tr;
+                            }
+                            else if (IsOds(dir.FullName))
+                            {
+                                tr.MimeType = _OdsMimeType;
+                                tr.Extension = _OdsExtension;
+                                tr.Type = DocumentTypeEnum.Ods;
+                                return tr;
+                            }
+                            else if (IsOdp(dir.FullName))
+                            {
+                                tr.MimeType = _OdpMimeType;
+                                tr.Extension = _OdpExtension;
+                                tr.Type = DocumentTypeEnum.Odp;
+                                return tr;
+                            }
+                            else if (IsIworkArchive(dir.FullName))
                             {
                                 if (IsKeynoteArchive(dir.FullName))
                                 {
@@ -298,20 +538,37 @@
                 {
                     #region Text
 
-                    if (IsMarkdown(contentType))
+                    // RTF is technically text but starts with specific signature
+                    if (IsRtf(data))
+                    {
+                        tr.MimeType = _RtfMimeType;
+                        tr.Extension = _RtfExtension;
+                        tr.Type = DocumentTypeEnum.Rtf;
+                        return tr;
+                    }
+                    // Content-type specific formats
+                    else if (IsMarkdown(contentType))
                     {
                         tr.MimeType = _MarkdownMimeType;
                         tr.Extension = _MarkdownExtension;
                         tr.Type = DocumentTypeEnum.Markdown;
                         return tr;
                     }
-                    if (IsCsv(contentType))
+                    else if (IsCsv(contentType))
                     {
                         tr.MimeType = _CsvMimeType;
                         tr.Extension = _CsvExtension;
                         tr.Type = DocumentTypeEnum.Csv;
                         return tr;
                     }
+                    else if (IsTsv(contentType))
+                    {
+                        tr.MimeType = _TsvMimeType;
+                        tr.Extension = _TsvExtension;
+                        tr.Type = DocumentTypeEnum.Tsv;
+                        return tr;
+                    }
+                    // Structured data formats
                     else if (IsJson(data))
                     {
                         tr.MimeType = _JsonMimeType;
@@ -321,7 +578,22 @@
                     }
                     else if (IsXml(data))
                     {
-                        if (IsHtml(data))
+                        // Check for specific XML-based formats first
+                        if (IsSvg(data))
+                        {
+                            tr.MimeType = _SvgMimeType;
+                            tr.Extension = _SvgExtension;
+                            tr.Type = DocumentTypeEnum.Svg;
+                            return tr;
+                        }
+                        else if (IsGpx(data))
+                        {
+                            tr.MimeType = _GpxMimeType;
+                            tr.Extension = _GpxExtension;
+                            tr.Type = DocumentTypeEnum.Gpx;
+                            return tr;
+                        }
+                        else if (IsHtml(data))
                         {
                             tr.MimeType = _HtmlMimeType;
                             tr.Extension = _HtmlExtension;
@@ -336,13 +608,15 @@
                             return tr;
                         }
                     }
-                    if (IsHtml(data))
+                    // HTML (non-XML compliant)
+                    else if (IsHtml(data))
                     {
                         tr.MimeType = _HtmlMimeType;
                         tr.Extension = _HtmlExtension;
                         tr.Type = DocumentTypeEnum.Html;
                         return tr;
                     }
+                    // Default to plain text
                     else
                     {
                         tr.MimeType = _TextMimeType;
@@ -536,6 +810,109 @@
                    data[5] == 0x0A &&
                    data[6] == 0x1A &&
                    data[7] == 0x0A;
+        }
+
+        private bool IsJpeg(byte[] data)
+        {
+            // JPEG signature: FF D8 FF
+            if (data.Length < 3) return false;
+
+            return data[0] == 0xFF && data[1] == 0xD8 && data[2] == 0xFF;
+        }
+
+        private bool IsGif(byte[] data)
+        {
+            // GIF signatures: GIF87a or GIF89a
+            if (data.Length < 6) return false;
+
+            return data[0] == 0x47 && data[1] == 0x49 && data[2] == 0x46 &&
+                   data[3] == 0x38 && (data[4] == 0x37 || data[4] == 0x39) && data[5] == 0x61;
+        }
+
+        private bool IsTiff(byte[] data)
+        {
+            // TIFF signature: 49 49 2A 00 (little endian) or 4D 4D 00 2A (big endian)
+            if (data.Length < 4) return false;
+
+            return (data[0] == 0x49 && data[1] == 0x49 && data[2] == 0x2A && data[3] == 0x00) ||
+                   (data[0] == 0x4D && data[1] == 0x4D && data[2] == 0x00 && data[3] == 0x2A);
+        }
+
+        private bool IsBmp(byte[] data)
+        {
+            // BMP signature: BM
+            if (data.Length < 2) return false;
+
+            return data[0] == 0x42 && data[1] == 0x4D;
+        }
+
+        private bool IsWebP(byte[] data)
+        {
+            // WebP signature: RIFF + ????WEBP
+            if (data.Length < 12) return false;
+
+            return data[0] == 0x52 && data[1] == 0x49 && data[2] == 0x46 && data[3] == 0x46 &&
+                   data[8] == 0x57 && data[9] == 0x45 && data[10] == 0x42 && data[11] == 0x50;
+        }
+
+        private bool IsIco(byte[] data)
+        {
+            // ICO signature: 00 00 01 00 (icon) or 00 00 02 00 (cursor)
+            if (data.Length < 4) return false;
+
+            return data[0] == 0x00 && data[1] == 0x00 &&
+                   (data[2] == 0x01 || data[2] == 0x02) && data[3] == 0x00;
+        }
+
+        private bool IsSvg(byte[] data)
+        {
+            try
+            {
+                string text = GetTextWithBestEncoding(data).Trim();
+                return text.StartsWith("<?xml", StringComparison.OrdinalIgnoreCase) &&
+                       text.Contains("<svg", StringComparison.OrdinalIgnoreCase) ||
+                       text.StartsWith("<svg", StringComparison.OrdinalIgnoreCase);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private string GetTextWithBestEncoding(byte[] data)
+        {
+            // Check for BOM first
+            if (data.Length >= 3 && data[0] == 0xEF && data[1] == 0xBB && data[2] == 0xBF)
+                return Encoding.UTF8.GetString(data, 3, data.Length - 3);
+
+            if (data.Length >= 2 && data[0] == 0xFF && data[1] == 0xFE)
+                return Encoding.Unicode.GetString(data, 2, data.Length - 2);
+
+            if (data.Length >= 2 && data[0] == 0xFE && data[1] == 0xFF)
+                return Encoding.BigEndianUnicode.GetString(data, 2, data.Length - 2);
+
+            if (data.Length >= 4 && data[0] == 0xFF && data[1] == 0xFE && data[2] == 0x00 && data[3] == 0x00)
+                return Encoding.UTF32.GetString(data, 4, data.Length - 4);
+
+            if (data.Length >= 4 && data[0] == 0x00 && data[1] == 0x00 && data[2] == 0xFE && data[3] == 0xFF)
+                return Encoding.UTF32.GetString(data, 4, data.Length - 4);
+
+            // Try UTF-8 first, fall back to others if needed
+            try
+            {
+                return Encoding.UTF8.GetString(data);
+            }
+            catch
+            {
+                try
+                {
+                    return Encoding.ASCII.GetString(data);
+                }
+                catch
+                {
+                    return Encoding.Default.GetString(data);
+                }
+            }
         }
 
         private bool IsPostScript(byte[] data)
@@ -800,6 +1177,243 @@
 
             return false;
         }
+
+        private bool IsRtf(byte[] data)
+        {
+            try
+            {
+                string text = Encoding.ASCII.GetString(data, 0, Math.Min(data.Length, 20)).Trim();
+                return text.StartsWith("{\\rtf", StringComparison.OrdinalIgnoreCase);
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private bool IsEpub(string directory)
+        {
+            // EPUB is a ZIP archive with specific structure
+            if (File.Exists(Path.Combine(directory, "mimetype")))
+            {
+                try
+                {
+                    string mimeContent = File.ReadAllText(Path.Combine(directory, "mimetype"));
+                    return mimeContent.Trim() == "application/epub+zip";
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        private bool IsDoc(byte[] data)
+        {
+            // DOC files use OLE2 compound document format
+            // OLE2 signature: D0 CF 11 E0 A1 B1 1A E1
+            if (data.Length < 8) return false;
+
+            bool isOle2 = data[0] == 0xD0 && data[1] == 0xCF && data[2] == 0x11 && data[3] == 0xE0 &&
+                         data[4] == 0xA1 && data[5] == 0xB1 && data[6] == 0x1A && data[7] == 0xE1;
+
+            if (!isOle2) return false;
+
+            // Additional check for Word document indicators
+            // Look for Word-specific OLE streams in the first 2KB
+            try
+            {
+                string content = Encoding.ASCII.GetString(data, 0, Math.Min(data.Length, 2048));
+                return content.Contains("Microsoft Office Word") ||
+                       content.Contains("Word.Document") ||
+                       content.Contains("WordDocument");
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private bool IsXls(byte[] data)
+        {
+            // XLS files use OLE2 compound document format
+            // OLE2 signature: D0 CF 11 E0 A1 B1 1A E1
+            if (data.Length < 8) return false;
+
+            bool isOle2 = data[0] == 0xD0 && data[1] == 0xCF && data[2] == 0x11 && data[3] == 0xE0 &&
+                         data[4] == 0xA1 && data[5] == 0xB1 && data[6] == 0x1A && data[7] == 0xE1;
+
+            if (!isOle2) return false;
+
+            // Additional check for Excel document indicators
+            try
+            {
+                string content = Encoding.ASCII.GetString(data, 0, Math.Min(data.Length, 2048));
+                return content.Contains("Microsoft Office Excel") ||
+                       content.Contains("Excel.Sheet") ||
+                       content.Contains("Workbook");
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private bool IsPpt(byte[] data)
+        {
+            // PPT files use OLE2 compound document format
+            // OLE2 signature: D0 CF 11 E0 A1 B1 1A E1
+            if (data.Length < 8) return false;
+
+            bool isOle2 = data[0] == 0xD0 && data[1] == 0xCF && data[2] == 0x11 && data[3] == 0xE0 &&
+                         data[4] == 0xA1 && data[5] == 0xB1 && data[6] == 0x1A && data[7] == 0xE1;
+
+            if (!isOle2) return false;
+
+            // Additional check for PowerPoint document indicators
+            try
+            {
+                string content = Encoding.ASCII.GetString(data, 0, Math.Min(data.Length, 2048));
+                return content.Contains("Microsoft Office PowerPoint") ||
+                       content.Contains("PowerPoint Document") ||
+                       content.Contains("PP") || // Common PowerPoint indicator
+                       content.Contains("Current User");
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private bool IsOpenDocument(string directory)
+        {
+            // OpenDocument formats are ZIP archives with specific structure
+            return File.Exists(Path.Combine(directory, "META-INF", "manifest.xml")) &&
+                   File.Exists(Path.Combine(directory, "content.xml"));
+        }
+
+        private bool IsOdt(string directory)
+        {
+            if (!IsOpenDocument(directory)) return false;
+
+            try
+            {
+                string manifestPath = Path.Combine(directory, "META-INF", "manifest.xml");
+                string manifestContent = File.ReadAllText(manifestPath);
+                return manifestContent.Contains("application/vnd.oasis.opendocument.text");
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private bool IsOds(string directory)
+        {
+            if (!IsOpenDocument(directory)) return false;
+
+            try
+            {
+                string manifestPath = Path.Combine(directory, "META-INF", "manifest.xml");
+                string manifestContent = File.ReadAllText(manifestPath);
+                return manifestContent.Contains("application/vnd.oasis.opendocument.spreadsheet");
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private bool IsOdp(string directory)
+        {
+            if (!IsOpenDocument(directory)) return false;
+
+            try
+            {
+                string manifestPath = Path.Combine(directory, "META-INF", "manifest.xml");
+                string manifestContent = File.ReadAllText(manifestPath);
+                return manifestContent.Contains("application/vnd.oasis.opendocument.presentation");
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private bool IsSevenZ(byte[] data)
+        {
+            // 7z signature: 37 7A BC AF 27 1C
+            if (data.Length < 6) return false;
+
+            return data[0] == 0x37 && data[1] == 0x7A && data[2] == 0xBC &&
+                   data[3] == 0xAF && data[4] == 0x27 && data[5] == 0x1C;
+        }
+
+        private bool IsRar(byte[] data)
+        {
+            // RAR signature: Rar! or Rar!\x1A\x07\x00 (newer)
+            if (data.Length < 4) return false;
+
+            return data[0] == 0x52 && data[1] == 0x61 && data[2] == 0x72 && data[3] == 0x21;
+        }
+
+        private bool IsTar(byte[] data)
+        {
+            // TAR files have a header at offset 257 with "ustar" signature
+            if (data.Length < 262) return false;
+
+            return data[257] == 0x75 && data[258] == 0x73 && data[259] == 0x74 &&
+                   data[260] == 0x61 && data[261] == 0x72;
+        }
+
+        private bool IsGzip(byte[] data)
+        {
+            // GZIP signature: 1F 8B
+            if (data.Length < 2) return false;
+
+            return data[0] == 0x1F && data[1] == 0x8B;
+        }
+
+        private bool IsMp3(byte[] data)
+        {
+            // MP3 signature: ID3 or starting with 0xFF 0xFB
+            if (data.Length < 3) return false;
+
+            return (data[0] == 0x49 && data[1] == 0x44 && data[2] == 0x33) ||
+                   (data[0] == 0xFF && (data[1] == 0xFB || data[1] == 0xF3 || data[1] == 0xF2));
+        }
+
+        private bool IsMp4OrMov(byte[] data)
+        {
+            // MP4/MOV/QuickTime signature: ftyp or moov at offset 4
+            if (data.Length < 8) return false;
+
+            return (data[4] == 0x66 && data[5] == 0x74 && data[6] == 0x79 && data[7] == 0x70) ||
+                   (data[4] == 0x6D && data[5] == 0x6F && data[6] == 0x6F && data[7] == 0x76);
+        }
+
+
+        private bool IsGpx(byte[] data)
+        {
+            try
+            {
+                string text = GetTextWithBestEncoding(data).Trim();
+                return text.Contains("<gpx") && text.Contains("</gpx>") ||
+                       text.Contains("<?xml") && text.Contains("gpx");
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private bool IsTsv(string contentType)
+        {
+            if (!String.IsNullOrEmpty(contentType) && contentType.ToLower().Contains("/tab-separated-values")) return true;
+            return false;
+        }
+
 
         #endregion
     }

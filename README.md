@@ -15,6 +15,7 @@ DocumentAtom requires that Tesseract v5.0 be installed on the host.  This is req
 | DocumentAtom.Pdf | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Pdf.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Pdf/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Pdf.svg)](https://www.nuget.org/packages/DocumentAtom.Pdf)  |
 | DocumentAtom.PowerPoint | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.PowerPoint.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.PowerPoint/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.PowerPoint.svg)](https://www.nuget.org/packages/DocumentAtom.PowerPoint)  |
 | DocumentAtom.Ocr | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Ocr.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Ocr/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Ocr.svg)](https://www.nuget.org/packages/DocumentAtom.Ocr)  |
+| DocumentAtom.RichText | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.RichText.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.RichText/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.RichText.svg)](https://www.nuget.org/packages/DocumentAtom.RichText)  |
 | DocumentAtom.Text | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Text.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Text/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Text.svg)](https://www.nuget.org/packages/DocumentAtom.Text)  |
 | DocumentAtom.TypeDetection | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.TypeDetection.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.TypeDetection/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.TypeDetection.svg)](https://www.nuget.org/packages/DocumentAtom.TypeDetection)  |
 | DocumentAtom.Word | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Word.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Word/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Word.svg)](https://www.nuget.org/packages/DocumentAtom.Word)  |
@@ -42,6 +43,7 @@ DocumentAtom supports the following input file types:
 - Microsoft PowerPoint (.pptx)
 - PNG images (**requires Tesseract on the host**)
 - PDF
+- Rich text (.rtf)
 
 ## Simple Example 
 
@@ -94,6 +96,7 @@ DocumentAtom is built on the shoulders of several libraries, without which, this
 - [SixLabors.ImageSharp](https://github.com/SixLabors/ImageSharp)
 - [Tesseract](https://github.com/charlesw/tesseract/)
 - [PdfPig](https://github.com/UglyToad/PdfPig)
+- [RtfPipe](github.com/erdomke/RtfPipe)
 - [Tabula](https://github.com/BobLd/tabula-sharp)
 
 Each of these libraries were integrated as NuGet packages, and no source was included or modified from these packages.
@@ -105,7 +108,7 @@ My libraries used within DocumentAtom:
 
 ## RESTful API and Docker
 
-Run the `DocumentAtom.Server` project to start a RESTful server listening on `localhost:8000`.  Modify the `documentatom.json` file to change the webserver, logging, or Tesseract settings.  Alternatively, you can pull `jchristn/documentatom` from [Docker Hub](https://hub.docker.com/repository/docker/jchristn/documentatom/general).
+Run the `DocumentAtom.Server` project to start a RESTful server listening on `localhost:8000`.  Modify the `documentatom.json` file to change the webserver, logging, or Tesseract settings.  Alternatively, you can pull `jchristn/documentatom` from [Docker Hub](https://hub.docker.com/repository/docker/jchristn/documentatom/general).  Refer to the `Docker` directory in the project for assets for running in Docker.
 
 Refer to the Postman collection for examples exercising the APIs.
 

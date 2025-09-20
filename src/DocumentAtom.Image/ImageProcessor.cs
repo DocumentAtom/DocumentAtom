@@ -2,7 +2,6 @@
 {
     using System.Data;
     using System.IO;
-    using System.Security.Cryptography;
     using System.Text;
     using DocumentAtom.Core;
     using DocumentAtom.Core.Atoms;

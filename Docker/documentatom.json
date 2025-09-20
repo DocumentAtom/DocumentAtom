@@ -14,7 +14,7 @@
     "MinimumSeverity": 0
   },
   "Tesseract": {
-    "DataDirectory": "C:\\Program Files\\Tesseract-OCR\\tessdata",
+    "DataDirectory": "/usr/share/tesseract-ocr/5/tessdata",
     "Language": "eng"
   },
   "Webserver": {

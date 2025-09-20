@@ -25,6 +25,94 @@ RUN apt-get update && apt-get install -y \
     tesseract-ocr-eng \
     && rm -rf /var/lib/apt/lists/*
 
+# Set working directory for build
+WORKDIR /src
+
+# Copy only the specific DocumentAtom projects that are built locally (not from NuGet)
+# Excluding: DocumentAtom, DocumentAtom.Core, DocumentAtom.Image, DocumentAtom.Ocr (these come from NuGet)
+# Including: Server and content-type specific projects
+COPY DocumentAtom.Server/*.csproj ./DocumentAtom.Server/
+COPY DocumentAtom.Word/*.csproj ./DocumentAtom.Word/
+COPY DocumentAtom.Excel/*.csproj ./DocumentAtom.Excel/
+COPY DocumentAtom.PowerPoint/*.csproj ./DocumentAtom.PowerPoint/
+COPY DocumentAtom.Pdf/*.csproj ./DocumentAtom.Pdf/
+COPY DocumentAtom.Html/*.csproj ./DocumentAtom.Html/
+COPY DocumentAtom.Markdown/*.csproj ./DocumentAtom.Markdown/
+COPY DocumentAtom.Text/*.csproj ./DocumentAtom.Text/
+COPY DocumentAtom.RichText/*.csproj ./DocumentAtom.RichText/
+COPY DocumentAtom.TypeDetection/*.csproj ./DocumentAtom.TypeDetection/
+COPY DocumentAtom.TextTools/*.csproj ./DocumentAtom.TextTools/
+
+# Copy source code for the same projects
+COPY DocumentAtom.Server/ ./DocumentAtom.Server/
+COPY DocumentAtom.Word/ ./DocumentAtom.Word/
+COPY DocumentAtom.Excel/ ./DocumentAtom.Excel/
+COPY DocumentAtom.PowerPoint/ ./DocumentAtom.PowerPoint/
+COPY DocumentAtom.Pdf/ ./DocumentAtom.Pdf/
+COPY DocumentAtom.Html/ ./DocumentAtom.Html/
+COPY DocumentAtom.Markdown/ ./DocumentAtom.Markdown/
+COPY DocumentAtom.Text/ ./DocumentAtom.Text/
+COPY DocumentAtom.RichText/ ./DocumentAtom.RichText/
+COPY DocumentAtom.TypeDetection/ ./DocumentAtom.TypeDetection/
+COPY DocumentAtom.TextTools/ ./DocumentAtom.TextTools/
+
+# Restore dependencies for the server project
+# Restore for the specific runtime based on TARGETARCH
+RUN if [ "${TARGETARCH}" = "arm64" ]; then \
+        RUNTIME="linux-arm64"; \
+    elif [ "${TARGETARCH}" = "amd64" ]; then \
+        RUNTIME="linux-x64"; \
+    else \
+        RUNTIME="linux-x64"; \
+    fi && \
+    dotnet restore DocumentAtom.Server/DocumentAtom.Server.csproj -r ${RUNTIME}
+
+# Build and publish the application
+# Use the same runtime that was used for restore
+RUN if [ "${TARGETARCH}" = "arm64" ]; then \
+        RUNTIME="linux-arm64"; \
+    elif [ "${TARGETARCH}" = "amd64" ]; then \
+        RUNTIME="linux-x64"; \
+    else \
+        RUNTIME="linux-x64"; \
+    fi && \
+    dotnet publish DocumentAtom.Server/DocumentAtom.Server.csproj \
+        -c Release \
+        -o /app/publish \
+        --no-restore \
+        -r ${RUNTIME} \
+        --self-contained false \
+        -p:GeneratePackageOnBuild=false \
+        -p:IsPackable=false \
+        -p:ErrorOnDuplicatePublishOutputFiles=false
+
+# Runtime stage
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+
+# Set ARCH properly using ARG and ENV
+ARG TARGETARCH
+ENV ARCH=${TARGETARCH}
+RUN echo "Runtime for TARGETARCH: ${TARGETARCH}"
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y \
+    iputils-ping \
+    traceroute \
+    net-tools \
+    curl \
+    wget \
+    dnsutils \
+    iproute2 \
+    vim \
+    file \
+    python3-full \
+    pip \
+    libleptonica-dev \
+    tesseract-ocr \
+    libtesseract-dev \
+    tesseract-ocr-eng \
+    && rm -rf /var/lib/apt/lists/*
+
 # Create necessary directories for all architectures
 RUN mkdir -p \
     /usr/lib/aarch64-linux-gnu \
@@ -93,15 +181,17 @@ ENV TESSDATA_PREFIX=/usr/share/tesseract-ocr/5/tessdata
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
 
 # Python setup
-RUN mv /usr/lib/python3.11/EXTERNALLY-MANAGED /usr/lib/python3.11/EXTERNALLY-MANAGED.old && \
+RUN mv /usr/lib/python3.11/EXTERNALLY-MANAGED /usr/lib/python3.11/EXTERNALLY-MANAGED.old || true && \
     pip install --upgrade pip && pip install pdfplumber && \
     ln -s $(which python3) /usr/bin/py
 
 ENV PATH="/usr/lib/libreoffice/program:${PATH}"
 
-# Set working directory and copy application files
+# Set working directory
 WORKDIR /app
-COPY . /app/
+
+# Copy published application from build stage
+COPY --from=build-env /app/publish .
 
 # Final verification
 RUN echo "=== Final System State for ${TARGETARCH} ===" && \
@@ -113,7 +203,9 @@ RUN echo "=== Final System State for ${TARGETARCH} ===" && \
     echo "Runtime locations:" && \
     ls -la /runtimes/linux-*/native && \
     echo "Tesseract data location:" && \
-    ls -la ${TESSDATA_PREFIX}
+    ls -la ${TESSDATA_PREFIX} && \
+    echo "Application files:" && \
+    ls -la /app/
 
 # Set architecture-specific PROCESSOR_ARCHITECTURE at runtime
 RUN echo '#!/bin/sh' > /set-arch.sh && \

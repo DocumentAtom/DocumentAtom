@@ -20,6 +20,7 @@
 	  <ProjectReference Include="..\DocumentAtom.Text\DocumentAtom.Text.csproj" />
 	  <ProjectReference Include="..\DocumentAtom.TypeDetection\DocumentAtom.TypeDetection.csproj" />
 	  <ProjectReference Include="..\DocumentAtom.Word\DocumentAtom.Word.csproj" />
+	  <ProjectReference Include="..\DocumentAtom.RichText\DocumentAtom.RichText.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -35,13 +36,7 @@
 	  <None Update="clean.sh">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
-	  <None Update="Dockerbuild.bat">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
 	  <None Update="Dockerfile">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Dockerrun.bat">
 	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </None>
 	  <None Update="Dockerrun.sh">

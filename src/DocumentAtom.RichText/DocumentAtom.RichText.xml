@@ -1,0 +1,319 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DocumentAtom.RichText</name>
+    </assembly>
+    <members>
+        <member name="T:DocumentAtom.RichText.RtfDocument">
+            <summary>
+            Represents an RTF document structure.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfDocument.Elements">
+            <summary>
+            Document elements.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.RichText.RtfDocument.AddText(System.String,DocumentAtom.RichText.RtfParseContext)">
+            <summary>
+            Add text to the document.
+            </summary>
+            <param name="text">Text to add.</param>
+            <param name="context">Parsing context.</param>
+        </member>
+        <member name="M:DocumentAtom.RichText.RtfDocument.AddTableCell(DocumentAtom.RichText.RtfParseContext)">
+            <summary>
+            Add a table cell.
+            </summary>
+            <param name="context">Parsing context.</param>
+        </member>
+        <member name="M:DocumentAtom.RichText.RtfDocument.EndCurrentList">
+            <summary>
+            End the current list.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.RichText.RtfDocument.EndTableRow">
+            <summary>
+            End the current table row.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.RichText.RtfDocument.EndParagraph">
+            <summary>
+            End the current paragraph.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.RichText.RtfDocument.FinalizeTables">
+            <summary>
+            Finalize any pending tables.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.RichText.RtfDocumentElement">
+            <summary>
+            Represents an element within an RTF document.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfDocumentElement.Type">
+            <summary>
+            Type of the element.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfDocumentElement.Text">
+            <summary>
+            Text content of the element.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfDocumentElement.RawRtf">
+            <summary>
+            Raw RTF content.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfDocumentElement.IsOrderedList">
+            <summary>
+            Whether this is an ordered list.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfDocumentElement.TableData">
+            <summary>
+            Table data if this element is a table.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfDocumentElement.ListItems">
+            <summary>
+            List items if this element is a list.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.RichText.RtfElementType">
+            <summary>
+            Type of RTF document element.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfElementType.Paragraph">
+            <summary>
+            Paragraph element.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfElementType.Header1">
+            <summary>
+            Header level 1 element.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfElementType.Header2">
+            <summary>
+            Header level 2 element.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfElementType.Header3">
+            <summary>
+            Header level 3 element.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfElementType.ListItem">
+            <summary>
+            List item element.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfElementType.List">
+            <summary>
+            List element.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfElementType.Table">
+            <summary>
+            Table element.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfElementType.TableCell">
+            <summary>
+            Table cell element.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.RichText.RtfParseContext">
+            <summary>
+            Context information for RTF parsing.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfParseContext.Bold">
+            <summary>
+            Whether text is bold.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfParseContext.Italic">
+            <summary>
+            Whether text is italic.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfParseContext.FontSize">
+            <summary>
+            Font size.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfParseContext.FontIndex">
+            <summary>
+            Font index.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfParseContext.StyleIndex">
+            <summary>
+            Style index.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfParseContext.OutlineLevel">
+            <summary>
+            Outline level.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfParseContext.InListText">
+            <summary>
+            Whether currently in list text.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfParseContext.ListStyle">
+            <summary>
+            List style.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfParseContext.ListLevel">
+            <summary>
+            List level.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfParseContext.InTable">
+            <summary>
+            Whether currently in a table.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfParseContext.InListSequence">
+            <summary>
+            Whether currently in a list sequence.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.RichText.RtfParseContext.Clone">
+            <summary>
+            Create a clone of this context.
+            </summary>
+            <returns>Cloned context.</returns>
+        </member>
+        <member name="M:DocumentAtom.RichText.RtfParseContext.ResetParagraph">
+            <summary>
+            Reset paragraph-specific formatting.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.RichText.RtfProcessor">
+            <summary>
+            Create atoms from Rich Text Format .rtf documents.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfProcessor.Settings">
+            <summary>
+            Rtf processor settings.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.RichText.RtfProcessor.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.RichText.RtfProcessor.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.RichText.RtfProcessor.#ctor(DocumentAtom.RichText.RtfProcessorSettings,DocumentAtom.Image.ImageProcessorSettings)">
+            <summary>
+            Create atoms from text documents.
+            </summary>
+            <param name="settings">Processor settings.</param>
+            <param name="imageSettings">Image processor settings.</param>
+        </member>
+        <member name="M:DocumentAtom.RichText.RtfProcessor.Extract(System.String)">
+            <summary>
+            Extract atoms from a file.
+            </summary>
+            <param name="filename">Filename.</param>
+            <returns>Atoms.</returns>
+        </member>
+        <member name="M:DocumentAtom.RichText.RtfProcessor.GetMetadata(System.String)">
+            <summary>
+            Retrieve metadata from a file.
+            </summary>
+            <param name="filename">Filename.</param>
+            <returns>Dictionary.</returns>
+        </member>
+        <member name="T:DocumentAtom.RichText.RtfProcessorSettings">
+            <summary>
+            Settings for Rich Text Format .rtf processor.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.RichText.RtfProcessorSettings.#ctor">
+            <summary>
+            Settings for Rich Text Format .rtf processor.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.RichText.RtfTableData">
+            <summary>
+            Represents table data extracted from RTF.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfTableData.DataTable">
+            <summary>
+            DataTable containing the extracted table data.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfTableData.RawRtf">
+            <summary>
+            Raw RTF content for this table.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.RichText.RtfToken">
+            <summary>
+            Represents a token in RTF parsing.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfToken.Type">
+            <summary>
+            Type of the token.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfToken.Text">
+            <summary>
+            Text content of the token.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfToken.Parameter">
+            <summary>
+            Optional parameter value for control words.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.RichText.RtfTokenType">
+            <summary>
+            Type of RTF token.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfTokenType.ControlWord">
+            <summary>
+            Control word token.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfTokenType.ControlSymbol">
+            <summary>
+            Control symbol token.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfTokenType.Text">
+            <summary>
+            Text token.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfTokenType.GroupStart">
+            <summary>
+            Group start token.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfTokenType.GroupEnd">
+            <summary>
+            Group end token.
+            </summary>
+        </member>
+    </members>
+</doc>

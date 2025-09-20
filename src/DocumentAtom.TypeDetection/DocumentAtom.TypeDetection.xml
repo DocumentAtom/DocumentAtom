@@ -14,6 +14,11 @@
             Unknown.
             </summary>
         </member>
+        <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Bmp">
+            <summary>
+            BMP image.
+            </summary>
+        </member>
         <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Csv">
             <summary>
             CSV.
@@ -24,14 +29,49 @@
             DataTable.
             </summary>
         </member>
+        <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Doc">
+            <summary>
+            DOC, legacy Word document.
+            </summary>
+        </member>
         <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Docx">
             <summary>
             DOCX, Word document.
             </summary>
         </member>
+        <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Epub">
+            <summary>
+            EPUB e-book.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Gif">
+            <summary>
+            GIF image.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Gpx">
+            <summary>
+            GPX GPS Exchange Format.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Gzip">
+            <summary>
+            GZIP compressed file.
+            </summary>
+        </member>
         <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Html">
             <summary>
             HTML.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Ico">
+            <summary>
+            ICO, Icon file.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Jpeg">
+            <summary>
+            JPEG image.
             </summary>
         </member>
         <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Json">
@@ -49,9 +89,39 @@
             Markdown.
             </summary>
         </member>
+        <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Mov">
+            <summary>
+            MOV video.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Mp3">
+            <summary>
+            MP3 audio.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Mp4">
+            <summary>
+            MP4 video.
+            </summary>
+        </member>
         <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Numbers">
             <summary>
             Numbers.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Odp">
+            <summary>
+            ODP, OpenDocument Presentation.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Ods">
+            <summary>
+            ODS, OpenDocument Spreadsheet.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Odt">
+            <summary>
+            ODT, OpenDocument Text.
             </summary>
         </member>
         <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Pages">
@@ -79,9 +149,29 @@
             PostScript.
             </summary>
         </member>
+        <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Ppt">
+            <summary>
+            PPT, legacy PowerPoint presentation.
+            </summary>
+        </member>
         <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Pptx">
             <summary>
             PPTX, PowerPoint presentation.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Rar">
+            <summary>
+            RAR archive.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Rtf">
+            <summary>
+            RTF document.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.SevenZip">
+            <summary>
+            7Z archive.
             </summary>
         </member>
         <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Sqlite">
@@ -89,15 +179,45 @@
             Sqlite database file.
             </summary>
         </member>
+        <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Svg">
+            <summary>
+            SVG, Scalable Vector Graphics.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Tar">
+            <summary>
+            TAR archive.
+            </summary>
+        </member>
         <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Text">
             <summary>
             Text.
             </summary>
         </member>
+        <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Tiff">
+            <summary>
+            TIFF image.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Tsv">
+            <summary>
+            TSV, Tab-separated values.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.WebP">
+            <summary>
+            WebP image.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Xls">
+            <summary>
+            XLS, legacy Excel spreadsheet.
+            </summary>
+        </member>
         <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Xlsx">
             <summary>
             XLSX, Excel spreadsheet.
-            </summary> 
+            </summary>
         </member>
         <member name="F:DocumentAtom.TypeDetection.DocumentTypeEnum.Xml">
             <summary>

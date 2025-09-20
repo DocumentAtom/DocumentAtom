@@ -51,6 +51,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentAtom.Html", "Docume
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.HtmlProcessor", "Test.HtmlProcessor\Test.HtmlProcessor.csproj", "{077E3586-D8D2-45C4-A879-B44AAFED3562}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentAtom.RichText", "DocumentAtom.RichText\DocumentAtom.RichText.csproj", "{8A1E2D4F-9B5C-4E7A-A8D3-F6B2C9E1A4B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.RtfProcessor", "Test.RtfProcessor\Test.RtfProcessor.csproj", "{2C3E5F8B-A7D9-4F2A-B6E8-D1C4A9F5E2B3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -153,6 +157,14 @@ Global
 		{077E3586-D8D2-45C4-A879-B44AAFED3562}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{077E3586-D8D2-45C4-A879-B44AAFED3562}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{077E3586-D8D2-45C4-A879-B44AAFED3562}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A1E2D4F-9B5C-4E7A-A8D3-F6B2C9E1A4B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A1E2D4F-9B5C-4E7A-A8D3-F6B2C9E1A4B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A1E2D4F-9B5C-4E7A-A8D3-F6B2C9E1A4B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A1E2D4F-9B5C-4E7A-A8D3-F6B2C9E1A4B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C3E5F8B-A7D9-4F2A-B6E8-D1C4A9F5E2B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C3E5F8B-A7D9-4F2A-B6E8-D1C4A9F5E2B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C3E5F8B-A7D9-4F2A-B6E8-D1C4A9F5E2B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C3E5F8B-A7D9-4F2A-B6E8-D1C4A9F5E2B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
