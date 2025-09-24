@@ -11,6 +11,11 @@ namespace DocumentAtom.RichText
         private List<RtfDocumentElement> _Elements = new List<RtfDocumentElement>();
 
         /// <summary>
+        /// Parse context used during parsing.
+        /// </summary>
+        public RtfParseContext ParseContext { get; set; } = new RtfParseContext();
+
+        /// <summary>
         /// Document elements.
         /// </summary>
         public List<RtfDocumentElement> Elements
@@ -140,18 +145,56 @@ namespace DocumentAtom.RichText
                 // Only create table if we have reasonable content (limit to max 10 columns)
                 if (filteredRow.Count > 0 && filteredRow.Count <= 10)
                 {
-                    // Ensure we have enough columns for this row
-                    while (_CurrentTable.Columns.Count < filteredRow.Count)
+                    // Check if this looks like table content or standalone text that should end the table
+                    bool looksLikeTableContent = true;
+
+                    // If we already have table rows and this row contains content that looks like headers or standalone text
+                    if (_CurrentTable.Rows.Count > 0 && filteredRow.Count <= 3)
                     {
-                        _CurrentTable.Columns.Add($"Column{_CurrentTable.Columns.Count + 1}", typeof(string));
+                        foreach (string cell in filteredRow)
+                        {
+                            // Look for patterns that suggest this is not table data but standalone content
+                            if (cell.Contains("Header") || cell.Contains("picture") ||
+                                cell.Contains("follows here") || cell.Contains("Subtext"))
+                            {
+                                looksLikeTableContent = false;
+                                break;
+                            }
+                        }
                     }
 
-                    var row = _CurrentTable.NewRow();
-                    for (int i = 0; i < filteredRow.Count && i < _CurrentTable.Columns.Count; i++)
+                    if (looksLikeTableContent)
                     {
-                        row[i] = filteredRow[i];
+                        // Ensure we have enough columns for this row
+                        while (_CurrentTable.Columns.Count < filteredRow.Count)
+                        {
+                            _CurrentTable.Columns.Add($"Column{_CurrentTable.Columns.Count + 1}", typeof(string));
+                        }
+
+                        var row = _CurrentTable.NewRow();
+                        for (int i = 0; i < filteredRow.Count && i < _CurrentTable.Columns.Count; i++)
+                        {
+                            row[i] = filteredRow[i];
+                        }
+                        _CurrentTable.Rows.Add(row);
                     }
-                    _CurrentTable.Rows.Add(row);
+                    else
+                    {
+                        // This doesn't look like table content - don't add the row and signal table should end
+                        // Process the content as regular text instead
+                        foreach (string cell in filteredRow)
+                        {
+                            if (!string.IsNullOrWhiteSpace(cell))
+                            {
+                                // Add as text element
+                                Elements.Add(new RtfDocumentElement
+                                {
+                                    Type = RtfElementType.Paragraph,
+                                    Text = cell.Trim()
+                                });
+                            }
+                        }
+                    }
                 }
 
                 _CurrentTableRow.Clear();
@@ -328,6 +371,25 @@ namespace DocumentAtom.RichText
                 {
                     return true;
                 }
+            }
+
+            // Additional heuristic: if list items contain words suggesting ordered sequence
+            // and follow a pattern like "Ordered list item 1", "Ordered list item 2", etc.
+            if (listItems.Count >= 2)
+            {
+                bool allContainOrderedHints = true;
+                for (int i = 0; i < listItems.Count; i++)
+                {
+                    string item = listItems[i].Trim().ToLowerInvariant();
+                    // Check if item contains "ordered" keyword or ends with sequential numbers
+                    if (!item.Contains("ordered") &&
+                        !System.Text.RegularExpressions.Regex.IsMatch(item, @"\b" + (i + 1) + @"\b"))
+                    {
+                        allContainOrderedHints = false;
+                        break;
+                    }
+                }
+                if (allContainOrderedHints) return true;
             }
 
             return false;

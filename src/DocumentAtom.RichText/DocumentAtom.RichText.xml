@@ -4,9 +4,79 @@
         <name>DocumentAtom.RichText</name>
     </assembly>
     <members>
+        <member name="T:DocumentAtom.RichText.RtfDestination">
+            <summary>
+            RTF destination types.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfDestination.Normal">
+            <summary>
+            Normal destination.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfDestination.FontTable">
+            <summary>
+            Font table destination.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfDestination.ColorTable">
+            <summary>
+            Color table destination.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfDestination.StyleSheet">
+            <summary>
+            Style sheet destination.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfDestination.Info">
+            <summary>
+            Info destination.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfDestination.Picture">
+            <summary>
+            Picture destination.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfDestination.ListTable">
+            <summary>
+            List table destination.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfDestination.ListOverrideTable">
+            <summary>
+            List override table destination.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfDestination.IgnoredDestination">
+            <summary>
+            Ignored destination.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfDestination.ShapeInst">
+            <summary>
+            Shape instance destination.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfDestination.ShapeProperty">
+            <summary>
+            Shape property destination.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfDestination.UnknownDestination">
+            <summary>
+            Unknown destination.
+            </summary>
+        </member>
         <member name="T:DocumentAtom.RichText.RtfDocument">
             <summary>
             Represents an RTF document structure.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfDocument.ParseContext">
+            <summary>
+            Parse context used during parsing.
             </summary>
         </member>
         <member name="P:DocumentAtom.RichText.RtfDocument.Elements">
@@ -129,7 +199,22 @@
         </member>
         <member name="T:DocumentAtom.RichText.RtfParseContext">
             <summary>
-            Context information for RTF parsing.
+            RTF parsing context.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfParseContext.State">
+            <summary>
+            Current parsing state.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfParseContext.CurrentDestination">
+            <summary>
+            Current RTF destination.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfParseContext.DestinationStack">
+            <summary>
+            Stack of RTF destinations.
             </summary>
         </member>
         <member name="P:DocumentAtom.RichText.RtfParseContext.Bold">
@@ -144,22 +229,32 @@
         </member>
         <member name="P:DocumentAtom.RichText.RtfParseContext.FontSize">
             <summary>
-            Font size.
+            Current font size.
             </summary>
         </member>
         <member name="P:DocumentAtom.RichText.RtfParseContext.FontIndex">
             <summary>
-            Font index.
+            Current font index.
             </summary>
         </member>
         <member name="P:DocumentAtom.RichText.RtfParseContext.StyleIndex">
             <summary>
-            Style index.
+            Current style index.
             </summary>
         </member>
         <member name="P:DocumentAtom.RichText.RtfParseContext.OutlineLevel">
             <summary>
-            Outline level.
+            Current outline level.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfParseContext.ListStyle">
+            <summary>
+            Current list style.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfParseContext.ListLevel">
+            <summary>
+            Current list level.
             </summary>
         </member>
         <member name="P:DocumentAtom.RichText.RtfParseContext.InListText">
@@ -167,35 +262,121 @@
             Whether currently in list text.
             </summary>
         </member>
-        <member name="P:DocumentAtom.RichText.RtfParseContext.ListStyle">
+        <member name="P:DocumentAtom.RichText.RtfParseContext.InListSequence">
             <summary>
-            List style.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.RichText.RtfParseContext.ListLevel">
-            <summary>
-            List level.
+            Whether currently in list sequence.
             </summary>
         </member>
         <member name="P:DocumentAtom.RichText.RtfParseContext.InTable">
             <summary>
-            Whether currently in a table.
+            Whether currently in table.
             </summary>
         </member>
-        <member name="P:DocumentAtom.RichText.RtfParseContext.InListSequence">
+        <member name="P:DocumentAtom.RichText.RtfParseContext.InTableCell">
             <summary>
-            Whether currently in a list sequence.
+            Whether currently in table cell.
             </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfParseContext.GroupLevel">
+            <summary>
+            Current group level.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfParseContext.CurrentListItems">
+            <summary>
+            Current list items.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfParseContext.CurrentTable">
+            <summary>
+            Current table being parsed.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfParseContext.CurrentTableRow">
+            <summary>
+            Current table row being parsed.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfParseContext.CurrentCellText">
+            <summary>
+            Current table cell text.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfParseContext.CurrentText">
+            <summary>
+            Current text being parsed.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfParseContext.IsOrderedList">
+            <summary>
+            Whether current list is ordered.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfParseContext.PendingListMarker">
+            <summary>
+            Pending list marker.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfParseContext.CurrentImageData">
+            <summary>
+            Current image data being parsed.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.RichText.RtfParseContext.ExtractedImages">
+            <summary>
+            Extracted images.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.RichText.RtfParseContext.ShouldIgnoreContent">
+            <summary>
+            Check if we should ignore content in the current destination.
+            </summary>
+            <returns>True if content should be ignored.</returns>
         </member>
         <member name="M:DocumentAtom.RichText.RtfParseContext.Clone">
             <summary>
-            Create a clone of this context.
+            Clone the context.
             </summary>
             <returns>Cloned context.</returns>
         </member>
         <member name="M:DocumentAtom.RichText.RtfParseContext.ResetParagraph">
             <summary>
-            Reset paragraph-specific formatting.
+            Reset paragraph-specific properties.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.RichText.RtfParseState">
+            <summary>
+            RTF parser state.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfParseState.Normal">
+            <summary>
+            Normal parsing state.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfParseState.InHeader">
+            <summary>
+            In header parsing state.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfParseState.InList">
+            <summary>
+            In list parsing state.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfParseState.InTable">
+            <summary>
+            In table parsing state.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfParseState.InImage">
+            <summary>
+            In image parsing state.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfParseState.SkipGroup">
+            <summary>
+            Skip group parsing state.
             </summary>
         </member>
         <member name="T:DocumentAtom.RichText.RtfProcessor">
@@ -205,40 +386,43 @@
         </member>
         <member name="P:DocumentAtom.RichText.RtfProcessor.Settings">
             <summary>
-            Rtf processor settings.
+            RTF processor settings for controlling document processing behavior.
             </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when attempting to set to null.</exception>
         </member>
         <member name="M:DocumentAtom.RichText.RtfProcessor.Dispose(System.Boolean)">
             <summary>
-            Dispose.
+            Dispose of managed and unmanaged resources.
             </summary>
-            <param name="disposing">Disposing.</param>
+            <param name="disposing">True to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
         </member>
         <member name="M:DocumentAtom.RichText.RtfProcessor.Dispose">
             <summary>
-            Dispose.
+            Dispose of all resources used by the RTF processor.
             </summary>
         </member>
         <member name="M:DocumentAtom.RichText.RtfProcessor.#ctor(DocumentAtom.RichText.RtfProcessorSettings,DocumentAtom.Image.ImageProcessorSettings)">
             <summary>
-            Create atoms from text documents.
+            Create atoms from RTF documents.
             </summary>
-            <param name="settings">Processor settings.</param>
-            <param name="imageSettings">Image processor settings.</param>
+            <param name="settings">RTF processor settings, defaults to new instance if null.</param>
+            <param name="imageSettings">Image processor settings for handling embedded images, can be null.</param>
         </member>
         <member name="M:DocumentAtom.RichText.RtfProcessor.Extract(System.String)">
             <summary>
-            Extract atoms from a file.
+            Extract atoms from an RTF file.
             </summary>
-            <param name="filename">Filename.</param>
-            <returns>Atoms.</returns>
+            <param name="filename">Path to the RTF file to process.</param>
+            <returns>Enumerable collection of atoms representing document structure and content.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when filename is null or empty.</exception>
         </member>
         <member name="M:DocumentAtom.RichText.RtfProcessor.GetMetadata(System.String)">
             <summary>
-            Retrieve metadata from a file.
+            Retrieve metadata from an RTF file.
             </summary>
-            <param name="filename">Filename.</param>
-            <returns>Dictionary.</returns>
+            <param name="filename">Path to the RTF file.</param>
+            <returns>Dictionary containing metadata key-value pairs extracted from RTF document properties.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when filename is null or empty.</exception>
         </member>
         <member name="T:DocumentAtom.RichText.RtfProcessorSettings">
             <summary>
@@ -267,27 +451,37 @@
         </member>
         <member name="T:DocumentAtom.RichText.RtfToken">
             <summary>
-            Represents a token in RTF parsing.
+            Represents an RTF token.
             </summary>
         </member>
         <member name="P:DocumentAtom.RichText.RtfToken.Type">
             <summary>
-            Type of the token.
+            Token type.
             </summary>
         </member>
         <member name="P:DocumentAtom.RichText.RtfToken.Text">
             <summary>
-            Text content of the token.
+            Token text.
             </summary>
         </member>
         <member name="P:DocumentAtom.RichText.RtfToken.Parameter">
             <summary>
-            Optional parameter value for control words.
+            Parameter value for control words.
             </summary>
         </member>
         <member name="T:DocumentAtom.RichText.RtfTokenType">
             <summary>
-            Type of RTF token.
+            RTF token types.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfTokenType.GroupStart">
+            <summary>
+            Group start token.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.RichText.RtfTokenType.GroupEnd">
+            <summary>
+            Group end token.
             </summary>
         </member>
         <member name="F:DocumentAtom.RichText.RtfTokenType.ControlWord">
@@ -303,16 +497,6 @@
         <member name="F:DocumentAtom.RichText.RtfTokenType.Text">
             <summary>
             Text token.
-            </summary>
-        </member>
-        <member name="F:DocumentAtom.RichText.RtfTokenType.GroupStart">
-            <summary>
-            Group start token.
-            </summary>
-        </member>
-        <member name="F:DocumentAtom.RichText.RtfTokenType.GroupEnd">
-            <summary>
-            Group end token.
             </summary>
         </member>
     </members>

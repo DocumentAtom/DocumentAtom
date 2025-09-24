@@ -1,22 +1,22 @@
 namespace DocumentAtom.RichText
 {
     /// <summary>
-    /// Represents a token in RTF parsing.
+    /// Represents an RTF token.
     /// </summary>
     internal class RtfToken
     {
         /// <summary>
-        /// Type of the token.
+        /// Token type.
         /// </summary>
         public RtfTokenType Type { get; set; }
 
         /// <summary>
-        /// Text content of the token.
+        /// Token text.
         /// </summary>
-        public string Text { get; set; } = "";
+        public string Text { get; set; } = string.Empty;
 
         /// <summary>
-        /// Optional parameter value for control words.
+        /// Parameter value for control words.
         /// </summary>
         public int? Parameter { get; set; }
     }

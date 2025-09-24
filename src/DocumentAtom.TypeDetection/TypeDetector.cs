@@ -25,18 +25,42 @@
 
         #region Private-Members
 
-        private string _Header = "[ViewTypeDetector] ";
+        private string _Header = "[TypeDetector] ";
         private string _TempDirectory = "./temp/";
         private DirectoryInfo _DirInfo = null;
+
+        private string _BmpMimeType = "image/bmp";
+        private string _BmpExtension = "bmp";
 
         private string _CsvMimeType = "text/csv";
         private string _CsvExtension = "csv";
 
+        private string _DocMimeType = "application/msword";
+        private string _DocExtension = "doc";
+
         private string _DocxMimeType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
         private string _DocxExtension = "docx";
 
+        private string _EpubMimeType = "application/epub+zip";
+        private string _EpubExtension = "epub";
+
+        private string _GifMimeType = "image/gif";
+        private string _GifExtension = "gif";
+
+        private string _GpxMimeType = "application/gpx+xml";
+        private string _GpxExtension = "gpx";
+
+        private string _GzipMimeType = "application/gzip";
+        private string _GzipExtension = "gz";
+
         private string _HtmlMimeType = "application/html";
         private string _HtmlExtension = "html";
+
+        private string _IcoMimeType = "image/x-icon";
+        private string _IcoExtension = "ico";
+
+        private string _JpegMimeType = "image/jpeg";
+        private string _JpegExtension = "jpg";
 
         private string _JsonMimeType = "application/json";
         private string _JsonExtension = "json";
@@ -47,8 +71,26 @@
         private string _MarkdownMimeType = "text/markdown";
         private string _MarkdownExtension = "md";
 
+        private string _MovMimeType = "video/quicktime";
+        private string _MovExtension = "mov";
+
+        private string _Mp3MimeType = "audio/mpeg";
+        private string _Mp3Extension = "mp3";
+
+        private string _Mp4MimeType = "video/mp4";
+        private string _Mp4Extension = "mp4";
+
         private string _NumbersMimeType = "application/vnd.apple.numbers";
         private string _NumbersExtension = "numbers";
+
+        private string _OdpMimeType = "application/vnd.oasis.opendocument.presentation";
+        private string _OdpExtension = "odp";
+
+        private string _OdsMimeType = "application/vnd.oasis.opendocument.spreadsheet";
+        private string _OdsExtension = "ods";
+
+        private string _OdtMimeType = "application/vnd.oasis.opendocument.text";
+        private string _OdtExtension = "odt";
 
         private string _PagesMimeType = "application/vnd.apple.pages";
         private string _PagesExtension = "pages";
@@ -65,101 +107,50 @@
         private string _PostScriptMimeType = "application/postscript";
         private string _PostScriptExtension = "ps";
 
+        private string _PptMimeType = "application/vnd.ms-powerpoint";
+        private string _PptExtension = "ppt";
+
         private string _PptxMimeType = "application/vnd.openxmlformats-officedocument.presentationml.presentation";
         private string _PptxExtension = "pptx";
+
+        private string _RarMimeType = "application/vnd.rar";
+        private string _RarExtension = "rar";
+
+        private string _RtfMimeType = "application/rtf";
+        private string _RtfExtension = "rtf";
+
+        private string _SevenZMimeType = "application/x-7z-compressed";
+        private string _SevenZExtension = "7z";
 
         private string _SqliteMimeType = "application/vnd.sqlite3";
         private string _SqliteExtension = "db";
 
+        private string _SvgMimeType = "image/svg+xml";
+        private string _SvgExtension = "svg";
+
+        private string _TarMimeType = "application/x-tar";
+        private string _TarExtension = "tar";
+
         private string _TextMimeType = "text/plain";
         private string _TextExtension = "txt";
+
+        private string _TiffMimeType = "image/tiff";
+        private string _TiffExtension = "tiff";
+
+        private string _TsvMimeType = "text/tab-separated-values";
+        private string _TsvExtension = "tsv";
+
+        private string _WebPMimeType = "image/webp";
+        private string _WebPExtension = "webp";
+
+        private string _XlsMimeType = "application/vnd.ms-excel";
+        private string _XlsExtension = "xls";
 
         private string _XlsxMimeType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
         private string _XlsxExtension = "xlsx";
 
         private string _XmlMimeType = "text/xml";
         private string _XmlExtension = "xml";
-
-        // Image formats
-        private string _JpegMimeType = "image/jpeg";
-        private string _JpegExtension = "jpg";
-
-        private string _GifMimeType = "image/gif";
-        private string _GifExtension = "gif";
-
-        private string _TiffMimeType = "image/tiff";
-        private string _TiffExtension = "tiff";
-
-        private string _BmpMimeType = "image/bmp";
-        private string _BmpExtension = "bmp";
-
-        private string _WebPMimeType = "image/webp";
-        private string _WebPExtension = "webp";
-
-        private string _IcoMimeType = "image/x-icon";
-        private string _IcoExtension = "ico";
-
-        private string _SvgMimeType = "image/svg+xml";
-        private string _SvgExtension = "svg";
-
-        // Document formats
-        private string _RtfMimeType = "application/rtf";
-        private string _RtfExtension = "rtf";
-
-        private string _EpubMimeType = "application/epub+zip";
-        private string _EpubExtension = "epub";
-
-        private string _DocMimeType = "application/msword";
-        private string _DocExtension = "doc";
-
-        private string _XlsMimeType = "application/vnd.ms-excel";
-        private string _XlsExtension = "xls";
-
-        private string _PptMimeType = "application/vnd.ms-powerpoint";
-        private string _PptExtension = "ppt";
-
-        // OpenDocument formats
-        private string _OdtMimeType = "application/vnd.oasis.opendocument.text";
-        private string _OdtExtension = "odt";
-
-        private string _OdsMimeType = "application/vnd.oasis.opendocument.spreadsheet";
-        private string _OdsExtension = "ods";
-
-        private string _OdpMimeType = "application/vnd.oasis.opendocument.presentation";
-        private string _OdpExtension = "odp";
-
-        // Data formats
-        private string _TsvMimeType = "text/tab-separated-values";
-        private string _TsvExtension = "tsv";
-
-        // Multimedia formats
-        private string _Mp3MimeType = "audio/mpeg";
-        private string _Mp3Extension = "mp3";
-
-        private string _Mp4MimeType = "video/mp4";
-        private string _Mp4Extension = "mp4";
-
-        private string _MovMimeType = "video/quicktime";
-        private string _MovExtension = "mov";
-
-        // Archive formats
-        private string _SevenZMimeType = "application/x-7z-compressed";
-        private string _SevenZExtension = "7z";
-
-        private string _RarMimeType = "application/vnd.rar";
-        private string _RarExtension = "rar";
-
-        private string _TarMimeType = "application/x-tar";
-        private string _TarExtension = "tar";
-
-        private string _GzipMimeType = "application/gzip";
-        private string _GzipExtension = "gz";
-
-
-
-        // Misc formats
-        private string _GpxMimeType = "application/gpx+xml";
-        private string _GpxExtension = "gpx";
 
         private bool _Disposed = false;
 
@@ -1393,7 +1384,6 @@
                    (data[4] == 0x6D && data[5] == 0x6F && data[6] == 0x6F && data[7] == 0x76);
         }
 
-
         private bool IsGpx(byte[] data)
         {
             try
@@ -1413,7 +1403,6 @@
             if (!String.IsNullOrEmpty(contentType) && contentType.ToLower().Contains("/tab-separated-values")) return true;
             return false;
         }
-
 
         #endregion
     }

@@ -1,10 +1,18 @@
 namespace DocumentAtom.RichText
 {
     /// <summary>
-    /// Type of RTF token.
+    /// RTF token types.
     /// </summary>
     internal enum RtfTokenType
     {
+        /// <summary>
+        /// Group start token.
+        /// </summary>
+        GroupStart,
+        /// <summary>
+        /// Group end token.
+        /// </summary>
+        GroupEnd,
         /// <summary>
         /// Control word token.
         /// </summary>
@@ -16,14 +24,6 @@ namespace DocumentAtom.RichText
         /// <summary>
         /// Text token.
         /// </summary>
-        Text,
-        /// <summary>
-        /// Group start token.
-        /// </summary>
-        GroupStart,
-        /// <summary>
-        /// Group end token.
-        /// </summary>
-        GroupEnd
+        Text
     }
 }

@@ -35,7 +35,6 @@ Please feel free to file issues, enhancement requests, or start discussions abou
 ## Types Supported
 
 DocumentAtom supports the following input file types:
-- Text
 - HTML
 - Markdown
 - Microsoft Word (.docx)
@@ -44,6 +43,7 @@ DocumentAtom supports the following input file types:
 - PNG images (**requires Tesseract on the host**)
 - PDF
 - Rich text (.rtf)
+- Text
 
 ## Simple Example 
 

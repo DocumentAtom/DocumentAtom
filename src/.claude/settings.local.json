@@ -47,7 +47,13 @@
       "Bash(\"bin\\Debug\\net8.0\\Test.RtfProcessor.exe\" \"Sample\\test.rtf\" q)",
       "Bash(\"bin\\Debug\\net8.0\\Test.RtfProcessor.exe\" noocr q)",
       "Bash(del \"C:\\Code\\DocumentAtom\\src\\debug.txt\")",
-      "Bash(\"bin\\Debug\\net8.0\\Test.RtfProcessor.exe\" \"Sample\\test.rtf\" noocr q)"
+      "Bash(\"bin\\Debug\\net8.0\\Test.RtfProcessor.exe\" \"Sample\\test.rtf\" noocr q)",
+      "Read(//g/Shared drives/View Systems/Test Files/Files By Type/Rtf/**)",
+      "Bash(\"bin\\Debug\\net8.0\\Test.RtfProcessor.exe\" \"G:\\Shared drives\\View Systems\\Test Files\\Files By Type\\Rtf\\1.rtf\")",
+      "Bash(binDebugnet8.0Test.RtfProcessor.exe \"G:\\Shared drives\\View Systems\\Test Files\\Files By Type\\Rtf\\1.rtf\")",
+      "Bash(./bin/Debug/net8.0/Test.RtfProcessor.exe \"G:\\Shared drives\\View Systems\\Test Files\\Files By Type\\Rtf\\1.rtf\")",
+      "Bash(\"bin\\Debug\\net8.0\\Test.RtfProcessor.exe\" \"G:\\Shared drives\\View Systems\\Test Files\\Files By Type\\Rtf\\1.rtf\" q)",
+      "Bash(test_1rtf.bat)"
     ],
     "deny": [],
     "ask": []
