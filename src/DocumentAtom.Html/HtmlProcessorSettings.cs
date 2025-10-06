@@ -54,6 +54,14 @@
         /// </summary>
         public bool ExtractDataAttributes { get; set; } = false;
 
+        /// <summary>
+        /// Enable or disable hierarchical structure building.
+        /// When true, atoms will be organized in a tree structure based on heading levels.
+        /// When false, atoms will be returned as a flat list.
+        /// Default is true.
+        /// </summary>
+        public bool BuildHierarchy { get; set; } = true;
+
         #endregion
 
         #region Private-Members

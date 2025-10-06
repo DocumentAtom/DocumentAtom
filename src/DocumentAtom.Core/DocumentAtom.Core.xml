@@ -9,6 +9,11 @@
             An atom is a small, self-contained unit of content from a document.
             </summary>
         </member>
+        <member name="P:DocumentAtom.Core.Atoms.Atom.ParentGUID">
+            <summary>
+            Parent atom GUID.
+            </summary>
+        </member>
         <member name="P:DocumentAtom.Core.Atoms.Atom.GUID">
             <summary>
             GUID.

@@ -15,6 +15,11 @@
         #region Public-Members
 
         /// <summary>
+        /// Parent atom GUID.
+        /// </summary>
+        public Guid? ParentGUID { get; set; } = null;
+
+        /// <summary>
         /// GUID.
         /// </summary>
         public Guid GUID { get; set; } = Guid.NewGuid();

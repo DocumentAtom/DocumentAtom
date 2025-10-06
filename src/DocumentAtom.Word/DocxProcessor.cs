@@ -27,6 +27,7 @@
 #pragma warning disable CS8602 // Dereference of a possibly null reference.
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
 #pragma warning disable CS8604 // Possible null reference argument.
+#pragma warning disable CS8603 // Possible null reference return.
 
         #region Public-Members
 
@@ -134,7 +135,22 @@
         public override IEnumerable<Atom> Extract(string filename)
         {
             if (String.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
-            return ProcessFile(filename);
+
+            List<Atom> flatAtoms = ProcessFile(filename).ToList();
+
+            if (_ProcessorSettings.BuildHierarchy)
+            {
+                return BuildHierarchy(flatAtoms);
+            }
+            else
+            {
+                // Ensure ParentGUID is null for flat list
+                foreach (Atom atom in flatAtoms)
+                {
+                    atom.ParentGUID = null;
+                }
+                return flatAtoms;
+            }
         }
 
         /// <summary>
@@ -192,9 +208,187 @@
 
         #region Private-Methods
 
+        /// <summary>
+        /// Build hierarchical structure from flat list of atoms.
+        /// </summary>
+        /// <param name="flatAtoms">Flat list of atoms.</param>
+        /// <returns>Root-level atoms with hierarchical structure.</returns>
+        private IEnumerable<Atom> BuildHierarchy(List<Atom> flatAtoms)
+        {
+            if (flatAtoms == null || flatAtoms.Count == 0)
+            {
+                return Enumerable.Empty<Atom>();
+            }
+
+            // Track the current header at each level (1-9 for Word heading styles)
+            Dictionary<int, Atom> currentHeaders = new Dictionary<int, Atom>();
+
+            // Root-level atoms (top of tree)
+            List<Atom> rootAtoms = new List<Atom>();
+
+            foreach (Atom atom in flatAtoms)
+            {
+                if (atom.HeaderLevel != null && atom.HeaderLevel.Value > 0)
+                {
+                    // This is a header atom
+                    int level = atom.HeaderLevel.Value;
+
+                    // Find parent header (nearest header with level < current level)
+                    Atom parent = FindParentHeader(currentHeaders, level);
+
+                    if (parent != null)
+                    {
+                        // Add this header as a Quark (child) of the parent
+                        if (parent.Quarks == null)
+                        {
+                            parent.Quarks = new List<Atom>();
+                        }
+                        atom.ParentGUID = parent.GUID;
+                        parent.Quarks.Add(atom);
+                    }
+                    else
+                    {
+                        // No parent found - this is a root-level header
+                        atom.ParentGUID = null;
+                        rootAtoms.Add(atom);
+                    }
+
+                    // Update current header tracking
+                    currentHeaders[level] = atom;
+
+                    // Clear tracking for deeper levels (they're now out of scope)
+                    ClearDeeperLevels(currentHeaders, level);
+                }
+                else
+                {
+                    // This is a non-header atom (text, list, table, image, etc.)
+                    // Add it to the deepest current header, or to root if no headers exist
+                    Atom parent = FindDeepestHeader(currentHeaders);
+
+                    if (parent != null)
+                    {
+                        // Add as Quark to deepest header
+                        if (parent.Quarks == null)
+                        {
+                            parent.Quarks = new List<Atom>();
+                        }
+                        atom.ParentGUID = parent.GUID;
+                        parent.Quarks.Add(atom);
+                    }
+                    else
+                    {
+                        // No headers yet - add to root
+                        atom.ParentGUID = null;
+                        rootAtoms.Add(atom);
+                    }
+                }
+            }
+
+            return rootAtoms;
+        }
+
+        /// <summary>
+        /// Find the parent header for a given header level.
+        /// Returns the nearest header with level less than the specified level.
+        /// </summary>
+        /// <param name="currentHeaders">Dictionary of current headers by level.</param>
+        /// <param name="level">Header level to find parent for.</param>
+        /// <returns>Parent header atom, or null if no parent exists.</returns>
+        private Atom FindParentHeader(Dictionary<int, Atom> currentHeaders, int level)
+        {
+            // Search backwards from level-1 down to 1
+            for (int i = level - 1; i >= 1; i--)
+            {
+                if (currentHeaders.ContainsKey(i))
+                {
+                    return currentHeaders[i];
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Find the deepest (highest level number) current header.
+        /// </summary>
+        /// <param name="currentHeaders">Dictionary of current headers by level.</param>
+        /// <returns>Deepest header atom, or null if no headers exist.</returns>
+        private Atom FindDeepestHeader(Dictionary<int, Atom> currentHeaders)
+        {
+            if (currentHeaders.Count == 0)
+            {
+                return null;
+            }
+
+            int deepestLevel = currentHeaders.Keys.Max();
+            return currentHeaders[deepestLevel];
+        }
+
+        /// <summary>
+        /// Clear tracking for header levels deeper than the specified level.
+        /// </summary>
+        /// <param name="currentHeaders">Dictionary of current headers by level.</param>
+        /// <param name="level">Current level.</param>
+        private void ClearDeeperLevels(Dictionary<int, Atom> currentHeaders, int level)
+        {
+            // Remove all levels > current level (max Word heading level is 9)
+            for (int i = level + 1; i <= 9; i++)
+            {
+                currentHeaders.Remove(i);
+            }
+        }
+
+        /// <summary>
+        /// Get the heading level from a paragraph's style.
+        /// </summary>
+        /// <param name="paragraph">Paragraph to analyze.</param>
+        /// <returns>Heading level (1-9) or null if not a heading.</returns>
+        private int? GetHeadingLevel(Paragraph paragraph)
+        {
+            var styleId = paragraph.ParagraphProperties?.ParagraphStyleId?.Val?.Value;
+
+            if (String.IsNullOrEmpty(styleId))
+            {
+                return null;
+            }
+
+            // Common heading style patterns:
+            // - "Heading1", "Heading2", etc.
+            // - "heading1", "heading2", etc.
+            // - "Heading 1", "Heading 2", etc.
+            // - "Title" (treat as Heading 1)
+            // - "Subtitle" (treat as Heading 2)
+
+            string styleLower = styleId.ToLower().Replace(" ", "");
+
+            if (styleLower == "title")
+            {
+                return 1;
+            }
+
+            if (styleLower == "subtitle")
+            {
+                return 2;
+            }
+
+            // Try to extract number from "heading1", "heading2", etc.
+            if (styleLower.StartsWith("heading"))
+            {
+                string numberPart = styleLower.Substring("heading".Length);
+                if (int.TryParse(numberPart, out int level) && level >= 1 && level <= 9)
+                {
+                    return level;
+                }
+            }
+
+            return null;
+        }
+
         private IEnumerable<Atom> ProcessFile(string filename)
         {
             if (String.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
+
+            int position = 0;
 
             using (WordprocessingDocument doc = WordprocessingDocument.Open(filename, false))
             {
@@ -229,6 +423,7 @@
                                     Type = AtomTypeEnum.List,
                                     OrderedList = isOrderedList ? currentList : null,
                                     UnorderedList = !isOrderedList ? currentList : null,
+                                    Position = position++,
                                     MD5Hash = HashHelper.MD5Hash(currentList),
                                     SHA1Hash = HashHelper.SHA1Hash(currentList),
                                     SHA256Hash = HashHelper.SHA256Hash(currentList),
@@ -241,10 +436,15 @@
                             string paragraphText = ExtractTextFromParagraph(paragraph);
                             if (!string.IsNullOrWhiteSpace(paragraphText))
                             {
+                                // Detect heading level from paragraph style
+                                int? headingLevel = GetHeadingLevel(paragraph);
+
                                 yield return new Atom
                                 {
                                     Type = AtomTypeEnum.Text,
                                     Text = paragraphText,
+                                    HeaderLevel = headingLevel,
+                                    Position = position++,
                                     MD5Hash = HashHelper.MD5Hash(paragraphText),
                                     SHA1Hash = HashHelper.SHA1Hash(paragraphText),
                                     SHA256Hash = HashHelper.SHA256Hash(paragraphText),
@@ -262,6 +462,7 @@
                                 Type = AtomTypeEnum.List,
                                 OrderedList = isOrderedList ? currentList : null,
                                 UnorderedList = !isOrderedList ? currentList : null,
+                                Position = position++,
                                 MD5Hash = HashHelper.MD5Hash(currentList),
                                 SHA1Hash = HashHelper.SHA1Hash(currentList),
                                 SHA256Hash = HashHelper.SHA256Hash(currentList),
@@ -277,6 +478,7 @@
                         {
                             Type = AtomTypeEnum.Table,
                             Table = SerializableDataTable.FromDataTable(dt),
+                            Position = position++,
                             MD5Hash = HashHelper.MD5Hash(dt),
                             SHA1Hash = HashHelper.SHA1Hash(dt),
                             SHA256Hash = HashHelper.SHA256Hash(dt),
@@ -292,6 +494,7 @@
                         Type = AtomTypeEnum.List,
                         OrderedList = isOrderedList ? currentList : null,
                         UnorderedList = !isOrderedList ? currentList : null,
+                        Position = position++,
                         MD5Hash = HashHelper.MD5Hash(currentList),
                         SHA1Hash = HashHelper.SHA1Hash(currentList),
                         SHA256Hash = HashHelper.SHA256Hash(currentList),
@@ -317,6 +520,7 @@
                         {
                             Type = AtomTypeEnum.Binary,
                             Binary = bytes,
+                            Position = position++,
                             MD5Hash = HashHelper.MD5Hash(bytes),
                             SHA1Hash = HashHelper.SHA1Hash(bytes),
                             SHA256Hash = HashHelper.SHA256Hash(bytes),
@@ -431,6 +635,7 @@
 
         #endregion
 
+#pragma warning restore CS8603 // Possible null reference return.
 #pragma warning restore CS8604 // Possible null reference argument.
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
 #pragma warning restore CS8602 // Dereference of a possibly null reference.

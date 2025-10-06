@@ -37,6 +37,36 @@
             <param name="filename">Filename.</param>
             <returns>Atoms.</returns>
         </member>
+        <member name="M:DocumentAtom.Markdown.MarkdownProcessor.BuildHierarchy(System.Collections.Generic.List{DocumentAtom.Core.Atoms.Atom})">
+            <summary>
+            Build hierarchical structure from flat list of atoms.
+            </summary>
+            <param name="flatAtoms">Flat list of atoms.</param>
+            <returns>Root-level atoms with hierarchical structure.</returns>
+        </member>
+        <member name="M:DocumentAtom.Markdown.MarkdownProcessor.FindParentHeader(System.Collections.Generic.Dictionary{System.Int32,DocumentAtom.Core.Atoms.Atom},System.Int32)">
+            <summary>
+            Find the parent header for a given header level.
+            Returns the nearest header with level less than the specified level.
+            </summary>
+            <param name="currentHeaders">Dictionary of current headers by level.</param>
+            <param name="level">Header level to find parent for.</param>
+            <returns>Parent header atom, or null if no parent exists.</returns>
+        </member>
+        <member name="M:DocumentAtom.Markdown.MarkdownProcessor.FindDeepestHeader(System.Collections.Generic.Dictionary{System.Int32,DocumentAtom.Core.Atoms.Atom})">
+            <summary>
+            Find the deepest (highest level number) current header.
+            </summary>
+            <param name="currentHeaders">Dictionary of current headers by level.</param>
+            <returns>Deepest header atom, or null if no headers exist.</returns>
+        </member>
+        <member name="M:DocumentAtom.Markdown.MarkdownProcessor.ClearDeeperLevels(System.Collections.Generic.Dictionary{System.Int32,DocumentAtom.Core.Atoms.Atom},System.Int32)">
+            <summary>
+            Clear tracking for header levels deeper than the specified level.
+            </summary>
+            <param name="currentHeaders">Dictionary of current headers by level.</param>
+            <param name="level">Current level.</param>
+        </member>
         <member name="T:DocumentAtom.Markdown.MarkdownProcessorSettings">
             <summary>
             Settings for markdown processor.
@@ -45,6 +75,14 @@
         <member name="P:DocumentAtom.Markdown.MarkdownProcessorSettings.Delimiters">
             <summary>
             Delimiters that indicate the beginning of a new atom.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Markdown.MarkdownProcessorSettings.BuildHierarchy">
+            <summary>
+            Enable or disable hierarchical structure building.
+            When true, atoms will be organized in a tree structure based on header levels.
+            When false, atoms will be returned as a flat list.
+            Default is true.
             </summary>
         </member>
         <member name="M:DocumentAtom.Markdown.MarkdownProcessorSettings.#ctor">

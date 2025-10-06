@@ -46,9 +46,54 @@
             <param name="filename">Filename.</param>
             <returns>Dictionary.</returns>
         </member>
+        <member name="M:DocumentAtom.Word.DocxProcessor.BuildHierarchy(System.Collections.Generic.List{DocumentAtom.Core.Atoms.Atom})">
+            <summary>
+            Build hierarchical structure from flat list of atoms.
+            </summary>
+            <param name="flatAtoms">Flat list of atoms.</param>
+            <returns>Root-level atoms with hierarchical structure.</returns>
+        </member>
+        <member name="M:DocumentAtom.Word.DocxProcessor.FindParentHeader(System.Collections.Generic.Dictionary{System.Int32,DocumentAtom.Core.Atoms.Atom},System.Int32)">
+            <summary>
+            Find the parent header for a given header level.
+            Returns the nearest header with level less than the specified level.
+            </summary>
+            <param name="currentHeaders">Dictionary of current headers by level.</param>
+            <param name="level">Header level to find parent for.</param>
+            <returns>Parent header atom, or null if no parent exists.</returns>
+        </member>
+        <member name="M:DocumentAtom.Word.DocxProcessor.FindDeepestHeader(System.Collections.Generic.Dictionary{System.Int32,DocumentAtom.Core.Atoms.Atom})">
+            <summary>
+            Find the deepest (highest level number) current header.
+            </summary>
+            <param name="currentHeaders">Dictionary of current headers by level.</param>
+            <returns>Deepest header atom, or null if no headers exist.</returns>
+        </member>
+        <member name="M:DocumentAtom.Word.DocxProcessor.ClearDeeperLevels(System.Collections.Generic.Dictionary{System.Int32,DocumentAtom.Core.Atoms.Atom},System.Int32)">
+            <summary>
+            Clear tracking for header levels deeper than the specified level.
+            </summary>
+            <param name="currentHeaders">Dictionary of current headers by level.</param>
+            <param name="level">Current level.</param>
+        </member>
+        <member name="M:DocumentAtom.Word.DocxProcessor.GetHeadingLevel(DocumentFormat.OpenXml.Wordprocessing.Paragraph)">
+            <summary>
+            Get the heading level from a paragraph's style.
+            </summary>
+            <param name="paragraph">Paragraph to analyze.</param>
+            <returns>Heading level (1-9) or null if not a heading.</returns>
+        </member>
         <member name="T:DocumentAtom.Word.DocxProcessorSettings">
             <summary>
             Settings for Microsoft Word .docx processor.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Word.DocxProcessorSettings.BuildHierarchy">
+            <summary>
+            Enable or disable hierarchical structure building.
+            When true, atoms will be organized in a tree structure based on heading styles (Heading 1, Heading 2, etc.).
+            When false, atoms will be returned as a flat list.
+            Default is true.
             </summary>
         </member>
         <member name="M:DocumentAtom.Word.DocxProcessorSettings.#ctor">

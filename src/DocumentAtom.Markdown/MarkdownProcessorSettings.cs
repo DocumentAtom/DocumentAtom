@@ -7,8 +7,6 @@
     /// </summary>
     public class MarkdownProcessorSettings : ProcessorSettingsBase
     {
-        #region Public-Members
-
         /// <summary>
         /// Delimiters that indicate the beginning of a new atom.
         /// </summary>
@@ -32,9 +30,13 @@
             }
         }
 
-        #endregion
-
-        #region Private-Members
+        /// <summary>
+        /// Enable or disable hierarchical structure building.
+        /// When true, atoms will be organized in a tree structure based on header levels.
+        /// When false, atoms will be returned as a flat list.
+        /// Default is true.
+        /// </summary>
+        public bool BuildHierarchy { get; set; } = true;
 
         private List<string> _Delimiters = new List<string>
         {
@@ -43,10 +45,6 @@
             "¶"
         };
 
-        #endregion
-
-        #region Constructors-and-Factories
-
         /// <summary>
         /// Settings for markdown processor.
         /// </summary>
@@ -54,15 +52,5 @@
         { 
 
         }
-
-        #endregion
-
-        #region Public-Methods
-
-        #endregion
-
-        #region Private-Methods
-
-        #endregion
     }
 }

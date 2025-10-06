@@ -46,9 +46,25 @@
             <param name="filename">Filename.</param>
             <returns>Dictionary.</returns>
         </member>
+        <member name="M:DocumentAtom.PowerPoint.PptxProcessor.BuildHierarchy(System.Collections.Generic.List{DocumentAtom.Core.Atoms.Atom})">
+            <summary>
+            Build hierarchical structure from flat list of atoms.
+            Groups atoms by PageNumber, making the first atom on each page the parent.
+            </summary>
+            <param name="flatAtoms">Flat list of atoms.</param>
+            <returns>Root-level atoms with hierarchical structure.</returns>
+        </member>
         <member name="T:DocumentAtom.PowerPoint.PptxProcessorSettings">
             <summary>
             Settings for Microsoft PowerPoint .pptx processor.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.PowerPoint.PptxProcessorSettings.BuildHierarchy">
+            <summary>
+            Enable or disable hierarchical structure building.
+            When true, atoms will be organized in a tree structure based on slide (page) grouping.
+            When false, atoms will be returned as a flat list.
+            Default is true.
             </summary>
         </member>
         <member name="M:DocumentAtom.PowerPoint.PptxProcessorSettings.#ctor">

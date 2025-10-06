@@ -121,7 +121,22 @@
         public override IEnumerable<Atom> Extract(string filename)
         {
             if (String.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
-            return ProcessFile(filename);
+
+            List<Atom> flatAtoms = ProcessFile(filename).ToList();
+
+            if (_ProcessorSettings.BuildHierarchy)
+            {
+                return BuildHierarchy(flatAtoms);
+            }
+            else
+            {
+                // Ensure ParentGUID is null for flat list
+                foreach (Atom atom in flatAtoms)
+                {
+                    atom.ParentGUID = null;
+                }
+                return flatAtoms;
+            }
         }
 
         /// <summary>
@@ -174,9 +189,57 @@
 
         #region Private-Methods
 
+        /// <summary>
+        /// Build hierarchical structure from flat list of atoms.
+        /// Groups atoms by PageNumber, making the first atom on each page the parent.
+        /// </summary>
+        /// <param name="flatAtoms">Flat list of atoms.</param>
+        /// <returns>Root-level atoms with hierarchical structure.</returns>
+        private IEnumerable<Atom> BuildHierarchy(List<Atom> flatAtoms)
+        {
+            if (flatAtoms == null || flatAtoms.Count == 0)
+            {
+                return Enumerable.Empty<Atom>();
+            }
+
+            // Group atoms by PageNumber
+            var atomsByPage = flatAtoms.GroupBy(a => a.PageNumber).OrderBy(g => g.Key);
+
+            List<Atom> rootAtoms = new List<Atom>();
+
+            foreach (var pageGroup in atomsByPage)
+            {
+                var atomsOnPage = pageGroup.ToList();
+
+                if (atomsOnPage.Count == 0) continue;
+
+                // First atom on the page becomes the parent
+                Atom parentAtom = atomsOnPage[0];
+                parentAtom.ParentGUID = null;
+                rootAtoms.Add(parentAtom);
+
+                // Remaining atoms become Quarks of the parent
+                if (atomsOnPage.Count > 1)
+                {
+                    parentAtom.Quarks = new List<Atom>();
+
+                    for (int i = 1; i < atomsOnPage.Count; i++)
+                    {
+                        Atom childAtom = atomsOnPage[i];
+                        childAtom.ParentGUID = parentAtom.GUID;
+                        parentAtom.Quarks.Add(childAtom);
+                    }
+                }
+            }
+
+            return rootAtoms;
+        }
+
         private IEnumerable<Atom> ProcessFile(string filename)
         {
             if (String.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
+
+            int position = 0;
 
             using (PresentationDocument pptx = PresentationDocument.Open(filename, false))
             {
@@ -199,6 +262,7 @@
                             Type = AtomTypeEnum.Text,
                             Title = titleAndSubtitle.title,
                             PageNumber = slideNumber,
+                            Position = position++,
                             MD5Hash = HashHelper.MD5Hash(titleAndSubtitle.title),
                             SHA1Hash = HashHelper.SHA1Hash(titleAndSubtitle.title),
                             SHA256Hash = HashHelper.SHA256Hash(titleAndSubtitle.title),
@@ -213,6 +277,7 @@
                             Type = AtomTypeEnum.Text,
                             Subtitle = titleAndSubtitle.subtitle,
                             PageNumber = slideNumber,
+                            Position = position++,
                             MD5Hash = HashHelper.MD5Hash(titleAndSubtitle.subtitle),
                             SHA1Hash = HashHelper.SHA1Hash(titleAndSubtitle.subtitle),
                             SHA256Hash = HashHelper.SHA256Hash(titleAndSubtitle.subtitle),
@@ -230,6 +295,7 @@
                                 Type = AtomTypeEnum.Text,
                                 Text = textContent,
                                 PageNumber = slideNumber,
+                                Position = position++,
                                 MD5Hash = HashHelper.MD5Hash(textContent),
                                 SHA1Hash = HashHelper.SHA1Hash(textContent),
                                 SHA256Hash = HashHelper.SHA256Hash(textContent),
@@ -248,6 +314,7 @@
                             UnorderedList = list,
                             OrderedList = null,
                             PageNumber = slideNumber,
+                            Position = position++,
                             MD5Hash = HashHelper.MD5Hash(list),
                             SHA1Hash = HashHelper.SHA1Hash(list),
                             SHA256Hash = HashHelper.SHA256Hash(list),
@@ -264,6 +331,7 @@
                             Type = AtomTypeEnum.Table,
                             Table = SerializableDataTable.FromDataTable(table),
                             PageNumber = slideNumber,
+                            Position = position++,
                             MD5Hash = HashHelper.MD5Hash(table),
                             SHA1Hash = HashHelper.SHA1Hash(table),
                             SHA256Hash = HashHelper.SHA256Hash(table),
@@ -285,6 +353,7 @@
                                 Type = AtomTypeEnum.Binary,
                                 Binary = bytes,
                                 PageNumber = slideNumber,
+                                Position = position++,
                                 MD5Hash = HashHelper.MD5Hash(bytes),
                                 SHA1Hash = HashHelper.SHA1Hash(bytes),
                                 SHA256Hash = HashHelper.SHA256Hash(bytes),

@@ -19,6 +19,8 @@
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
 #pragma warning disable CS8601 // Possible null reference assignment.
 #pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+#pragma warning disable CS8603 // Possible null reference return.
+#pragma warning disable CS8604 // Possible null reference argument.
 
         #region Public-Members
 
@@ -95,7 +97,20 @@
                 throw;
             }
 
-            return atoms;
+            // Build hierarchy if enabled
+            if (_Settings.BuildHierarchy)
+            {
+                return BuildHierarchy(atoms);
+            }
+            else
+            {
+                // Ensure ParentGUID is null for flat list
+                foreach (Atom atom in atoms)
+                {
+                    atom.ParentGUID = null;
+                }
+                return atoms;
+            }
         }
 
         /// <summary>
@@ -110,6 +125,136 @@
         #endregion
 
         #region Private-Methods
+
+        /// <summary>
+        /// Build hierarchical structure from flat list of atoms.
+        /// </summary>
+        /// <param name="flatAtoms">Flat list of atoms.</param>
+        /// <returns>Root-level atoms with hierarchical structure.</returns>
+        private IEnumerable<Atom> BuildHierarchy(List<Atom> flatAtoms)
+        {
+            if (flatAtoms == null || flatAtoms.Count == 0)
+            {
+                return Enumerable.Empty<Atom>();
+            }
+
+            // Track the current header at each level (1-6)
+            Dictionary<int, Atom> currentHeaders = new Dictionary<int, Atom>();
+
+            // Root-level atoms (top of tree)
+            List<Atom> rootAtoms = new List<Atom>();
+
+            foreach (Atom atom in flatAtoms)
+            {
+                if (atom.HeaderLevel != null && atom.HeaderLevel.Value > 0)
+                {
+                    // This is a header atom
+                    int level = atom.HeaderLevel.Value;
+
+                    // Find parent header (nearest header with level < current level)
+                    Atom parent = FindParentHeader(currentHeaders, level);
+
+                    if (parent != null)
+                    {
+                        // Add this header as a Quark (child) of the parent
+                        if (parent.Quarks == null)
+                        {
+                            parent.Quarks = new List<Atom>();
+                        }
+                        atom.ParentGUID = parent.GUID;
+                        parent.Quarks.Add(atom);
+                    }
+                    else
+                    {
+                        // No parent found - this is a root-level header
+                        atom.ParentGUID = null;
+                        rootAtoms.Add(atom);
+                    }
+
+                    // Update current header tracking
+                    currentHeaders[level] = atom;
+
+                    // Clear tracking for deeper levels (they're now out of scope)
+                    ClearDeeperLevels(currentHeaders, level);
+                }
+                else
+                {
+                    // This is a non-header atom (text, list, table, code, etc.)
+                    // Add it to the deepest current header, or to root if no headers exist
+                    Atom parent = FindDeepestHeader(currentHeaders);
+
+                    if (parent != null)
+                    {
+                        // Add as Quark to deepest header
+                        if (parent.Quarks == null)
+                        {
+                            parent.Quarks = new List<Atom>();
+                        }
+                        atom.ParentGUID = parent.GUID;
+                        parent.Quarks.Add(atom);
+                    }
+                    else
+                    {
+                        // No headers yet - add to root
+                        atom.ParentGUID = null;
+                        rootAtoms.Add(atom);
+                    }
+                }
+            }
+
+            return rootAtoms;
+        }
+
+        /// <summary>
+        /// Find the parent header for a given header level.
+        /// Returns the nearest header with level less than the specified level.
+        /// </summary>
+        /// <param name="currentHeaders">Dictionary of current headers by level.</param>
+        /// <param name="level">Header level to find parent for.</param>
+        /// <returns>Parent header atom, or null if no parent exists.</returns>
+        private Atom FindParentHeader(Dictionary<int, Atom> currentHeaders, int level)
+        {
+            // Search backwards from level-1 down to 1
+            for (int i = level - 1; i >= 1; i--)
+            {
+                if (currentHeaders.ContainsKey(i))
+                {
+                    return currentHeaders[i];
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Find the deepest (highest level number) current header.
+        /// </summary>
+        /// <param name="currentHeaders">Dictionary of current headers by level.</param>
+        /// <returns>Deepest header atom, or null if no headers exist.</returns>
+        private Atom FindDeepestHeader(Dictionary<int, Atom> currentHeaders)
+        {
+            if (currentHeaders.Count == 0)
+            {
+                return null;
+            }
+
+            int deepestLevel = currentHeaders.Keys.Max();
+            return currentHeaders[deepestLevel];
+        }
+
+        /// <summary>
+        /// Clear tracking for header levels deeper than the specified level.
+        /// </summary>
+        /// <param name="currentHeaders">Dictionary of current headers by level.</param>
+        /// <param name="level">Current level.</param>
+        private void ClearDeeperLevels(Dictionary<int, Atom> currentHeaders, int level)
+        {
+            // Remove all levels > current level (max HTML heading level is 6)
+            for (int i = level + 1; i <= 6; i++)
+            {
+                currentHeaders.Remove(i);
+            }
+        }
 
         /// <summary>
         /// Process an HTML node and extract atoms.
@@ -178,6 +323,27 @@
                     ProcessTextNode(node, atoms, ref position, pageNumber);
                     break;
 
+                case "strong":
+                case "em":
+                case "b":
+                case "i":
+                case "u":
+                case "small":
+                case "mark":
+                case "del":
+                case "ins":
+                case "sub":
+                case "sup":
+                case "abbr":
+                case "cite":
+                case "kbd":
+                case "samp":
+                case "var":
+                case "time":
+                case "q":
+                    // Inline formatting elements - skip processing, their text is part of parent
+                    break;
+
                 default:
                     // Recursively process child nodes for unhandled elements
                     if (node.ChildNodes != null)
@@ -198,22 +364,41 @@
         {
             if (node == null) return;
 
-            string text = GetCleanText(node);
-            if (!String.IsNullOrWhiteSpace(text))
+            string nodeName = node.Name?.ToLower() ?? string.Empty;
+
+            // Check if this is a structural container (div, section, article, etc.)
+            bool isStructuralContainer = nodeName == "div" || nodeName == "section" ||
+                                        nodeName == "article" || nodeName == "main" ||
+                                        nodeName == "aside" || nodeName == "header" ||
+                                        nodeName == "footer" || nodeName == "nav";
+
+            // Check if the node has block-level children
+            bool hasBlockChildren = false;
+            if (isStructuralContainer && node.ChildNodes != null)
             {
-                HtmlAtom atom = new HtmlAtom
+                hasBlockChildren = node.ChildNodes.Any(child => IsBlockElement(child?.Name?.ToLower()));
+            }
+
+            // Only create atom if it's not a structural container with block children
+            if (!hasBlockChildren)
+            {
+                string text = GetCleanText(node);
+                if (!String.IsNullOrWhiteSpace(text))
                 {
-                    GUID = Guid.NewGuid(),
-                    Type = AtomTypeEnum.Text,
-                    Position = position++,
-                    PageNumber = pageNumber,
-                    Text = text,
-                    Tag = node.Name?.ToLower() ?? string.Empty,
-                    Id = node.GetAttributeValue("id", null),
-                    Class = node.GetAttributeValue("class", null)
-                };
-                SetAtomHashes(atom, text);
-                atoms.Add(atom);
+                    HtmlAtom atom = new HtmlAtom
+                    {
+                        GUID = Guid.NewGuid(),
+                        Type = AtomTypeEnum.Text,
+                        Position = position++,
+                        PageNumber = pageNumber,
+                        Text = text,
+                        Tag = node.Name?.ToLower() ?? string.Empty,
+                        Id = node.GetAttributeValue("id", null),
+                        Class = node.GetAttributeValue("class", null)
+                    };
+                    SetAtomHashes(atom, text);
+                    atoms.Add(atom);
+                }
             }
 
             // Process child nodes that aren't pure text
@@ -629,6 +814,28 @@
         }
 
         /// <summary>
+        /// Check if an HTML element is a block-level element.
+        /// </summary>
+        /// <param name="nodeName">Node name (tag name).</param>
+        /// <returns>True if block-level element.</returns>
+        private bool IsBlockElement(string nodeName)
+        {
+            if (String.IsNullOrEmpty(nodeName)) return false;
+
+            return nodeName == "p" || nodeName == "div" || nodeName == "section" ||
+                   nodeName == "article" || nodeName == "main" || nodeName == "aside" ||
+                   nodeName == "header" || nodeName == "footer" || nodeName == "nav" ||
+                   nodeName == "h1" || nodeName == "h2" || nodeName == "h3" ||
+                   nodeName == "h4" || nodeName == "h5" || nodeName == "h6" ||
+                   nodeName == "ul" || nodeName == "ol" || nodeName == "li" ||
+                   nodeName == "table" || nodeName == "tr" || nodeName == "td" || nodeName == "th" ||
+                   nodeName == "pre" || nodeName == "blockquote" || nodeName == "hr" ||
+                   nodeName == "form" || nodeName == "fieldset" || nodeName == "dl" ||
+                   nodeName == "dt" || nodeName == "dd" || nodeName == "figure" ||
+                   nodeName == "figcaption" || nodeName == "address";
+        }
+
+        /// <summary>
         /// Get clean text from an HTML node.
         /// </summary>
         private string GetCleanText(HtmlNode node)
@@ -702,6 +909,8 @@
 
         #endregion
 
+#pragma warning restore CS8604 // Possible null reference argument.
+#pragma warning restore CS8603 // Possible null reference return.
 #pragma warning restore CS8600 // Converting null literal or possible null value to non-nullable type.
 #pragma warning restore CS8601 // Possible null reference assignment.
 #pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.

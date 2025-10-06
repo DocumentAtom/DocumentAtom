@@ -1,17 +1,15 @@
-﻿namespace DocumentAtom.Word
+namespace DocumentAtom.Excel
 {
-    using DocumentAtom.Core;
-
     /// <summary>
-    /// Settings for Microsoft Word .docx processor.
+    /// Settings for hierarchical Microsoft Excel .xlsx processor.
     /// </summary>
-    public class DocxProcessorSettings : ProcessorSettingsBase
+    public class HierarchicalXlsxProcessorSettings : XlsxProcessorSettings
     {
         #region Public-Members
 
         /// <summary>
         /// Enable or disable hierarchical structure building.
-        /// When true, atoms will be organized in a tree structure based on heading styles (Heading 1, Heading 2, etc.).
+        /// When true, atoms will be organized in a tree structure based on sheet (page) grouping.
         /// When false, atoms will be returned as a flat list.
         /// Default is true.
         /// </summary>
@@ -26,10 +24,10 @@
         #region Constructors-and-Factories
 
         /// <summary>
-        /// Settings for Microsoft Word .docx processor.
+        /// Settings for hierarchical Microsoft Excel .xlsx processor.
         /// </summary>
-        public DocxProcessorSettings() 
-        { 
+        public HierarchicalXlsxProcessorSettings()
+        {
 
         }
 
