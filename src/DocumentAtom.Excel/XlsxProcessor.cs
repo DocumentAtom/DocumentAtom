@@ -124,7 +124,22 @@
         public override IEnumerable<Atom> Extract(string filename)
         {
             if (String.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
-            return ProcessFile(filename);
+
+            List<Atom> flatAtoms = ProcessFile(filename).ToList();
+
+            if (_ProcessorSettings.BuildHierarchy)
+            {
+                return BuildHierarchy(flatAtoms);
+            }
+            else
+            {
+                // Ensure ParentGUID is null for flat list
+                foreach (Atom atom in flatAtoms)
+                {
+                    atom.ParentGUID = null;
+                }
+                return flatAtoms;
+            }
         }
 
         /// <summary>
@@ -177,9 +192,57 @@
 
         #region Private-Methods
 
+        /// <summary>
+        /// Build hierarchical structure from flat list of atoms.
+        /// Groups atoms by PageNumber (sheet number), making the first atom on each page the parent.
+        /// </summary>
+        /// <param name="flatAtoms">Flat list of atoms.</param>
+        /// <returns>Root-level atoms with hierarchical structure.</returns>
+        private IEnumerable<Atom> BuildHierarchy(List<Atom> flatAtoms)
+        {
+            if (flatAtoms == null || flatAtoms.Count == 0)
+            {
+                return Enumerable.Empty<Atom>();
+            }
+
+            // Group atoms by PageNumber (sheet number)
+            var atomsByPage = flatAtoms.GroupBy(a => a.PageNumber).OrderBy(g => g.Key);
+
+            List<Atom> rootAtoms = new List<Atom>();
+
+            foreach (var pageGroup in atomsByPage)
+            {
+                var atomsOnPage = pageGroup.ToList();
+
+                if (atomsOnPage.Count == 0) continue;
+
+                // First atom on the page becomes the parent
+                Atom parentAtom = atomsOnPage[0];
+                parentAtom.ParentGUID = null;
+                rootAtoms.Add(parentAtom);
+
+                // Remaining atoms become Quarks of the parent
+                if (atomsOnPage.Count > 1)
+                {
+                    parentAtom.Quarks = new List<Atom>();
+
+                    for (int i = 1; i < atomsOnPage.Count; i++)
+                    {
+                        Atom childAtom = atomsOnPage[i];
+                        childAtom.ParentGUID = parentAtom.GUID;
+                        parentAtom.Quarks.Add(childAtom);
+                    }
+                }
+            }
+
+            return rootAtoms;
+        }
+
         private IEnumerable<Atom> ProcessFile(string filename)
         {
             if (String.IsNullOrEmpty(filename)) throw new ArgumentNullException(nameof(filename));
+
+            int position = 0;
 
             using (SpreadsheetDocument doc = SpreadsheetDocument.Open(filename, false))
             {
@@ -253,6 +316,7 @@
                                     PageNumber = sheetNumber,
                                     SheetName = sheet.Name,
                                     CellIdentifier = cellIdentifier,
+                                    Position = position++,
                                     MD5Hash = HashHelper.MD5Hash(cellData.Value),
                                     SHA1Hash = HashHelper.SHA1Hash(cellData.Value),
                                     SHA256Hash = HashHelper.SHA256Hash(cellData.Value),
@@ -398,6 +462,7 @@
                             PageNumber = sheetNumber,
                             SheetName = sheet.Name,
                             CellIdentifier = tableRange,
+                            Position = position++,
                             MD5Hash = HashHelper.MD5Hash(dt),
                             SHA1Hash = HashHelper.SHA1Hash(dt),
                             SHA256Hash = HashHelper.SHA256Hash(dt),
@@ -424,6 +489,7 @@
                                     PageNumber = sheetNumber,
                                     SheetName = sheet.Name,
                                     CellIdentifier = imageLocation,
+                                    Position = position++,
                                     MD5Hash = HashHelper.MD5Hash(bytes),
                                     SHA1Hash = HashHelper.SHA1Hash(bytes),
                                     SHA256Hash = HashHelper.SHA256Hash(bytes),

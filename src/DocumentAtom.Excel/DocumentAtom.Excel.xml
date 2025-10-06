@@ -168,6 +168,14 @@
             <param name="filename">Filename.</param>
             <returns>Dictionary.</returns>
         </member>
+        <member name="M:DocumentAtom.Excel.XlsxProcessor.BuildHierarchy(System.Collections.Generic.List{DocumentAtom.Core.Atoms.Atom})">
+            <summary>
+            Build hierarchical structure from flat list of atoms.
+            Groups atoms by PageNumber (sheet number), making the first atom on each page the parent.
+            </summary>
+            <param name="flatAtoms">Flat list of atoms.</param>
+            <returns>Root-level atoms with hierarchical structure.</returns>
+        </member>
         <member name="T:DocumentAtom.Excel.XlsxProcessorSettings">
             <summary>
             Settings for Microsoft Excel .xlsx processor.
@@ -186,6 +194,14 @@
         <member name="P:DocumentAtom.Excel.XlsxProcessorSettings.HeaderRowScoreThreshold">
             <summary>
             Header row score threshold.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Excel.XlsxProcessorSettings.BuildHierarchy">
+            <summary>
+            Enable or disable hierarchical structure building.
+            When true, atoms will be organized in a tree structure based on sheet (page) grouping.
+            When false, atoms will be returned as a flat list.
+            Default is true.
             </summary>
         </member>
         <member name="M:DocumentAtom.Excel.XlsxProcessorSettings.#ctor">

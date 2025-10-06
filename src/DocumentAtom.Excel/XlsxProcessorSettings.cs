@@ -57,6 +57,14 @@
             }
         }
 
+        /// <summary>
+        /// Enable or disable hierarchical structure building.
+        /// When true, atoms will be organized in a tree structure based on sheet (page) grouping.
+        /// When false, atoms will be returned as a flat list.
+        /// Default is true.
+        /// </summary>
+        public bool BuildHierarchy { get; set; } = true;
+
         #endregion
 
         #region Private-Members
