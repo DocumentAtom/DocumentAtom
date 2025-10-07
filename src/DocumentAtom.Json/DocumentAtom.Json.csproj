@@ -25,6 +25,10 @@
 		<IncludeSymbols>True</IncludeSymbols>
 	</PropertyGroup>
 
+	<PropertyGroup>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<Content Include="icon.ico" />
 	</ItemGroup>

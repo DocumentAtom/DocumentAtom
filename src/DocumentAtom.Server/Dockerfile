@@ -48,16 +48,19 @@ COPY DocumentAtom.Xml/*.csproj ./DocumentAtom.Xml/
 
 # Copy source code for the same projects
 COPY DocumentAtom.Server/ ./DocumentAtom.Server/
-COPY DocumentAtom.Word/ ./DocumentAtom.Word/
+COPY DocumentAtom.Csv/ ./DocumentAtom.Csv/
 COPY DocumentAtom.Excel/ ./DocumentAtom.Excel/
-COPY DocumentAtom.PowerPoint/ ./DocumentAtom.PowerPoint/
-COPY DocumentAtom.Pdf/ ./DocumentAtom.Pdf/
 COPY DocumentAtom.Html/ ./DocumentAtom.Html/
+COPY DocumentAtom.Json/ ./DocumentAtom.Json/
 COPY DocumentAtom.Markdown/ ./DocumentAtom.Markdown/
-COPY DocumentAtom.Text/ ./DocumentAtom.Text/
+COPY DocumentAtom.Pdf/ ./DocumentAtom.Pdf/
+COPY DocumentAtom.PowerPoint/ ./DocumentAtom.PowerPoint/
 COPY DocumentAtom.RichText/ ./DocumentAtom.RichText/
-COPY DocumentAtom.TypeDetection/ ./DocumentAtom.TypeDetection/
+COPY DocumentAtom.Text/ ./DocumentAtom.Text/
 COPY DocumentAtom.TextTools/ ./DocumentAtom.TextTools/
+COPY DocumentAtom.TypeDetection/ ./DocumentAtom.TypeDetection/
+COPY DocumentAtom.Word/ ./DocumentAtom.Word/
+COPY DocumentAtom.Xml/ ./DocumentAtom.Xml/
 
 # Restore dependencies for the server project
 # Restore for the specific runtime based on TARGETARCH
