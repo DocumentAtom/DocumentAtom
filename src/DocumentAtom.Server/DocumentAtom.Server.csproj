@@ -11,9 +11,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <ProjectReference Include="..\DocumentAtom.Csv\DocumentAtom.Csv.csproj" />
 	  <ProjectReference Include="..\DocumentAtom.Excel\DocumentAtom.Excel.csproj" />
 	  <ProjectReference Include="..\DocumentAtom.Html\DocumentAtom.Html.csproj" />
 	  <ProjectReference Include="..\DocumentAtom.Image\DocumentAtom.Image.csproj" />
+	  <ProjectReference Include="..\DocumentAtom.Json\DocumentAtom.Json.csproj" />
 	  <ProjectReference Include="..\DocumentAtom.Markdown\DocumentAtom.Markdown.csproj" />
 	  <ProjectReference Include="..\DocumentAtom.Pdf\DocumentAtom.Pdf.csproj" />
 	  <ProjectReference Include="..\DocumentAtom.PowerPoint\DocumentAtom.PowerPoint.csproj" />
@@ -21,6 +23,7 @@
 	  <ProjectReference Include="..\DocumentAtom.TypeDetection\DocumentAtom.TypeDetection.csproj" />
 	  <ProjectReference Include="..\DocumentAtom.Word\DocumentAtom.Word.csproj" />
 	  <ProjectReference Include="..\DocumentAtom.RichText\DocumentAtom.RichText.csproj" />
+	  <ProjectReference Include="..\DocumentAtom.Xml\DocumentAtom.Xml.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

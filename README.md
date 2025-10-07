@@ -8,9 +8,11 @@ DocumentAtom requires that Tesseract v5.0 be installed on the host.  This is req
 
 | Package | Version | Downloads |
 |---------|---------|-----------|
+| DocumentAtom.Csv | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Csv.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Csv/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Csv.svg)](https://www.nuget.org/packages/DocumentAtom.Csv)  |
 | DocumentAtom.Excel | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Excel.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Excel/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Excel.svg)](https://www.nuget.org/packages/DocumentAtom.Excel)  |
 | DocumentAtom.Html | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Html.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Html/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Html.svg)](https://www.nuget.org/packages/DocumentAtom.Html)  |
 | DocumentAtom.Image | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Image.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Image/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Image.svg)](https://www.nuget.org/packages/DocumentAtom.Image)  |
+| DocumentAtom.Json | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Json.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Json/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Json.svg)](https://www.nuget.org/packages/DocumentAtom.Json)  |
 | DocumentAtom.Markdown | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Markdown.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Markdown/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Markdown.svg)](https://www.nuget.org/packages/DocumentAtom.Markdown)  |
 | DocumentAtom.Pdf | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Pdf.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Pdf/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Pdf.svg)](https://www.nuget.org/packages/DocumentAtom.Pdf)  |
 | DocumentAtom.PowerPoint | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.PowerPoint.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.PowerPoint/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.PowerPoint.svg)](https://www.nuget.org/packages/DocumentAtom.PowerPoint)  |
@@ -19,10 +21,12 @@ DocumentAtom requires that Tesseract v5.0 be installed on the host.  This is req
 | DocumentAtom.Text | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Text.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Text/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Text.svg)](https://www.nuget.org/packages/DocumentAtom.Text)  |
 | DocumentAtom.TypeDetection | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.TypeDetection.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.TypeDetection/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.TypeDetection.svg)](https://www.nuget.org/packages/DocumentAtom.TypeDetection)  |
 | DocumentAtom.Word | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Word.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Word/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Word.svg)](https://www.nuget.org/packages/DocumentAtom.Word)  |
+| DocumentAtom.Xml | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Xml.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Xml/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Xml.svg)](https://www.nuget.org/packages/DocumentAtom.Xml)  |
 
 ## New in v1.1.x
 
 - Hierarchical atomization (see `BuildHierarchy` in settings) - heading-based for markdown/HTML/Word, page-based for PowerPoint
+- Support for CSV, JSON, and XML documents
 - Dependency updates and fixes
 
 ## Motivation
@@ -36,7 +40,9 @@ Please feel free to file issues, enhancement requests, or start discussions abou
 ## Types Supported
 
 DocumentAtom supports the following input file types:
+- CSV
 - HTML
+- JSON
 - Markdown
 - Microsoft Word (.docx)
 - Microsoft Excel (.xlsx)
@@ -45,6 +51,7 @@ DocumentAtom supports the following input file types:
 - PDF
 - Rich text (.rtf)
 - Text
+- XML
 
 ## Simple Example 
 
@@ -65,7 +72,8 @@ foreach (Atom atom in processor.Extract(filename))
 ## Atom Types
 
 DocumentAtom parses input data assets into a variety of `Atom` objects.  Each `Atom` includes top-level metadata including:
-- `GUID`
+- `ParentGUID` - globally-unique identifier of the parent atom, or, null
+- `GUID` - globally-unique identifier
 - `Type` - including `Text`, `Image`, `Binary`, `Table`, and `List`
 - `PageNumber` - where available; some document types do not explicitly indicate page numbers, and page numbers are inferred when rendered
 - `Position` - the ordinal position of the `Atom`, relative to others
@@ -92,13 +100,14 @@ The `AtomBase` class provides the aforementioned metadata, and several type-spec
 
 DocumentAtom is built on the shoulders of several libraries, without which, this work would not be possible.
 
+- [CsvHelper](https://github.com/JoshClose/CsvHelper)
 - [DocumentFormat.OpenXml](https://github.com/dotnet/Open-XML-SDK)
 - [HTML Agility Pack](https://github.com/zzzprojects/html-agility-pack)
-- [SixLabors.ImageSharp](https://github.com/SixLabors/ImageSharp)
-- [Tesseract](https://github.com/charlesw/tesseract/)
 - [PdfPig](https://github.com/UglyToad/PdfPig)
 - [RtfPipe](github.com/erdomke/RtfPipe)
+- [SixLabors.ImageSharp](https://github.com/SixLabors/ImageSharp)
 - [Tabula](https://github.com/BobLd/tabula-sharp)
+- [Tesseract](https://github.com/charlesw/tesseract/)
 
 Each of these libraries were integrated as NuGet packages, and no source was included or modified from these packages.
 

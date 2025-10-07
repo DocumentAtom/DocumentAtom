@@ -126,6 +126,32 @@
 			"response": []
 		},
 		{
+			"name": "Extract atoms (OCR)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "file",
+					"file": {
+						"src": "/G:/Shared drives/View Systems/Test Files/Ocr/1.png"
+					}
+				},
+				"url": {
+					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/ocr",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"atom",
+						"ocr"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Extract atoms (PDF)",
 			"request": {
 				"method": "POST",
@@ -185,6 +211,38 @@
 		},
 		{
 			"name": "Extract atoms (PowerPoint)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "file",
+					"file": {
+						"src": "/G:/Shared drives/View Systems/Test Files/SampleFilesByType/Ppt/3.pptx"
+					}
+				},
+				"url": {
+					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/powerpoint?ocr",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"atom",
+						"powerpoint"
+					],
+					"query": [
+						{
+							"key": "ocr",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Extract atoms (RTF)",
 			"request": {
 				"method": "POST",
 				"header": [],

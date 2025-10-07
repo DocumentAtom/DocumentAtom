@@ -17,9 +17,11 @@
     using DocumentAtom.Core;
     using DocumentAtom.Core.Atoms;
     using DocumentAtom.Core.Helpers;
+    using DocumentAtom.Csv;
     using DocumentAtom.Excel;
     using DocumentAtom.Html;
     using DocumentAtom.Image;
+    using DocumentAtom.Json;
     using DocumentAtom.Markdown;
     using DocumentAtom.Ocr;
     using DocumentAtom.Pdf;
@@ -28,6 +30,7 @@
     using DocumentAtom.Text;
     using DocumentAtom.TypeDetection;
     using DocumentAtom.Word;
+    using DocumentAtom.Xml;
 
     /// <summary>
     /// DocumentAtom server.
@@ -223,8 +226,10 @@
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.GET, "/favicon.ico", GetFavicon, ExceptionRoute);
 
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/typedetect", TypeDetectionRoute, ExceptionRoute);
+            _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/csv", CsvAtomRoute, ExceptionRoute);
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/excel", ExcelAtomRoute, ExceptionRoute);
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/html", HtmlAtomRoute, ExceptionRoute);
+            _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/json", JsonAtomRoute, ExceptionRoute);
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/markdown", MarkdownAtomRoute, ExceptionRoute);
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/ocr", OcrAtomRoute, ExceptionRoute);
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/pdf", PdfAtomRoute, ExceptionRoute);
@@ -233,6 +238,7 @@
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/rtf", RtfAtomRoute, ExceptionRoute);
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/text", TextAtomRoute, ExceptionRoute);
             _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/word", WordAtomRoute, ExceptionRoute);
+            _RestServer.Routes.PreAuthentication.Static.Add(HttpMethod.POST, "/atom/xml", XmlAtomRoute, ExceptionRoute);
 
             Console.WriteLine("Starting REST server on       : " + _Settings.Webserver.Prefix);
             _RestServer.Start();
@@ -357,6 +363,32 @@
             await ctx.Response.Send();
         }
 
+        private static async Task CsvAtomRoute(HttpContextBase ctx)
+        {
+            if (ctx.Request.DataAsBytes == null && ctx.Request.ContentLength < 1)
+            {
+                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress + " from " + ctx.Request.Source.IpAddress);
+                ctx.Response.StatusCode = 400;
+                await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.RequestBodyMissing, null, "No request body found."), true));
+                return;
+            }
+
+            CsvProcessorSettings settings = new CsvProcessorSettings();
+            settings.ExtractAtomsFromImages = ctx.Request.QuerystringExists(Constants.OcrQuerystring);
+
+            List<Atom> ret = new List<Atom>();
+
+            using (CsvProcessor processor = new CsvProcessor(settings))
+            {
+                IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
+                if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
+
+                ctx.Response.StatusCode = 200;
+                await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
+                return;
+            }
+        }
+
         private static async Task ExcelAtomRoute(HttpContextBase ctx)
         {
             if (ctx.Request.DataAsBytes == null && ctx.Request.ContentLength < 1)
@@ -383,13 +415,15 @@
 
             List<Atom> ret = new List<Atom>();
 
-            XlsxProcessor processor = new XlsxProcessor(settings, imageSettings);
-            IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
-            if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
+            using (XlsxProcessor processor = new XlsxProcessor(settings, imageSettings))
+            {
+                IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
+                if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
 
-            ctx.Response.StatusCode = 200;
-            await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
-            return;
+                ctx.Response.StatusCode = 200;
+                await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
+                return;
+            }
         }
 
         private static async Task HtmlAtomRoute(HttpContextBase ctx)
@@ -405,13 +439,41 @@
             HtmlProcessorSettings settings = new HtmlProcessorSettings();
 
             List<Atom> ret = new List<Atom>();
-            HtmlProcessor processor = new HtmlProcessor(settings);
-            IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
-            if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
 
-            ctx.Response.StatusCode = 200;
-            await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
-            return;
+            using (HtmlProcessor processor = new HtmlProcessor(settings))
+            {
+                IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
+                if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
+
+                ctx.Response.StatusCode = 200;
+                await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
+                return;
+            }
+        }
+
+        private static async Task JsonAtomRoute(HttpContextBase ctx)
+        {
+            if (ctx.Request.DataAsBytes == null && ctx.Request.ContentLength < 1)
+            {
+                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress + " from " + ctx.Request.Source.IpAddress);
+                ctx.Response.StatusCode = 400;
+                await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.RequestBodyMissing, null, "No request body found."), true));
+                return;
+            }
+
+            JsonProcessorSettings settings = new JsonProcessorSettings();
+
+            List<Atom> ret = new List<Atom>();
+
+            using (JsonProcessor processor = new JsonProcessor(settings))
+            {
+                IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
+                if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
+
+                ctx.Response.StatusCode = 200;
+                await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
+                return;
+            }
         }
 
         private static async Task MarkdownAtomRoute(HttpContextBase ctx)
@@ -426,13 +488,15 @@
 
             List<Atom> ret = new List<Atom>();
 
-            MarkdownProcessor processor = new MarkdownProcessor(new MarkdownProcessorSettings());
-            IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
-            if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
+            using (MarkdownProcessor processor = new MarkdownProcessor(new MarkdownProcessorSettings()))
+            {
+                IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
+                if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
 
-            ctx.Response.StatusCode = 200;
-            await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
-            return;
+                ctx.Response.StatusCode = 200;
+                await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
+                return;
+            }
         }
 
         private static async Task OcrAtomRoute(HttpContextBase ctx)
@@ -486,13 +550,15 @@
 
             List<Atom> ret = new List<Atom>();
 
-            PdfProcessor processor = new PdfProcessor(settings, imageSettings);
-            IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
-            if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
+            using (PdfProcessor processor = new PdfProcessor(settings, imageSettings))
+            {
+                IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
+                if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
 
-            ctx.Response.StatusCode = 200;
-            await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
-            return;
+                ctx.Response.StatusCode = 200;
+                await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
+                return;
+            }
         }
 
         private static async Task PngAtomRoute(HttpContextBase ctx)
@@ -513,13 +579,15 @@
 
             List<Atom> ret = new List<Atom>();
 
-            ImageProcessor processor = new ImageProcessor(settings);
-            IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
-            if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
+            using (ImageProcessor processor = new ImageProcessor(settings))
+            {
+                IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
+                if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
 
-            ctx.Response.StatusCode = 200;
-            await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
-            return;
+                ctx.Response.StatusCode = 200;
+                await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
+                return;
+            }
         }
 
         private static async Task PowerPointAtomRoute(HttpContextBase ctx)
@@ -548,13 +616,15 @@
 
             List<Atom> ret = new List<Atom>();
 
-            PptxProcessor processor = new PptxProcessor(settings, imageSettings);
-            IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
-            if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
+            using (PptxProcessor processor = new PptxProcessor(settings, imageSettings))
+            {
+                IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
+                if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
 
-            ctx.Response.StatusCode = 200;
-            await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
-            return;
+                ctx.Response.StatusCode = 200;
+                await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
+                return;
+            }
         }
 
         private static async Task RtfAtomRoute(HttpContextBase ctx)
@@ -583,13 +653,15 @@
 
             List<Atom> ret = new List<Atom>();
 
-            RtfProcessor processor = new RtfProcessor(settings, imageSettings);
-            IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
-            if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
+            using (RtfProcessor processor = new RtfProcessor(settings, imageSettings))
+            {
+                IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
+                if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
 
-            ctx.Response.StatusCode = 200;
-            await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
-            return;
+                ctx.Response.StatusCode = 200;
+                await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
+                return;
+            }
         }
 
         private static async Task TextAtomRoute(HttpContextBase ctx)
@@ -604,13 +676,15 @@
 
             List<Atom> ret = new List<Atom>();
 
-            TextProcessor processor = new TextProcessor(new TextProcessorSettings());
-            IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
-            if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
+            using (TextProcessor processor = new TextProcessor(new TextProcessorSettings()))
+            {
+                IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
+                if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
 
-            ctx.Response.StatusCode = 200;
-            await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
-            return;
+                ctx.Response.StatusCode = 200;
+                await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
+                return;
+            }
         }
 
         private static async Task WordAtomRoute(HttpContextBase ctx)
@@ -639,13 +713,40 @@
 
             List<Atom> ret = new List<Atom>();
 
-            DocxProcessor processor = new DocxProcessor(settings, imageSettings);
-            IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
-            if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
+            using (DocxProcessor processor = new DocxProcessor(settings, imageSettings))
+            {
+                IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
+                if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
 
-            ctx.Response.StatusCode = 200;
-            await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
-            return;
+                ctx.Response.StatusCode = 200;
+                await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
+                return;
+            }
+        }
+
+        private static async Task XmlAtomRoute(HttpContextBase ctx)
+        {
+            if (ctx.Request.DataAsBytes == null && ctx.Request.ContentLength < 1)
+            {
+                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress);
+                ctx.Response.StatusCode = 400;
+                await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.RequestBodyMissing, null, "No request body found."), true));
+                return;
+            }
+
+            XmlProcessorSettings settings = new XmlProcessorSettings();
+
+            List<Atom> ret = new List<Atom>();
+
+            using (XmlProcessor processor = new XmlProcessor(settings))
+            {
+                IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
+                if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
+
+                ctx.Response.StatusCode = 200;
+                await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
+                return;
+            }
         }
 
         private static async Task TypeDetectionRoute(HttpContextBase ctx)
@@ -663,8 +764,10 @@
 
             try
             {
-                TypeDetector td = new TypeDetector(dir);
-                tr = td.Process(ctx.Request.DataAsBytes, ctx.Request.ContentType);
+                using (TypeDetector td = new TypeDetector(dir))
+                {
+                    tr = td.Process(ctx.Request.DataAsBytes, ctx.Request.ContentType);
+                }
             }
             finally
             {
@@ -674,11 +777,6 @@
 
             ctx.Response.StatusCode = 200;
             await ctx.Response.Send(_Serializer.SerializeJson(tr, true));
-        }
-
-        private static void LogSubdirectories(string msg)
-        {
-            _Logging.Debug(_Header + msg + ":" + Environment.NewLine + string.Join("\n", Directory.GetDirectories(Directory.GetCurrentDirectory())));
         }
 
         #endregion

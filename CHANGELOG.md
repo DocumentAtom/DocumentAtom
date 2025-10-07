@@ -2,8 +2,14 @@
 
 ## Current Version
 
-- Initial release
+v1.1.x
+
+- Hierarchical atomization (see `BuildHierarchy` in settings) - heading-based for markdown/HTML/Word, page-based for PowerPoint
+- Support for CSV, JSON, and XML documents
+- Dependency updates and fixes
 
 ## Previous Versions
 
-- Notes from previous versions will be placed here.
+v1.0.x
+
+- Initial release

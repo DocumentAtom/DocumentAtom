@@ -1,7 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(dotnet run:*)"
+      "Bash(dotnet run:*)",
+      "Read(//c/code/view/backend/core/src/View.SemanticCellExtractor/**)",
+      "Bash(dotnet build:*)",
+      "Read(//c/code/view/backend/core/src/Test.SemanticCellExtractor/Sample/**)",
+      "Bash(dotnet clean:*)"
     ],
     "deny": [],
     "ask": []
