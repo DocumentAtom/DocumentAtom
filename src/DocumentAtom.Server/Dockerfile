@@ -32,16 +32,19 @@ WORKDIR /src
 # Excluding: DocumentAtom, DocumentAtom.Core, DocumentAtom.Image, DocumentAtom.Ocr (these come from NuGet)
 # Including: Server and content-type specific projects
 COPY DocumentAtom.Server/*.csproj ./DocumentAtom.Server/
-COPY DocumentAtom.Word/*.csproj ./DocumentAtom.Word/
+COPY DocumentAtom.Csv/*.csproj ./DocumentAtom.Csv/
 COPY DocumentAtom.Excel/*.csproj ./DocumentAtom.Excel/
-COPY DocumentAtom.PowerPoint/*.csproj ./DocumentAtom.PowerPoint/
-COPY DocumentAtom.Pdf/*.csproj ./DocumentAtom.Pdf/
 COPY DocumentAtom.Html/*.csproj ./DocumentAtom.Html/
+COPY DocumentAtom.Json/*.csproj ./DocumentAtom.Json/
 COPY DocumentAtom.Markdown/*.csproj ./DocumentAtom.Markdown/
-COPY DocumentAtom.Text/*.csproj ./DocumentAtom.Text/
+COPY DocumentAtom.Pdf/*.csproj ./DocumentAtom.Pdf/
+COPY DocumentAtom.PowerPoint/*.csproj ./DocumentAtom.PowerPoint/
 COPY DocumentAtom.RichText/*.csproj ./DocumentAtom.RichText/
-COPY DocumentAtom.TypeDetection/*.csproj ./DocumentAtom.TypeDetection/
+COPY DocumentAtom.Text/*.csproj ./DocumentAtom.Text/
 COPY DocumentAtom.TextTools/*.csproj ./DocumentAtom.TextTools/
+COPY DocumentAtom.TypeDetection/*.csproj ./DocumentAtom.TypeDetection/
+COPY DocumentAtom.Word/*.csproj ./DocumentAtom.Word/
+COPY DocumentAtom.Xml/*.csproj ./DocumentAtom.Xml/
 
 # Copy source code for the same projects
 COPY DocumentAtom.Server/ ./DocumentAtom.Server/
