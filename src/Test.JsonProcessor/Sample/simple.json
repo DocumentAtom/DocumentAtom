@@ -1,0 +1,23 @@
+{
+	"id": 1,
+	"first": "matt",
+	"last": "white",
+	"hobbies": [
+		"arts",
+		"crafts",
+		"fishing",
+		"coding"
+	],
+	"addresses": [
+		{
+			"line1": "123 main st",
+			"city": "bradenton",
+			"type": "home"
+		},
+		{
+			"line1": "456 vine st",
+			"city": "tampa",
+			"type": "work"
+		}
+	]
+}

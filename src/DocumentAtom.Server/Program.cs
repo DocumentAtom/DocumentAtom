@@ -336,16 +336,40 @@
 
         private static async Task ExceptionRoute(HttpContextBase ctx, Exception e)
         {
-            _Logging.Warn(
-                _Header +
-                "handling exception for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " " +
-                "from " + ctx.Request.Source.IpAddress +
-                Environment.NewLine +
-                e.ToString());
+            if (e is System.IO.FileFormatException)
+            {
+                _Logging.Warn(_Header + "file format exception: " + Environment.NewLine + e.ToString());
+                ctx.Response.StatusCode = 400;
+                await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.BadRequest, null, e.Message), true));
+                return;
+            }
+            else if (e is DocumentFormat.OpenXml.Packaging.OpenXmlPackageException)
+            {
+                _Logging.Warn(_Header + "OpenXML package exception: " + Environment.NewLine + e.ToString());
+                ctx.Response.StatusCode = 400;
+                await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.BadRequest, null, e.Message), true));
+                return;
+            }
+            else if (e is System.IO.InvalidDataException)
+            {
+                _Logging.Warn(_Header + "invalid data exception: " + Environment.NewLine + e.ToString());
+                ctx.Response.StatusCode = 400;
+                await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.BadRequest, null, e.Message), true));
+                return;
+            }
+            else
+            {
+                _Logging.Warn(
+                    _Header +
+                    "handling exception for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " " +
+                    "from " + ctx.Request.Source.IpAddress +
+                    Environment.NewLine +
+                    e.ToString());
 
-            ctx.Response.StatusCode = 500;
-            await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.InternalError, null, e.Message), true));
-            return;
+                ctx.Response.StatusCode = 500;
+                await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.InternalError, null, e.Message), true));
+                return;
+            }
         }
 
         private static async Task DefaultRoute(HttpContextBase ctx)
