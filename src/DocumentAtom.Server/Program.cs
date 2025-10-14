@@ -357,6 +357,13 @@
                 await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.BadRequest, null, e.Message), true));
                 return;
             }
+            else if (e is UglyToad.PdfPig.Core.PdfDocumentFormatException)
+            {
+                _Logging.Warn(_Header + "PDF document format exception: " + Environment.NewLine + e.ToString());
+                ctx.Response.StatusCode = 400;
+                await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.BadRequest, null, e.Message), true));
+                return;
+            }
             else
             {
                 _Logging.Warn(
