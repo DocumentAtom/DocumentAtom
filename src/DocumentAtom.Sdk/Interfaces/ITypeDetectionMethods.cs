@@ -1,10 +1,10 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using DocumentAtom.TypeDetection;
-
 namespace DocumentAtom.Sdk.Interfaces
 {
+    using DocumentAtom.TypeDetection;
+
     /// <summary>
     /// Interface for type detection methods.
     /// </summary>

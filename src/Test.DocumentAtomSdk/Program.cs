@@ -1,19 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
-using DocumentAtom.Sdk;
-using DocumentAtom.Core.Atoms;
-using DocumentAtom.TypeDetection;
-using GetSomeInput;
-using DocumentAtom.Core.Enums;
-
-namespace Test.DocumentAtom.Sdk
+namespace Test.DocumentAtomSdk
 {
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Text.Json;
+    using System.Threading.Tasks;
+    using DocumentAtom.Sdk;  
+    using DocumentAtom.Core.Enums;
+    using DocumentAtom.TypeDetection;
+    using GetSomeInput;
+    using DocumentAtom.Core.Atoms;
+
     /// <summary>
     /// Test application for DocumentAtom SDK demonstrating all available methods.
     /// </summary>
@@ -385,32 +383,32 @@ namespace Test.DocumentAtom.Sdk
                     Console.WriteLine($"Extracted {atoms.Count} atoms:");
                     Console.WriteLine();
 
-                     foreach (var atom in atoms.Take(5)) // Show first 5 atoms
-                     {
-                         string content = "";
-                         if (atom.Type == AtomTypeEnum.Table)
-                         {
-                             content = $"Table with {atom.Rows} rows, {atom.Columns} columns";
-                         }
-                         else if (!string.IsNullOrEmpty(atom.Text))
-                         {
-                             content = atom.Text.Substring(0, Math.Min(300, atom.Text.Length));
-                         }
-                         else if (atom.UnorderedList != null && atom.UnorderedList.Count > 0)
-                         {
-                             content = $"Unordered list with {atom.UnorderedList.Count} items";
-                         }
-                         else if (atom.OrderedList != null && atom.OrderedList.Count > 0)
-                         {
-                             content = $"Ordered list with {atom.OrderedList.Count} items";
-                         }
-                         else
-                         {
-                             content = "No text content";
-                         }
-                         
-                         Console.WriteLine($"Atom: {atom.Type} - {content}...");
-                     }
+                    foreach (var atom in atoms.Take(5)) // Show first 5 atoms
+                    {
+                        string content = "";
+                        if (atom.Type == AtomTypeEnum.Table)
+                        {
+                            content = $"Table with {atom.Rows} rows, {atom.Columns} columns";
+                        }
+                        else if (!string.IsNullOrEmpty(atom.Text))
+                        {
+                            content = atom.Text.Substring(0, Math.Min(300, atom.Text.Length));
+                        }
+                        else if (atom.UnorderedList != null && atom.UnorderedList.Count > 0)
+                        {
+                            content = $"Unordered list with {atom.UnorderedList.Count} items";
+                        }
+                        else if (atom.OrderedList != null && atom.OrderedList.Count > 0)
+                        {
+                            content = $"Ordered list with {atom.OrderedList.Count} items";
+                        }
+                        else
+                        {
+                            content = "No text content";
+                        }
+
+                        Console.WriteLine($"Atom: {atom.Type} - {content}...");
+                    }
 
                     if (atoms.Count > 5)
                     {

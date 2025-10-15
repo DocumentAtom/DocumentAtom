@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using DocumentAtom.Core.Atoms;
-
 namespace DocumentAtom.Sdk.Interfaces
 {
+    using DocumentAtom.Core.Atoms;
+
     /// <summary>
     /// Interface for document atomization methods.
     /// </summary>

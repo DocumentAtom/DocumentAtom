@@ -1,15 +1,11 @@
-using System;
-using System.Net.Http;
-using System.Threading;
-using System.Threading.Tasks;
-using DocumentAtom.TypeDetection;
-using DocumentAtom.Sdk.Interfaces;
-using DocumentAtom.Core.Enums;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-
 namespace DocumentAtom.Sdk.Implementations
 {
+    using System.Text.Json;
+    using System.Text.Json.Serialization;
+    using DocumentAtom.Core.Enums;
+    using DocumentAtom.Sdk.Interfaces;
+    using DocumentAtom.TypeDetection;
+
     /// <summary>
     /// Implementation of type detection methods.
     /// </summary>
@@ -59,14 +55,14 @@ namespace DocumentAtom.Sdk.Implementations
                     if (resp != null)
                     {
                         string? responseData = await _Sdk.ReadResponse(resp, url, cancellationToken).ConfigureAwait(false);
-                        
+
                         if (_Sdk.LogResponses)
                             _Sdk.Log(SeverityEnum.Debug, $"Response from {url} (status {resp.StatusCode}): {responseData}");
 
                         if (resp.StatusCode >= 200 && resp.StatusCode <= 299)
                         {
                             _Sdk.Log(SeverityEnum.Debug, $"Success from {url}: {resp.StatusCode}, {resp.ContentLength} bytes");
-                            
+
                             if (!string.IsNullOrEmpty(responseData))
                             {
                                 _Sdk.Log(SeverityEnum.Debug, "Deserializing response body");

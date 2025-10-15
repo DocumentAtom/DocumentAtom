@@ -1,17 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading;
-using System.Threading.Tasks;
-using DocumentAtom.Core.Atoms;
-using DocumentAtom.Core.Enums;
-using DocumentAtom.Core.Image;
-using DocumentAtom.Sdk.Interfaces;
-
 namespace DocumentAtom.Sdk.Implementations
 {
+    using DocumentAtom.Core.Atoms;
+    using DocumentAtom.Core.Enums;
+    using DocumentAtom.Core.Image;
+    using DocumentAtom.Sdk.Interfaces;
+
     /// <summary>
     /// Implementation of document atomization methods.
     /// </summary>
@@ -83,15 +76,15 @@ namespace DocumentAtom.Sdk.Implementations
         public async Task<List<Atom>?> ProcessOcr(byte[] data, CancellationToken cancellationToken = default)
         {
             string url = _Sdk.Endpoint + "/atom/ocr";
-            
+
             var extractionResult = await _Sdk.PostAsync<ExtractionResult>(url, data, cancellationToken).ConfigureAwait(false);
-            
+
             if (extractionResult == null)
                 return null;
-            
+
             // Convert ExtractionResult to List<Atom>
             var atoms = new List<Atom>();
-            
+
             // Convert text elements to atoms
             if (extractionResult.TextElements != null)
             {
@@ -109,7 +102,7 @@ namespace DocumentAtom.Sdk.Implementations
                     }
                 }
             }
-            
+
             // Convert tables to atoms
             if (extractionResult.Tables != null)
             {
@@ -122,7 +115,7 @@ namespace DocumentAtom.Sdk.Implementations
                     }
                 }
             }
-            
+
             // Convert lists to atoms
             if (extractionResult.Lists != null)
             {
@@ -141,7 +134,7 @@ namespace DocumentAtom.Sdk.Implementations
                     }
                 }
             }
-            
+
             return atoms;
         }
 

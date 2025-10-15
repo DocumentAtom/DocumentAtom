@@ -1,23 +1,14 @@
-using DocumentAtom.Core.Atoms;
-using DocumentAtom.Core.Enums;
-using DocumentAtom.Sdk.Implementations;
-using DocumentAtom.Sdk.Interfaces;
-using DocumentAtom.TypeDetection;
-using RestWrapper;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net.Http;
-using System.Text;
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading;
-using System.Threading.Tasks;
-
 namespace DocumentAtom.Sdk
 {
+    using System.Text.Json;
+    using System.Text.Json.Serialization;
+    using DocumentAtom.Core.Enums;
+    using DocumentAtom.Sdk.Implementations;
+    using DocumentAtom.Sdk.Interfaces;
+    using RestWrapper;
+
     /// <summary>
-    /// DocumentAtom SDK for C# - Main client class for interacting with DocumentAtom server.
+    /// DocumentAtom SDK for interacting with DocumentAtom server.
     /// </summary>
     public class DocumentAtomSdk : IDisposable
     {
@@ -99,7 +90,6 @@ namespace DocumentAtom.Sdk
             };
             _JsonOptions.Converters.Add(new JsonStringEnumConverter());
 
-            // Initialize method groups
             Atom = new AtomMethods(this);
             TypeDetection = new TypeDetectionMethods(this);
             Health = new HealthMethods(this);
@@ -125,13 +115,7 @@ namespace DocumentAtom.Sdk
         protected virtual void Dispose(bool disposing)
         {
             if (!_Disposed)
-            {
-                if (disposing)
-                {
-                    // Clean up any resources here
-                }
                 _Disposed = true;
-            }
         }
 
         /// <summary>
@@ -142,9 +126,7 @@ namespace DocumentAtom.Sdk
         public void Log(SeverityEnum severity, string message)
         {
             if (!string.IsNullOrEmpty(message))
-            {
                 Logger?.Invoke(severity, message);
-            }
         }
 
         /// <summary>
@@ -168,9 +150,7 @@ namespace DocumentAtom.Sdk
                 req.ContentType = "application/octet-stream";
 
                 if (!string.IsNullOrEmpty(AccessKey))
-                {
                     req.Authorization.BearerToken = AccessKey;
-                }
 
                 if (LogRequests)
                     Log(SeverityEnum.Debug, $"POST request to {url} with {data.Length} bytes");
@@ -180,14 +160,14 @@ namespace DocumentAtom.Sdk
                     if (resp != null)
                     {
                         string? responseData = await ReadResponse(resp, url, cancellationToken).ConfigureAwait(false);
-                        
+
                         if (LogResponses)
                             Log(SeverityEnum.Debug, $"Response from {url} (status {resp.StatusCode}): {responseData}");
 
                         if (resp.StatusCode >= 200 && resp.StatusCode <= 299)
                         {
                             Log(SeverityEnum.Debug, $"Success from {url}: {resp.StatusCode}, {resp.ContentLength} bytes");
-                            
+
                             if (!string.IsNullOrEmpty(responseData))
                             {
                                 Log(SeverityEnum.Debug, "Deserializing response body");
@@ -231,9 +211,7 @@ namespace DocumentAtom.Sdk
                 req.TimeoutMilliseconds = TimeoutMs;
 
                 if (!string.IsNullOrEmpty(AccessKey))
-                {
                     req.Authorization.BearerToken = AccessKey;
-                }
 
                 if (LogRequests)
                     Log(SeverityEnum.Debug, $"GET request to {url}");
@@ -243,14 +221,14 @@ namespace DocumentAtom.Sdk
                     if (resp != null)
                     {
                         string? responseData = await ReadResponse(resp, url, cancellationToken).ConfigureAwait(false);
-                        
+
                         if (LogResponses)
                             Log(SeverityEnum.Debug, $"Response from {url} (status {resp.StatusCode}): {responseData}");
 
                         if (resp.StatusCode >= 200 && resp.StatusCode <= 299)
                         {
                             Log(SeverityEnum.Debug, $"Success from {url}: {resp.StatusCode}, {resp.ContentLength} bytes");
-                            
+
                             if (!string.IsNullOrEmpty(responseData))
                             {
                                 Log(SeverityEnum.Debug, "Deserializing response body");
@@ -283,7 +261,7 @@ namespace DocumentAtom.Sdk
         /// <param name="url">Full URL to send request to.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>Response as string.</returns>
-        public async Task<string?> GetStringAsync(string url, CancellationToken cancellationToken = default)
+        public async Task<string?> GetAsync(string url, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(url))
                 throw new ArgumentNullException(nameof(url));
@@ -293,9 +271,7 @@ namespace DocumentAtom.Sdk
                 req.TimeoutMilliseconds = TimeoutMs;
 
                 if (!string.IsNullOrEmpty(AccessKey))
-                {
                     req.Authorization.BearerToken = AccessKey;
-                }
 
                 if (LogRequests)
                     Log(SeverityEnum.Debug, $"GET request to {url}");
@@ -305,7 +281,7 @@ namespace DocumentAtom.Sdk
                     if (resp != null)
                     {
                         string? responseData = await ReadResponse(resp, url, cancellationToken).ConfigureAwait(false);
-                        
+
                         if (LogResponses)
                             Log(SeverityEnum.Debug, $"Response from {url} (status {resp.StatusCode}): {responseData}");
 
@@ -345,9 +321,7 @@ namespace DocumentAtom.Sdk
                 req.TimeoutMilliseconds = TimeoutMs;
 
                 if (!string.IsNullOrEmpty(AccessKey))
-                {
                     req.Authorization.BearerToken = AccessKey;
-                }
 
                 if (LogRequests)
                     Log(SeverityEnum.Debug, $"GET request to {url}");

@@ -1,10 +1,7 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using DocumentAtom.Sdk.Interfaces;
-
 namespace DocumentAtom.Sdk.Implementations
 {
+    using DocumentAtom.Sdk.Interfaces;
+
     /// <summary>
     /// Implementation of health check methods.
     /// </summary>
@@ -42,7 +39,7 @@ namespace DocumentAtom.Sdk.Implementations
         public async Task<string?> GetStatus(CancellationToken cancellationToken = default)
         {
             string url = _Sdk.Endpoint + "/";
-            return await _Sdk.GetStringAsync(url, cancellationToken).ConfigureAwait(false);
+            return await _Sdk.GetAsync(url, cancellationToken).ConfigureAwait(false);
         }
 
         #endregion
