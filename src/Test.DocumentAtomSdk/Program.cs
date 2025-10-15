@@ -373,9 +373,9 @@ namespace Test.DocumentAtomSdk
                 byte[] data = await File.ReadAllBytesAsync(filename);
                 Console.WriteLine($"Processing {documentType} file: {filename} ({data.Length} bytes)...");
 
-                var startTime = DateTime.UtcNow;
+                DateTime startTime = DateTime.UtcNow;
                 List<Atom>? atoms = await processor(data, extractOcr);
-                var endTime = DateTime.UtcNow;
+                DateTime endTime = DateTime.UtcNow;
 
                 if (atoms != null)
                 {
@@ -383,7 +383,7 @@ namespace Test.DocumentAtomSdk
                     Console.WriteLine($"Extracted {atoms.Count} atoms:");
                     Console.WriteLine();
 
-                    foreach (var atom in atoms.Take(5)) // Show first 5 atoms
+                    foreach (Atom atom in atoms.Take(5)) // Show first 5 atoms
                     {
                         string content = "";
                         if (atom.Type == AtomTypeEnum.Table)

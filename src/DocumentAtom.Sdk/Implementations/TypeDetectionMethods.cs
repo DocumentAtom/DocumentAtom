@@ -68,7 +68,7 @@ namespace DocumentAtom.Sdk.Implementations
                                 _Sdk.Log(SeverityEnum.Debug, "Deserializing response body");
                                 try
                                 {
-                                    var options = new JsonSerializerOptions
+                                    JsonSerializerOptions options = new JsonSerializerOptions
                                     {
                                         PropertyNameCaseInsensitive = true
                                     };

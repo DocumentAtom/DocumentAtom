@@ -77,18 +77,16 @@ namespace DocumentAtom.Sdk.Implementations
         {
             string url = _Sdk.Endpoint + "/atom/ocr";
 
-            var extractionResult = await _Sdk.PostAsync<ExtractionResult>(url, data, cancellationToken).ConfigureAwait(false);
+            ExtractionResult? extractionResult = await _Sdk.PostAsync<ExtractionResult>(url, data, cancellationToken).ConfigureAwait(false);
 
             if (extractionResult == null)
                 return null;
 
-            // Convert ExtractionResult to List<Atom>
-            var atoms = new List<Atom>();
+            List<Atom> atoms = new List<Atom>();
 
-            // Convert text elements to atoms
             if (extractionResult.TextElements != null)
             {
-                foreach (var textElement in extractionResult.TextElements)
+                foreach (TextElement textElement in extractionResult.TextElements)
                 {
                     if (!string.IsNullOrEmpty(textElement.Text))
                     {
@@ -103,12 +101,11 @@ namespace DocumentAtom.Sdk.Implementations
                 }
             }
 
-            // Convert tables to atoms
             if (extractionResult.Tables != null)
             {
-                foreach (var table in extractionResult.Tables)
+                foreach (TableStructure table in extractionResult.Tables)
                 {
-                    var tableAtom = Atom.FromTableStructure(table);
+                    Atom tableAtom = Atom.FromTableStructure(table);
                     if (tableAtom != null)
                     {
                         atoms.Add(tableAtom);
@@ -116,10 +113,9 @@ namespace DocumentAtom.Sdk.Implementations
                 }
             }
 
-            // Convert lists to atoms
             if (extractionResult.Lists != null)
             {
-                foreach (var list in extractionResult.Lists)
+                foreach (ListStructure list in extractionResult.Lists)
                 {
                     if (list.Items != null && list.Items.Count > 0)
                     {
