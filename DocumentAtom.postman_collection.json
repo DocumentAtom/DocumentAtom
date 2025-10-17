@@ -48,6 +48,32 @@
 			"response": []
 		},
 		{
+			"name": "Extract atoms (CSV)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "file",
+					"file": {
+						"src": "/C:/Code/DocumentAtom/src/Test.CsvProcessor/Sample/1.csv"
+					}
+				},
+				"url": {
+					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/csv",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"atom",
+						"csv"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Extract atoms (Excel)",
 			"request": {
 				"method": "POST",
@@ -94,6 +120,32 @@
 					"path": [
 						"atom",
 						"html"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Extract atoms (JSON)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "file",
+					"file": {
+						"src": "/C:/Code/DocumentAtom/src/Test.JsonProcessor/Sample/1.json"
+					}
+				},
+				"url": {
+					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/json",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"atom",
+						"json"
 					]
 				}
 			},
@@ -253,7 +305,7 @@
 					}
 				},
 				"url": {
-					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/powerpoint?ocr",
+					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/rtf?ocr",
 					"protocol": "{{protocol}}",
 					"host": [
 						"{{hostname}}"
@@ -261,7 +313,7 @@
 					"port": "{{port}}",
 					"path": [
 						"atom",
-						"powerpoint"
+						"rtf"
 					],
 					"query": [
 						{
@@ -320,6 +372,32 @@
 					"path": [
 						"atom",
 						"word"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Extract atoms (XML)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "file",
+					"file": {
+						"src": "/G:/Shared drives/View Systems/Test Files/SampleFilesByType/Word/3.docx"
+					}
+				},
+				"url": {
+					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/xml",
+					"protocol": "{{protocol}}",
+					"host": [
+						"{{hostname}}"
+					],
+					"port": "{{port}}",
+					"path": [
+						"atom",
+						"xml"
 					]
 				}
 			},
