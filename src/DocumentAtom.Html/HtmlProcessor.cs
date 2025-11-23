@@ -323,6 +323,17 @@
                     ProcessTextNode(node, atoms, ref position, pageNumber);
                     break;
 
+                case "script":
+                case "style":
+                case "noscript":
+                case "meta":
+                case "link":
+                case "template":
+                    // Skip non-content elements - JavaScript, CSS, metadata, etc.
+                    // Note: These will still be captured if they appear inside <pre> or <code> blocks
+                    // because those parent elements process their InnerText before recursion reaches here
+                    break;
+
                 case "strong":
                 case "em":
                 case "b":
