@@ -513,5 +513,34 @@
             <param name="sdk">DocumentAtom SDK instance.</param>
             <param name="serializer">Serializer instance.</param>
         </member>
+        <member name="T:DocumentAtom.McpServer.Registrations.MarkdownRegistrations">
+            <summary>
+            Registration methods for Markdown operations.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.McpServer.Registrations.MarkdownRegistrations.RegisterHttpTools(Voltaic.McpHttpServer,DocumentAtom.Sdk.DocumentAtomSdk,SerializationHelper.Serializer)">
+            <summary>
+            Registers Markdown tools on HTTP server.
+            </summary>
+            <param name="server">HTTP server instance.</param>
+            <param name="sdk">DocumentAtom SDK instance.</param>
+            <param name="serializer">Serializer instance.</param>
+        </member>
+        <member name="M:DocumentAtom.McpServer.Registrations.MarkdownRegistrations.RegisterTcpMethods(Voltaic.McpTcpServer,DocumentAtom.Sdk.DocumentAtomSdk,SerializationHelper.Serializer)">
+            <summary>
+            Registers Markdown methods on TCP server.
+            </summary>
+            <param name="server">TCP server instance.</param>
+            <param name="sdk">DocumentAtom SDK instance.</param>
+            <param name="serializer">Serializer instance.</param>
+        </member>
+        <member name="M:DocumentAtom.McpServer.Registrations.MarkdownRegistrations.RegisterWebSocketMethods(Voltaic.McpWebsocketsServer,DocumentAtom.Sdk.DocumentAtomSdk,SerializationHelper.Serializer)">
+            <summary>
+            Registers Markdown methods on WebSocket server.
+            </summary>
+            <param name="server">WebSocket server instance.</param>
+            <param name="sdk">DocumentAtom SDK instance.</param>
+            <param name="serializer">Serializer instance.</param>
+        </member>
     </members>
 </doc>

@@ -63,6 +63,7 @@ namespace Test.Mcp
                 else if (userInput.Equals("test-excel-process")) await TestExcelProcess(token).ConfigureAwait(false);
                 else if (userInput.Equals("test-html-process")) await TestHtmlProcess(token).ConfigureAwait(false);
                 else if (userInput.Equals("test-json-process")) await TestJsonProcess(token).ConfigureAwait(false);
+                else if (userInput.Equals("test-markdown-process")) await TestMarkdownProcess(token).ConfigureAwait(false);
                 else
                 {
                     Console.WriteLine("Unknown command. Type '?' for help.");
@@ -85,6 +86,7 @@ namespace Test.Mcp
             Console.WriteLine("  test-excel-process   test Excel processing with Excel file path");
             Console.WriteLine("  test-html-process    test HTML processing with HTML file path");
             Console.WriteLine("  test-json-process    test JSON processing with JSON file path");
+            Console.WriteLine("  test-markdown-process test Markdown processing with Markdown file path");
             Console.WriteLine("");
         }
 
@@ -384,6 +386,53 @@ namespace Test.Mcp
             catch (Exception ex)
             {
                 Console.WriteLine($"Error in JSON processing test: {ex.Message}");
+                if (_Debug)
+                {
+                    Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                }
+            }
+        }
+
+        static async Task TestMarkdownProcess(CancellationToken token = default)
+        {
+            try
+            {
+                Console.WriteLine("Testing Markdown processing...");
+
+                // Get Markdown file path from user
+                string markdownPath = Inputty.GetString("Enter Markdown file path:", null, false);
+                if (string.IsNullOrEmpty(markdownPath))
+                {
+                    Console.WriteLine("No Markdown path provided.");
+                    return;
+                }
+
+                if (!File.Exists(markdownPath))
+                {
+                    Console.WriteLine($"Markdown file not found: {markdownPath}");
+                    return;
+                }
+
+                // Read the Markdown file
+                byte[] markdownData = File.ReadAllBytes(markdownPath);
+                string base64Markdown = Convert.ToBase64String(markdownData);
+                string filename = Path.GetFileName(markdownPath);
+
+                var request = new
+                {
+                    data = base64Markdown
+                };
+
+                Console.WriteLine($"Processing Markdown: {filename} ({markdownData.Length} bytes)");
+                Console.WriteLine("Sending Markdown processing request...");
+                var result = await _McpClient!.CallAsync<string>("markdown/process", request, 60000, token).ConfigureAwait(false);
+
+                Console.WriteLine("Markdown processing result:");
+                Console.WriteLine(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in Markdown processing test: {ex.Message}");
                 if (_Debug)
                 {
                     Console.WriteLine($"Stack trace: {ex.StackTrace}");

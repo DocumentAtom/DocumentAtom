@@ -372,30 +372,26 @@ namespace DocumentAtom.McpServer
             if (_McpHttpServer == null || _McpTcpServer == null || _McpWebsocketServer == null || _McpSdk == null)
                 throw new InvalidOperationException("Servers and SDK have not been initialized");
 
-            // Register image tools for HTTP, TCP, and WebSocket servers
             ImageRegistrations.RegisterHttpTools(_McpHttpServer, _McpSdk, _Serializer);
-            ImageRegistrations.RegisterTcpMethods(_McpTcpServer, _McpSdk, _Serializer);
-            ImageRegistrations.RegisterWebSocketMethods(_McpWebsocketServer, _McpSdk, _Serializer);
-
-            // Register CSV tools for HTTP, TCP, and WebSocket servers
             CsvRegistrations.RegisterHttpTools(_McpHttpServer, _McpSdk, _Serializer);
-            CsvRegistrations.RegisterTcpMethods(_McpTcpServer, _McpSdk, _Serializer);
-            CsvRegistrations.RegisterWebSocketMethods(_McpWebsocketServer, _McpSdk, _Serializer);
-
-            // Register Excel tools for HTTP, TCP, and WebSocket servers
             ExcelRegistrations.RegisterHttpTools(_McpHttpServer, _McpSdk, _Serializer);
-            ExcelRegistrations.RegisterTcpMethods(_McpTcpServer, _McpSdk, _Serializer);
-            ExcelRegistrations.RegisterWebSocketMethods(_McpWebsocketServer, _McpSdk, _Serializer);
-
-            // Register HTML tools for HTTP, TCP, and WebSocket servers
             HtmlRegistrations.RegisterHttpTools(_McpHttpServer, _McpSdk, _Serializer);
-            HtmlRegistrations.RegisterTcpMethods(_McpTcpServer, _McpSdk, _Serializer);
-            HtmlRegistrations.RegisterWebSocketMethods(_McpWebsocketServer, _McpSdk, _Serializer);
-
-            // Register JSON tools for HTTP, TCP, and WebSocket servers
             JsonRegistrations.RegisterHttpTools(_McpHttpServer, _McpSdk, _Serializer);
+            MarkdownRegistrations.RegisterHttpTools(_McpHttpServer, _McpSdk, _Serializer);
+
+            ImageRegistrations.RegisterTcpMethods(_McpTcpServer, _McpSdk, _Serializer);
+            CsvRegistrations.RegisterTcpMethods(_McpTcpServer, _McpSdk, _Serializer);
+            ExcelRegistrations.RegisterTcpMethods(_McpTcpServer, _McpSdk, _Serializer);
+            HtmlRegistrations.RegisterTcpMethods(_McpTcpServer, _McpSdk, _Serializer);
             JsonRegistrations.RegisterTcpMethods(_McpTcpServer, _McpSdk, _Serializer);
+            MarkdownRegistrations.RegisterTcpMethods(_McpTcpServer, _McpSdk, _Serializer);
+
+            ImageRegistrations.RegisterWebSocketMethods(_McpWebsocketServer, _McpSdk, _Serializer);
+            CsvRegistrations.RegisterWebSocketMethods(_McpWebsocketServer, _McpSdk, _Serializer);
+            ExcelRegistrations.RegisterWebSocketMethods(_McpWebsocketServer, _McpSdk, _Serializer);
+            HtmlRegistrations.RegisterWebSocketMethods(_McpWebsocketServer, _McpSdk, _Serializer);
             JsonRegistrations.RegisterWebSocketMethods(_McpWebsocketServer, _McpSdk, _Serializer);
+            MarkdownRegistrations.RegisterWebSocketMethods(_McpWebsocketServer, _McpSdk, _Serializer);
         }
 
         private static void ShowHelp()
