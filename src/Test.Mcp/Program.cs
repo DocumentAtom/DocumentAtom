@@ -60,6 +60,9 @@ namespace Test.Mcp
                 else if (userInput.Equals("test-image-process")) await TestImageProcess(token).ConfigureAwait(false);
                 else if (userInput.Equals("test-image-ocr")) await TestImageOcr(token).ConfigureAwait(false);
                 else if (userInput.Equals("test-csv-process")) await TestCsvProcess(token).ConfigureAwait(false);
+                else if (userInput.Equals("test-excel-process")) await TestExcelProcess(token).ConfigureAwait(false);
+                else if (userInput.Equals("test-html-process")) await TestHtmlProcess(token).ConfigureAwait(false);
+                else if (userInput.Equals("test-json-process")) await TestJsonProcess(token).ConfigureAwait(false);
                 else
                 {
                     Console.WriteLine("Unknown command. Type '?' for help.");
@@ -79,6 +82,9 @@ namespace Test.Mcp
             Console.WriteLine("  test-image-process   test image processing with image file path");
             Console.WriteLine("  test-image-ocr       test OCR extraction from image file");
             Console.WriteLine("  test-csv-process     test CSV processing with CSV file path");
+            Console.WriteLine("  test-excel-process   test Excel processing with Excel file path");
+            Console.WriteLine("  test-html-process    test HTML processing with HTML file path");
+            Console.WriteLine("  test-json-process    test JSON processing with JSON file path");
             Console.WriteLine("");
         }
 
@@ -235,5 +241,155 @@ namespace Test.Mcp
                 }
             }
         }
+
+        static async Task TestExcelProcess(CancellationToken token = default)
+        {
+            try
+            {
+                Console.WriteLine("Testing Excel processing...");
+
+                // Get Excel file path from user
+                string excelPath = Inputty.GetString("Enter Excel file path:", null, false);
+                if (string.IsNullOrEmpty(excelPath))
+                {
+                    Console.WriteLine("No Excel path provided.");
+                    return;
+                }
+
+                if (!File.Exists(excelPath))
+                {
+                    Console.WriteLine($"Excel file not found: {excelPath}");
+                    return;
+                }
+
+                // Read the Excel file
+                byte[] excelData = File.ReadAllBytes(excelPath);
+                string base64Excel = Convert.ToBase64String(excelData);
+                string filename = Path.GetFileName(excelPath);
+
+                // Ask if user wants OCR extraction
+                bool extractOcr = Inputty.GetBoolean("Extract text from images using OCR?", false);
+
+                var request = new
+                {
+                    data = base64Excel,
+                    extractOcr = extractOcr
+                };
+
+                Console.WriteLine($"Processing Excel: {filename} ({excelData.Length} bytes)");
+                if (extractOcr)
+                {
+                    Console.WriteLine("OCR extraction enabled");
+                }
+                Console.WriteLine("Sending Excel processing request...");
+                var result = await _McpClient!.CallAsync<string>("excel/process", request, 60000, token).ConfigureAwait(false);
+
+                Console.WriteLine("Excel processing result:");
+                Console.WriteLine(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in Excel processing test: {ex.Message}");
+                if (_Debug)
+                {
+                    Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                }
+            }
+        }
+
+        static async Task TestHtmlProcess(CancellationToken token = default)
+        {
+            try
+            {
+                Console.WriteLine("Testing HTML processing...");
+
+                // Get HTML file path from user
+                string htmlPath = Inputty.GetString("Enter HTML file path:", null, false);
+                if (string.IsNullOrEmpty(htmlPath))
+                {
+                    Console.WriteLine("No HTML path provided.");
+                    return;
+                }
+
+                if (!File.Exists(htmlPath))
+                {
+                    Console.WriteLine($"HTML file not found: {htmlPath}");
+                    return;
+                }
+
+                // Read the HTML file
+                byte[] htmlData = File.ReadAllBytes(htmlPath);
+                string base64Html = Convert.ToBase64String(htmlData);
+                string filename = Path.GetFileName(htmlPath);
+
+                var request = new
+                {
+                    data = base64Html
+                };
+
+                Console.WriteLine($"Processing HTML: {filename} ({htmlData.Length} bytes)");
+                Console.WriteLine("Sending HTML processing request...");
+                var result = await _McpClient!.CallAsync<string>("html/process", request, 60000, token).ConfigureAwait(false);
+
+                Console.WriteLine("HTML processing result:");
+                Console.WriteLine(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in HTML processing test: {ex.Message}");
+                if (_Debug)
+                {
+                    Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                }
+            }
+        }
+
+        static async Task TestJsonProcess(CancellationToken token = default)
+        {
+            try
+            {
+                Console.WriteLine("Testing JSON processing...");
+
+                // Get JSON file path from user
+                string jsonPath = Inputty.GetString("Enter JSON file path:", null, false);
+                if (string.IsNullOrEmpty(jsonPath))
+                {
+                    Console.WriteLine("No JSON path provided.");
+                    return;
+                }
+
+                if (!File.Exists(jsonPath))
+                {
+                    Console.WriteLine($"JSON file not found: {jsonPath}");
+                    return;
+                }
+
+                // Read the JSON file
+                byte[] jsonData = File.ReadAllBytes(jsonPath);
+                string base64Json = Convert.ToBase64String(jsonData);
+                string filename = Path.GetFileName(jsonPath);
+
+                var request = new
+                {
+                    data = base64Json
+                };
+
+                Console.WriteLine($"Processing JSON: {filename} ({jsonData.Length} bytes)");
+                Console.WriteLine("Sending JSON processing request...");
+                var result = await _McpClient!.CallAsync<string>("json/process", request, 60000, token).ConfigureAwait(false);
+
+                Console.WriteLine("JSON processing result:");
+                Console.WriteLine(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in JSON processing test: {ex.Message}");
+                if (_Debug)
+                {
+                    Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                }
+            }
+        }
+
     }
 }
