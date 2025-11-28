@@ -59,6 +59,7 @@ namespace Test.Mcp
                 else if (userInput.Equals("debug")) ToggleDebug();
                 else if (userInput.Equals("test-image-process")) await TestImageProcess(token).ConfigureAwait(false);
                 else if (userInput.Equals("test-image-ocr")) await TestImageOcr(token).ConfigureAwait(false);
+                else if (userInput.Equals("test-csv-process")) await TestCsvProcess(token).ConfigureAwait(false);
                 else
                 {
                     Console.WriteLine("Unknown command. Type '?' for help.");
@@ -77,6 +78,7 @@ namespace Test.Mcp
             Console.WriteLine("");
             Console.WriteLine("  test-image-process   test image processing with image file path");
             Console.WriteLine("  test-image-ocr       test OCR extraction from image file");
+            Console.WriteLine("  test-csv-process     test CSV processing with CSV file path");
             Console.WriteLine("");
         }
 
@@ -181,5 +183,57 @@ namespace Test.Mcp
             }
         }
 
+        static async Task TestCsvProcess(CancellationToken token = default)
+        {
+            try
+            {
+                Console.WriteLine("Testing CSV processing...");
+
+                // Get CSV file path from user
+                string csvPath = Inputty.GetString("Enter CSV file path:", null, false);
+                if (string.IsNullOrEmpty(csvPath))
+                {
+                    Console.WriteLine("No CSV path provided.");
+                    return;
+                }
+
+                if (!File.Exists(csvPath))
+                {
+                    Console.WriteLine($"CSV file not found: {csvPath}");
+                    return;
+                }
+
+                byte[] csvData = File.ReadAllBytes(csvPath);
+                string base64Csv = Convert.ToBase64String(csvData);
+                string filename = Path.GetFileName(csvPath);
+
+                bool extractOcr = Inputty.GetBoolean("Extract text from images using OCR?", false);
+
+                var request = new
+                {
+                    data = base64Csv,
+                    extractOcr = extractOcr
+                };
+
+                Console.WriteLine($"Processing CSV: {filename} ({csvData.Length} bytes)");
+                if (extractOcr)
+                {
+                    Console.WriteLine("OCR extraction enabled");
+                }
+                Console.WriteLine("Sending CSV processing request...");
+                var result = await _McpClient!.CallAsync<string>("csv/process", request, 60000, token).ConfigureAwait(false);
+
+                Console.WriteLine("CSV processing result:");
+                Console.WriteLine(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in CSV processing test: {ex.Message}");
+                if (_Debug)
+                {
+                    Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                }
+            }
+        }
     }
 }

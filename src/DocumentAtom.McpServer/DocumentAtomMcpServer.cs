@@ -376,6 +376,11 @@ namespace DocumentAtom.McpServer
             ImageRegistrations.RegisterHttpTools(_McpHttpServer, _McpSdk, _Serializer);
             ImageRegistrations.RegisterTcpMethods(_McpTcpServer, _McpSdk, _Serializer);
             ImageRegistrations.RegisterWebSocketMethods(_McpWebsocketServer, _McpSdk, _Serializer);
+
+            // Register CSV tools for HTTP, TCP, and WebSocket servers
+            CsvRegistrations.RegisterHttpTools(_McpHttpServer, _McpSdk, _Serializer);
+            CsvRegistrations.RegisterTcpMethods(_McpTcpServer, _McpSdk, _Serializer);
+            CsvRegistrations.RegisterWebSocketMethods(_McpWebsocketServer, _McpSdk, _Serializer);
         }
 
         private static void ShowHelp()

@@ -368,6 +368,35 @@
             <param name="sdkSeverity">SDK severity.</param>
             <returns>Syslog severity.</returns>
         </member>
+        <member name="T:DocumentAtom.McpServer.Registrations.CsvRegistrations">
+            <summary>
+            Registration methods for CSV operations.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.McpServer.Registrations.CsvRegistrations.RegisterHttpTools(Voltaic.McpHttpServer,DocumentAtom.Sdk.DocumentAtomSdk,SerializationHelper.Serializer)">
+            <summary>
+            Registers CSV tools on HTTP server.
+            </summary>
+            <param name="server">HTTP server instance.</param>
+            <param name="sdk">DocumentAtom SDK instance.</param>
+            <param name="serializer">Serializer instance.</param>
+        </member>
+        <member name="M:DocumentAtom.McpServer.Registrations.CsvRegistrations.RegisterTcpMethods(Voltaic.McpTcpServer,DocumentAtom.Sdk.DocumentAtomSdk,SerializationHelper.Serializer)">
+            <summary>
+            Registers CSV methods on TCP server.
+            </summary>
+            <param name="server">TCP server instance.</param>
+            <param name="sdk">DocumentAtom SDK instance.</param>
+            <param name="serializer">Serializer instance.</param>
+        </member>
+        <member name="M:DocumentAtom.McpServer.Registrations.CsvRegistrations.RegisterWebSocketMethods(Voltaic.McpWebsocketsServer,DocumentAtom.Sdk.DocumentAtomSdk,SerializationHelper.Serializer)">
+            <summary>
+            Registers CSV methods on WebSocket server.
+            </summary>
+            <param name="server">WebSocket server instance.</param>
+            <param name="sdk">DocumentAtom SDK instance.</param>
+            <param name="serializer">Serializer instance.</param>
+        </member>
         <member name="T:DocumentAtom.McpServer.Registrations.ImageRegistrations">
             <summary>
             Registration methods for Image operations.
