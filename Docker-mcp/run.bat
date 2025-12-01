@@ -15,9 +15,9 @@ REM   backups/
 REM Argument order matters!
 
 docker run ^
-  -p 8000:8000 ^
-  -p 8001:8001 ^
-  -p 8002:8002 ^
+  -p 8200:8200 ^
+  -p 8201:8201 ^
+  -p 8202:8202 ^
   -t ^
   -i ^
   -e "TERM=xterm-256color" ^
@@ -30,6 +30,6 @@ GOTO :Done
 
 :Usage
 ECHO Provide one argument indicating the tag.
-ECHO Example: dockerrun.bat v1.0.0
+ECHO Example: run.bat v1.1.0
 :Done
 @echo on

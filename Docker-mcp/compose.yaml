@@ -9,7 +9,7 @@ services:
 
   documentatom-mcp:
     container_name: 'documentatom-mcp'
-    image: 'jchristn/documentatom-mcp:v1.0.0'
+    image: 'jchristn/documentatom-mcp:v1.1.0'
     network_mode: 'host'
     stdin_open: true
     tty: true
@@ -18,4 +18,4 @@ services:
       - ./logs/:/app/logs/
       - ./backups/:/app/backups/
     healthcheck:
-      test: curl --fail http://localhost:8000
+      test: curl --fail http://localhost:8200

@@ -27,6 +27,7 @@ DocumentAtom requires that Tesseract v5.0 be installed on the host.  This is req
 
 - Hierarchical atomization (see `BuildHierarchy` in settings) - heading-based for markdown/HTML/Word, page-based for PowerPoint
 - Support for CSV, JSON, and XML documents
+- MCP server (`DocumentAtom.McpServer`) for exposing DocumentAtom operations via Model Context Protocol to AI assistants
 - Dependency updates and fixes
 
 ## Motivation
@@ -121,6 +122,173 @@ My libraries used within DocumentAtom:
 Run the `DocumentAtom.Server` project to start a RESTful server listening on `localhost:8000`.  Modify the `documentatom.json` file to change the webserver, logging, or Tesseract settings.  Alternatively, you can pull `jchristn/documentatom` from [Docker Hub](https://hub.docker.com/repository/docker/jchristn/documentatom/general).  Refer to the `Docker` directory in the project for assets for running in Docker.
 
 Refer to the Postman collection for examples exercising the APIs.
+
+### Running Locally
+
+```bash
+cd src/DocumentAtom.Server
+dotnet run
+```
+
+### Running with Docker
+
+1. Pull the image from Docker Hub:
+```bash
+docker pull jchristn/documentatom:v1.1.0
+```
+
+2. Create a `documentatom.json` configuration file (see `Docker/documentatom.json` for an example)
+
+3. Run the container:
+```bash
+# Windows
+docker run -p 8000:8000 -v .\documentatom.json:/app/documentatom.json -v .\logs\:/app/logs/ jchristn/documentatom:v1.1.0
+
+# Linux/macOS
+docker run -p 8000:8000 -v ./documentatom.json:/app/documentatom.json -v ./logs/:/app/logs/ jchristn/documentatom:v1.1.0
+```
+
+Alternatively, use the provided scripts in the `Docker` directory:
+```bash
+# Windows
+Dockerrun.bat v1.1.0
+
+# Linux/macOS
+IMG_TAG=v1.1.0 ./Dockerrun.sh
+```
+
+## MCP Server and Docker
+
+The `DocumentAtom.McpServer` project provides a [Model Context Protocol (MCP)](https://modelcontextprotocol.io/) server that exposes DocumentAtom operations to AI assistants and LLM-based tools. The MCP server acts as a front-end to the `DocumentAtom.Server` RESTful API, enabling AI agents to process documents via standardized MCP tool calls.
+
+The MCP server supports three transport protocols:
+- **HTTP**: JSON-RPC over HTTP at `/rpc` (default port 8200)
+- **TCP**: Raw TCP socket connection (default port 8201)
+- **WebSocket**: WebSocket connection at `/mcp` (default port 8202)
+
+### Prerequisites
+
+The MCP server requires a running `DocumentAtom.Server` instance. Configure the endpoint in `documentatom.json`:
+
+```json
+{
+  "DocumentAtom": {
+    "Endpoint": "http://localhost:8000",
+    "AccessKey": null
+  }
+}
+```
+
+### Running Locally
+
+```bash
+cd src/DocumentAtom.McpServer
+dotnet run
+```
+
+Command-line options:
+- `--config=<file>` - Specify settings file path (default: `./documentatom.json`)
+- `--showconfig` - Display configuration and exit
+- `--help`, `-h` - Show help message
+
+### Running with Docker
+
+1. Pull the image from Docker Hub:
+```bash
+docker pull jchristn/documentatom-mcp:v1.1.0
+```
+
+2. Create a `documentatom.json` configuration file with MCP server settings:
+
+```json
+{
+  "Logging": {
+    "LogDirectory": "./logs/",
+    "LogFilename": "documentatom-mcp.log",
+    "ConsoleLogging": true,
+    "EnableColors": true,
+    "MinimumSeverity": 0
+  },
+  "DocumentAtom": {
+    "Endpoint": "http://host.docker.internal:8000",
+    "AccessKey": null
+  },
+  "Http": {
+    "Hostname": "0.0.0.0",
+    "Port": 8200
+  },
+  "Tcp": {
+    "Address": "0.0.0.0",
+    "Port": 8201
+  },
+  "WebSocket": {
+    "Hostname": "0.0.0.0",
+    "Port": 8202
+  },
+  "Storage": {
+    "BackupsDirectory": "./backups/",
+    "TempDirectory": "./temp/"
+  }
+}
+```
+
+3. Run the container:
+```bash
+# Windows
+docker run -p 8200:8200 -p 8201:8201 -p 8202:8202 ^
+  -v .\documentatom.json:/app/documentatom.json ^
+  -v .\logs\:/app/logs/ ^
+  -v .\temp\:/app/temp/ ^
+  -v .\backups\:/app/backups/ ^
+  jchristn/documentatom-mcp:v1.1.0
+
+# Linux/macOS
+docker run -p 8200:8200 -p 8201:8201 -p 8202:8202 \
+  -v ./documentatom.json:/app/documentatom.json \
+  -v ./logs/:/app/logs/ \
+  -v ./temp/:/app/temp/ \
+  -v ./backups/:/app/backups/ \
+  jchristn/documentatom-mcp:v1.1.0
+```
+
+Alternatively, use the provided scripts in `src/DocumentAtom.McpServer`:
+```bash
+# Windows
+Dockerrun.bat v1.0.0
+
+# Linux/macOS
+IMG_TAG=v1.0.0 ./Dockerrun.sh
+```
+
+### Environment Variables
+
+The MCP server supports the following environment variables to override configuration:
+
+| Variable | Description |
+|----------|-------------|
+| `DOCUMENTATOM_ENDPOINT` | DocumentAtom server endpoint URL |
+| `DOCUMENTATOM_ACCESS_KEY` | Access key for authentication |
+| `MCP_HTTP_HOSTNAME` | HTTP server hostname |
+| `MCP_HTTP_PORT` | HTTP server port |
+| `MCP_TCP_ADDRESS` | TCP server address |
+| `MCP_TCP_PORT` | TCP server port |
+| `MCP_WEBSOCKET_HOSTNAME` | WebSocket server hostname |
+| `MCP_WEBSOCKET_PORT` | WebSocket server port |
+| `CONSOLE_LOGGING` | Enable console logging (1 or 0) |
+
+### Building Docker Images
+
+To build the Docker images locally:
+
+```bash
+# Build DocumentAtom.Server image
+cd Docker
+Dockerbuild.bat v1.1.0 0  # 0 = don't push, 1 = push to Docker Hub
+
+# Build DocumentAtom.McpServer image (from src directory)
+cd src
+docker buildx build -f DocumentAtom.McpServer/Dockerfile --platform linux/amd64,linux/arm64/v8 --tag jchristn/documentatom-mcp:v1.1.0 --push .
+```
 
 ## Version History
 

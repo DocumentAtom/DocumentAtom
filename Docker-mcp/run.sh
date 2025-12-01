@@ -1,5 +1,5 @@
 if [ -z "${IMG_TAG}" ]; then
-  IMG_TAG='v1.0.0'
+  IMG_TAG='v1.1.0'
 fi
 
 echo Using image tag $IMG_TAG
@@ -18,9 +18,9 @@ fi
 # Argument order matters!
 
 docker run \
-  -p 8000:8000 \
-  -p 8001:8001 \
-  -p 8002:8002 \
+  -p 8200:8200 \
+  -p 8201:8201 \
+  -p 8202:8202 \
   -t \
   -i \
   -e "TERM=xterm-256color" \
