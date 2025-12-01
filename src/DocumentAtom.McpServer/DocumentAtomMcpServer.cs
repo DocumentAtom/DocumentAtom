@@ -383,6 +383,9 @@ namespace DocumentAtom.McpServer
             PowerPointRegistrations.RegisterHttpTools(_McpHttpServer, _McpSdk, _Serializer);
             RichTextRegistrations.RegisterHttpTools(_McpHttpServer, _McpSdk, _Serializer);
             TextRegistrations.RegisterHttpTools(_McpHttpServer, _McpSdk, _Serializer);
+            TypeDetectionRegistrations.RegisterHttpTools(_McpHttpServer, _McpSdk, _Serializer);
+            WordRegistrations.RegisterHttpTools(_McpHttpServer, _McpSdk, _Serializer);
+            XmlRegistrations.RegisterHttpTools(_McpHttpServer, _McpSdk, _Serializer);
 
             ImageRegistrations.RegisterTcpMethods(_McpTcpServer, _McpSdk, _Serializer);
             CsvRegistrations.RegisterTcpMethods(_McpTcpServer, _McpSdk, _Serializer);
@@ -395,6 +398,9 @@ namespace DocumentAtom.McpServer
             PowerPointRegistrations.RegisterTcpMethods(_McpTcpServer, _McpSdk, _Serializer);
             RichTextRegistrations.RegisterTcpMethods(_McpTcpServer, _McpSdk, _Serializer);
             TextRegistrations.RegisterTcpMethods(_McpTcpServer, _McpSdk, _Serializer);
+            TypeDetectionRegistrations.RegisterTcpMethods(_McpTcpServer, _McpSdk, _Serializer);
+            WordRegistrations.RegisterTcpMethods(_McpTcpServer, _McpSdk, _Serializer);
+            XmlRegistrations.RegisterTcpMethods(_McpTcpServer, _McpSdk, _Serializer);
 
             ImageRegistrations.RegisterWebSocketMethods(_McpWebsocketServer, _McpSdk, _Serializer);
             CsvRegistrations.RegisterWebSocketMethods(_McpWebsocketServer, _McpSdk, _Serializer);
@@ -407,6 +413,9 @@ namespace DocumentAtom.McpServer
             PowerPointRegistrations.RegisterWebSocketMethods(_McpWebsocketServer, _McpSdk, _Serializer);
             RichTextRegistrations.RegisterWebSocketMethods(_McpWebsocketServer, _McpSdk, _Serializer);
             TextRegistrations.RegisterWebSocketMethods(_McpWebsocketServer, _McpSdk, _Serializer);
+            TypeDetectionRegistrations.RegisterWebSocketMethods(_McpWebsocketServer, _McpSdk, _Serializer);
+            WordRegistrations.RegisterWebSocketMethods(_McpWebsocketServer, _McpSdk, _Serializer);
+            XmlRegistrations.RegisterWebSocketMethods(_McpWebsocketServer, _McpSdk, _Serializer);
         }
 
         private static void ShowHelp()

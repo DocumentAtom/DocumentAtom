@@ -69,6 +69,9 @@ namespace Test.Mcp
                 else if (userInput.Equals("test-powerpoint-process")) await TestPowerPointProcess(token).ConfigureAwait(false);
                 else if (userInput.Equals("test-richtext-process")) await TestRichTextProcess(token).ConfigureAwait(false);
                 else if (userInput.Equals("test-text-process")) await TestTextProcess(token).ConfigureAwait(false);
+                else if (userInput.Equals("test-typedetection-detect")) await TestTypeDetectionDetect(token).ConfigureAwait(false);
+                else if (userInput.Equals("test-word-process")) await TestWordProcess(token).ConfigureAwait(false);
+                else if (userInput.Equals("test-xml-process")) await TestXmlProcess(token).ConfigureAwait(false);
                 else
                 {
                     Console.WriteLine("Unknown command. Type '?' for help.");
@@ -97,6 +100,9 @@ namespace Test.Mcp
             Console.WriteLine("  test-powerpoint-process        test PowerPoint processing with PowerPoint file path");
             Console.WriteLine("  test-richtext-process          test Rich Text processing with RTF file path");
             Console.WriteLine("  test-text-process              test text processing with text file path");
+            Console.WriteLine("  test-typedetection-detect      test type detection with file path");
+            Console.WriteLine("  test-word-process              test Word processing with Word file path");
+            Console.WriteLine("  test-xml-process               test XML processing with XML file path");
             Console.WriteLine("");
         }
 
@@ -702,6 +708,167 @@ namespace Test.Mcp
             catch (Exception ex)
             {
                 Console.WriteLine($"Error in text processing test: {ex.Message}");
+                if (_Debug)
+                {
+                    Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                }
+            }
+        }
+
+        static async Task TestTypeDetectionDetect(CancellationToken token = default)
+        {
+            try
+            {
+                Console.WriteLine("Testing Type Detection...");
+
+                // Get file path from user
+                string filePath = Inputty.GetString("Enter file path:", null, false);
+                if (string.IsNullOrEmpty(filePath))
+                {
+                    Console.WriteLine("No file path provided.");
+                    return;
+                }
+
+                if (!File.Exists(filePath))
+                {
+                    Console.WriteLine($"File not found: {filePath}");
+                    return;
+                }
+
+                // Read the file
+                byte[] fileData = File.ReadAllBytes(filePath);
+                string base64Data = Convert.ToBase64String(fileData);
+                string filename = Path.GetFileName(filePath);
+
+                // Get optional content type hint
+                string? contentType = Inputty.GetString("Enter content type hint (optional, press Enter to skip):", null, true);
+                if (string.IsNullOrEmpty(contentType))
+                {
+                    contentType = null;
+                }
+
+                var request = new
+                {
+                    data = base64Data,
+                    contentType = contentType
+                };
+
+                Console.WriteLine($"Detecting type for: {filename} ({fileData.Length} bytes)");
+                if (!string.IsNullOrEmpty(contentType))
+                {
+                    Console.WriteLine($"Content type hint: {contentType}");
+                }
+                Console.WriteLine("Sending type detection request...");
+                var result = await _McpClient!.CallAsync<string>("typedetection/detect", request, 60000, token).ConfigureAwait(false);
+
+                Console.WriteLine("Type detection result:");
+                Console.WriteLine(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in type detection test: {ex.Message}");
+                if (_Debug)
+                {
+                    Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                }
+            }
+        }
+
+        static async Task TestWordProcess(CancellationToken token = default)
+        {
+            try
+            {
+                Console.WriteLine("Testing Word processing...");
+
+                // Get Word file path from user
+                string wordPath = Inputty.GetString("Enter Word file path:", null, false);
+                if (string.IsNullOrEmpty(wordPath))
+                {
+                    Console.WriteLine("No Word path provided.");
+                    return;
+                }
+
+                if (!File.Exists(wordPath))
+                {
+                    Console.WriteLine($"Word file not found: {wordPath}");
+                    return;
+                }
+
+                // Read the Word file
+                byte[] wordData = File.ReadAllBytes(wordPath);
+                string base64Word = Convert.ToBase64String(wordData);
+                string filename = Path.GetFileName(wordPath);
+
+                // Ask if user wants OCR extraction
+                bool extractOcr = Inputty.GetBoolean("Extract text from images using OCR?", false);
+
+                var request = new
+                {
+                    data = base64Word,
+                    extractOcr = extractOcr
+                };
+
+                Console.WriteLine($"Processing Word: {filename} ({wordData.Length} bytes)");
+                if (extractOcr)
+                {
+                    Console.WriteLine("OCR extraction enabled");
+                }
+                Console.WriteLine("Sending Word processing request...");
+                var result = await _McpClient!.CallAsync<string>("word/process", request, 60000, token).ConfigureAwait(false);
+
+                Console.WriteLine("Word processing result:");
+                Console.WriteLine(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in Word processing test: {ex.Message}");
+                if (_Debug)
+                {
+                    Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                }
+            }
+        }
+
+        static async Task TestXmlProcess(CancellationToken token = default)
+        {
+            try
+            {
+                Console.WriteLine("Testing XML processing...");
+
+                // Get XML file path from user
+                string xmlPath = Inputty.GetString("Enter XML file path:", null, false);
+                if (string.IsNullOrEmpty(xmlPath))
+                {
+                    Console.WriteLine("No XML path provided.");
+                    return;
+                }
+
+                if (!File.Exists(xmlPath))
+                {
+                    Console.WriteLine($"XML file not found: {xmlPath}");
+                    return;
+                }
+
+                // Read the XML file
+                byte[] xmlData = File.ReadAllBytes(xmlPath);
+                string base64Xml = Convert.ToBase64String(xmlData);
+                string filename = Path.GetFileName(xmlPath);
+
+                var request = new
+                {
+                    data = base64Xml
+                };
+
+                Console.WriteLine($"Processing XML: {filename} ({xmlData.Length} bytes)");
+                Console.WriteLine("Sending XML processing request...");
+                var result = await _McpClient!.CallAsync<string>("xml/process", request, 60000, token).ConfigureAwait(false);
+
+                Console.WriteLine("XML processing result:");
+                Console.WriteLine(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in XML processing test: {ex.Message}");
                 if (_Debug)
                 {
                     Console.WriteLine($"Stack trace: {ex.StackTrace}");

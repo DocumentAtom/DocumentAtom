@@ -687,5 +687,92 @@
             <param name="sdk">DocumentAtom SDK instance.</param>
             <param name="serializer">Serializer instance.</param>
         </member>
+        <member name="T:DocumentAtom.McpServer.Registrations.TypeDetectionRegistrations">
+            <summary>
+            Registration methods for TypeDetection operations.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.McpServer.Registrations.TypeDetectionRegistrations.RegisterHttpTools(Voltaic.McpHttpServer,DocumentAtom.Sdk.DocumentAtomSdk,SerializationHelper.Serializer)">
+            <summary>
+            Registers TypeDetection tools on HTTP server.
+            </summary>
+            <param name="server">HTTP server instance.</param>
+            <param name="sdk">DocumentAtom SDK instance.</param>
+            <param name="serializer">Serializer instance.</param>
+        </member>
+        <member name="M:DocumentAtom.McpServer.Registrations.TypeDetectionRegistrations.RegisterTcpMethods(Voltaic.McpTcpServer,DocumentAtom.Sdk.DocumentAtomSdk,SerializationHelper.Serializer)">
+            <summary>
+            Registers TypeDetection methods on TCP server.
+            </summary>
+            <param name="server">TCP server instance.</param>
+            <param name="sdk">DocumentAtom SDK instance.</param>
+            <param name="serializer">Serializer instance.</param>
+        </member>
+        <member name="M:DocumentAtom.McpServer.Registrations.TypeDetectionRegistrations.RegisterWebSocketMethods(Voltaic.McpWebsocketsServer,DocumentAtom.Sdk.DocumentAtomSdk,SerializationHelper.Serializer)">
+            <summary>
+            Registers TypeDetection methods on WebSocket server.
+            </summary>
+            <param name="server">WebSocket server instance.</param>
+            <param name="sdk">DocumentAtom SDK instance.</param>
+            <param name="serializer">Serializer instance.</param>
+        </member>
+        <member name="T:DocumentAtom.McpServer.Registrations.WordRegistrations">
+            <summary>
+            Registration methods for Word operations.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.McpServer.Registrations.WordRegistrations.RegisterHttpTools(Voltaic.McpHttpServer,DocumentAtom.Sdk.DocumentAtomSdk,SerializationHelper.Serializer)">
+            <summary>
+            Registers Word tools on HTTP server.
+            </summary>
+            <param name="server">HTTP server instance.</param>
+            <param name="sdk">DocumentAtom SDK instance.</param>
+            <param name="serializer">Serializer instance.</param>
+        </member>
+        <member name="M:DocumentAtom.McpServer.Registrations.WordRegistrations.RegisterTcpMethods(Voltaic.McpTcpServer,DocumentAtom.Sdk.DocumentAtomSdk,SerializationHelper.Serializer)">
+            <summary>
+            Registers Word methods on TCP server.
+            </summary>
+            <param name="server">TCP server instance.</param>
+            <param name="sdk">DocumentAtom SDK instance.</param>
+            <param name="serializer">Serializer instance.</param>
+        </member>
+        <member name="M:DocumentAtom.McpServer.Registrations.WordRegistrations.RegisterWebSocketMethods(Voltaic.McpWebsocketsServer,DocumentAtom.Sdk.DocumentAtomSdk,SerializationHelper.Serializer)">
+            <summary>
+            Registers Word methods on WebSocket server.
+            </summary>
+            <param name="server">WebSocket server instance.</param>
+            <param name="sdk">DocumentAtom SDK instance.</param>
+            <param name="serializer">Serializer instance.</param>
+        </member>
+        <member name="T:DocumentAtom.McpServer.Registrations.XmlRegistrations">
+            <summary>
+            Registration methods for XML operations.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.McpServer.Registrations.XmlRegistrations.RegisterHttpTools(Voltaic.McpHttpServer,DocumentAtom.Sdk.DocumentAtomSdk,SerializationHelper.Serializer)">
+            <summary>
+            Registers XML tools on HTTP server.
+            </summary>
+            <param name="server">HTTP server instance.</param>
+            <param name="sdk">DocumentAtom SDK instance.</param>
+            <param name="serializer">Serializer instance.</param>
+        </member>
+        <member name="M:DocumentAtom.McpServer.Registrations.XmlRegistrations.RegisterTcpMethods(Voltaic.McpTcpServer,DocumentAtom.Sdk.DocumentAtomSdk,SerializationHelper.Serializer)">
+            <summary>
+            Registers XML methods on TCP server.
+            </summary>
+            <param name="server">TCP server instance.</param>
+            <param name="sdk">DocumentAtom SDK instance.</param>
+            <param name="serializer">Serializer instance.</param>
+        </member>
+        <member name="M:DocumentAtom.McpServer.Registrations.XmlRegistrations.RegisterWebSocketMethods(Voltaic.McpWebsocketsServer,DocumentAtom.Sdk.DocumentAtomSdk,SerializationHelper.Serializer)">
+            <summary>
+            Registers XML methods on WebSocket server.
+            </summary>
+            <param name="server">WebSocket server instance.</param>
+            <param name="sdk">DocumentAtom SDK instance.</param>
+            <param name="serializer">Serializer instance.</param>
+        </member>
     </members>
 </doc>
