@@ -1,3 +1,5 @@
+using System;
+
 namespace DocumentAtom.McpServer.Classes
 {
     /// <summary>
@@ -15,11 +17,24 @@ namespace DocumentAtom.McpServer.Classes
         /// <summary>
         /// WebSocket server port.
         /// </summary>
-        public int Port { get; set; } = 8202;
+        public int Port
+        {
+            get
+            {
+                return _Port;
+            }
+            set
+            {
+                if (value < 0 || value > 65535) throw new ArgumentOutOfRangeException(nameof(Port));
+                _Port = value;
+            }
+        }
 
         #endregion
 
         #region Private-Members
+
+        private int _Port = 8202;
 
         #endregion
 
