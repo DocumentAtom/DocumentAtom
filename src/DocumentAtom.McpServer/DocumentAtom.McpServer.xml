@@ -542,5 +542,34 @@
             <param name="sdk">DocumentAtom SDK instance.</param>
             <param name="serializer">Serializer instance.</param>
         </member>
+        <member name="T:DocumentAtom.McpServer.Registrations.OcrRegistrations">
+            <summary>
+            Registration methods for OCR operations.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.McpServer.Registrations.OcrRegistrations.RegisterHttpTools(Voltaic.McpHttpServer,DocumentAtom.Sdk.DocumentAtomSdk,SerializationHelper.Serializer)">
+            <summary>
+            Registers OCR tools on HTTP server.
+            </summary>
+            <param name="server">HTTP server instance.</param>
+            <param name="sdk">DocumentAtom SDK instance.</param>
+            <param name="serializer">Serializer instance.</param>
+        </member>
+        <member name="M:DocumentAtom.McpServer.Registrations.OcrRegistrations.RegisterTcpMethods(Voltaic.McpTcpServer,DocumentAtom.Sdk.DocumentAtomSdk,SerializationHelper.Serializer)">
+            <summary>
+            Registers OCR methods on TCP server.
+            </summary>
+            <param name="server">TCP server instance.</param>
+            <param name="sdk">DocumentAtom SDK instance.</param>
+            <param name="serializer">Serializer instance.</param>
+        </member>
+        <member name="M:DocumentAtom.McpServer.Registrations.OcrRegistrations.RegisterWebSocketMethods(Voltaic.McpWebsocketsServer,DocumentAtom.Sdk.DocumentAtomSdk,SerializationHelper.Serializer)">
+            <summary>
+            Registers OCR methods on WebSocket server.
+            </summary>
+            <param name="server">WebSocket server instance.</param>
+            <param name="sdk">DocumentAtom SDK instance.</param>
+            <param name="serializer">Serializer instance.</param>
+        </member>
     </members>
 </doc>

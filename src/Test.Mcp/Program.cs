@@ -64,6 +64,7 @@ namespace Test.Mcp
                 else if (userInput.Equals("test-html-process")) await TestHtmlProcess(token).ConfigureAwait(false);
                 else if (userInput.Equals("test-json-process")) await TestJsonProcess(token).ConfigureAwait(false);
                 else if (userInput.Equals("test-markdown-process")) await TestMarkdownProcess(token).ConfigureAwait(false);
+                else if (userInput.Equals("test-ocr-process")) await TestOcrProcess(token).ConfigureAwait(false);
                 else
                 {
                     Console.WriteLine("Unknown command. Type '?' for help.");
@@ -87,6 +88,7 @@ namespace Test.Mcp
             Console.WriteLine("  test-html-process    test HTML processing with HTML file path");
             Console.WriteLine("  test-json-process    test JSON processing with JSON file path");
             Console.WriteLine("  test-markdown-process test Markdown processing with Markdown file path");
+            Console.WriteLine("  test-ocr-process     test OCR processing with image file path");
             Console.WriteLine("");
         }
 
@@ -433,6 +435,53 @@ namespace Test.Mcp
             catch (Exception ex)
             {
                 Console.WriteLine($"Error in Markdown processing test: {ex.Message}");
+                if (_Debug)
+                {
+                    Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                }
+            }
+        }
+
+        static async Task TestOcrProcess(CancellationToken token = default)
+        {
+            try
+            {
+                Console.WriteLine("Testing OCR processing...");
+
+                // Get image file path from user
+                string imagePath = Inputty.GetString("Enter image file path:", null, false);
+                if (string.IsNullOrEmpty(imagePath))
+                {
+                    Console.WriteLine("No image path provided.");
+                    return;
+                }
+
+                if (!File.Exists(imagePath))
+                {
+                    Console.WriteLine($"Image file not found: {imagePath}");
+                    return;
+                }
+
+                // Read the image file
+                byte[] imageData = File.ReadAllBytes(imagePath);
+                string base64Image = Convert.ToBase64String(imageData);
+                string filename = Path.GetFileName(imagePath);
+
+                var request = new
+                {
+                    data = base64Image
+                };
+
+                Console.WriteLine($"Processing image with OCR: {filename} ({imageData.Length} bytes)");
+                Console.WriteLine("Sending OCR processing request...");
+                var result = await _McpClient!.CallAsync<string>("ocr/process", request, 60000, token).ConfigureAwait(false);
+
+                Console.WriteLine("OCR processing result:");
+                Console.WriteLine(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in OCR processing test: {ex.Message}");
                 if (_Debug)
                 {
                     Console.WriteLine($"Stack trace: {ex.StackTrace}");
