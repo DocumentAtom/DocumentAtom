@@ -1,0 +1,39 @@
+{
+  "CreatedUtc": "2025-12-01T12:00:00.000000Z",
+  "CreatedBy": "Setup",
+  "DeploymentType": "Private",
+  "SoftwareVersion": "v1.0.0",
+  "Node": {
+    "GUID": "d2ebf75d-ec51-4836-b831-6555bff66ef7",
+    "Name": "DocumentAtom Model Context Protocol Server",
+    "Hostname": "localhost",
+    "InstanceType": "McpServer",
+    "LastStartUtc": "2025-12-01T12:00:00.000000Z",
+    "CreatedUtc": "2025-12-01T12:00:00.000000Z"
+  },
+  "Logging": {
+    "Servers": [],
+    "LogDirectory": "./logs/",
+    "LogFilename": "documentatom-mcp.log",
+    "ConsoleLogging": true,
+    "EnableColors": true,
+    "MinimumSeverity": 0
+  },
+  "McpServer": {
+    "HttpServer": {
+      "Hostname": "*",
+      "Port": 8000
+    },
+    "TcpServer": {
+      "Address": "*",
+      "Port": 8001
+    },
+    "WebSocketServer": {
+      "Hostname": "*",
+      "Port": 8002
+    }
+  },
+  "Debug": {
+    "Enable": false
+  }
+}
