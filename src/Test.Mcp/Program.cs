@@ -68,6 +68,7 @@ namespace Test.Mcp
                 else if (userInput.Equals("test-pdf-process")) await TestPdfProcess(token).ConfigureAwait(false);
                 else if (userInput.Equals("test-powerpoint-process")) await TestPowerPointProcess(token).ConfigureAwait(false);
                 else if (userInput.Equals("test-richtext-process")) await TestRichTextProcess(token).ConfigureAwait(false);
+                else if (userInput.Equals("test-text-process")) await TestTextProcess(token).ConfigureAwait(false);
                 else
                 {
                     Console.WriteLine("Unknown command. Type '?' for help.");
@@ -79,22 +80,23 @@ namespace Test.Mcp
         {
             Console.WriteLine("");
             Console.WriteLine("Available commands:");
-            Console.WriteLine("  ?                    help, this menu");
-            Console.WriteLine("  q                    quit");
-            Console.WriteLine("  cls                  clear the screen");
-            Console.WriteLine("  debug                enable or disable debug (enabled: " + _Debug + ")");
+            Console.WriteLine("  ?                              help, this menu");
+            Console.WriteLine("  q                              quit");
+            Console.WriteLine("  cls                            clear the screen");
+            Console.WriteLine("  debug                          enable or disable debug (enabled: " + _Debug + ")");
             Console.WriteLine("");
-            Console.WriteLine("  test-image-process   test image processing with image file path");
-            Console.WriteLine("  test-image-ocr       test OCR extraction from image file");
-            Console.WriteLine("  test-csv-process     test CSV processing with CSV file path");
-            Console.WriteLine("  test-excel-process   test Excel processing with Excel file path");
-            Console.WriteLine("  test-html-process    test HTML processing with HTML file path");
-            Console.WriteLine("  test-json-process    test JSON processing with JSON file path");
-            Console.WriteLine("  test-markdown-process test Markdown processing with Markdown file path");
-            Console.WriteLine("  test-ocr-process     test OCR processing with image file path");
-            Console.WriteLine("  test-pdf-process     test PDF processing with PDF file path");
-            Console.WriteLine("  test-powerpoint-process test PowerPoint processing with PowerPoint file path");
-            Console.WriteLine("  test-richtext-process test Rich Text processing with RTF file path");
+            Console.WriteLine("  test-image-process             test image processing with image file path");
+            Console.WriteLine("  test-image-ocr                 test OCR extraction from image file");
+            Console.WriteLine("  test-csv-process               test CSV processing with CSV file path");
+            Console.WriteLine("  test-excel-process             test Excel processing with Excel file path");
+            Console.WriteLine("  test-html-process              test HTML processing with HTML file path");
+            Console.WriteLine("  test-json-process              test JSON processing with JSON file path");
+            Console.WriteLine("  test-markdown-process          test Markdown processing with Markdown file path");
+            Console.WriteLine("  test-ocr-process               test OCR processing with image file path");
+            Console.WriteLine("  test-pdf-process               test PDF processing with PDF file path");
+            Console.WriteLine("  test-powerpoint-process        test PowerPoint processing with PowerPoint file path");
+            Console.WriteLine("  test-richtext-process          test Rich Text processing with RTF file path");
+            Console.WriteLine("  test-text-process              test text processing with text file path");
             Console.WriteLine("");
         }
 
@@ -659,6 +661,54 @@ namespace Test.Mcp
                 }
             }
         }
+
+        static async Task TestTextProcess(CancellationToken token = default)
+        {
+            try
+            {
+                Console.WriteLine("Testing Text processing...");
+
+                // Get text file path from user
+                string textPath = Inputty.GetString("Enter text file path:", null, false);
+                if (string.IsNullOrEmpty(textPath))
+                {
+                    Console.WriteLine("No text path provided.");
+                    return;
+                }
+
+                if (!File.Exists(textPath))
+                {
+                    Console.WriteLine($"Text file not found: {textPath}");
+                    return;
+                }
+
+                // Read the text file
+                byte[] textData = File.ReadAllBytes(textPath);
+                string base64Text = Convert.ToBase64String(textData);
+                string filename = Path.GetFileName(textPath);
+
+                var request = new
+                {
+                    data = base64Text
+                };
+
+                Console.WriteLine($"Processing text: {filename} ({textData.Length} bytes)");
+                Console.WriteLine("Sending text processing request...");
+                var result = await _McpClient!.CallAsync<string>("text/process", request, 60000, token).ConfigureAwait(false);
+
+                Console.WriteLine("Text processing result:");
+                Console.WriteLine(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in text processing test: {ex.Message}");
+                if (_Debug)
+                {
+                    Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                }
+            }
+        }
+
 
     }
 }

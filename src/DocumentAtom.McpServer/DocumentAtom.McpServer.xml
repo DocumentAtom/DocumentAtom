@@ -658,5 +658,34 @@
             <param name="sdk">DocumentAtom SDK instance.</param>
             <param name="serializer">Serializer instance.</param>
         </member>
+        <member name="T:DocumentAtom.McpServer.Registrations.TextRegistrations">
+            <summary>
+            Registration methods for Text operations.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.McpServer.Registrations.TextRegistrations.RegisterHttpTools(Voltaic.McpHttpServer,DocumentAtom.Sdk.DocumentAtomSdk,SerializationHelper.Serializer)">
+            <summary>
+            Registers Text tools on HTTP server.
+            </summary>
+            <param name="server">HTTP server instance.</param>
+            <param name="sdk">DocumentAtom SDK instance.</param>
+            <param name="serializer">Serializer instance.</param>
+        </member>
+        <member name="M:DocumentAtom.McpServer.Registrations.TextRegistrations.RegisterTcpMethods(Voltaic.McpTcpServer,DocumentAtom.Sdk.DocumentAtomSdk,SerializationHelper.Serializer)">
+            <summary>
+            Registers Text methods on TCP server.
+            </summary>
+            <param name="server">TCP server instance.</param>
+            <param name="sdk">DocumentAtom SDK instance.</param>
+            <param name="serializer">Serializer instance.</param>
+        </member>
+        <member name="M:DocumentAtom.McpServer.Registrations.TextRegistrations.RegisterWebSocketMethods(Voltaic.McpWebsocketsServer,DocumentAtom.Sdk.DocumentAtomSdk,SerializationHelper.Serializer)">
+            <summary>
+            Registers Text methods on WebSocket server.
+            </summary>
+            <param name="server">WebSocket server instance.</param>
+            <param name="sdk">DocumentAtom SDK instance.</param>
+            <param name="serializer">Serializer instance.</param>
+        </member>
     </members>
 </doc>
