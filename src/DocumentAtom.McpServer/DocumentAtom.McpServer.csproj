@@ -10,11 +10,9 @@
 		<DocumentationFile>DocumentAtom.McpServer.xml</DocumentationFile>
 	</PropertyGroup>
 	<ItemGroup>
+		<PackageReference Include="DocumentAtom.Sdk" Version="1.0.0" />
 		<PackageReference Include="SyslogLogging" Version="2.0.11" />
 		<PackageReference Include="Voltaic" Version="0.1.5" />
-	</ItemGroup>
-	<ItemGroup>
-	  <ProjectReference Include="..\..\DocumentAtomSdk\src\DocumentAtom.Sdk\DocumentAtom.Sdk.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
