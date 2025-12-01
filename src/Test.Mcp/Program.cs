@@ -66,6 +66,8 @@ namespace Test.Mcp
                 else if (userInput.Equals("test-markdown-process")) await TestMarkdownProcess(token).ConfigureAwait(false);
                 else if (userInput.Equals("test-ocr-process")) await TestOcrProcess(token).ConfigureAwait(false);
                 else if (userInput.Equals("test-pdf-process")) await TestPdfProcess(token).ConfigureAwait(false);
+                else if (userInput.Equals("test-powerpoint-process")) await TestPowerPointProcess(token).ConfigureAwait(false);
+                else if (userInput.Equals("test-richtext-process")) await TestRichTextProcess(token).ConfigureAwait(false);
                 else
                 {
                     Console.WriteLine("Unknown command. Type '?' for help.");
@@ -91,6 +93,8 @@ namespace Test.Mcp
             Console.WriteLine("  test-markdown-process test Markdown processing with Markdown file path");
             Console.WriteLine("  test-ocr-process     test OCR processing with image file path");
             Console.WriteLine("  test-pdf-process     test PDF processing with PDF file path");
+            Console.WriteLine("  test-powerpoint-process test PowerPoint processing with PowerPoint file path");
+            Console.WriteLine("  test-richtext-process test Rich Text processing with RTF file path");
             Console.WriteLine("");
         }
 
@@ -539,6 +543,116 @@ namespace Test.Mcp
             catch (Exception ex)
             {
                 Console.WriteLine($"Error in PDF processing test: {ex.Message}");
+                if (_Debug)
+                {
+                    Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                }
+            }
+        }
+
+        static async Task TestPowerPointProcess(CancellationToken token = default)
+        {
+            try
+            {
+                Console.WriteLine("Testing PowerPoint processing...");
+
+                // Get PowerPoint file path from user
+                string powerPointPath = Inputty.GetString("Enter PowerPoint file path:", null, false);
+                if (string.IsNullOrEmpty(powerPointPath))
+                {
+                    Console.WriteLine("No PowerPoint path provided.");
+                    return;
+                }
+
+                if (!File.Exists(powerPointPath))
+                {
+                    Console.WriteLine($"PowerPoint file not found: {powerPointPath}");
+                    return;
+                }
+
+                // Read the PowerPoint file
+                byte[] powerPointData = File.ReadAllBytes(powerPointPath);
+                string base64PowerPoint = Convert.ToBase64String(powerPointData);
+                string filename = Path.GetFileName(powerPointPath);
+
+                // Ask if user wants OCR extraction
+                bool extractOcr = Inputty.GetBoolean("Extract text from images using OCR?", false);
+
+                var request = new
+                {
+                    data = base64PowerPoint,
+                    extractOcr = extractOcr
+                };
+
+                Console.WriteLine($"Processing PowerPoint: {filename} ({powerPointData.Length} bytes)");
+                if (extractOcr)
+                {
+                    Console.WriteLine("OCR extraction enabled");
+                }
+                Console.WriteLine("Sending PowerPoint processing request...");
+                var result = await _McpClient!.CallAsync<string>("powerpoint/process", request, 60000, token).ConfigureAwait(false);
+
+                Console.WriteLine("PowerPoint processing result:");
+                Console.WriteLine(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in PowerPoint processing test: {ex.Message}");
+                if (_Debug)
+                {
+                    Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                }
+            }
+        }
+
+        static async Task TestRichTextProcess(CancellationToken token = default)
+        {
+            try
+            {
+                Console.WriteLine("Testing Rich Text processing...");
+
+                // Get Rich Text file path from user
+                string richTextPath = Inputty.GetString("Enter Rich Text file path:", null, false);
+                if (string.IsNullOrEmpty(richTextPath))
+                {
+                    Console.WriteLine("No Rich Text path provided.");
+                    return;
+                }
+
+                if (!File.Exists(richTextPath))
+                {
+                    Console.WriteLine($"Rich Text file not found: {richTextPath}");
+                    return;
+                }
+
+                // Read the Rich Text file
+                byte[] richTextData = File.ReadAllBytes(richTextPath);
+                string base64RichText = Convert.ToBase64String(richTextData);
+                string filename = Path.GetFileName(richTextPath);
+
+                // Ask if user wants OCR extraction
+                bool extractOcr = Inputty.GetBoolean("Extract text from images using OCR?", false);
+
+                var request = new
+                {
+                    data = base64RichText,
+                    extractOcr = extractOcr
+                };
+
+                Console.WriteLine($"Processing Rich Text: {filename} ({richTextData.Length} bytes)");
+                if (extractOcr)
+                {
+                    Console.WriteLine("OCR extraction enabled");
+                }
+                Console.WriteLine("Sending Rich Text processing request...");
+                var result = await _McpClient!.CallAsync<string>("richtext/process", request, 60000, token).ConfigureAwait(false);
+
+                Console.WriteLine("Rich Text processing result:");
+                Console.WriteLine(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in Rich Text processing test: {ex.Message}");
                 if (_Debug)
                 {
                     Console.WriteLine($"Stack trace: {ex.StackTrace}");

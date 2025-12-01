@@ -380,6 +380,8 @@ namespace DocumentAtom.McpServer
             MarkdownRegistrations.RegisterHttpTools(_McpHttpServer, _McpSdk, _Serializer);
             OcrRegistrations.RegisterHttpTools(_McpHttpServer, _McpSdk, _Serializer);
             PdfRegistrations.RegisterHttpTools(_McpHttpServer, _McpSdk, _Serializer);
+            PowerPointRegistrations.RegisterHttpTools(_McpHttpServer, _McpSdk, _Serializer);
+            RichTextRegistrations.RegisterHttpTools(_McpHttpServer, _McpSdk, _Serializer);
 
             ImageRegistrations.RegisterTcpMethods(_McpTcpServer, _McpSdk, _Serializer);
             CsvRegistrations.RegisterTcpMethods(_McpTcpServer, _McpSdk, _Serializer);
@@ -389,6 +391,8 @@ namespace DocumentAtom.McpServer
             MarkdownRegistrations.RegisterTcpMethods(_McpTcpServer, _McpSdk, _Serializer);
             OcrRegistrations.RegisterTcpMethods(_McpTcpServer, _McpSdk, _Serializer);
             PdfRegistrations.RegisterTcpMethods(_McpTcpServer, _McpSdk, _Serializer);
+            PowerPointRegistrations.RegisterTcpMethods(_McpTcpServer, _McpSdk, _Serializer);
+            RichTextRegistrations.RegisterTcpMethods(_McpTcpServer, _McpSdk, _Serializer);
 
             ImageRegistrations.RegisterWebSocketMethods(_McpWebsocketServer, _McpSdk, _Serializer);
             CsvRegistrations.RegisterWebSocketMethods(_McpWebsocketServer, _McpSdk, _Serializer);
@@ -398,6 +402,8 @@ namespace DocumentAtom.McpServer
             MarkdownRegistrations.RegisterWebSocketMethods(_McpWebsocketServer, _McpSdk, _Serializer);
             OcrRegistrations.RegisterWebSocketMethods(_McpWebsocketServer, _McpSdk, _Serializer);
             PdfRegistrations.RegisterWebSocketMethods(_McpWebsocketServer, _McpSdk, _Serializer);
+            PowerPointRegistrations.RegisterWebSocketMethods(_McpWebsocketServer, _McpSdk, _Serializer);
+            RichTextRegistrations.RegisterWebSocketMethods(_McpWebsocketServer, _McpSdk, _Serializer);
         }
 
         private static void ShowHelp()
