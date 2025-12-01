@@ -65,6 +65,7 @@ namespace Test.Mcp
                 else if (userInput.Equals("test-json-process")) await TestJsonProcess(token).ConfigureAwait(false);
                 else if (userInput.Equals("test-markdown-process")) await TestMarkdownProcess(token).ConfigureAwait(false);
                 else if (userInput.Equals("test-ocr-process")) await TestOcrProcess(token).ConfigureAwait(false);
+                else if (userInput.Equals("test-pdf-process")) await TestPdfProcess(token).ConfigureAwait(false);
                 else
                 {
                     Console.WriteLine("Unknown command. Type '?' for help.");
@@ -89,6 +90,7 @@ namespace Test.Mcp
             Console.WriteLine("  test-json-process    test JSON processing with JSON file path");
             Console.WriteLine("  test-markdown-process test Markdown processing with Markdown file path");
             Console.WriteLine("  test-ocr-process     test OCR processing with image file path");
+            Console.WriteLine("  test-pdf-process     test PDF processing with PDF file path");
             Console.WriteLine("");
         }
 
@@ -482,6 +484,61 @@ namespace Test.Mcp
             catch (Exception ex)
             {
                 Console.WriteLine($"Error in OCR processing test: {ex.Message}");
+                if (_Debug)
+                {
+                    Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                }
+            }
+        }
+
+        static async Task TestPdfProcess(CancellationToken token = default)
+        {
+            try
+            {
+                Console.WriteLine("Testing PDF processing...");
+
+                // Get PDF file path from user
+                string pdfPath = Inputty.GetString("Enter PDF file path:", null, false);
+                if (string.IsNullOrEmpty(pdfPath))
+                {
+                    Console.WriteLine("No PDF path provided.");
+                    return;
+                }
+
+                if (!File.Exists(pdfPath))
+                {
+                    Console.WriteLine($"PDF file not found: {pdfPath}");
+                    return;
+                }
+
+                // Read the PDF file
+                byte[] pdfData = File.ReadAllBytes(pdfPath);
+                string base64Pdf = Convert.ToBase64String(pdfData);
+                string filename = Path.GetFileName(pdfPath);
+
+                // Ask if user wants OCR extraction
+                bool extractOcr = Inputty.GetBoolean("Extract text from images using OCR?", false);
+
+                var request = new
+                {
+                    data = base64Pdf,
+                    extractOcr = extractOcr
+                };
+
+                Console.WriteLine($"Processing PDF: {filename} ({pdfData.Length} bytes)");
+                if (extractOcr)
+                {
+                    Console.WriteLine("OCR extraction enabled");
+                }
+                Console.WriteLine("Sending PDF processing request...");
+                var result = await _McpClient!.CallAsync<string>("pdf/process", request, 60000, token).ConfigureAwait(false);
+
+                Console.WriteLine("PDF processing result:");
+                Console.WriteLine(result);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in PDF processing test: {ex.Message}");
                 if (_Debug)
                 {
                     Console.WriteLine($"Stack trace: {ex.StackTrace}");
