@@ -20,7 +20,7 @@ docker run ^
   -e "TERM=xterm-256color" ^
   -v .\documentatom.json:/app/documentatom.json ^
   -v .\logs\:/app/logs/ ^
-  jchristn/documentatom:%1
+  jchristn77/documentatom:%1
 
 GOTO :Done
 

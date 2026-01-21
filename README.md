@@ -9,6 +9,7 @@ DocumentAtom requires that Tesseract v5.0 be installed on the host.  This is req
 | Package | Version | Downloads |
 |---------|---------|-----------|
 | DocumentAtom.Csv | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Csv.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Csv/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Csv.svg)](https://www.nuget.org/packages/DocumentAtom.Csv)  |
+| DocumentAtom.DataIngestion | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.DataIngestion.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.DataIngestion/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.DataIngestion.svg)](https://www.nuget.org/packages/DocumentAtom.DataIngestion)  |
 | DocumentAtom.Excel | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Excel.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Excel/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Excel.svg)](https://www.nuget.org/packages/DocumentAtom.Excel)  |
 | DocumentAtom.Html | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Html.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Html/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Html.svg)](https://www.nuget.org/packages/DocumentAtom.Html)  |
 | DocumentAtom.Image | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Image.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Image/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Image.svg)](https://www.nuget.org/packages/DocumentAtom.Image)  |
@@ -22,6 +23,15 @@ DocumentAtom requires that Tesseract v5.0 be installed on the host.  This is req
 | DocumentAtom.TypeDetection | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.TypeDetection.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.TypeDetection/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.TypeDetection.svg)](https://www.nuget.org/packages/DocumentAtom.TypeDetection)  |
 | DocumentAtom.Word | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Word.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Word/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Word.svg)](https://www.nuget.org/packages/DocumentAtom.Word)  |
 | DocumentAtom.Xml | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Xml.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Xml/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Xml.svg)](https://www.nuget.org/packages/DocumentAtom.Xml)  |
+
+## New in v1.2.x
+
+- **Data Ingestion Module** (`DocumentAtom.DataIngestion`) for RAG/AI pipeline integration
+  - Unified document reader with automatic type detection
+  - Intelligent chunking with hierarchy preservation
+  - Configurable options for RAG, summarization, and large context windows
+  - Dependency injection support with `Microsoft.Extensions.DependencyInjection`
+  - Preserves full metadata from atoms for rich filtering in vector databases
 
 ## New in v1.1.x
 
@@ -117,9 +127,71 @@ My libraries used within DocumentAtom:
 - [SerializableDataTable](https://github.com/jchristn/serializabledatatable)
 - [SerializationHelper](https://github.com/jchristn/serializationhelper)
 
+## Data Ingestion for RAG/AI Pipelines
+
+The `DocumentAtom.DataIngestion` package provides a high-level API for processing documents and producing chunks ready for embedding and vector storage. It's designed to integrate seamlessly with RAG (Retrieval-Augmented Generation) applications and AI pipelines.
+
+### Basic Usage
+
+```csharp
+using DocumentAtom.DataIngestion;
+using DocumentAtom.DataIngestion.Processors;
+
+// Create processor with RAG-optimized settings
+AtomDocumentProcessorOptions options = AtomDocumentProcessorOptions.ForRag();
+using AtomDocumentProcessor processor = new AtomDocumentProcessor(options);
+
+// Process a document and get chunks
+await foreach (IngestionChunk chunk in processor.ProcessAsync("document.pdf"))
+{
+    Console.WriteLine($"Chunk {chunk.ChunkIndex}: {chunk.Content.Substring(0, 100)}...");
+
+    // Access metadata for filtering
+    if (chunk.Metadata.TryGetValue("atom:page_number", out object? page))
+        Console.WriteLine($"  Page: {page}");
+}
+```
+
+### Dependency Injection
+
+```csharp
+using DocumentAtom.DataIngestion.Extensions;
+
+// In your service configuration
+services.AddDocumentAtomIngestionForRag();
+
+// Or with custom options
+services.AddDocumentAtomIngestion(
+    reader => {
+        reader.EnableOcr = true;
+        reader.BuildHierarchy = true;
+    },
+    chunker => {
+        chunker.MaxChunkSize = 500;
+        chunker.ChunkOverlap = 50;
+    });
+```
+
+### Key Features
+
+- **Automatic Type Detection**: Automatically detects document type from content
+- **Intelligent Chunking**: Preserves paragraph boundaries and header context
+- **Hierarchy-Aware**: Maintains document structure in chunks for better retrieval
+- **Metadata Preservation**: All atom metadata is preserved for rich filtering
+- **Duplicate Removal**: Optional deduplication based on content hash
+- **Multiple Presets**: Optimized configurations for RAG, summarization, and large context windows
+
+### Processing Options
+
+| Method | Best For |
+|--------|----------|
+| `AtomDocumentProcessorOptions.ForRag()` | Vector database ingestion, semantic search |
+| `AtomDocumentProcessorOptions.ForSummarization()` | Document summarization, analysis |
+| `AtomChunkerOptions.ForLargeContext()` | Large context window models |
+
 ## RESTful API and Docker
 
-Run the `DocumentAtom.Server` project to start a RESTful server listening on `localhost:8000`.  Modify the `documentatom.json` file to change the webserver, logging, or Tesseract settings.  Alternatively, you can pull `jchristn/documentatom` from [Docker Hub](https://hub.docker.com/repository/docker/jchristn/documentatom/general).  Refer to the `Docker` directory in the project for assets for running in Docker.
+Run the `DocumentAtom.Server` project to start a RESTful server listening on `localhost:8000`.  Modify the `documentatom.json` file to change the webserver, logging, or Tesseract settings.  Alternatively, you can pull `jchristn77/documentatom` from [Docker Hub](https://hub.docker.com/repository/docker/jchristn77/documentatom/general).  Refer to the `Docker` directory in the project for assets for running in Docker.
 
 Refer to the Postman collection for examples exercising the APIs.
 
@@ -134,7 +206,7 @@ dotnet run
 
 1. Pull the image from Docker Hub:
 ```bash
-docker pull jchristn/documentatom:v1.1.0
+docker pull jchristn77/documentatom:v1.1.0
 ```
 
 2. Create a `documentatom.json` configuration file (see `Docker/documentatom.json` for an example)
@@ -142,10 +214,10 @@ docker pull jchristn/documentatom:v1.1.0
 3. Run the container:
 ```bash
 # Windows
-docker run -p 8000:8000 -v .\documentatom.json:/app/documentatom.json -v .\logs\:/app/logs/ jchristn/documentatom:v1.1.0
+docker run -p 8000:8000 -v .\documentatom.json:/app/documentatom.json -v .\logs\:/app/logs/ jchristn77/documentatom:v1.1.0
 
 # Linux/macOS
-docker run -p 8000:8000 -v ./documentatom.json:/app/documentatom.json -v ./logs/:/app/logs/ jchristn/documentatom:v1.1.0
+docker run -p 8000:8000 -v ./documentatom.json:/app/documentatom.json -v ./logs/:/app/logs/ jchristn77/documentatom:v1.1.0
 ```
 
 Alternatively, use the provided scripts in the `Docker` directory:
@@ -195,7 +267,7 @@ Command-line options:
 
 1. Pull the image from Docker Hub:
 ```bash
-docker pull jchristn/documentatom-mcp:v1.1.0
+docker pull jchristn77/documentatom-mcp:v1.1.0
 ```
 
 2. Create a `documentatom.json` configuration file with MCP server settings:
@@ -240,7 +312,7 @@ docker run -p 8200:8200 -p 8201:8201 -p 8202:8202 ^
   -v .\logs\:/app/logs/ ^
   -v .\temp\:/app/temp/ ^
   -v .\backups\:/app/backups/ ^
-  jchristn/documentatom-mcp:v1.1.0
+  jchristn77/documentatom-mcp:v1.1.0
 
 # Linux/macOS
 docker run -p 8200:8200 -p 8201:8201 -p 8202:8202 \
@@ -248,7 +320,7 @@ docker run -p 8200:8200 -p 8201:8201 -p 8202:8202 \
   -v ./logs/:/app/logs/ \
   -v ./temp/:/app/temp/ \
   -v ./backups/:/app/backups/ \
-  jchristn/documentatom-mcp:v1.1.0
+  jchristn77/documentatom-mcp:v1.1.0
 ```
 
 Alternatively, use the provided scripts in `src/DocumentAtom.McpServer`:
@@ -287,7 +359,7 @@ Dockerbuild.bat v1.1.0 0  # 0 = don't push, 1 = push to Docker Hub
 
 # Build DocumentAtom.McpServer image (from src directory)
 cd src
-docker buildx build -f DocumentAtom.McpServer/Dockerfile --platform linux/amd64,linux/arm64/v8 --tag jchristn/documentatom-mcp:v1.1.0 --push .
+docker buildx build -f DocumentAtom.McpServer/Dockerfile --platform linux/amd64,linux/arm64/v8 --tag jchristn77/documentatom-mcp:v1.1.0 --push .
 ```
 
 ## Version History

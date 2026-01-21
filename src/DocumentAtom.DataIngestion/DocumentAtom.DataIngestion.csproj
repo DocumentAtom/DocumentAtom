@@ -1,0 +1,74 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net8.0;net10.0</TargetFrameworks>
+		<Version>1.1.0</Version>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<LangVersion>latest</LangVersion>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<PackageId>DocumentAtom.DataIngestion</PackageId>
+		<Title>DocumentAtom.DataIngestion</Title>
+		<Product>DocumentAtom.DataIngestion</Product>
+		<Authors>Joel Christner</Authors>
+		<Copyright>(c)2026 Joel Christner</Copyright>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<DocumentationFile>DocumentAtom.DataIngestion.xml</DocumentationFile>
+		<Description>Microsoft.Extensions.AI.DataIngestion integration for DocumentAtom document parsing library. Provides adapters for using DocumentAtom's document processing capabilities in standard .NET AI/RAG pipelines.</Description>
+		<PackageProjectUrl>https://github.com/jchristn/DocumentAtom</PackageProjectUrl>
+		<PackageIcon>icon.png</PackageIcon>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<RepositoryUrl>https://github.com/jchristn/DocumentAtom</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>document;parsing;ingestion;rag;ai;vector;embedding;chunking;microsoft;extensions;datatable;pdf;docx;xlsx;pptx</PackageTags>
+		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
+		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<IncludeSymbols>True</IncludeSymbols>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<None Include="..\..\assets\icon.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="..\..\LICENSE.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="..\..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- Core DocumentAtom dependency -->
+		<ProjectReference Include="..\DocumentAtom.Core\DocumentAtom.Core.csproj" />
+
+		<!-- All processor dependencies -->
+		<ProjectReference Include="..\DocumentAtom.Pdf\DocumentAtom.Pdf.csproj" />
+		<ProjectReference Include="..\DocumentAtom.Word\DocumentAtom.Word.csproj" />
+		<ProjectReference Include="..\DocumentAtom.Excel\DocumentAtom.Excel.csproj" />
+		<ProjectReference Include="..\DocumentAtom.PowerPoint\DocumentAtom.PowerPoint.csproj" />
+		<ProjectReference Include="..\DocumentAtom.Html\DocumentAtom.Html.csproj" />
+		<ProjectReference Include="..\DocumentAtom.Markdown\DocumentAtom.Markdown.csproj" />
+		<ProjectReference Include="..\DocumentAtom.Json\DocumentAtom.Json.csproj" />
+		<ProjectReference Include="..\DocumentAtom.Csv\DocumentAtom.Csv.csproj" />
+		<ProjectReference Include="..\DocumentAtom.Xml\DocumentAtom.Xml.csproj" />
+		<ProjectReference Include="..\DocumentAtom.RichText\DocumentAtom.RichText.csproj" />
+		<ProjectReference Include="..\DocumentAtom.Image\DocumentAtom.Image.csproj" />
+		<ProjectReference Include="..\DocumentAtom.Text\DocumentAtom.Text.csproj" />
+		<ProjectReference Include="..\DocumentAtom.TypeDetection\DocumentAtom.TypeDetection.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<!-- Microsoft Extensions AI -->
+		<PackageReference Include="Microsoft.Extensions.AI" Version="10.2.0" />
+		<PackageReference Include="Microsoft.Extensions.AI.Abstractions" Version="10.2.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.2" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.2" />
+		<PackageReference Include="Microsoft.Extensions.Options" Version="10.0.2" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,43 @@
+# DocumentAtom Data Ingestion Test
+
+This is a sample document for testing the DocumentAtom.DataIngestion library.
+
+## Introduction
+
+DocumentAtom provides a powerful way to parse documents and break them into constituent atoms for AI, machine learning, and analytics applications.
+
+The DataIngestion module extends DocumentAtom with capabilities for:
+- Reading documents of various formats
+- Converting atoms to ingestion elements
+- Chunking content for embedding and vector storage
+- Preserving document hierarchy and metadata
+
+## Features
+
+### Multi-Format Support
+
+The library supports many document formats including:
+- PDF documents
+- Microsoft Word (DOCX)
+- Microsoft Excel (XLSX)
+- Microsoft PowerPoint (PPTX)
+- HTML and Markdown
+- JSON and XML
+- Plain text and RTF
+- Images with OCR
+
+### Intelligent Chunking
+
+Content is chunked intelligently to preserve:
+1. Paragraph boundaries
+2. Header context
+3. Semantic relationships
+4. Document structure
+
+### Metadata Preservation
+
+All metadata from the original atoms is preserved and mapped to the ingestion format, enabling rich filtering and retrieval in vector databases.
+
+## Conclusion
+
+This sample demonstrates the basic structure that DocumentAtom.DataIngestion handles when processing documents for RAG and AI applications.

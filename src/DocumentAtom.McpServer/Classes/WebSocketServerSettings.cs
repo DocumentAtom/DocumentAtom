@@ -1,7 +1,7 @@
-using System;
-
 namespace DocumentAtom.McpServer.Classes
 {
+    using System;
+
     /// <summary>
     /// WebSocket server settings.
     /// </summary>

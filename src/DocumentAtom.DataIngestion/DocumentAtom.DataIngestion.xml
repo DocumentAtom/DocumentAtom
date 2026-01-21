@@ -1,0 +1,1054 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DocumentAtom.DataIngestion</name>
+    </assembly>
+    <members>
+        <member name="T:DocumentAtom.DataIngestion.Chunkers.AtomChunker">
+            <summary>
+            Default chunker implementation for IngestionDocuments.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Chunkers.AtomChunker.Options">
+            <summary>
+            Chunker options.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Chunkers.AtomChunker.#ctor(DocumentAtom.DataIngestion.Chunkers.AtomChunkerOptions)">
+            <summary>
+            Default chunker implementation for IngestionDocuments.
+            </summary>
+            <param name="options">Chunker options.</param>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Chunkers.AtomChunker.ChunkAsync(DocumentAtom.DataIngestion.IngestionDocument,System.Threading.CancellationToken)">
+            <summary>
+            Chunk an ingestion document into smaller pieces.
+            </summary>
+            <param name="document">The document to chunk.</param>
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns>Enumerable of chunks.</returns>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Chunkers.AtomChunker.Chunk(DocumentAtom.DataIngestion.IngestionDocument)">
+            <summary>
+            Chunk an ingestion document into smaller pieces synchronously.
+            </summary>
+            <param name="document">The document to chunk.</param>
+            <returns>Enumerable of chunks.</returns>
+        </member>
+        <member name="T:DocumentAtom.DataIngestion.Chunkers.AtomChunkerOptions">
+            <summary>
+            Options for the AtomChunker.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Chunkers.AtomChunkerOptions.MaxChunkSize">
+            <summary>
+            Maximum number of characters per chunk.
+            Default is 1000.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Chunkers.AtomChunkerOptions.ChunkOverlap">
+            <summary>
+            Number of overlapping characters between chunks.
+            Default is 100.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Chunkers.AtomChunkerOptions.PreserveParagraphs">
+            <summary>
+            Whether to preserve paragraph boundaries during chunking.
+            Default is true.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Chunkers.AtomChunkerOptions.IncludeHeaderContext">
+            <summary>
+            Whether to include header context in chunks.
+            Default is true.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Chunkers.AtomChunkerOptions.HeaderContextSeparator">
+            <summary>
+            Separator to use between header context and content.
+            Default is ": ".
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Chunkers.AtomChunkerOptions.PreserveElementMetadata">
+            <summary>
+            Whether to include metadata from source elements.
+            Default is true.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Chunkers.AtomChunkerOptions.UseQuarksIfAvailable">
+            <summary>
+            Whether to use DocumentAtom quarks if available.
+            Default is true.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Chunkers.AtomChunkerOptions.MinChunkSize">
+            <summary>
+            Minimum chunk size to produce.
+            Chunks smaller than this will be merged with adjacent content.
+            Default is 50.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Chunkers.AtomChunkerOptions.SplitSeparators">
+            <summary>
+            Separator pattern to use when splitting text.
+            Default splits on paragraphs.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Chunkers.AtomChunkerOptions.#ctor">
+            <summary>
+            Options for the AtomChunker.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Chunkers.AtomChunkerOptions.ForRag">
+            <summary>
+            Create options optimized for RAG applications.
+            </summary>
+            <returns>Chunker options.</returns>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Chunkers.AtomChunkerOptions.ForSummarization">
+            <summary>
+            Create options optimized for summarization.
+            </summary>
+            <returns>Chunker options.</returns>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Chunkers.AtomChunkerOptions.ForLargeContext">
+            <summary>
+            Create options for large context windows.
+            </summary>
+            <returns>Chunker options.</returns>
+        </member>
+        <member name="T:DocumentAtom.DataIngestion.Chunkers.HierarchyAwareChunker">
+            <summary>
+            Chunker that preserves document hierarchy and context.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Chunkers.HierarchyAwareChunker.Options">
+            <summary>
+            Chunker options.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Chunkers.HierarchyAwareChunker.#ctor(DocumentAtom.DataIngestion.Chunkers.AtomChunkerOptions)">
+            <summary>
+            Chunker that preserves document hierarchy and context.
+            </summary>
+            <param name="options">Chunker options.</param>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Chunkers.HierarchyAwareChunker.ChunkAsync(DocumentAtom.DataIngestion.IngestionDocument,System.Threading.CancellationToken)">
+            <summary>
+            Chunk an ingestion document into smaller pieces.
+            </summary>
+            <param name="document">The document to chunk.</param>
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns>Enumerable of chunks.</returns>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Chunkers.HierarchyAwareChunker.Chunk(DocumentAtom.DataIngestion.IngestionDocument)">
+            <summary>
+            Chunk an ingestion document into smaller pieces synchronously.
+            </summary>
+            <param name="document">The document to chunk.</param>
+            <returns>Enumerable of chunks.</returns>
+        </member>
+        <member name="T:DocumentAtom.DataIngestion.Chunkers.IAtomChunker">
+            <summary>
+            Interface for chunking ingestion documents.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Chunkers.IAtomChunker.ChunkAsync(DocumentAtom.DataIngestion.IngestionDocument,System.Threading.CancellationToken)">
+            <summary>
+            Chunk an ingestion document into smaller pieces.
+            </summary>
+            <param name="document">The document to chunk.</param>
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns>Enumerable of chunks.</returns>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Chunkers.IAtomChunker.Chunk(DocumentAtom.DataIngestion.IngestionDocument)">
+            <summary>
+            Chunk an ingestion document into smaller pieces synchronously.
+            </summary>
+            <param name="document">The document to chunk.</param>
+            <returns>Enumerable of chunks.</returns>
+        </member>
+        <member name="T:DocumentAtom.DataIngestion.Converters.AtomToIngestionElementConverter">
+            <summary>
+            Converts Atoms to IngestionDocumentElements.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Converters.AtomToIngestionElementConverter.#ctor(DocumentAtom.DataIngestion.Readers.AtomDocumentReaderOptions)">
+            <summary>
+            Converts Atoms to IngestionDocumentElements.
+            </summary>
+            <param name="options">Reader options.</param>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Converters.AtomToIngestionElementConverter.Convert(DocumentAtom.Core.Atoms.Atom,System.Collections.Generic.Dictionary{System.Guid,DocumentAtom.Core.Atoms.Atom})">
+            <summary>
+            Convert an Atom to an IngestionDocumentElement.
+            </summary>
+            <param name="atom">The atom to convert.</param>
+            <param name="hierarchyMap">Map of GUID to Atom for hierarchy lookups.</param>
+            <returns>The converted element, or null if the atom should be skipped.</returns>
+        </member>
+        <member name="T:DocumentAtom.DataIngestion.Converters.AtomToIngestionElementConverter.ExtractedContent">
+            <summary>
+            Holds the result of content extraction from an Atom.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Converters.AtomToIngestionElementConverter.ExtractedContent.ElementType">
+            <summary>
+            The type of element.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Converters.AtomToIngestionElementConverter.ExtractedContent.TextContent">
+            <summary>
+            Text content.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Converters.AtomToIngestionElementConverter.ExtractedContent.BinaryContent">
+            <summary>
+            Binary content.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Converters.AtomToIngestionElementConverter.ExtractedContent.#ctor(DocumentAtom.DataIngestion.IngestionElementType,System.String,System.Byte[])">
+            <summary>
+            Creates a new ExtractedContent instance.
+            </summary>
+            <param name="elementType">Element type.</param>
+            <param name="textContent">Text content.</param>
+            <param name="binaryContent">Binary content.</param>
+        </member>
+        <member name="T:DocumentAtom.DataIngestion.Converters.IAtomToIngestionElementConverter">
+            <summary>
+            Interface for converting Atoms to IngestionDocumentElements.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Converters.IAtomToIngestionElementConverter.Convert(DocumentAtom.Core.Atoms.Atom,System.Collections.Generic.Dictionary{System.Guid,DocumentAtom.Core.Atoms.Atom})">
+            <summary>
+            Convert an Atom to an IngestionDocumentElement.
+            </summary>
+            <param name="atom">The atom to convert.</param>
+            <param name="hierarchyMap">Map of GUID to Atom for hierarchy lookups.</param>
+            <returns>The converted element, or null if the atom should be skipped.</returns>
+        </member>
+        <member name="T:DocumentAtom.DataIngestion.Extensions.ServiceCollectionExtensions">
+            <summary>
+            Extension methods for registering DocumentAtom.DataIngestion services.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Extensions.ServiceCollectionExtensions.AddDocumentAtomIngestion(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Action{DocumentAtom.DataIngestion.Readers.AtomDocumentReaderOptions},System.Action{DocumentAtom.DataIngestion.Chunkers.AtomChunkerOptions})">
+            <summary>
+            Add DocumentAtom data ingestion services to the service collection.
+            </summary>
+            <param name="services">The service collection.</param>
+            <param name="configureReader">Optional action to configure reader options.</param>
+            <param name="configureChunker">Optional action to configure chunker options.</param>
+            <returns>The service collection.</returns>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Extensions.ServiceCollectionExtensions.AddDocumentAtomIngestionForRag(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Add DocumentAtom data ingestion services optimized for RAG.
+            </summary>
+            <param name="services">The service collection.</param>
+            <returns>The service collection.</returns>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Extensions.ServiceCollectionExtensions.AddDocumentAtomIngestionForSummarization(Microsoft.Extensions.DependencyInjection.IServiceCollection)">
+            <summary>
+            Add DocumentAtom data ingestion services optimized for summarization.
+            </summary>
+            <param name="services">The service collection.</param>
+            <returns>The service collection.</returns>
+        </member>
+        <member name="T:DocumentAtom.DataIngestion.IngestionChunk">
+            <summary>
+            Represents a chunk of content ready for embedding and vector storage.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.IngestionChunk.Id">
+            <summary>
+            Unique identifier for this chunk.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.IngestionChunk.DocumentId">
+            <summary>
+            The document ID this chunk belongs to.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.IngestionChunk.ChunkIndex">
+            <summary>
+            Index of this chunk within the document.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.IngestionChunk.Content">
+            <summary>
+            Text content of the chunk.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.IngestionChunk.Metadata">
+            <summary>
+            Chunk-level metadata.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.IngestionChunk.Embedding">
+            <summary>
+            Embedding vector, if computed.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.IngestionChunk.#ctor">
+            <summary>
+            Represents a chunk of content ready for embedding and vector storage.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.IngestionChunk.#ctor(System.String,System.String,System.Int32)">
+            <summary>
+            Represents a chunk of content ready for embedding and vector storage.
+            </summary>
+            <param name="content">Text content.</param>
+            <param name="documentId">Document ID.</param>
+            <param name="chunkIndex">Chunk index.</param>
+        </member>
+        <member name="T:DocumentAtom.DataIngestion.IngestionDocument">
+            <summary>
+            Represents a document that has been processed for ingestion.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.IngestionDocument.Id">
+            <summary>
+            Unique identifier for this document.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.IngestionDocument.SourcePath">
+            <summary>
+            Source path of the document.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.IngestionDocument.Metadata">
+            <summary>
+            Document-level metadata.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.IngestionDocument.Sections">
+            <summary>
+            Sections within the document, organized by page or logical grouping.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.IngestionDocument.Elements">
+            <summary>
+            Flattened list of all elements in the document.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.IngestionDocument.#ctor">
+            <summary>
+            Represents a document that has been processed for ingestion.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.DataIngestion.IngestionDocumentElement">
+            <summary>
+            Represents an element within an ingestion document.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.IngestionDocumentElement.Id">
+            <summary>
+            Unique identifier for this element.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.IngestionDocumentElement.ElementType">
+            <summary>
+            The type of element.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.IngestionDocumentElement.Content">
+            <summary>
+            Text content of the element.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.IngestionDocumentElement.BinaryContent">
+            <summary>
+            Binary content for images or attachments.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.IngestionDocumentElement.Metadata">
+            <summary>
+            Element-level metadata.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.IngestionDocumentElement.#ctor">
+            <summary>
+            Represents an element within an ingestion document.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.DataIngestion.IngestionDocumentSection">
+            <summary>
+            Represents a section within an ingestion document.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.IngestionDocumentSection.PageNumber">
+            <summary>
+            Page number for this section, if applicable.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.IngestionDocumentSection.Title">
+            <summary>
+            Section title, if applicable.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.IngestionDocumentSection.Elements">
+            <summary>
+            Elements within this section.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.IngestionDocumentSection.#ctor">
+            <summary>
+            Represents a section within an ingestion document.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.DataIngestion.IngestionElementType">
+            <summary>
+            Types of ingestion document elements.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.IngestionElementType.Paragraph">
+            <summary>
+            Paragraph text.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.IngestionElementType.Header">
+            <summary>
+            Header element.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.IngestionElementType.Table">
+            <summary>
+            Table element.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.IngestionElementType.Image">
+            <summary>
+            Image element.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.IngestionElementType.List">
+            <summary>
+            List element.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.IngestionElementType.Code">
+            <summary>
+            Code block element.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.IngestionElementType.Binary">
+            <summary>
+            Binary/attachment element.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.IngestionElementType.Unknown">
+            <summary>
+            Unknown element type.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys">
+            <summary>
+            Constants for metadata key names used in the DataIngestion pipeline.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.AtomGuid">
+            <summary>
+            Unique identifier for the atom.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.AtomParentGuid">
+            <summary>
+            Parent atom GUID for hierarchy.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.AtomType">
+            <summary>
+            Atom type name.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.AtomPageNumber">
+            <summary>
+            Source page number.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.AtomPosition">
+            <summary>
+            Ordinal position in document.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.AtomLength">
+            <summary>
+            Content length.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.AtomMd5">
+            <summary>
+            MD5 hash of content.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.AtomSha1">
+            <summary>
+            SHA1 hash of content.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.AtomSha256">
+            <summary>
+            SHA256 hash of content.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.AtomHeaderLevel">
+            <summary>
+            Header level (1-6).
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.AtomTitle">
+            <summary>
+            Atom title.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.AtomSubtitle">
+            <summary>
+            Atom subtitle.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.AtomFormatting">
+            <summary>
+            Markdown formatting type.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.AtomBoundingBox">
+            <summary>
+            Bounding box JSON.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.AtomSheetName">
+            <summary>
+            Excel sheet name.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.AtomCellId">
+            <summary>
+            Excel cell identifier.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.AtomRows">
+            <summary>
+            Table row count.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.AtomColumns">
+            <summary>
+            Table column count.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.AtomHasQuarks">
+            <summary>
+            Whether atom has quarks.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.AtomQuarkCount">
+            <summary>
+            Number of quarks.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.AtomSerialized">
+            <summary>
+            Full serialized atom JSON.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.AtomTotalAtoms">
+            <summary>
+            Total atoms in document.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.AtomExtractionTimestamp">
+            <summary>
+            Extraction timestamp.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.AtomQuarkIndex">
+            <summary>
+            Quark index within parent atom.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.AtomTotalQuarks">
+            <summary>
+            Total quarks in parent atom.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.AtomParentAtomGuid">
+            <summary>
+            Parent atom GUID for quark.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.AtomDocumentGuid">
+            <summary>
+            Document-level GUID.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.SourcePath">
+            <summary>
+            Source file path.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.SourceFilename">
+            <summary>
+            Source filename.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.SourceExtension">
+            <summary>
+            Source file extension.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.SourceDocumentType">
+            <summary>
+            Document type.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.SourceMimeType">
+            <summary>
+            MIME type.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.SourceOriginalFilename">
+            <summary>
+            Original filename for byte array inputs.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.SourceWasByteArray">
+            <summary>
+            Indicates input was a byte array.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.ChunkIndex">
+            <summary>
+            Chunk index.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.ChunkHeaderContext">
+            <summary>
+            Header context breadcrumb.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.ChunkSource">
+            <summary>
+            Chunk source type.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.ChunkSplitIndex">
+            <summary>
+            Split index for token-split chunks.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.HierarchyId">
+            <summary>
+            Hierarchy ID.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.HierarchyParentId">
+            <summary>
+            Hierarchy parent ID.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.HierarchyLevel">
+            <summary>
+            Hierarchy level.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.ComputedSha256">
+            <summary>
+            Computed SHA256 hash.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.ProcessorDuplicatesRemoved">
+            <summary>
+            Number of duplicates removed.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.SectionTitle">
+            <summary>
+            Section title.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.SectionLevel">
+            <summary>
+            Section level.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.DataIngestion.Metadata.AtomMetadataKeys.SectionAtomCount">
+            <summary>
+            Atom count in section.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.DataIngestion.Metadata.MetadataSerializer">
+            <summary>
+            Utilities for serializing and deserializing metadata.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Metadata.MetadataSerializer.JsonOptions">
+            <summary>
+            JSON serializer options for metadata.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Metadata.MetadataSerializer.SerializeAtomMetadata(DocumentAtom.Core.Atoms.Atom)">
+            <summary>
+            Serializes an Atom's properties to a metadata dictionary.
+            </summary>
+            <param name="atom">The atom to serialize.</param>
+            <returns>Metadata dictionary.</returns>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Metadata.MetadataSerializer.SerializeAtom(DocumentAtom.Core.Atoms.Atom)">
+            <summary>
+            Serializes the full Atom object to JSON.
+            </summary>
+            <param name="atom">The atom to serialize.</param>
+            <returns>JSON string.</returns>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Metadata.MetadataSerializer.DeserializeAtom(System.String)">
+            <summary>
+            Deserializes an Atom from JSON.
+            </summary>
+            <param name="json">JSON string.</param>
+            <returns>The deserialized Atom, or null if deserialization fails.</returns>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Metadata.MetadataSerializer.ExtractAtomFromMetadata(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Extracts an Atom from metadata if it was serialized.
+            </summary>
+            <param name="metadata">The metadata dictionary.</param>
+            <returns>The deserialized Atom, or null if not found or deserialization fails.</returns>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Metadata.MetadataSerializer.HashToHexString(System.Byte[])">
+            <summary>
+            Converts a byte array hash to a hex string.
+            </summary>
+            <param name="hash">Hash bytes.</param>
+            <returns>Hex string.</returns>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Metadata.MetadataSerializer.HexStringToHash(System.String)">
+            <summary>
+            Converts a hex string to a byte array.
+            </summary>
+            <param name="hex">Hex string.</param>
+            <returns>Byte array.</returns>
+        </member>
+        <member name="T:DocumentAtom.DataIngestion.Processors.AtomDocumentProcessor">
+            <summary>
+            High-level processor that reads documents and produces chunks ready for embedding.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Processors.AtomDocumentProcessor.Options">
+            <summary>
+            Processor options.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Processors.AtomDocumentProcessor.Logger">
+            <summary>
+            Logger action for debug output.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Processors.AtomDocumentProcessor.#ctor(DocumentAtom.DataIngestion.Processors.AtomDocumentProcessorOptions)">
+            <summary>
+            High-level processor that reads documents and produces chunks ready for embedding.
+            </summary>
+            <param name="options">Processor options.</param>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Processors.AtomDocumentProcessor.#ctor(DocumentAtom.DataIngestion.Processors.AtomDocumentProcessorOptions,DocumentAtom.DataIngestion.Readers.AtomDocumentReader,DocumentAtom.DataIngestion.Chunkers.IAtomChunker)">
+            <summary>
+            High-level processor that reads documents and produces chunks ready for embedding.
+            </summary>
+            <param name="options">Processor options.</param>
+            <param name="reader">Custom document reader.</param>
+            <param name="chunker">Custom chunker.</param>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Processors.AtomDocumentProcessor.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Processors.AtomDocumentProcessor.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Processors.AtomDocumentProcessor.ProcessAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Process a document from a file path and return chunks.
+            </summary>
+            <param name="path">Path to the document.</param>
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns>Enumerable of chunks.</returns>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Processors.AtomDocumentProcessor.ProcessAsync(System.Byte[],System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Process a document from a byte array and return chunks.
+            </summary>
+            <param name="data">Document data.</param>
+            <param name="contentType">Optional content type hint.</param>
+            <param name="originalFilename">Optional original filename.</param>
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns>Enumerable of chunks.</returns>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Processors.AtomDocumentProcessor.Process(System.String)">
+            <summary>
+            Process a document synchronously and return all chunks.
+            </summary>
+            <param name="path">Path to the document.</param>
+            <returns>List of chunks.</returns>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Processors.AtomDocumentProcessor.Process(System.Byte[],System.String,System.String)">
+            <summary>
+            Process a document from a byte array synchronously and return all chunks.
+            </summary>
+            <param name="data">Document data.</param>
+            <param name="contentType">Optional content type hint.</param>
+            <param name="originalFilename">Optional original filename.</param>
+            <returns>List of chunks.</returns>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Processors.AtomDocumentProcessor.ProcessManyAsync(System.Collections.Generic.IEnumerable{System.String},System.Threading.CancellationToken)">
+            <summary>
+            Process multiple documents from file paths.
+            </summary>
+            <param name="paths">Paths to documents.</param>
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns>Enumerable of chunks with source information.</returns>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Processors.AtomDocumentProcessor.GetReader">
+            <summary>
+            Get the underlying document reader.
+            </summary>
+            <returns>The document reader.</returns>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Processors.AtomDocumentProcessor.GetChunker">
+            <summary>
+            Get the underlying chunker.
+            </summary>
+            <returns>The chunker.</returns>
+        </member>
+        <member name="T:DocumentAtom.DataIngestion.Processors.AtomDocumentProcessorOptions">
+            <summary>
+            Configuration options for AtomDocumentProcessor.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Processors.AtomDocumentProcessorOptions.ReaderOptions">
+            <summary>
+            Reader options for document processing.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Processors.AtomDocumentProcessorOptions.ChunkerOptions">
+            <summary>
+            Chunker options for splitting documents.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Processors.AtomDocumentProcessorOptions.UseHierarchyAwareChunking">
+            <summary>
+            Whether to use hierarchy-aware chunking.
+            Default is true.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Processors.AtomDocumentProcessorOptions.RemoveDuplicates">
+            <summary>
+            Whether to remove duplicate chunks based on content hash.
+            Default is false.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Processors.AtomDocumentProcessorOptions.SkipEmptyChunks">
+            <summary>
+            Whether to skip empty or whitespace-only chunks.
+            Default is true.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Processors.AtomDocumentProcessorOptions.MinimumChunkLength">
+            <summary>
+            Minimum content length for a chunk to be included.
+            Default is 10.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Processors.AtomDocumentProcessorOptions.#ctor">
+            <summary>
+            Configuration options for AtomDocumentProcessor.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Processors.AtomDocumentProcessorOptions.ForRag">
+            <summary>
+            Create options optimized for RAG applications.
+            </summary>
+            <returns>Processor options.</returns>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Processors.AtomDocumentProcessorOptions.ForSummarization">
+            <summary>
+            Create options optimized for summarization.
+            </summary>
+            <returns>Processor options.</returns>
+        </member>
+        <member name="T:DocumentAtom.DataIngestion.Readers.AtomDocumentReader">
+            <summary>
+            Reads documents and converts them to IngestionDocument format.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Readers.AtomDocumentReader.Options">
+            <summary>
+            Reader options.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Readers.AtomDocumentReader.Logger">
+            <summary>
+            Logger action for debug output.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Readers.AtomDocumentReader.#ctor(DocumentAtom.DataIngestion.Readers.AtomDocumentReaderOptions,DocumentAtom.DataIngestion.Readers.IProcessorFactory,DocumentAtom.DataIngestion.Converters.IAtomToIngestionElementConverter)">
+            <summary>
+            Reads documents and converts them to IngestionDocument format.
+            </summary>
+            <param name="options">Reader options.</param>
+            <param name="processorFactory">Optional custom processor factory.</param>
+            <param name="converter">Optional custom converter.</param>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Readers.AtomDocumentReader.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Readers.AtomDocumentReader.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Readers.AtomDocumentReader.ReadAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Read a document from a file path.
+            </summary>
+            <param name="path">Path to the file.</param>
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns>The ingestion document.</returns>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Readers.AtomDocumentReader.ReadAsync(System.Byte[],System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Read a document from a byte array.
+            </summary>
+            <param name="data">Document data.</param>
+            <param name="contentType">Optional content type hint.</param>
+            <param name="originalFilename">Optional original filename.</param>
+            <param name="cancellationToken">Cancellation token.</param>
+            <returns>The ingestion document.</returns>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Readers.AtomDocumentReader.Read(System.String)">
+            <summary>
+            Read a document synchronously.
+            </summary>
+            <param name="path">Path to the file.</param>
+            <returns>The ingestion document.</returns>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Readers.AtomDocumentReader.Read(System.Byte[],System.String,System.String)">
+            <summary>
+            Read a document from a byte array synchronously.
+            </summary>
+            <param name="data">Document data.</param>
+            <param name="contentType">Optional content type hint.</param>
+            <param name="originalFilename">Optional original filename.</param>
+            <returns>The ingestion document.</returns>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Readers.AtomDocumentReader.GetSupportedTypes">
+            <summary>
+            Get supported document types.
+            </summary>
+            <returns>List of supported document types.</returns>
+        </member>
+        <member name="T:DocumentAtom.DataIngestion.Readers.AtomDocumentReaderOptions">
+            <summary>
+            Configuration options for AtomDocumentReader.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Readers.AtomDocumentReaderOptions.TempDirectory">
+            <summary>
+            Directory for temporary files during processing.
+            Default is the system temp path with DocumentAtom subfolder.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Readers.AtomDocumentReaderOptions.PreserveFullAtomData">
+            <summary>
+            Whether to preserve full serialized Atom data in element metadata.
+            Enables lossless round-trip and advanced chunking.
+            Default is true.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Readers.AtomDocumentReaderOptions.EnableOcr">
+            <summary>
+            Whether to extract text from images using OCR.
+            Default is true.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Readers.AtomDocumentReaderOptions.BuildHierarchy">
+            <summary>
+            Whether to build document hierarchy from heading structure.
+            Default is true.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Readers.AtomDocumentReaderOptions.IncludeBinaryContent">
+            <summary>
+            Whether to include binary content (images, attachments) in output.
+            Default is true.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Readers.AtomDocumentReaderOptions.MaxFileSizeBytes">
+            <summary>
+            Maximum file size in bytes to process. 0 = unlimited.
+            Default is 0 (unlimited).
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Readers.AtomDocumentReaderOptions.ChunkingSettings">
+            <summary>
+            Settings for chunking during extraction.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Readers.AtomDocumentReaderOptions.ProcessorSettings">
+            <summary>
+            Custom processor settings by document type.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.DataIngestion.Readers.AtomDocumentReaderOptions.ExcludedMetadataKeys">
+            <summary>
+            Metadata keys to exclude from output.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Readers.AtomDocumentReaderOptions.#ctor">
+            <summary>
+            Configuration options for AtomDocumentReader.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.DataIngestion.Readers.DefaultProcessorFactory">
+            <summary>
+            Default implementation of processor factory.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Readers.DefaultProcessorFactory.#ctor(DocumentAtom.DataIngestion.Readers.AtomDocumentReaderOptions)">
+            <summary>
+            Default implementation of processor factory.
+            </summary>
+            <param name="options">Reader options.</param>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Readers.DefaultProcessorFactory.CreateProcessor(DocumentAtom.TypeDetection.DocumentTypeEnum,System.String)">
+            <summary>
+            Create a processor for the specified document type.
+            </summary>
+            <param name="documentType">The document type.</param>
+            <param name="path">Optional path to the document.</param>
+            <returns>A processor instance, or null if the type is not supported.</returns>
+        </member>
+        <member name="T:DocumentAtom.DataIngestion.Readers.IProcessorFactory">
+            <summary>
+            Factory interface for creating DocumentAtom processors based on document type.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.DataIngestion.Readers.IProcessorFactory.CreateProcessor(DocumentAtom.TypeDetection.DocumentTypeEnum,System.String)">
+            <summary>
+            Create a processor for the specified document type.
+            </summary>
+            <param name="documentType">The document type.</param>
+            <param name="path">Optional path to the document.</param>
+            <returns>A processor instance, or null if the type is not supported.</returns>
+        </member>
+    </members>
+</doc>

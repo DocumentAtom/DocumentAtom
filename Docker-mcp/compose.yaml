@@ -3,13 +3,13 @@ services:
   #
   # DocumentAtom MCP Server
   # Requires a DocumentAtom backend
-  # See https://hub.docker.com/r/jchristn/documentatom
+  # See https://hub.docker.com/r/jchristn77/documentatom
   # and https://github.com/jchristn/DocumentAtom
   #
 
   documentatom-mcp:
     container_name: 'documentatom-mcp'
-    image: 'jchristn/documentatom-mcp:v1.1.0'
+    image: 'jchristn77/documentatom-mcp:v1.1.0'
     network_mode: 'host'
     stdin_open: true
     tty: true

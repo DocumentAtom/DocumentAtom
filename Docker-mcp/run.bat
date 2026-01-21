@@ -24,7 +24,7 @@ docker run ^
   -v .\documentatom.json:/app/documentatom.json ^
   -v .\logs\:/app/logs/ ^
   -v .\backups\:/app/backups/ ^
-  jchristn/documentatom-mcp:%1
+  jchristn77/documentatom-mcp:%1
 
 GOTO :Done
 
