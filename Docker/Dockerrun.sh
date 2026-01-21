@@ -22,4 +22,4 @@ docker run \
   -i \
   -e "TERM=xterm-256color" \
   -v ./documentatom.json:/app/documentatom.json \
-  jchristn/documentatom:$IMG_TAG
+  jchristn77/documentatom:$IMG_TAG

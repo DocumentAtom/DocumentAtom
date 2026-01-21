@@ -31,4 +31,4 @@ docker run \
   -v ./logs/:/app/logs/ \
   -v ./temp/:/app/temp/ \
   -v ./backups/:/app/backups/ \
-  jchristn/documentatom-mcp:$IMG_TAG
+  jchristn77/documentatom-mcp:$IMG_TAG

@@ -3,13 +3,14 @@ IF "%1" == "" GOTO :Usage
 IF "%2" == "" GOTO :Usage
 ECHO.
 ECHO Building for linux/amd64 and linux/arm64/v8...
-docker buildx build -f Dockerfile --platform linux/amd64,linux/arm64/v8 --progress=plain --tag jchristn/documentatom:%1 --load .
+docker buildx build -f Dockerfile --platform linux/amd64,linux/arm64/v8 --progress=plain --tag jchristn77/documentatom:%1 --tag jchristn77/documentatom:latest --load .
 
 IF "%2" NEQ "1" GOTO :Done
 
 ECHO.
-ECHO Pushing image...
-docker push jchristn/documentatom:%1
+ECHO Pushing images...
+docker push jchristn77/documentatom:%1
+docker push jchristn77/documentatom:latest
 
 GOTO :Done
 
