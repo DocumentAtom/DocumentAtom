@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DocuAtomAvatar should match snapshot 1`] = `
+<span
+  class="ant-avatar ant-avatar-circle css-dev-only-do-not-override-1d4w9r2"
+>
+  <span
+    class="ant-avatar-string"
+    style="transform: scale(1);"
+  >
+    A
+  </span>
+</span>
+`;

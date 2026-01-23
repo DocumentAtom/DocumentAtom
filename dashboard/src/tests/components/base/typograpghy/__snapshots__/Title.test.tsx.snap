@@ -1,0 +1,10 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`DocuAtomTitle should match snapshot 1`] = `
+<h1
+  class="ant-typography css-dev-only-do-not-override-1d4w9r2"
+  style="text-align: left;"
+>
+  Title
+</h1>
+`;

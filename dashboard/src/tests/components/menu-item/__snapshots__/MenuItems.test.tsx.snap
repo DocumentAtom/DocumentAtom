@@ -1,0 +1,97 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`MenuItems Snapshots should match snapshot 1`] = `
+<ul
+  class="ant-menu ant-menu-root ant-menu-inline ant-menu-light css-dev-only-do-not-override-1d4w9r2"
+  data-menu-list="true"
+  role="menu"
+  tabindex="0"
+>
+  <li
+    aria-describedby="test-id"
+    class="ant-menu-item ant-menu-item-only-child"
+    data-menu-id="rc-menu-uuid-test-home"
+    path="/dashboard"
+    role="menuitem"
+    style="padding-left: 24px;"
+    tabindex="-1"
+  >
+    <span
+      class="ant-menu-title-content"
+    >
+      <a
+        href="/dashboard"
+      >
+        Home
+      </a>
+    </span>
+  </li>
+  <li
+    aria-describedby="test-id"
+    class="ant-menu-item ant-menu-item-only-child"
+    data-menu-id="rc-menu-uuid-test-settings"
+    path="/dashboard/settings"
+    role="menuitem"
+    style="padding-left: 24px;"
+    tabindex="-1"
+  >
+    <span
+      class="ant-menu-title-content"
+    >
+      <a
+        href="/dashboard/settings"
+      >
+        Settings
+      </a>
+    </span>
+  </li>
+</ul>
+`;
+
+exports[`MenuItems Snapshots should match snapshot when collapsed 1`] = `
+<ul
+  class="ant-menu ant-menu-root ant-menu-inline ant-menu-light css-dev-only-do-not-override-1d4w9r2"
+  data-menu-list="true"
+  role="menu"
+  tabindex="0"
+>
+  <li
+    aria-describedby="test-id"
+    class="ant-menu-item ant-menu-item-only-child"
+    data-menu-id="rc-menu-uuid-test-home"
+    path="/dashboard"
+    role="menuitem"
+    style="padding-left: 24px;"
+    tabindex="-1"
+  >
+    <span
+      class="ant-menu-title-content"
+    >
+      <a
+        href="/dashboard"
+      >
+        Home
+      </a>
+    </span>
+  </li>
+  <li
+    aria-describedby="test-id"
+    class="ant-menu-item ant-menu-item-only-child"
+    data-menu-id="rc-menu-uuid-test-settings"
+    path="/dashboard/settings"
+    role="menuitem"
+    style="padding-left: 24px;"
+    tabindex="-1"
+  >
+    <span
+      class="ant-menu-title-content"
+    >
+      <a
+        href="/dashboard/settings"
+      >
+        Settings
+      </a>
+    </span>
+  </li>
+</ul>
+`;

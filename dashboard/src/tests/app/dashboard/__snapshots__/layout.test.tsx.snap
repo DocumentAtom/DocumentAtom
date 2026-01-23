@@ -1,0 +1,186 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Dashboard Layout should match snapshot 1`] = `
+<div
+  class="ant-layout css-dev-only-do-not-override-1d4w9r2"
+  style="min-height: 100vh;"
+>
+  <div
+    class="ant-layout css-dev-only-do-not-override-1d4w9r2"
+  >
+    <header
+      class="ant-layout-header header css-dev-only-do-not-override-1d4w9r2"
+    >
+      <div
+        class="ant-flex css-dev-only-do-not-override-1d4w9r2 ant-flex-align-center"
+        style="gap: 10px;"
+      >
+        <div
+          class="ant-flex css-dev-only-do-not-override-1d4w9r2 ant-flex-align-center"
+          style="gap: 10px;"
+        >
+          <img
+            alt="Document Atom"
+            data-nimg="1"
+            decoding="async"
+            height="35"
+            loading="lazy"
+            src="/_next/image?url=%2Fassets%2Flogo.png&w=96&q=75"
+            srcset="/_next/image?url=%2Fassets%2Flogo.png&w=48&q=75 1x, /_next/image?url=%2Fassets%2Flogo.png&w=96&q=75 2x"
+            style="color: transparent;"
+            width="35"
+          />
+          <span
+            class="ant-typography css-dev-only-do-not-override-1d4w9r2"
+            style="font-size: 16px;"
+          >
+            Document Atom
+          </span>
+        </div>
+        <svg
+          color="black"
+          fill="none"
+          height="20"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          style="cursor: pointer; transform: rotate(90deg);"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <mask
+            id="circle-mask-5"
+          >
+            <rect
+              fill="white"
+              height="100%"
+              width="100%"
+              x="0"
+              y="0"
+            />
+            <circle
+              fill="black"
+              r="9"
+            />
+          </mask>
+          <circle
+            cx="12"
+            cy="12"
+            fill="black"
+            mask="url(#circle-mask-5)"
+          />
+          <g
+            stroke="currentColor"
+            style="opacity: 1;"
+          >
+            <line
+              x1="12"
+              x2="12"
+              y1="1"
+              y2="3"
+            />
+            <line
+              x1="12"
+              x2="12"
+              y1="21"
+              y2="23"
+            />
+            <line
+              x1="4.22"
+              x2="5.64"
+              y1="4.22"
+              y2="5.64"
+            />
+            <line
+              x1="18.36"
+              x2="19.78"
+              y1="18.36"
+              y2="19.78"
+            />
+            <line
+              x1="1"
+              x2="3"
+              y1="12"
+              y2="12"
+            />
+            <line
+              x1="21"
+              x2="23"
+              y1="12"
+              y2="12"
+            />
+            <line
+              x1="4.22"
+              x2="5.64"
+              y1="19.78"
+              y2="18.36"
+            />
+            <line
+              x1="18.36"
+              x2="19.78"
+              y1="5.64"
+              y2="4.22"
+            />
+          </g>
+        </svg>
+      </div>
+      <div
+        class="ant-flex css-dev-only-do-not-override-1d4w9r2 ant-flex-align-center"
+        style="gap: 10px;"
+      >
+        <a
+          href="/"
+        >
+          <b>
+            Change Server URL
+          </b>
+        </a>
+      </div>
+    </header>
+    <main
+      class="ant-layout-content css-dev-only-do-not-override-1d4w9r2"
+      style="min-height: 280px; background: rgb(255, 255, 255);"
+    >
+      <main
+        class="ant-layout-content pageContainer css-dev-only-do-not-override-1d4w9r2"
+        style="height: 100vh;"
+      >
+        <div
+          class="pageContent"
+        >
+          <div
+            class="pageLoading mt ant-flex css-dev-only-do-not-override-1d4w9r2 ant-flex-align-center ant-flex-justify-center ant-flex-vertical"
+          >
+            <span
+              class="ant-typography css-dev-only-do-not-override-1d4w9r2"
+            >
+              Validating connectivity...
+            </span>
+            <span
+              aria-label="loading"
+              class="anticon anticon-loading anticon-spin pageLoader"
+              role="img"
+            >
+              <svg
+                aria-hidden="true"
+                data-icon="loading"
+                fill="currentColor"
+                focusable="false"
+                height="1em"
+                viewBox="0 0 1024 1024"
+                width="1em"
+              >
+                <path
+                  d="M988 548c-19.9 0-36-16.1-36-36 0-59.4-11.6-117-34.6-171.3a440.45 440.45 0 00-94.3-139.9 437.71 437.71 0 00-139.9-94.3C629 83.6 571.4 72 512 72c-19.9 0-36-16.1-36-36s16.1-36 36-36c69.1 0 136.2 13.5 199.3 40.3C772.3 66 827 103 874 150c47 47 83.9 101.8 109.7 162.7 26.7 63.1 40.2 130.2 40.2 199.3.1 19.9-16 36-35.9 36z"
+                />
+              </svg>
+            </span>
+          </div>
+        </div>
+      </main>
+    </main>
+  </div>
+</div>
+`;

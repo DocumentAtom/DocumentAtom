@@ -1,0 +1,346 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Dashboard Page should match snapshot 1`] = `
+<div
+  class="ant-layout css-dev-only-do-not-override-1d4w9r2"
+  style="min-height: 100vh;"
+>
+  <div
+    class="ant-layout css-dev-only-do-not-override-1d4w9r2"
+  >
+    <header
+      class="ant-layout-header header css-dev-only-do-not-override-1d4w9r2"
+    >
+      <div
+        class="ant-flex css-dev-only-do-not-override-1d4w9r2 ant-flex-align-center"
+        style="gap: 10px;"
+      >
+        <div
+          class="ant-flex css-dev-only-do-not-override-1d4w9r2 ant-flex-align-center"
+          style="gap: 10px;"
+        >
+          <img
+            alt="Document Atom"
+            data-nimg="1"
+            decoding="async"
+            height="35"
+            loading="lazy"
+            src="/_next/image?url=%2Fassets%2Flogo.png&w=96&q=75"
+            srcset="/_next/image?url=%2Fassets%2Flogo.png&w=48&q=75 1x, /_next/image?url=%2Fassets%2Flogo.png&w=96&q=75 2x"
+            style="color: transparent;"
+            width="35"
+          />
+          <span
+            class="ant-typography css-dev-only-do-not-override-1d4w9r2"
+            style="font-size: 16px;"
+          >
+            Document Atom
+          </span>
+        </div>
+        <svg
+          color="black"
+          fill="none"
+          height="20"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          style="cursor: pointer; transform: rotate(90deg);"
+          viewBox="0 0 24 24"
+          width="20"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <mask
+            id="circle-mask-4"
+          >
+            <rect
+              fill="white"
+              height="100%"
+              width="100%"
+              x="0"
+              y="0"
+            />
+            <circle
+              fill="black"
+              r="9"
+            />
+          </mask>
+          <circle
+            cx="12"
+            cy="12"
+            fill="black"
+            mask="url(#circle-mask-4)"
+          />
+          <g
+            stroke="currentColor"
+            style="opacity: 1;"
+          >
+            <line
+              x1="12"
+              x2="12"
+              y1="1"
+              y2="3"
+            />
+            <line
+              x1="12"
+              x2="12"
+              y1="21"
+              y2="23"
+            />
+            <line
+              x1="4.22"
+              x2="5.64"
+              y1="4.22"
+              y2="5.64"
+            />
+            <line
+              x1="18.36"
+              x2="19.78"
+              y1="18.36"
+              y2="19.78"
+            />
+            <line
+              x1="1"
+              x2="3"
+              y1="12"
+              y2="12"
+            />
+            <line
+              x1="21"
+              x2="23"
+              y1="12"
+              y2="12"
+            />
+            <line
+              x1="4.22"
+              x2="5.64"
+              y1="19.78"
+              y2="18.36"
+            />
+            <line
+              x1="18.36"
+              x2="19.78"
+              y1="5.64"
+              y2="4.22"
+            />
+          </g>
+        </svg>
+      </div>
+      <div
+        class="ant-flex css-dev-only-do-not-override-1d4w9r2 ant-flex-align-center"
+        style="gap: 10px;"
+      >
+        <a
+          href="/"
+        >
+          <b>
+            Change Server URL
+          </b>
+        </a>
+      </div>
+    </header>
+    <main
+      class="ant-layout-content css-dev-only-do-not-override-1d4w9r2"
+      style="min-height: 280px; background: rgb(255, 255, 255);"
+    >
+      <main
+        class="ant-layout-content pageContainer css-dev-only-do-not-override-1d4w9r2"
+        style="height: auto;"
+      >
+        <div
+          class="pageTitleContainer ant-flex css-dev-only-do-not-override-1d4w9r2 ant-flex-wrap-wrap ant-flex-align-center ant-flex-justify-space-between ant-flex-gap-small"
+        >
+          <div
+            class="ant-flex css-dev-only-do-not-override-1d4w9r2 ant-flex-align-center ant-flex-gap-small"
+          >
+            <span
+              class="ant-typography css-dev-only-do-not-override-1d4w9r2"
+              data-testid="heading"
+              style="font-weight: 600; font-size: 16px;"
+            >
+              Home
+            </span>
+          </div>
+        </div>
+        <div
+          class="pageContent"
+        >
+          <div
+            class="ant-tabs ant-tabs-top custom-tabs css-dev-only-do-not-override-1d4w9r2"
+          >
+            <div
+              aria-orientation="horizontal"
+              class="ant-tabs-nav"
+              role="tablist"
+            >
+              <div
+                class="ant-tabs-nav-wrap"
+              >
+                <div
+                  class="ant-tabs-nav-list"
+                  style="transform: translate(0px, 0px);"
+                >
+                  <div
+                    class="ant-tabs-tab ant-tabs-tab-active"
+                    data-node-key="type-detection"
+                  >
+                    <div
+                      aria-controls="rc-tabs-test-panel-type-detection"
+                      aria-selected="true"
+                      class="ant-tabs-tab-btn"
+                      id="rc-tabs-test-tab-type-detection"
+                      role="tab"
+                      tabindex="0"
+                    >
+                      Type Detection
+                    </div>
+                  </div>
+                  <div
+                    class="ant-tabs-tab"
+                    data-node-key="atom-extraction"
+                  >
+                    <div
+                      aria-controls="rc-tabs-test-panel-atom-extraction"
+                      aria-selected="false"
+                      class="ant-tabs-tab-btn"
+                      id="rc-tabs-test-tab-atom-extraction"
+                      role="tab"
+                      tabindex="-1"
+                    >
+                      Atom Extraction
+                    </div>
+                  </div>
+                  <div
+                    class="ant-tabs-ink-bar ant-tabs-ink-bar-animated"
+                  />
+                </div>
+              </div>
+              <div
+                class="ant-tabs-nav-operations ant-tabs-nav-operations-hidden"
+              >
+                <button
+                  aria-controls="rc-tabs-test-more-popup"
+                  aria-expanded="false"
+                  aria-haspopup="listbox"
+                  class="ant-tabs-nav-more"
+                  id="rc-tabs-test-more"
+                  style="visibility: hidden; order: 1;"
+                  type="button"
+                >
+                  <span
+                    aria-label="ellipsis"
+                    class="anticon anticon-ellipsis"
+                    role="img"
+                  >
+                    <svg
+                      aria-hidden="true"
+                      data-icon="ellipsis"
+                      fill="currentColor"
+                      focusable="false"
+                      height="1em"
+                      viewBox="64 64 896 896"
+                      width="1em"
+                    >
+                      <path
+                        d="M176 511a56 56 0 10112 0 56 56 0 10-112 0zm280 0a56 56 0 10112 0 56 56 0 10-112 0zm280 0a56 56 0 10112 0 56 56 0 10-112 0z"
+                      />
+                    </svg>
+                  </span>
+                </button>
+              </div>
+            </div>
+            <div
+              class="ant-tabs-content-holder"
+            >
+              <div
+                class="ant-tabs-content ant-tabs-content-top"
+              >
+                <div
+                  aria-hidden="false"
+                  aria-labelledby="rc-tabs-test-tab-type-detection"
+                  class="ant-tabs-tabpane ant-tabs-tabpane-active"
+                  id="rc-tabs-test-panel-type-detection"
+                  role="tabpanel"
+                  tabindex="0"
+                >
+                  <h4
+                    class="ant-typography css-dev-only-do-not-override-1d4w9r2"
+                    style="text-align: left;"
+                  >
+                    Type Detection
+                  </h4>
+                  <div
+                    class="ant-divider css-dev-only-do-not-override-1d4w9r2 ant-divider-horizontal mt-0"
+                    role="separator"
+                  />
+                  <span
+                    class="ant-upload-wrapper uploadContainer css-dev-only-do-not-override-1d4w9r2"
+                  >
+                    <div
+                      class="ant-upload ant-upload-select"
+                    >
+                      <span
+                        class="ant-upload"
+                      >
+                        <input
+                          accept=""
+                          name="file"
+                          style="display: none;"
+                          type="file"
+                        />
+                        <button
+                          class="ant-btn css-dev-only-do-not-override-1d4w9r2 ant-btn-default ant-btn-color-default ant-btn-variant-outlined"
+                          type="button"
+                        >
+                          <span
+                            class="ant-btn-icon"
+                          >
+                            <span
+                              aria-label="upload"
+                              class="anticon anticon-upload"
+                              role="img"
+                            >
+                              <svg
+                                aria-hidden="true"
+                                data-icon="upload"
+                                fill="currentColor"
+                                focusable="false"
+                                height="1em"
+                                viewBox="64 64 896 896"
+                                width="1em"
+                              >
+                                <path
+                                  d="M400 317.7h73.9V656c0 4.4 3.6 8 8 8h60c4.4 0 8-3.6 8-8V317.7H624c6.7 0 10.4-7.7 6.3-12.9L518.3 163a8 8 0 00-12.6 0l-112 141.7c-4.1 5.3-.4 13 6.3 13zM878 626h-60c-4.4 0-8 3.6-8 8v154H214V634c0-4.4-3.6-8-8-8h-60c-4.4 0-8 3.6-8 8v198c0 17.7 14.3 32 32 32h684c17.7 0 32-14.3 32-32V634c0-4.4-3.6-8-8-8z"
+                                />
+                              </svg>
+                            </span>
+                          </span>
+                          <span>
+                            Select File
+                          </span>
+                        </button>
+                      </span>
+                    </div>
+                    <div
+                      class="ant-upload-list ant-upload-list-text"
+                    />
+                  </span>
+                  <button
+                    class="ant-btn css-dev-only-do-not-override-1d4w9r2 ant-btn-primary ant-btn-color-primary ant-btn-variant-solid mt"
+                    disabled=""
+                    type="button"
+                  >
+                    <span>
+                      Submit
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </main>
+  </div>
+</div>
+`;

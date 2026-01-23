@@ -1,0 +1,72 @@
+services:
+
+  #
+  # DocumentAtom Server
+  # See https://hub.docker.com/r/jchristn77/documentatom
+  # and https://github.com/DocumentAtom/DocumentAtom
+  #
+
+  documentatom-server:
+    container_name: 'documentatom-server'
+    image: 'jchristn77/documentatom:latest'
+    ports:
+      - '8000:8000'
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./documentatom.json:/app/documentatom.json
+      - ./logs/:/app/logs/
+    healthcheck:
+      test: curl --fail http://localhost:8000
+      interval: 10s
+      timeout: 5s
+      retries: 2
+
+  #
+  # DocumentAtom Dashboard
+  # See https://hub.docker.com/r/jchristn77/documentatom-ui
+  # and https://github.com/DocumentAtom/DocumentAtom
+  #
+
+  documentatom-dashboard:
+    container_name: 'documentatom-dashboard'
+    image: 'jchristn77/documentatom-ui:latest'
+    ports:
+      - '3000:3000'
+    stdin_open: true
+    tty: true
+    depends_on:
+      - documentatom-server
+    healthcheck:
+      test: curl --fail http://localhost:3000
+      interval: 10s
+      timeout: 5s
+      retries: 2
+
+  #
+  # DocumentAtom MCP Server
+  # Requires DocumentAtom Server backend
+  # See https://hub.docker.com/r/jchristn77/documentatom-mcp
+  # and https://github.com/DocumentAtom/DocumentAtom
+  #
+
+  documentatom-mcp:
+    container_name: 'documentatom-mcp'
+    image: 'jchristn77/documentatom-mcp:latest'
+    ports:
+      - '8200:8200'
+      - '8201:8201'
+      - '8202:8202'
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./documentatom-mcp.json:/app/documentatom.json
+      - ./logs/:/app/logs/
+      - ./backups/:/app/backups/
+    depends_on:
+      - documentatom-server
+    healthcheck:
+      test: curl --fail http://localhost:8200
+      interval: 10s
+      timeout: 5s
+      retries: 2

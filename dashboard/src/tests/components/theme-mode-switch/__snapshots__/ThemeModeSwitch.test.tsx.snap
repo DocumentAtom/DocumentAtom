@@ -1,0 +1,183 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ThemeModeSwitch Snapshots should match snapshot in dark mode 1`] = `
+<svg
+  color="white"
+  fill="none"
+  height="20"
+  stroke="currentColor"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  style="cursor: pointer; transform: rotate(40deg);"
+  viewBox="0 0 24 24"
+  width="20"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <mask
+    id="circle-mask-8"
+  >
+    <rect
+      fill="white"
+      height="100%"
+      width="100%"
+      x="0"
+      y="0"
+    />
+    <circle
+      fill="black"
+      r="9"
+    />
+  </mask>
+  <circle
+    cx="12"
+    cy="12"
+    fill="white"
+    mask="url(#circle-mask-8)"
+  />
+  <g
+    stroke="currentColor"
+    style="opacity: 0;"
+  >
+    <line
+      x1="12"
+      x2="12"
+      y1="1"
+      y2="3"
+    />
+    <line
+      x1="12"
+      x2="12"
+      y1="21"
+      y2="23"
+    />
+    <line
+      x1="4.22"
+      x2="5.64"
+      y1="4.22"
+      y2="5.64"
+    />
+    <line
+      x1="18.36"
+      x2="19.78"
+      y1="18.36"
+      y2="19.78"
+    />
+    <line
+      x1="1"
+      x2="3"
+      y1="12"
+      y2="12"
+    />
+    <line
+      x1="21"
+      x2="23"
+      y1="12"
+      y2="12"
+    />
+    <line
+      x1="4.22"
+      x2="5.64"
+      y1="19.78"
+      y2="18.36"
+    />
+    <line
+      x1="18.36"
+      x2="19.78"
+      y1="5.64"
+      y2="4.22"
+    />
+  </g>
+</svg>
+`;
+
+exports[`ThemeModeSwitch Snapshots should match snapshot in light mode 1`] = `
+<svg
+  color="black"
+  fill="none"
+  height="20"
+  stroke="currentColor"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  stroke-width="2"
+  style="cursor: pointer; transform: rotate(90deg);"
+  viewBox="0 0 24 24"
+  width="20"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <mask
+    id="circle-mask-7"
+  >
+    <rect
+      fill="white"
+      height="100%"
+      width="100%"
+      x="0"
+      y="0"
+    />
+    <circle
+      fill="black"
+      r="9"
+    />
+  </mask>
+  <circle
+    cx="12"
+    cy="12"
+    fill="black"
+    mask="url(#circle-mask-7)"
+  />
+  <g
+    stroke="currentColor"
+    style="opacity: 1;"
+  >
+    <line
+      x1="12"
+      x2="12"
+      y1="1"
+      y2="3"
+    />
+    <line
+      x1="12"
+      x2="12"
+      y1="21"
+      y2="23"
+    />
+    <line
+      x1="4.22"
+      x2="5.64"
+      y1="4.22"
+      y2="5.64"
+    />
+    <line
+      x1="18.36"
+      x2="19.78"
+      y1="18.36"
+      y2="19.78"
+    />
+    <line
+      x1="1"
+      x2="3"
+      y1="12"
+      y2="12"
+    />
+    <line
+      x1="21"
+      x2="23"
+      y1="12"
+      y2="12"
+    />
+    <line
+      x1="4.22"
+      x2="5.64"
+      y1="19.78"
+      y2="18.36"
+    />
+    <line
+      x1="18.36"
+      x2="19.78"
+      y1="5.64"
+      y2="4.22"
+    />
+  </g>
+</svg>
+`;

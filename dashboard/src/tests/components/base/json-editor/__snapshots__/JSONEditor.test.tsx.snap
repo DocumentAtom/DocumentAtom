@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`JSONEditor Snapshots should match snapshot 1`] = `
+<input
+  data-testid="json-editor-textarea"
+  value="[object Object]"
+/>
+`;
+
+exports[`JSONEditor Snapshots should match snapshot in tree mode 1`] = `
+<input
+  data-testid="json-editor-textarea"
+  value="[object Object]"
+/>
+`;
