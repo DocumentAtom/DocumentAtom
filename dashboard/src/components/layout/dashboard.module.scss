@@ -1,11 +1,9 @@
 .avatar {
   background-color: var(--ant-color-primary);
+}
 
-  :global {
-    .ant-avatar-string {
-      font-size: 20px;
-    }
-  }
+.avatar :global(.ant-avatar-string) {
+  font-size: 20px;
 }
 
 .logoutLink {
@@ -52,15 +50,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
 
-  :global {
-    .label {
-      font-size: 10px;
-      font-weight: 600;
-      color: #333333;
-      display: block;
-      height: fit-content;
-      line-height: normal;
-    }
-  }
+.header :global(.label) {
+  font-size: 10px;
+  font-weight: 600;
+  color: #333333;
+  display: block;
+  height: fit-content;
+  line-height: normal;
 }

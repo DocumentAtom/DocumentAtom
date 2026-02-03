@@ -10,7 +10,7 @@ const PageLoading = ({
   message = "Loading...",
   dataTestId,
 }: {
-  message?: string | JSX.Element;
+  message?: string | React.ReactNode;
   dataTestId?: string;
 }) => {
   return (
