@@ -1,6 +1,6 @@
 #
 #
-# Run the docker build command from src, not from the project directory
+# Run the docker build command from the repo root, not from src
 #
 #
 
@@ -10,18 +10,26 @@
 # Build stage
 #
 #
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /src
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /repo
 
-# Copy source
-COPY . .
+# Copy shared build properties and project files for restore
+COPY src/Directory.Build.props ./src/
+COPY src/DocumentAtom.Core/DocumentAtom.Core.csproj ./src/DocumentAtom.Core/
+COPY src/DocumentAtom.McpServer/DocumentAtom.McpServer.csproj ./src/DocumentAtom.McpServer/
+COPY sdk/csharp/src/DocumentAtom.Sdk/DocumentAtom.Sdk.csproj ./sdk/csharp/src/DocumentAtom.Sdk/
 
 # Restore dependencies
-RUN dotnet restore "DocumentAtom.McpServer/DocumentAtom.McpServer.csproj"
+RUN dotnet restore "src/DocumentAtom.McpServer/DocumentAtom.McpServer.csproj" -p:TargetFrameworks=net10.0
+
+# Copy source code
+COPY src/DocumentAtom.Core/ ./src/DocumentAtom.Core/
+COPY src/DocumentAtom.McpServer/ ./src/DocumentAtom.McpServer/
+COPY sdk/csharp/src/DocumentAtom.Sdk/ ./sdk/csharp/src/DocumentAtom.Sdk/
 
 # Build the application
-WORKDIR /src/DocumentAtom.McpServer
-RUN dotnet build "DocumentAtom.McpServer.csproj" -c Release -o /app/build /p:GeneratePackageOnBuild=false
+WORKDIR /repo/src/DocumentAtom.McpServer
+RUN dotnet build "DocumentAtom.McpServer.csproj" -c Release -f net10.0 -o /app/build /p:GeneratePackageOnBuild=false
 
 
 #
@@ -30,7 +38,7 @@ RUN dotnet build "DocumentAtom.McpServer.csproj" -c Release -o /app/build /p:Gen
 #
 #
 FROM build AS publish
-RUN dotnet publish "DocumentAtom.McpServer.csproj" -c Release -o /app/publish /p:UseAppHost=false /p:GeneratePackageOnBuild=false /p:ErrorOnDuplicatePublishOutputFiles=false
+RUN dotnet publish "DocumentAtom.McpServer.csproj" -c Release -f net10.0 -o /app/publish /p:UseAppHost=false /p:GeneratePackageOnBuild=false /p:ErrorOnDuplicatePublishOutputFiles=false
 
 
 #
@@ -38,7 +46,7 @@ RUN dotnet publish "DocumentAtom.McpServer.csproj" -c Release -o /app/publish /p
 # Runtime stage
 #
 #
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS final
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS final
 RUN apt-get update && apt-get install -y iputils-ping traceroute net-tools curl wget dnsutils iproute2 vim file && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 COPY --from=publish /app/publish .

@@ -16,7 +16,7 @@ export const DocumentAtomTheme = {
 };
 
 export const primaryTheme: ThemeConfig = {
-  cssVar: true,
+  cssVar: {},
   algorithm: theme.defaultAlgorithm,
   token: {
     colorPrimary: DocumentAtomTheme.primary,
@@ -84,7 +84,7 @@ export const primaryTheme: ThemeConfig = {
 };
 
 export const darkTheme: ThemeConfig = {
-  cssVar: true,
+  cssVar: {},
   algorithm: theme.darkAlgorithm,
   token: {
     colorBgBase: "#151515",

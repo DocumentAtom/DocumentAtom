@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build-env
 
 # Set ARCH properly using ARG and ENV
 ARG TARGETARCH
@@ -28,39 +28,18 @@ RUN apt-get update && apt-get install -y \
 # Set working directory for build
 WORKDIR /src
 
-# Copy only the specific DocumentAtom projects that are built locally (not from NuGet)
-# Excluding: DocumentAtom, DocumentAtom.Core, DocumentAtom.Image, DocumentAtom.Ocr (these come from NuGet)
-# Including: Server and content-type specific projects
-COPY DocumentAtom.Server/*.csproj ./DocumentAtom.Server/
-COPY DocumentAtom.Csv/*.csproj ./DocumentAtom.Csv/
-COPY DocumentAtom.Excel/*.csproj ./DocumentAtom.Excel/
-COPY DocumentAtom.Html/*.csproj ./DocumentAtom.Html/
-COPY DocumentAtom.Json/*.csproj ./DocumentAtom.Json/
-COPY DocumentAtom.Markdown/*.csproj ./DocumentAtom.Markdown/
-COPY DocumentAtom.Pdf/*.csproj ./DocumentAtom.Pdf/
-COPY DocumentAtom.PowerPoint/*.csproj ./DocumentAtom.PowerPoint/
-COPY DocumentAtom.RichText/*.csproj ./DocumentAtom.RichText/
-COPY DocumentAtom.Text/*.csproj ./DocumentAtom.Text/
-COPY DocumentAtom.TextTools/*.csproj ./DocumentAtom.TextTools/
-COPY DocumentAtom.TypeDetection/*.csproj ./DocumentAtom.TypeDetection/
-COPY DocumentAtom.Word/*.csproj ./DocumentAtom.Word/
-COPY DocumentAtom.Xml/*.csproj ./DocumentAtom.Xml/
+# Copy shared build properties and project files for restore
+COPY Directory.Build.props ./
+COPY DocumentAtom.Server/DocumentAtom.Server.csproj ./DocumentAtom.Server/
+COPY DocumentAtom.Core/DocumentAtom.Core.csproj ./DocumentAtom.Core/
+COPY DocumentAtom.Text/DocumentAtom.Text.csproj ./DocumentAtom.Text/
+COPY DocumentAtom.Documents/DocumentAtom.Documents.csproj ./DocumentAtom.Documents/
 
-# Copy source code for the same projects
+# Copy source code
 COPY DocumentAtom.Server/ ./DocumentAtom.Server/
-COPY DocumentAtom.Csv/ ./DocumentAtom.Csv/
-COPY DocumentAtom.Excel/ ./DocumentAtom.Excel/
-COPY DocumentAtom.Html/ ./DocumentAtom.Html/
-COPY DocumentAtom.Json/ ./DocumentAtom.Json/
-COPY DocumentAtom.Markdown/ ./DocumentAtom.Markdown/
-COPY DocumentAtom.Pdf/ ./DocumentAtom.Pdf/
-COPY DocumentAtom.PowerPoint/ ./DocumentAtom.PowerPoint/
-COPY DocumentAtom.RichText/ ./DocumentAtom.RichText/
+COPY DocumentAtom.Core/ ./DocumentAtom.Core/
 COPY DocumentAtom.Text/ ./DocumentAtom.Text/
-COPY DocumentAtom.TextTools/ ./DocumentAtom.TextTools/
-COPY DocumentAtom.TypeDetection/ ./DocumentAtom.TypeDetection/
-COPY DocumentAtom.Word/ ./DocumentAtom.Word/
-COPY DocumentAtom.Xml/ ./DocumentAtom.Xml/
+COPY DocumentAtom.Documents/ ./DocumentAtom.Documents/
 
 # Restore dependencies for the server project
 # Restore for the specific runtime based on TARGETARCH
@@ -71,7 +50,7 @@ RUN if [ "${TARGETARCH}" = "arm64" ]; then \
     else \
         RUNTIME="linux-x64"; \
     fi && \
-    dotnet restore DocumentAtom.Server/DocumentAtom.Server.csproj -r ${RUNTIME}
+    dotnet restore DocumentAtom.Server/DocumentAtom.Server.csproj -r ${RUNTIME} -p:TargetFrameworks=net10.0
 
 # Build and publish the application
 # Use the same runtime that was used for restore
@@ -87,13 +66,14 @@ RUN if [ "${TARGETARCH}" = "arm64" ]; then \
         -o /app/publish \
         --no-restore \
         -r ${RUNTIME} \
+        -f net10.0 \
         --self-contained false \
         -p:GeneratePackageOnBuild=false \
         -p:IsPackable=false \
         -p:ErrorOnDuplicatePublishOutputFiles=false
 
 # Runtime stage
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 
 # Set ARCH properly using ARG and ENV
 ARG TARGETARCH
@@ -187,8 +167,7 @@ ENV TESSDATA_PREFIX=/usr/share/tesseract-ocr/5/tessdata
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
 
 # Python setup
-RUN mv /usr/lib/python3.11/EXTERNALLY-MANAGED /usr/lib/python3.11/EXTERNALLY-MANAGED.old || true && \
-    pip install --upgrade pip && pip install pdfplumber && \
+RUN pip install --break-system-packages pdfplumber && \
     ln -s $(which python3) /usr/bin/py
 
 ENV PATH="/usr/lib/libreoffice/program:${PATH}"

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --webpack",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
@@ -56,7 +56,8 @@
   "overrides": {
     "jsoneditor-react": {
       "react": "$react",
-      "react-dom": "$react-dom"
+      "react-dom": "$react-dom",
+      "jsoneditor": "$jsoneditor"
     },
     "qs": "^6.14.1",
     "glob": "^10.5.0",

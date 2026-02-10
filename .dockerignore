@@ -1,0 +1,53 @@
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# IDE and editor files
+.vs/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Build results
+**/[Dd]ebug/
+**/[Rr]elease/
+**/[Bb]in/
+**/[Oo]bj/
+**/[Ll]og/
+**/[Ll]ogs/
+
+# .NET artifacts
+**/project.lock.json
+**/project.fragment.lock.json
+**/artifacts/
+**/packages/
+**/.nuget/
+
+# Node
+**/node_modules/
+**/.next/
+
+# Test results
+**/TestResults/
+**/coverage/
+
+# OS files
+**/.DS_Store
+**/Thumbs.db
+
+# Docker files
+**/Dockerfile*
+**/.dockerignore
+**/docker-compose*.yml
+
+# Documentation
+**/*.md
+**/docs/
+
+# Misc
+**/*.bak
+**/backup/
+docker/
