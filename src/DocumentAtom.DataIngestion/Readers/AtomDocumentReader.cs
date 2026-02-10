@@ -8,9 +8,9 @@ namespace DocumentAtom.DataIngestion.Readers
     using System.Threading.Tasks;
     using DocumentAtom.Core;
     using DocumentAtom.Core.Atoms;
+    using DocumentAtom.Core.TypeDetection;
     using DocumentAtom.DataIngestion.Converters;
     using DocumentAtom.DataIngestion.Metadata;
-    using DocumentAtom.TypeDetection;
 
     /// <summary>
     /// Reads documents and converts them to IngestionDocument format.

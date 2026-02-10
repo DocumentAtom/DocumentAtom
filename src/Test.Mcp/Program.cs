@@ -139,13 +139,13 @@ namespace Test.Mcp
 
 
                 Console.WriteLine($"Processing image: {filename} ({imageData.Length} bytes)");
-                var request = new
+                object request = new
                 {
                     data = base64Image
                 };
 
                 Console.WriteLine("Sending image processing request...");
-                var result = await _McpClient!.CallAsync<string>("image/process", request, 60000, token).ConfigureAwait(false);
+                string result = await _McpClient!.CallAsync<string>("image/process", request, 60000, token).ConfigureAwait(false);
 
                 Console.WriteLine("Image processing result:");
                 Console.WriteLine(result);
@@ -186,13 +186,13 @@ namespace Test.Mcp
                 string filename = Path.GetFileName(imagePath);
 
                 Console.WriteLine($"Extracting OCR from image: {filename} ({imageData.Length} bytes)");
-                var request = new
+                object request = new
                 {
                     data = base64Image
                 };
 
                 Console.WriteLine("Sending OCR extraction request...");
-                var result = await _McpClient!.CallAsync<string>("image/ocr", request, 60000, token).ConfigureAwait(false);
+                string result = await _McpClient!.CallAsync<string>("image/ocr", request, 60000, token).ConfigureAwait(false);
 
                 Console.WriteLine("OCR extraction result:");
                 Console.WriteLine(result);
@@ -233,7 +233,7 @@ namespace Test.Mcp
 
                 bool extractOcr = Inputty.GetBoolean("Extract text from images using OCR?", false);
 
-                var request = new
+                object request = new
                 {
                     data = base64Csv,
                     extractOcr = extractOcr
@@ -245,7 +245,7 @@ namespace Test.Mcp
                     Console.WriteLine("OCR extraction enabled");
                 }
                 Console.WriteLine("Sending CSV processing request...");
-                var result = await _McpClient!.CallAsync<string>("csv/process", request, 60000, token).ConfigureAwait(false);
+                string result = await _McpClient!.CallAsync<string>("csv/process", request, 60000, token).ConfigureAwait(false);
 
                 Console.WriteLine("CSV processing result:");
                 Console.WriteLine(result);
@@ -288,7 +288,7 @@ namespace Test.Mcp
                 // Ask if user wants OCR extraction
                 bool extractOcr = Inputty.GetBoolean("Extract text from images using OCR?", false);
 
-                var request = new
+                object request = new
                 {
                     data = base64Excel,
                     extractOcr = extractOcr
@@ -300,7 +300,7 @@ namespace Test.Mcp
                     Console.WriteLine("OCR extraction enabled");
                 }
                 Console.WriteLine("Sending Excel processing request...");
-                var result = await _McpClient!.CallAsync<string>("excel/process", request, 60000, token).ConfigureAwait(false);
+                string result = await _McpClient!.CallAsync<string>("excel/process", request, 60000, token).ConfigureAwait(false);
 
                 Console.WriteLine("Excel processing result:");
                 Console.WriteLine(result);
@@ -340,14 +340,14 @@ namespace Test.Mcp
                 string base64Html = Convert.ToBase64String(htmlData);
                 string filename = Path.GetFileName(htmlPath);
 
-                var request = new
+                object request = new
                 {
                     data = base64Html
                 };
 
                 Console.WriteLine($"Processing HTML: {filename} ({htmlData.Length} bytes)");
                 Console.WriteLine("Sending HTML processing request...");
-                var result = await _McpClient!.CallAsync<string>("html/process", request, 60000, token).ConfigureAwait(false);
+                string result = await _McpClient!.CallAsync<string>("html/process", request, 60000, token).ConfigureAwait(false);
 
                 Console.WriteLine("HTML processing result:");
                 Console.WriteLine(result);
@@ -387,14 +387,14 @@ namespace Test.Mcp
                 string base64Json = Convert.ToBase64String(jsonData);
                 string filename = Path.GetFileName(jsonPath);
 
-                var request = new
+                object request = new
                 {
                     data = base64Json
                 };
 
                 Console.WriteLine($"Processing JSON: {filename} ({jsonData.Length} bytes)");
                 Console.WriteLine("Sending JSON processing request...");
-                var result = await _McpClient!.CallAsync<string>("json/process", request, 60000, token).ConfigureAwait(false);
+                string result = await _McpClient!.CallAsync<string>("json/process", request, 60000, token).ConfigureAwait(false);
 
                 Console.WriteLine("JSON processing result:");
                 Console.WriteLine(result);
@@ -434,14 +434,14 @@ namespace Test.Mcp
                 string base64Markdown = Convert.ToBase64String(markdownData);
                 string filename = Path.GetFileName(markdownPath);
 
-                var request = new
+                object request = new
                 {
                     data = base64Markdown
                 };
 
                 Console.WriteLine($"Processing Markdown: {filename} ({markdownData.Length} bytes)");
                 Console.WriteLine("Sending Markdown processing request...");
-                var result = await _McpClient!.CallAsync<string>("markdown/process", request, 60000, token).ConfigureAwait(false);
+                string result = await _McpClient!.CallAsync<string>("markdown/process", request, 60000, token).ConfigureAwait(false);
 
                 Console.WriteLine("Markdown processing result:");
                 Console.WriteLine(result);
@@ -481,14 +481,14 @@ namespace Test.Mcp
                 string base64Image = Convert.ToBase64String(imageData);
                 string filename = Path.GetFileName(imagePath);
 
-                var request = new
+                object request = new
                 {
                     data = base64Image
                 };
 
                 Console.WriteLine($"Processing image with OCR: {filename} ({imageData.Length} bytes)");
                 Console.WriteLine("Sending OCR processing request...");
-                var result = await _McpClient!.CallAsync<string>("ocr/process", request, 60000, token).ConfigureAwait(false);
+                string result = await _McpClient!.CallAsync<string>("ocr/process", request, 60000, token).ConfigureAwait(false);
 
                 Console.WriteLine("OCR processing result:");
                 Console.WriteLine(result);
@@ -531,7 +531,7 @@ namespace Test.Mcp
                 // Ask if user wants OCR extraction
                 bool extractOcr = Inputty.GetBoolean("Extract text from images using OCR?", false);
 
-                var request = new
+                object request = new
                 {
                     data = base64Pdf,
                     extractOcr = extractOcr
@@ -543,7 +543,7 @@ namespace Test.Mcp
                     Console.WriteLine("OCR extraction enabled");
                 }
                 Console.WriteLine("Sending PDF processing request...");
-                var result = await _McpClient!.CallAsync<string>("pdf/process", request, 60000, token).ConfigureAwait(false);
+                string result = await _McpClient!.CallAsync<string>("pdf/process", request, 60000, token).ConfigureAwait(false);
 
                 Console.WriteLine("PDF processing result:");
                 Console.WriteLine(result);
@@ -586,7 +586,7 @@ namespace Test.Mcp
                 // Ask if user wants OCR extraction
                 bool extractOcr = Inputty.GetBoolean("Extract text from images using OCR?", false);
 
-                var request = new
+                object request = new
                 {
                     data = base64PowerPoint,
                     extractOcr = extractOcr
@@ -598,7 +598,7 @@ namespace Test.Mcp
                     Console.WriteLine("OCR extraction enabled");
                 }
                 Console.WriteLine("Sending PowerPoint processing request...");
-                var result = await _McpClient!.CallAsync<string>("powerpoint/process", request, 60000, token).ConfigureAwait(false);
+                string result = await _McpClient!.CallAsync<string>("powerpoint/process", request, 60000, token).ConfigureAwait(false);
 
                 Console.WriteLine("PowerPoint processing result:");
                 Console.WriteLine(result);
@@ -641,7 +641,7 @@ namespace Test.Mcp
                 // Ask if user wants OCR extraction
                 bool extractOcr = Inputty.GetBoolean("Extract text from images using OCR?", false);
 
-                var request = new
+                object request = new
                 {
                     data = base64RichText,
                     extractOcr = extractOcr
@@ -653,7 +653,7 @@ namespace Test.Mcp
                     Console.WriteLine("OCR extraction enabled");
                 }
                 Console.WriteLine("Sending Rich Text processing request...");
-                var result = await _McpClient!.CallAsync<string>("richtext/process", request, 60000, token).ConfigureAwait(false);
+                string result = await _McpClient!.CallAsync<string>("richtext/process", request, 60000, token).ConfigureAwait(false);
 
                 Console.WriteLine("Rich Text processing result:");
                 Console.WriteLine(result);
@@ -693,14 +693,14 @@ namespace Test.Mcp
                 string base64Text = Convert.ToBase64String(textData);
                 string filename = Path.GetFileName(textPath);
 
-                var request = new
+                object request = new
                 {
                     data = base64Text
                 };
 
                 Console.WriteLine($"Processing text: {filename} ({textData.Length} bytes)");
                 Console.WriteLine("Sending text processing request...");
-                var result = await _McpClient!.CallAsync<string>("text/process", request, 60000, token).ConfigureAwait(false);
+                string result = await _McpClient!.CallAsync<string>("text/process", request, 60000, token).ConfigureAwait(false);
 
                 Console.WriteLine("Text processing result:");
                 Console.WriteLine(result);
@@ -747,7 +747,7 @@ namespace Test.Mcp
                     contentType = null;
                 }
 
-                var request = new
+                object request = new
                 {
                     data = base64Data,
                     contentType = contentType
@@ -759,7 +759,7 @@ namespace Test.Mcp
                     Console.WriteLine($"Content type hint: {contentType}");
                 }
                 Console.WriteLine("Sending type detection request...");
-                var result = await _McpClient!.CallAsync<string>("typedetection/detect", request, 60000, token).ConfigureAwait(false);
+                string result = await _McpClient!.CallAsync<string>("typedetection/detect", request, 60000, token).ConfigureAwait(false);
 
                 Console.WriteLine("Type detection result:");
                 Console.WriteLine(result);
@@ -802,7 +802,7 @@ namespace Test.Mcp
                 // Ask if user wants OCR extraction
                 bool extractOcr = Inputty.GetBoolean("Extract text from images using OCR?", false);
 
-                var request = new
+                object request = new
                 {
                     data = base64Word,
                     extractOcr = extractOcr
@@ -814,7 +814,7 @@ namespace Test.Mcp
                     Console.WriteLine("OCR extraction enabled");
                 }
                 Console.WriteLine("Sending Word processing request...");
-                var result = await _McpClient!.CallAsync<string>("word/process", request, 60000, token).ConfigureAwait(false);
+                string result = await _McpClient!.CallAsync<string>("word/process", request, 60000, token).ConfigureAwait(false);
 
                 Console.WriteLine("Word processing result:");
                 Console.WriteLine(result);
@@ -854,14 +854,14 @@ namespace Test.Mcp
                 string base64Xml = Convert.ToBase64String(xmlData);
                 string filename = Path.GetFileName(xmlPath);
 
-                var request = new
+                object request = new
                 {
                     data = base64Xml
                 };
 
                 Console.WriteLine($"Processing XML: {filename} ({xmlData.Length} bytes)");
                 Console.WriteLine("Sending XML processing request...");
-                var result = await _McpClient!.CallAsync<string>("xml/process", request, 60000, token).ConfigureAwait(false);
+                string result = await _McpClient!.CallAsync<string>("xml/process", request, 60000, token).ConfigureAwait(false);
 
                 Console.WriteLine("XML processing result:");
                 Console.WriteLine(result);

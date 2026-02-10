@@ -2,14 +2,14 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFrameworks>net8.0;net10.0</TargetFrameworks>
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\DocumentAtom.McpServer\DocumentAtom.McpServer.csproj" />
 		<PackageReference Include="Inputty" Version="1.0.13" />
-		<PackageReference Include="Voltaic" Version="0.1.5" />
+		<PackageReference Include="Voltaic" Version="0.1.6" />
 	</ItemGroup>
 
 	<ItemGroup>

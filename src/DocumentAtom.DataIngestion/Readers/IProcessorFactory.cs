@@ -1,7 +1,7 @@
 namespace DocumentAtom.DataIngestion.Readers
 {
     using DocumentAtom.Core;
-    using DocumentAtom.TypeDetection;
+    using DocumentAtom.Core.TypeDetection;
 
     /// <summary>
     /// Factory interface for creating DocumentAtom processors based on document type.

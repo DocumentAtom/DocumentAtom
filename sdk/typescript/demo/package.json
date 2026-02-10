@@ -1,0 +1,13 @@
+{
+  "name": "demo",
+  "version": "1.0.0",
+  "description": "This is used as a demo for testing the document-atom SDK directly from the dist folder while developing locally",
+  "license": "ISC",
+  "author": "Ashish Patel",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "setup": "cd .. && npm link && cd demo && npm link documentatom-sdk",
+    "start": "rimraf index.cjs && tsc index.ts && mv index.js index.cjs && node index.cjs && rimraf index.cjs"
+  }
+}

@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36603.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocumentAtom.Sdk", "DocumentAtom.Sdk\DocumentAtom.Sdk.csproj", "{8D1C4464-94E6-D834-0EEA-C70313683E65}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.DocumentAtomSdk", "Test.DocumentAtomSdk\Test.DocumentAtomSdk.csproj", "{C387E5C8-2B5B-F491-BDA8-7646ADCE7864}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8D1C4464-94E6-D834-0EEA-C70313683E65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D1C4464-94E6-D834-0EEA-C70313683E65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D1C4464-94E6-D834-0EEA-C70313683E65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D1C4464-94E6-D834-0EEA-C70313683E65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C387E5C8-2B5B-F491-BDA8-7646ADCE7864}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C387E5C8-2B5B-F491-BDA8-7646ADCE7864}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C387E5C8-2B5B-F491-BDA8-7646ADCE7864}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C387E5C8-2B5B-F491-BDA8-7646ADCE7864}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {709856C0-1B9B-4E7D-B64E-04DCBD39E1B9}
+	EndGlobalSection
+EndGlobal

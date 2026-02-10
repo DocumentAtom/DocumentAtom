@@ -1,0 +1,54 @@
+{
+  "company": {
+    "name": "DocumentAtom Technologies",
+    "founded": 2024,
+    "headquarters": {
+      "city": "San Francisco",
+      "state": "California",
+      "country": "USA"
+    },
+    "employees": [
+      {
+        "id": 1,
+        "name": "John Doe",
+        "position": "Software Engineer",
+        "department": "Engineering",
+        "skills": ["C#", "Python", "Machine Learning", "REST APIs"]
+      },
+      {
+        "id": 2,
+        "name": "Jane Smith",
+        "position": "Product Manager",
+        "department": "Product",
+        "skills": ["Product Strategy", "User Research", "Agile", "Data Analysis"]
+      },
+      {
+        "id": 3,
+        "name": "Bob Johnson",
+        "position": "Data Scientist",
+        "department": "Research",
+        "skills": ["Python", "TensorFlow", "NLP", "Statistics"]
+      }
+    ],
+    "products": [
+      {
+        "name": "DocumentAtom Core",
+        "version": "1.0.0",
+        "description": "Core document atomization library",
+        "features": ["Multi-format support", "OCR integration", "Batch processing"]
+      },
+      {
+        "name": "DocumentAtom SDK",
+        "version": "1.0.0",
+        "description": "C# SDK for DocumentAtom",
+        "features": ["REST client", "Type safety", "Async operations"]
+      }
+    ],
+    "technologies": {
+      "backend": ["C#", ".NET 8", "ASP.NET Core"],
+      "frontend": ["React", "TypeScript", "Material-UI"],
+      "database": ["SQL Server", "PostgreSQL"],
+      "cloud": ["Azure", "AWS", "Docker"]
+    }
+  }
+}

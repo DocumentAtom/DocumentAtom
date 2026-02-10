@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!--
+    IMPORTANT: This project is designed to test the DocumentAtom metapackage from NuGet.
+
+    For local development (before publishing to NuGet):
+      - Use ProjectReference (currently enabled below)
+      - This allows testing with local changes
+
+    For testing published NuGet packages:
+      - Comment out the ProjectReference below
+      - Uncomment the PackageReference below
+      - Update the version number to match the published package
+    -->
+    <ProjectReference Include="..\DocumentAtom\DocumentAtom.csproj" />
+
+    <!--
+    After publishing DocumentAtom metapackage to NuGet, enable this instead:
+    <PackageReference Include="DocumentAtom" Version="2.0.0" />
+    -->
+
+    <PackageReference Include="SerializationHelper" Version="2.0.3" />
+  </ItemGroup>
+
+</Project>

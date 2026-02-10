@@ -6,25 +6,37 @@ DocumentAtom provides a light, fast library for breaking input documents into co
 
 DocumentAtom requires that Tesseract v5.0 be installed on the host.  This is required as certain document types can have embedded images which are parsed using OCR via Tesseract.
 
-| Package | Version | Downloads |
-|---------|---------|-----------|
-| DocumentAtom.Csv | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Csv.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Csv/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Csv.svg)](https://www.nuget.org/packages/DocumentAtom.Csv)  |
-| DocumentAtom.DataIngestion | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.DataIngestion.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.DataIngestion/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.DataIngestion.svg)](https://www.nuget.org/packages/DocumentAtom.DataIngestion)  |
-| DocumentAtom.Excel | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Excel.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Excel/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Excel.svg)](https://www.nuget.org/packages/DocumentAtom.Excel)  |
-| DocumentAtom.Html | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Html.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Html/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Html.svg)](https://www.nuget.org/packages/DocumentAtom.Html)  |
-| DocumentAtom.Image | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Image.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Image/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Image.svg)](https://www.nuget.org/packages/DocumentAtom.Image)  |
-| DocumentAtom.Json | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Json.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Json/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Json.svg)](https://www.nuget.org/packages/DocumentAtom.Json)  |
-| DocumentAtom.Markdown | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Markdown.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Markdown/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Markdown.svg)](https://www.nuget.org/packages/DocumentAtom.Markdown)  |
-| DocumentAtom.Pdf | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Pdf.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Pdf/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Pdf.svg)](https://www.nuget.org/packages/DocumentAtom.Pdf)  |
-| DocumentAtom.PowerPoint | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.PowerPoint.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.PowerPoint/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.PowerPoint.svg)](https://www.nuget.org/packages/DocumentAtom.PowerPoint)  |
-| DocumentAtom.Ocr | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Ocr.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Ocr/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Ocr.svg)](https://www.nuget.org/packages/DocumentAtom.Ocr)  |
-| DocumentAtom.RichText | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.RichText.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.RichText/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.RichText.svg)](https://www.nuget.org/packages/DocumentAtom.RichText)  |
-| DocumentAtom.Text | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Text.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Text/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Text.svg)](https://www.nuget.org/packages/DocumentAtom.Text)  |
-| DocumentAtom.TypeDetection | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.TypeDetection.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.TypeDetection/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.TypeDetection.svg)](https://www.nuget.org/packages/DocumentAtom.TypeDetection)  |
-| DocumentAtom.Word | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Word.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Word/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Word.svg)](https://www.nuget.org/packages/DocumentAtom.Word)  |
-| DocumentAtom.Xml | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Xml.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Xml/) | [![NuGet](https://img.shields.io/nuget/dt/DocumentAtom.Xml.svg)](https://www.nuget.org/packages/DocumentAtom.Xml)  |
+## Packages
 
-## New in v1.2.x
+| Package | Description | Version |
+|---------|-------------|---------|
+| `DocumentAtom` | Metapackage (includes Core, Text, Documents) | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom/) |
+| `DocumentAtom.Core` | Core classes and TextTools | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Core.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Core/) |
+| `DocumentAtom.Text` | Text processors (CSV, JSON, XML, HTML, Markdown) | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Text.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Text/) |
+| `DocumentAtom.Documents` | Document processors (Word, Excel, PowerPoint, PDF, Image, OCR) | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Documents.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Documents/) |
+| `DocumentAtom.DataIngestion` | Microsoft.Extensions.AI integration for RAG | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.DataIngestion.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.DataIngestion/) |
+
+## SDKs
+
+SDKs are available for multiple languages in the `sdk/` directory:
+
+| SDK | Location | Description |
+|-----|----------|-------------|
+| TypeScript/JavaScript | `sdk/typescript/` | Full-featured SDK for Node.js and browser |
+| Python | `sdk/python/` | Python SDK for data science workflows |
+| C# | `sdk/csharp/` | .NET SDK client library |
+
+## New in v2.0.0
+
+- **Consolidated Packages**: Reduced from 17+ packages to 4 main packages
+- **Monorepo Structure**: All SDKs (TypeScript, Python, C#) are now part of the main repository
+- **Unified Versioning**: All packages share the same version number via `Directory.Build.props`
+- **Simplified Dependencies**: Single Tesseract native DLL location in DocumentAtom.Documents
+- **Migration Guide**: See [MIGRATION.md](MIGRATION.md) for upgrading from v1.x
+
+## Previous Releases
+
+### v1.2.x
 
 - **Data Ingestion Module** (`DocumentAtom.DataIngestion`) for RAG/AI pipeline integration
   - Unified document reader with automatic type detection
@@ -72,10 +84,10 @@ The following example shows processing a markdown (`.md`) file.
 
 ```csharp
 using DocumentAtom.Core.Atoms;
-using DocumentAtom.Markdown;
+using DocumentAtom.Text.Markdown;
 
 MarkdownProcessorSettings settings = new MarkdownProcessorSettings();
-MarkdownProcessor processor = new MarkdownProcessor(_Settings);
+MarkdownProcessor processor = new MarkdownProcessor(settings);
 foreach (Atom atom in processor.Extract(filename))
     Console.WriteLine(atom.ToString());
 ```
