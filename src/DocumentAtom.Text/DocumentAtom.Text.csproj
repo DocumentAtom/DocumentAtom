@@ -1,28 +1,16 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
-		<Version>1.0.36</Version>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-		<ApplicationIcon>icon.ico</ApplicationIcon>
-		<GenerateDocumentationFile>True</GenerateDocumentationFile>
-		<DocumentationFile>DocumentAtom.Text.xml</DocumentationFile>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<PackageId>DocumentAtom.Text</PackageId>
 		<Title>DocumentAtom.Text</Title>
-		<Authors>Joel Christner</Authors>
-		<Description>DocumentAtom provides a light, fast library for breaking input text documents into constituent parts (atoms), useful for AI, machine learning, processing, analytics, and general analysis.</Description>
-		<Copyright>(c)2025 Joel Christner</Copyright>
-		<PackageProjectUrl>https://github.com/jchristn/DocumentAtom</PackageProjectUrl>
-		<PackageIcon>icon.png</PackageIcon>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<RepositoryUrl>https://github.com/jchristn/DocumentAtom</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
-		<PackageTags>semantic cell chunk text processing extract extraction doc docx xlsx pptx ppt png csv json xml keynote pages numbers text txt rtf pdf ai llm rag parse parsing parser word excel powerpoint</PackageTags>
-		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
-		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-		<IncludeSymbols>True</IncludeSymbols>
+		<Product>DocumentAtom.Text</Product>
+		<ApplicationIcon>icon.ico</ApplicationIcon>
+		<DocumentationFile>DocumentAtom.Text.xml</DocumentationFile>
+		<Description>Text format processors for DocumentAtom including plain text, CSV, JSON, XML, HTML, and Markdown. DocumentAtom provides a light, fast library for breaking input documents into constituent parts (atoms), useful for AI, machine learning, processing, analytics, and general analysis.</Description>
+		<PackageTags>semantic cell chunk text processing extract extraction csv json xml html markdown ai llm rag parse parsing parser</PackageTags>
+		<PackageReleaseNotes>v2.0.0 - Consolidated text processors (Text, CSV, JSON, XML, HTML, Markdown, TypeDetection)</PackageReleaseNotes>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -45,7 +33,12 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="DocumentAtom" Version="1.1.0" />
+		<ProjectReference Include="..\DocumentAtom.Core\DocumentAtom.Core.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="CsvHelper" Version="33.0.1" />
+		<PackageReference Include="HtmlAgilityPack" Version="1.12.4" />
 	</ItemGroup>
 
 </Project>

@@ -3,6 +3,7 @@ namespace DocumentAtom.McpServer.Registrations
     using System;
     using System.Text.Json;
     using DocumentAtom.McpServer.Classes;
+    using DocumentAtom.Core.Atoms;
     using DocumentAtom.Sdk;
     using SerializationHelper;
     using Voltaic;
@@ -43,7 +44,7 @@ namespace DocumentAtom.McpServer.Registrations
                     string base64Data = dataProp.GetString() ?? throw new ArgumentException("Text data cannot be null");
                     byte[] textData = Convert.FromBase64String(base64Data);
 
-                    var atoms = sdk.Atom.ProcessText(textData).GetAwaiter().GetResult();
+                    List<Atom> atoms = sdk.Atom.ProcessText(textData).GetAwaiter().GetResult();
                     return serializer.SerializeJson(atoms, true);
                 });
         }
@@ -69,7 +70,7 @@ namespace DocumentAtom.McpServer.Registrations
                 string base64Data = dataProp.GetString() ?? throw new ArgumentException("Text data cannot be null");
                 byte[] textData = Convert.FromBase64String(base64Data);
 
-                var atoms = sdk.Atom.ProcessText(textData).GetAwaiter().GetResult();
+                List<Atom> atoms =sdk.Atom.ProcessText(textData).GetAwaiter().GetResult();
                 return serializer.SerializeJson(atoms, true);
             });
         }
@@ -95,7 +96,7 @@ namespace DocumentAtom.McpServer.Registrations
                 string base64Data = dataProp.GetString() ?? throw new ArgumentException("Text data cannot be null");
                 byte[] textData = Convert.FromBase64String(base64Data);
 
-                var atoms = sdk.Atom.ProcessText(textData).GetAwaiter().GetResult();
+                List<Atom> atoms =sdk.Atom.ProcessText(textData).GetAwaiter().GetResult();
                 return serializer.SerializeJson(atoms, true);
             });
         }

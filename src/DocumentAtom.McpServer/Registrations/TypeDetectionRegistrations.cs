@@ -4,6 +4,7 @@ namespace DocumentAtom.McpServer.Registrations
     using System.Text.Json;
     using DocumentAtom.McpServer.Classes;
     using DocumentAtom.Sdk;
+    using DocumentAtom.Core.TypeDetection;
     using SerializationHelper;
     using Voltaic;
 
@@ -50,7 +51,7 @@ namespace DocumentAtom.McpServer.Registrations
                         contentType = contentTypeProp.GetString();
                     }
 
-                    var result = sdk.TypeDetection.DetectType(documentData, contentType).GetAwaiter().GetResult();
+                    TypeResult result = sdk.TypeDetection.DetectType(documentData, contentType).GetAwaiter().GetResult();
                     return serializer.SerializeJson(result, true);
                 });
         }
@@ -82,7 +83,7 @@ namespace DocumentAtom.McpServer.Registrations
                     contentType = contentTypeProp.GetString();
                 }
 
-                var result = sdk.TypeDetection.DetectType(documentData, contentType).GetAwaiter().GetResult();
+                TypeResult result =sdk.TypeDetection.DetectType(documentData, contentType).GetAwaiter().GetResult();
                 return serializer.SerializeJson(result, true);
             });
         }
@@ -114,7 +115,7 @@ namespace DocumentAtom.McpServer.Registrations
                     contentType = contentTypeProp.GetString();
                 }
 
-                var result = sdk.TypeDetection.DetectType(documentData, contentType).GetAwaiter().GetResult();
+                TypeResult result =sdk.TypeDetection.DetectType(documentData, contentType).GetAwaiter().GetResult();
                 return serializer.SerializeJson(result, true);
             });
         }

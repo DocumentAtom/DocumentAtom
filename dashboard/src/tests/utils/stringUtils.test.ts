@@ -4,13 +4,13 @@ import {
   uuid,
   decodePayload,
 } from "#/utils/stringUtils";
-import { message } from "antd";
+import { getMessageApi } from "#/utils/messageHolder";
 
-// Mock antd message
-jest.mock("antd", () => ({
-  message: {
+// Mock messageHolder
+jest.mock("#/utils/messageHolder", () => ({
+  getMessageApi: jest.fn(() => ({
     error: jest.fn(),
-  },
+  })),
 }));
 
 // Mock uuid
@@ -188,21 +188,25 @@ describe("stringUtils", () => {
     });
 
     it("should return original payload and show error for invalid base64", () => {
+      const mockError = jest.fn();
+      (getMessageApi as jest.Mock).mockReturnValue({ error: mockError });
       const invalidPayload = "not-base64-encoded!!!";
 
       const result = decodePayload(invalidPayload);
 
       expect(result).toBe(invalidPayload);
-      expect(message.error).toHaveBeenCalledWith("Failed to decode payload.");
+      expect(mockError).toHaveBeenCalledWith("Failed to decode payload.");
     });
 
     it("should return original payload and show error for invalid JSON", () => {
+      const mockError = jest.fn();
+      (getMessageApi as jest.Mock).mockReturnValue({ error: mockError });
       const invalidJson = btoa("not valid json {");
 
       const result = decodePayload(invalidJson);
 
       expect(result).toBe(invalidJson);
-      expect(message.error).toHaveBeenCalledWith("Failed to decode payload.");
+      expect(mockError).toHaveBeenCalledWith("Failed to decode payload.");
     });
 
     it("should handle empty string", () => {

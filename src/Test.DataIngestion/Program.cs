@@ -282,7 +282,7 @@ namespace Test.DataIngestion
             Console.WriteLine("");
             Console.WriteLine("Supported document types:");
 
-            foreach (DocumentAtom.TypeDetection.DocumentTypeEnum type in AtomDocumentReader.GetSupportedTypes())
+            foreach (DocumentAtom.Core.TypeDetection.DocumentTypeEnum type in AtomDocumentReader.GetSupportedTypes())
             {
                 Console.WriteLine($"  - {type}");
             }

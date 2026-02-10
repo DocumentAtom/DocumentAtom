@@ -17,20 +17,20 @@
     using DocumentAtom.Core;
     using DocumentAtom.Core.Atoms;
     using DocumentAtom.Core.Helpers;
-    using DocumentAtom.Csv;
-    using DocumentAtom.Excel;
-    using DocumentAtom.Html;
-    using DocumentAtom.Image;
-    using DocumentAtom.Json;
-    using DocumentAtom.Markdown;
-    using DocumentAtom.Ocr;
-    using DocumentAtom.Pdf;
-    using DocumentAtom.PowerPoint;
-    using DocumentAtom.RichText;
     using DocumentAtom.Text;
-    using DocumentAtom.TypeDetection;
-    using DocumentAtom.Word;
-    using DocumentAtom.Xml;
+    using DocumentAtom.Text.Csv;
+    using DocumentAtom.Text.Html;
+    using DocumentAtom.Text.Json;
+    using DocumentAtom.Text.Markdown;
+    using DocumentAtom.Core.TypeDetection;
+    using DocumentAtom.Text.Xml;
+    using DocumentAtom.Documents.Excel;
+    using DocumentAtom.Documents.Image;
+    using DocumentAtom.Documents.Ocr;
+    using DocumentAtom.Documents.Pdf;
+    using DocumentAtom.Documents.PowerPoint;
+    using DocumentAtom.Documents.RichText;
+    using DocumentAtom.Documents.Word;
 
     /// <summary>
     /// DocumentAtom server.

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocumentAtom SDK Test Page</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .header { color: #2c3e50; border-bottom: 2px solid #3498db; }
+        .content { margin: 20px 0; }
+        .highlight { background-color: #f39c12; padding: 2px 4px; }
+    </style>
+</head>
+<body>
+    <h1 class="header">DocumentAtom SDK Test Page</h1>
+    
+    <div class="content">
+        <h2>Introduction</h2>
+        <p>This is a sample HTML page for testing the <span class="highlight">DocumentAtom SDK</span>. 
+        The SDK provides comprehensive document processing capabilities for various file formats.</p>
+        
+        <h2>Features</h2>
+        <ul>
+            <li><strong>Multi-format Support:</strong> PDF, Word, Excel, PowerPoint, HTML, JSON, XML, Markdown, RTF, CSV, and plain text</li>
+            <li><strong>OCR Integration:</strong> Extract text from images within documents</li>
+            <li><strong>Batch Processing:</strong> Process multiple documents efficiently</li>
+            <li><strong>Type Safety:</strong> Strongly-typed C# SDK with full IntelliSense support</li>
+        </ul>
+        
+        <h2>Usage Example</h2>
+        <pre><code>
+var sdk = new DocumentAtomSdk("http://localhost:8080");
+var atoms = await sdk.Atom.ProcessPdf(pdfData, extractOcr: true);
+        </code></pre>
+        
+        <h2>Contact Information</h2>
+        <table border="1" style="border-collapse: collapse; width: 100%;">
+            <tr>
+                <th>Department</th>
+                <th>Email</th>
+                <th>Phone</th>
+            </tr>
+            <tr>
+                <td>Engineering</td>
+                <td>engineering@documentatom.com</td>
+                <td>+1-555-0123</td>
+            </tr>
+            <tr>
+                <td>Support</td>
+                <td>support@documentatom.com</td>
+                <td>+1-555-0124</td>
+            </tr>
+            <tr>
+                <td>Sales</td>
+                <td>sales@documentatom.com</td>
+                <td>+1-555-0125</td>
+            </tr>
+        </table>
+        
+        <h2>Conclusion</h2>
+        <p>The DocumentAtom SDK makes it easy to integrate document processing capabilities 
+        into your C# applications. Whether you need to extract text from PDFs, process 
+        Excel spreadsheets, or analyze HTML content, the SDK provides a unified interface 
+        for all document types.</p>
+    </div>
+    
+    <footer>
+        <p>&copy; 2024 DocumentAtom Technologies. All rights reserved.</p>
+    </footer>
+</body>
+</html>

@@ -1,6 +1,6 @@
 "use client";
 import { Inter } from "next/font/google";
-import { ConfigProvider, message } from "antd";
+import { App, ConfigProvider } from "antd";
 import { darkTheme, primaryTheme } from "#/theme/theme";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { StyleProvider } from "@ant-design/cssinjs";
@@ -9,27 +9,28 @@ import "jsoneditor-react/es/editor.min.css";
 import "#/assets/css/globals.scss";
 import { AppContext } from "#/hooks/appHooks";
 import { ThemeEnum } from "#/types/types";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { localStorageKeys } from "#/constants/constant";
 import classNames from "classnames";
+import MessageApiInitializer from "#/components/MessageApiInitializer";
 
 const inter = Inter({ subsets: ["latin"] });
-
-const getThemeFromLocalStorage = () => {
-  let theme;
-  if (typeof localStorage !== "undefined") {
-    theme = localStorage.getItem(localStorageKeys.theme);
-  }
-  return theme ? (theme as ThemeEnum) : ThemeEnum.LIGHT;
-};
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  message.config({ maxCount: 1 });
-  const [theme, setTheme] = useState(getThemeFromLocalStorage());
+  const [theme, setTheme] = useState<ThemeEnum>(ThemeEnum.LIGHT);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem(localStorageKeys.theme);
+    if (savedTheme) {
+      setTheme(savedTheme as ThemeEnum);
+    }
+    setMounted(true);
+  }, []);
   const handleThemeChange = (theme: ThemeEnum) => {
     localStorage.setItem(localStorageKeys.theme, theme);
     setTheme(theme);
@@ -56,9 +57,10 @@ export default function RootLayout({
         />
       </head>
       <body
+        suppressHydrationWarning
         className={classNames(
           inter.className,
-          theme === ThemeEnum.DARK ? "theme-dark-mode" : ""
+          mounted && theme === ThemeEnum.DARK ? "theme-dark-mode" : ""
         )}
       >
         <StoreProvider>
@@ -68,7 +70,9 @@ export default function RootLayout({
                 <ConfigProvider
                   theme={theme === ThemeEnum.DARK ? darkTheme : primaryTheme}
                 >
-                  {children}
+                  <App message={{ maxCount: 1 }}>
+                    <MessageApiInitializer>{children}</MessageApiInitializer>
+                  </App>
                 </ConfigProvider>
               </AntdRegistry>
             </StyleProvider>

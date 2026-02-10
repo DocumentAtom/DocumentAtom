@@ -1,0 +1,71 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<PackageId>DocumentAtom.Documents</PackageId>
+		<Title>DocumentAtom.Documents</Title>
+		<Product>DocumentAtom.Documents</Product>
+		<ApplicationIcon>icon.ico</ApplicationIcon>
+		<DocumentationFile>DocumentAtom.Documents.xml</DocumentationFile>
+		<Description>Document format processors for DocumentAtom including Word, Excel, PowerPoint, PDF, images, and OCR. DocumentAtom provides a light, fast library for breaking input documents into constituent parts (atoms), useful for AI, machine learning, processing, analytics, and general analysis.</Description>
+		<PackageTags>semantic cell chunk text processing extract extraction doc docx xlsx pptx png pdf rtf image ocr ai llm rag parse parsing parser word excel powerpoint</PackageTags>
+		<PackageReleaseNotes>v2.0.0 - Consolidated document processors (Word, Excel, PowerPoint, PDF, Image, OCR, RichText)</PackageReleaseNotes>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Content Include="x86\**\*.*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="x64\**\*.*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="tessdata\**\*.*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="icon.ico" />
+		<None Include="..\..\assets\icon.png">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="..\..\LICENSE.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+		<None Include="..\..\README.md">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\DocumentAtom.Core\DocumentAtom.Core.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Tesseract" Version="5.2.0" />
+		<PackageReference Include="SixLabors.ImageSharp" Version="3.1.11" />
+		<PackageReference Include="DocumentFormat.OpenXml" Version="3.3.0" />
+		<PackageReference Include="PdfPig" Version="0.1.11" />
+		<PackageReference Include="Tabula" Version="0.1.5" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Update="x64\leptonica-1.82.0.dll">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Update="x64\tesseract50.dll">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Update="x86\leptonica-1.82.0.dll">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+		<Content Update="x86\tesseract50.dll">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+
+</Project>

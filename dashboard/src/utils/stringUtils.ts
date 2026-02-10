@@ -1,5 +1,5 @@
-import { message } from "antd";
 import { v4 } from "uuid";
+import { getMessageApi } from "./messageHolder";
 
 export const toTitleCase = (str: string): string => {
   return str
@@ -25,7 +25,7 @@ export const decodePayload = (payload: string) => {
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error(error);
-    message.error("Failed to decode payload.");
+    getMessageApi()?.error("Failed to decode payload.");
     return payload;
   }
 };

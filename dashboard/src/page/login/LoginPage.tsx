@@ -8,7 +8,7 @@ import DocuAtomFlex from "#/components/base/flex/Flex";
 import DocuAtomText from "#/components/base/typograpghy/Text";
 import DocuAtomDivider from "#/components/base/divider/Divider";
 import PageLoading from "#/components/base/loading/PageLoading";
-import { Form, Input, message } from "antd";
+import { App, Form, Input } from "antd";
 import {
   ArrowRightOutlined,
   CheckCircleOutlined,
@@ -22,6 +22,7 @@ import { localStorageKeys, paths } from "#/constants/constant";
 
 //eslint-disable-next-line max-lines-per-function
 const LoginPage = () => {
+  const { message } = App.useApp();
   const [loading, setLoading] = useState(false);
   const [documentAtomAPIUrl, setDocumentAtomAPIUrl] = useState(apiEndpointURL);
   const [form] = Form.useForm();

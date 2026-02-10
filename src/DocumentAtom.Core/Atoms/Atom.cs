@@ -304,7 +304,7 @@
                 throw new ArgumentException("Invalid table structure provided", nameof(table));
             }
 
-            var dt = new DataTable();
+            DataTable dt = new DataTable();
 
             // Add columns with guaranteed unique names
             for (int i = 0; i < table.Columns; i++)
@@ -318,7 +318,7 @@
             {
                 for (int i = 0; i < table.Rows && i < table.Cells.Count; i++)
                 {
-                    var row = dt.NewRow();
+                    DataRow row = dt.NewRow();
                     if (table.Cells[i] != null)
                     {
                         for (int j = 0; j < table.Columns && j < table.Cells[i].Count; j++)
@@ -614,10 +614,10 @@
         {
             if (string.IsNullOrEmpty(text)) return null;
 
-            var dataTable = new DataTable();
+            DataTable dataTable = new DataTable();
 
             // Split into lines and remove empty ones
-            var lines = text.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries)
+            List<string> lines = text.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(line => line.Trim())
                 .Where(line => !string.IsNullOrWhiteSpace(line))
                 .ToList();
@@ -625,11 +625,11 @@
             if (lines.Count < 1) return null;
 
             // Process header row
-            var headers = ParseRow(lines[0]);
+            List<string> headers = ParseRow(lines[0]);
             if (headers.Count == 0) return null;
 
             // Create columns with unique names
-            var columnNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            HashSet<string> columnNames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             for (int i = 0; i < headers.Count; i++)
             {
                 string columnName = SanitizeColumnName(headers[i]);
@@ -664,10 +664,10 @@
             {
                 if (!IsSeparatorRow(lines[i]))
                 {
-                    var row = ParseRow(lines[i]);
+                    List<string> row = ParseRow(lines[i]);
 
                     // Create data row with proper column count handling
-                    var dataRow = dataTable.NewRow();
+                    DataRow dataRow = dataTable.NewRow();
                     for (int j = 0; j < Math.Min(row.Count, dataTable.Columns.Count); j++)
                     {
                         dataRow[j] = row[j] ?? string.Empty;
@@ -693,12 +693,12 @@
         /// <returns>List of strings.</returns>
         public static List<string> MarkdownTextToList(string text)
         {
-            var results = new List<string>();
+            List<string> results = new List<string>();
 
             if (string.IsNullOrWhiteSpace(text)) return results;
 
             // Split into lines and process each non-empty line
-            var lines = text.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries)
+            IEnumerable<string> lines = text.Split(new[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries)
                 .Select(line => line.Trim())
                 .Where(line => !string.IsNullOrWhiteSpace(line));
 

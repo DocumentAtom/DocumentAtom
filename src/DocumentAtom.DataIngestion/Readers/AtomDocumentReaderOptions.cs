@@ -4,7 +4,7 @@ namespace DocumentAtom.DataIngestion.Readers
     using System.Collections.Generic;
     using System.IO;
     using DocumentAtom.Core;
-    using DocumentAtom.TypeDetection;
+    using DocumentAtom.Core.TypeDetection;
 
     /// <summary>
     /// Configuration options for AtomDocumentReader.

@@ -11,7 +11,7 @@
         #region General
 
         /// <summary>
-        /// Logo.  See https://patorjk.com/software/taag/#p=testall&f=Small&t=DocumentAtom
+        /// Logo.  See https://patorjk.com/software/taag/#p=testall&amp;f=Small&amp;t=DocumentAtom
         /// </summary>
         public static string Logo =
             @"  ___                             _     _  _              " + Environment.NewLine +

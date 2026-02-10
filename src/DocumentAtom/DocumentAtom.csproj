@@ -1,56 +1,41 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.0;netstandard2.1;net6.0;net8.0</TargetFrameworks>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-		<ApplicationIcon>icon.ico</ApplicationIcon>
-		<GenerateDocumentationFile>True</GenerateDocumentationFile>
-		<DocumentationFile>DocumentAtom.xml</DocumentationFile>
-		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<PackageId>DocumentAtom</PackageId>
 		<Title>DocumentAtom</Title>
-		<Version>1.0.0</Version>
-		<Authors>Joel Christner</Authors>
-		<Description>DocumentAtom provides a light, fast library for breaking input data assets into constituent parts (atoms), useful for AI, machine learning, processing, analytics, and general analysis.</Description>
-		<Copyright>(c)2025 Joel Christner</Copyright>
-		<PackageProjectUrl>https://github.com/jchristn/DocumentAtom</PackageProjectUrl>
-		<PackageIcon>icon.png</PackageIcon>
-		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<RepositoryUrl>https://github.com/jchristn/DocumentAtom</RepositoryUrl>
-		<RepositoryType>git</RepositoryType>
+		<ApplicationIcon>icon.ico</ApplicationIcon>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<IncludeBuildOutput>false</IncludeBuildOutput>
+		<Description>Complete document processing library for AI, ML, and analytics. DocumentAtom provides a light, fast library for breaking input documents into constituent parts (atoms), useful for AI, machine learning, processing, analytics, and general analysis.</Description>
 		<PackageTags>semantic cell chunk text processing extract extraction doc docx xlsx pptx ppt keynote pages numbers text txt pdf ai llm rag parse parsing parser word excel powerpoint</PackageTags>
-		<PackageReleaseNotes>Initial release</PackageReleaseNotes>
-		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+		<PackageReleaseNotes>v2.0.0 - Consolidated metapackage referencing Core, Text, and Documents</PackageReleaseNotes>
+		<!-- Suppress metapackage warning since this is expected for metapackages with no lib output -->
+		<NoWarn>$(NoWarn);NU5128</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <Content Include="icon.ico" />
+		<Content Include="icon.ico" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Include="..\..\assets\icon.png" Link="icon.png">
-	    <PackagePath>\</PackagePath>
-	    <Pack>True</Pack>
-	  </None>
-	  <None Include="..\..\LICENSE.md" Link="LICENSE.md">
-	    <PackagePath>\</PackagePath>
-	    <Pack>True</Pack>
-	  </None>
-	  <None Include="..\..\README.md" Link="README.md">
-	    <PackagePath>\</PackagePath>
-	    <Pack>True</Pack>
-	  </None>
+		<None Include="..\..\assets\icon.png" Link="icon.png">
+			<PackagePath>\</PackagePath>
+			<Pack>True</Pack>
+		</None>
+		<None Include="..\..\LICENSE.md" Link="LICENSE.md">
+			<PackagePath>\</PackagePath>
+			<Pack>True</Pack>
+		</None>
+		<None Include="..\..\README.md" Link="README.md">
+			<PackagePath>\</PackagePath>
+			<Pack>True</Pack>
+		</None>
 	</ItemGroup>
 
 	<ItemGroup>
 		<ProjectReference Include="..\DocumentAtom.Core\DocumentAtom.Core.csproj" />
-		<ProjectReference Include="..\DocumentAtom.Excel\DocumentAtom.Excel.csproj" />
-		<ProjectReference Include="..\DocumentAtom.Image\DocumentAtom.Image.csproj" />
-		<ProjectReference Include="..\DocumentAtom.Markdown\DocumentAtom.Markdown.csproj" />
-		<ProjectReference Include="..\DocumentAtom.Pdf\DocumentAtom.Pdf.csproj" />
-		<ProjectReference Include="..\DocumentAtom.PowerPoint\DocumentAtom.PowerPoint.csproj" />
 		<ProjectReference Include="..\DocumentAtom.Text\DocumentAtom.Text.csproj" />
-		<ProjectReference Include="..\DocumentAtom.Word\DocumentAtom.Word.csproj" />
+		<ProjectReference Include="..\DocumentAtom.Documents\DocumentAtom.Documents.csproj" />
 	</ItemGroup>
 
 </Project>

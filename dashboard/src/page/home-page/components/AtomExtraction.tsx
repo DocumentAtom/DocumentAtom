@@ -1,6 +1,6 @@
 "use client";
 import React, { useRef, useState } from "react";
-import { message } from "antd";
+import { App } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import DocuAtomButton from "#/components/base/button/Button";
 import DocuAtomUpload from "#/components/base/upload/Upload";
@@ -31,6 +31,7 @@ import DocuAtomFlex from "#/components/base/flex/Flex";
 
 //eslint-disable-next-line max-lines-per-function
 const FileExtraction = () => {
+  const { message } = App.useApp();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [fileType, setFileType] = useState<FileExtractionType | null>(null);
   const [responseData, setResponseData] = useState<any>(null);

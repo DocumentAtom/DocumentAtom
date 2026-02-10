@@ -1011,5 +1011,567 @@
             Processor settings base class.
             </summary>
         </member>
+        <member name="T:DocumentAtom.Core.TextTools.Lemmatizer">
+            <summary>
+            Reduces words to their base or dictionary form by removing inflectional endings and returning the base or dictionary form of a word.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.TextTools.Lemmatizer.IrregularVerbs">
+            <summary>
+            Irregular verbs.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.TextTools.Lemmatizer.IrregularNouns">
+            <summary>
+            Irregular nouns.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.TextTools.Lemmatizer.MorphologicalForms">
+            <summary>
+            Dictionary for morphological transformations (comparative/superlative adjectives, adverbs).
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.TextTools.Lemmatizer.PreservedTerms">
+            <summary>
+            Terms that should be preserved in their original form.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.TextTools.Lemmatizer.CommonPrefixes">
+            <summary>
+            Common prefixes used in word formation.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.TextTools.Lemmatizer.CommonSuffixes">
+            <summary>
+            Common suffixes used in word formation.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.TextTools.Lemmatizer.PreservedEndingForms">
+            <summary>
+            Words with preserved endings (e.g., -ment, -ant, -ent).
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.TextTools.Lemmatizer.#ctor">
+            <summary>
+            Instantiates a new lemmatizer.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.TextTools.Lemmatizer.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.Core.TextTools.Lemmatizer.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.TextTools.Lemmatizer.Process(System.String)">
+            <summary>
+            Process a single word.
+            </summary>
+            <param name="word">Word to process.</param>
+            <returns>Lemmatized word.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.TextTools.Lemmatizer.Process(System.String[])">
+            <summary>
+            Process multiple words.
+            </summary>
+            <param name="words">Words to process.</param>
+            <returns>Lemmatized words.</returns>
+        </member>
+        <member name="T:DocumentAtom.Core.TextTools.StringSequenceReplacer">
+            <summary>
+            String sequence replacer.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.TextTools.StringSequenceReplacer.Replacements">
+            <summary>
+            Replacer sequences.  Dictionary where the key is the match value, and the value is the value to use for in-place replacement.
+            The default value for this dictionary includes whitespace, newline characters, braces, dashes, apostrophes and quotes,
+            mathematical operators, and other common non-word-forming characters.
+            Each key-value pair is evaluated any instances of the keys found in the supplied input will be replaced with the specified values.
+            Replacements are evaluated in the order in which they are added to the dictionary.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.TextTools.StringSequenceReplacer.#ctor(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            String sequence replacer.  This class is used to replace specific substrings with replacement values, and is often useful for
+            removing punctuation, reducing whitespace, and removal of special characters.
+            </summary>
+            <param name="replacements">
+            Replacer sequences.  Dictionary where the key is the match value, and the value is the value to use for in-place replacement.
+            The default value for this dictionary includes whitespace, newline characters, braces, dashes, apostrophes and quotes,
+            mathematical operators, and other common non-word-forming characters.
+            Each key-value pair is evaluated any instances of the keys found in the supplied input will be replaced with the specified values.
+            </param>
+        </member>
+        <member name="M:DocumentAtom.Core.TextTools.StringSequenceReplacer.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.Core.TextTools.StringSequenceReplacer.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.TextTools.StringSequenceReplacer.Process(System.String,System.Boolean)">
+            <summary>
+            Process a string of text.
+            </summary>
+            <param name="str">String.</param>
+            <param name="reduceWhitespace">True to reduce whitespace in the returned string.</param>
+            <returns>Input string with replacements as specified in the replacements dictionary.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.TextTools.StringSequenceReplacer.Process(System.String[],System.Boolean,System.Boolean)">
+            <summary>
+            Process an array of text strings.
+            </summary>
+            <param name="strings">Strings.</param>
+            <param name="removeEmptyEntries">True to remove empty entries after processing.  If set to true, the dimensions of the returned array may be different than the input array.</param>
+            <param name="reduceWhitespace">True to reduce whitespace in the returned string.</param>
+            <returns>Input string with replacements as specified in the replacements dictionary.</returns>
+        </member>
+        <member name="T:DocumentAtom.Core.TextTools.StringSplitter">
+            <summary>
+            String splitter.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.TextTools.StringSplitter.SplitCharacters">
+            <summary>
+            Split characters.  Input strings will be split using these characters.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.TextTools.StringSplitter.#ctor">
+            <summary>
+            String splitter.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.TextTools.StringSplitter.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.Core.TextTools.StringSplitter.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.TextTools.StringSplitter.Process(System.String)">
+            <summary>
+            Process an input string.
+            </summary>
+            <param name="str">String.</param>
+            <returns>Enumerable string.</returns>
+        </member>
+        <member name="T:DocumentAtom.Core.TextTools.TokenExtractor">
+            <summary>
+            Token extractor.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.TextTools.TokenExtractor.StringSequenceReplacer">
+            <summary>
+            String sequence replacer.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.TextTools.TokenExtractor.WordRemover">
+            <summary>
+            Word remover.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.TextTools.TokenExtractor.StringSplitter">
+            <summary>
+            String splitter.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.TextTools.TokenExtractor.Lemmatizer">
+            <summary>
+            Lemmatizer.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.TextTools.TokenExtractor.MinimumTokenLength">
+            <summary>
+            Minimum token length.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.TextTools.TokenExtractor.MaximumTokenLength">
+            <summary>
+            Maximum token length.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.TextTools.TokenExtractor.#ctor">
+            <summary>
+            Token extractor.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.TextTools.TokenExtractor.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.Core.TextTools.TokenExtractor.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.TextTools.TokenExtractor.Process(System.String)">
+            <summary>
+            Extract tokens from an input string.
+            </summary>
+            <param name="str">Input string.</param>
+            <returns>Enumerable string.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.TextTools.TokenExtractor.Chunk(System.String,System.Int32,System.Int32)">
+            <summary>
+            Break an input string into chunks given the specified constraints.
+            </summary>
+            <param name="str">Input string.</param>
+            <param name="maxTokenCount">Maximum number of tokens per chunk.  Minimum is 1.</param>
+            <param name="maxChunkLength">Maximum chunk length.  Minimum is 32.</param>
+            <returns>Enumerable string, where each string contains one or more tokens.</returns>
+        </member>
+        <member name="T:DocumentAtom.Core.TextTools.WordRemover">
+            <summary>
+            Removes stop words and other specified words from text while preserving word boundaries.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.TextTools.WordRemover.WordsToRemove">
+            <summary>
+            Words to remove. When any of these words are encountered as complete words, they will be removed.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.TextTools.WordRemover.WordSeparators">
+            <summary>
+            Characters used to separate words during processing.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.TextTools.WordRemover.#ctor">
+            <summary>
+            Initializes a new instance of the WordRemover class.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.TextTools.WordRemover.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.Core.TextTools.WordRemover.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.TextTools.WordRemover.Process(System.String[])">
+            <summary>
+            Process an array of tokens, removing specified words.
+            </summary>
+            <param name="tokens">Array of tokens to process.</param>
+            <returns>Array with specified words removed.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.TextTools.WordRemover.Process(System.String)">
+            <summary>
+            Process a single string, removing specified words.
+            </summary>
+            <param name="input">String to process.</param>
+            <returns>Input string with specified words removed.</returns>
+        </member>
+        <member name="T:DocumentAtom.Core.TypeDetection.DocumentTypeEnum">
+            <summary>
+            Data type associated with an input object or file.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Unknown">
+            <summary>
+            Unknown.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Bmp">
+            <summary>
+            BMP image.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Csv">
+            <summary>
+            CSV.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.DataTable">
+            <summary>
+            DataTable.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Doc">
+            <summary>
+            DOC, legacy Word document.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Docx">
+            <summary>
+            DOCX, Word document.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Epub">
+            <summary>
+            EPUB e-book.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Gif">
+            <summary>
+            GIF image.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Gpx">
+            <summary>
+            GPX GPS Exchange Format.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Gzip">
+            <summary>
+            GZIP compressed file.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Html">
+            <summary>
+            HTML.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Ico">
+            <summary>
+            ICO, Icon file.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Jpeg">
+            <summary>
+            JPEG image.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Json">
+            <summary>
+            JSON.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Keynote">
+            <summary>
+            Keynote.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Markdown">
+            <summary>
+            Markdown.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Mov">
+            <summary>
+            MOV video.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Mp3">
+            <summary>
+            MP3 audio.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Mp4">
+            <summary>
+            MP4 video.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Numbers">
+            <summary>
+            Numbers.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Odp">
+            <summary>
+            ODP, OpenDocument Presentation.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Ods">
+            <summary>
+            ODS, OpenDocument Spreadsheet.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Odt">
+            <summary>
+            ODT, OpenDocument Text.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Pages">
+            <summary>
+            Pages.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Parquet">
+            <summary>
+            Parquet.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Pdf">
+            <summary>
+            PDF.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Png">
+            <summary>
+            PNG.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.PostScript">
+            <summary>
+            PostScript.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Ppt">
+            <summary>
+            PPT, legacy PowerPoint presentation.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Pptx">
+            <summary>
+            PPTX, PowerPoint presentation.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Rar">
+            <summary>
+            RAR archive.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Rtf">
+            <summary>
+            RTF document.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.SevenZip">
+            <summary>
+            7Z archive.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Sqlite">
+            <summary>
+            Sqlite database file.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Svg">
+            <summary>
+            SVG, Scalable Vector Graphics.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Tar">
+            <summary>
+            TAR archive.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Text">
+            <summary>
+            Text.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Tiff">
+            <summary>
+            TIFF image.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Tsv">
+            <summary>
+            TSV, Tab-separated values.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.WebP">
+            <summary>
+            WebP image.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Xls">
+            <summary>
+            XLS, legacy Excel spreadsheet.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Xlsx">
+            <summary>
+            XLSX, Excel spreadsheet.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.TypeDetection.DocumentTypeEnum.Xml">
+            <summary>
+            XML.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Core.TypeDetection.TypeDetector">
+            <summary>
+            DocumentAtom type detector.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.TypeDetection.TypeDetector.Logger">
+            <summary>
+            Method to invoke to emit log messages.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.TypeDetection.TypeDetector.#ctor(System.String)">
+            <summary>
+            DocumentAtom type detector.
+            </summary>
+            <param name="tempDirectory">Temporary directory.</param>
+        </member>
+        <member name="M:DocumentAtom.Core.TypeDetection.TypeDetector.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.Core.TypeDetection.TypeDetector.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.TypeDetection.TypeDetector.Process(System.String,System.String)">
+            <summary>
+            Determine the type of a given file.  CSV file types are inferred from the supplied content type header.
+            </summary>
+            <param name="filename">Filename.</param>
+            <param name="contentType">Content-type header value, if any.
+            The content-type header is used to infer the content-type for certain difficult types, including CSV.
+            </param>
+            <returns>TypeResult.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.TypeDetection.TypeDetector.Process(System.Byte[],System.String)">
+            <summary>
+            Determine the type of supplied data.  CSV file types are inferred from the supplied content type header.
+            </summary>
+            <param name="data">Data.</param>
+            <param name="contentType">
+            Content-type header value, if any.
+            The content-type header is used to infer the content-type for certain difficult types, including CSV.
+            </param>
+            <returns>TypeResult.</returns>
+        </member>
+        <member name="T:DocumentAtom.Core.TypeDetection.TypeResult">
+            <summary>
+            Type detection results.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.TypeDetection.TypeResult.MimeType">
+            <summary>
+            MIME type.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.TypeDetection.TypeResult.Extension">
+            <summary>
+            Extension.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.TypeDetection.TypeResult.Type">
+            <summary>
+            Data type.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.TypeDetection.TypeResult.#ctor">
+            <summary>
+            Instantiate.
+            </summary>
+        </member>
     </members>
 </doc>

@@ -3,6 +3,7 @@ namespace DocumentAtom.McpServer.Registrations
     using System;
     using System.Text.Json;
     using DocumentAtom.McpServer.Classes;
+    using DocumentAtom.Core.Atoms;
     using DocumentAtom.Sdk;
     using SerializationHelper;
     using Voltaic;
@@ -45,7 +46,7 @@ namespace DocumentAtom.McpServer.Registrations
                     byte[] richTextData = Convert.FromBase64String(base64Data);
                     bool extractOcr = DocumentAtomMcpServerHelpers.GetBoolOrDefault(args.Value, "extractOcr", false);
 
-                    var atoms = sdk.Atom.ProcessRtf(richTextData, extractOcr).GetAwaiter().GetResult();
+                    List<Atom> atoms = sdk.Atom.ProcessRtf(richTextData, extractOcr).GetAwaiter().GetResult();
                     return serializer.SerializeJson(atoms, true);
                 });
         }
@@ -72,7 +73,7 @@ namespace DocumentAtom.McpServer.Registrations
                 byte[] richTextData = Convert.FromBase64String(base64Data);
                 bool extractOcr = DocumentAtomMcpServerHelpers.GetBoolOrDefault(args.Value, "extractOcr", false);
 
-                var atoms = sdk.Atom.ProcessRtf(richTextData, extractOcr).GetAwaiter().GetResult();
+                List<Atom> atoms =sdk.Atom.ProcessRtf(richTextData, extractOcr).GetAwaiter().GetResult();
                 return serializer.SerializeJson(atoms, true);
             });
         }
@@ -99,7 +100,7 @@ namespace DocumentAtom.McpServer.Registrations
                 byte[] richTextData = Convert.FromBase64String(base64Data);
                 bool extractOcr = DocumentAtomMcpServerHelpers.GetBoolOrDefault(args.Value, "extractOcr", false);
 
-                var atoms = sdk.Atom.ProcessRtf(richTextData, extractOcr).GetAwaiter().GetResult();
+                List<Atom> atoms =sdk.Atom.ProcessRtf(richTextData, extractOcr).GetAwaiter().GetResult();
                 return serializer.SerializeJson(atoms, true);
             });
         }

@@ -1,0 +1,1398 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DocumentAtom.Documents</name>
+    </assembly>
+    <members>
+        <member name="T:DocumentAtom.Documents.Excel.CellData">
+            <summary>
+            Represents cell data with row index and value information.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Excel.CellData.RowIndex">
+            <summary>
+            Gets or sets the row index of the cell.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Excel.CellData.Value">
+            <summary>
+            Gets or sets the cell value.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.Excel.CellData.#ctor">
+            <summary>
+            Initializes a new instance of the CellData class.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.Excel.CellData.#ctor(System.Int32,System.String)">
+            <summary>
+            Initializes a new instance of the CellData class with specified values.
+            </summary>
+            <param name="rowIndex">The row index.</param>
+            <param name="value">The cell value.</param>
+        </member>
+        <member name="T:DocumentAtom.Documents.Excel.HeaderRowDetector">
+            <summary>
+            Improved header row detector with a more modular pattern evaluation system.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.Excel.HeaderRowDetector.#ctor(DocumentAtom.Documents.Excel.XlsxProcessorSettings)">
+            <summary>
+            Header row detector.
+            </summary>
+            <param name="settings">Settings.</param>
+        </member>
+        <member name="M:DocumentAtom.Documents.Excel.HeaderRowDetector.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.Excel.HeaderRowDetector.Process(System.Collections.Generic.List{DocumentFormat.OpenXml.Spreadsheet.Row},DocumentFormat.OpenXml.Spreadsheet.SharedStringTable,System.Int32)">
+            <summary>
+            Determines if the first row of a sheet is a header row by analyzing patterns in the data.
+            </summary>
+            <param name="rows">List of rows from the sheet.</param>
+            <param name="sharedStringTable">The shared string table for the workbook.</param>
+            <param name="maxRowsToAnalyze">Maximum number of rows to analyze (default 10).</param>
+            <returns>Header row result.</returns>
+        </member>
+        <member name="M:DocumentAtom.Documents.Excel.HeaderRowDetector.Dispose(System.Boolean)">
+            <summary>
+            Dispose pattern.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="T:DocumentAtom.Documents.Excel.HeaderRowPatternWeights">
+            <summary>
+            Header row pattern weights.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Excel.HeaderRowPatternWeights.SequentialFirstColumn">
+            <summary>
+            Sequential first column.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Excel.HeaderRowPatternWeights.HigherTextRatio">
+            <summary>
+            Higher text ratio.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Excel.HeaderRowPatternWeights.DistinctFormat">
+            <summary>
+            Distinct format.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Excel.HeaderRowPatternWeights.ConsistentDataColumns">
+            <summary>
+            Consistent data columns.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Excel.HeaderRowPatternWeights.HeaderTerms">
+            <summary>
+            Header terms.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Excel.HeaderRowPatternWeights.ColumnHeaders">
+            <summary>
+            Column headers.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Excel.HeaderRowPatternWeights.Row1Differs">
+            <summary>
+            Row one differs.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Excel.HeaderRowPatternWeights.AllRowsSimilar">
+            <summary>
+            All rows similar.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Excel.HeaderRowPatternWeights.ColumnNumbers">
+            <summary>
+            Column numbers.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Excel.HeaderRowPatternWeights.NumericSequence">
+            <summary>
+            Numeric sequence.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.Excel.HeaderRowPatternWeights.#ctor">
+            <summary>
+            Header row pattern weights.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Documents.Excel.HeaderRowResult">
+            <summary>
+            Result object from detection of existence of a header row.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Excel.HeaderRowResult.IsHeaderRow">
+            <summary>
+            Boolean indicating whether the first row is a header row.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Excel.HeaderRowResult.Scores">
+            <summary>
+            Scores.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.Excel.HeaderRowResult.#ctor">
+            <summary>
+            Result object from detection of existence of a header row.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.Excel.HeaderRowResult.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.Documents.Excel.HeaderRowResult.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Documents.Excel.XlsxProcessor">
+            <summary>
+            Create atoms from Microsoft Excel .xlsx documents.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Excel.XlsxProcessor.Settings">
+            <summary>
+            Xlsx processor settings.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.Excel.XlsxProcessor.#ctor(DocumentAtom.Documents.Excel.XlsxProcessorSettings,DocumentAtom.Documents.Image.ImageProcessorSettings)">
+            <summary>
+            Create atoms from Excel documents.
+            </summary>
+            <param name="settings">Processor settings.</param>
+            <param name="imageSettings">Image processor settings.</param>
+        </member>
+        <member name="M:DocumentAtom.Documents.Excel.XlsxProcessor.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.Documents.Excel.XlsxProcessor.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.Excel.XlsxProcessor.Extract(System.String)">
+            <summary>
+            Extract atoms from a file.
+            </summary>
+            <param name="filename">Filename.</param>
+            <returns>Atoms.</returns>
+        </member>
+        <member name="M:DocumentAtom.Documents.Excel.XlsxProcessor.GetMetadata(System.String)">
+            <summary>
+            Retrieve metadata from a file.
+            </summary>
+            <param name="filename">Filename.</param>
+            <returns>Dictionary.</returns>
+        </member>
+        <member name="M:DocumentAtom.Documents.Excel.XlsxProcessor.BuildHierarchy(System.Collections.Generic.List{DocumentAtom.Core.Atoms.Atom})">
+            <summary>
+            Build hierarchical structure from flat list of atoms.
+            Groups atoms by PageNumber (sheet number), making the first atom on each page the parent.
+            </summary>
+            <param name="flatAtoms">Flat list of atoms.</param>
+            <returns>Root-level atoms with hierarchical structure.</returns>
+        </member>
+        <member name="T:DocumentAtom.Documents.Excel.XlsxProcessorSettings">
+            <summary>
+            Settings for Microsoft Excel .xlsx processor.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Excel.XlsxProcessorSettings.CommonHeaderRowTerms">
+            <summary>
+            Terms to search for when identifying header rows.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Excel.XlsxProcessorSettings.HeaderRowWeights">
+            <summary>
+            Pattern weights for header row detection.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Excel.XlsxProcessorSettings.HeaderRowScoreThreshold">
+            <summary>
+            Header row score threshold.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Excel.XlsxProcessorSettings.BuildHierarchy">
+            <summary>
+            Enable or disable hierarchical structure building.
+            When true, atoms will be organized in a tree structure based on sheet (page) grouping.
+            When false, atoms will be returned as a flat list.
+            Default is true.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.Excel.XlsxProcessorSettings.#ctor">
+            <summary>
+            Settings for Microsoft Excel .xlsx processor.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Documents.Image.ImageProcessor">
+            <summary>
+            Create atoms from images.  Use of this processor requires that Tesseract be installed on the host.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Image.ImageProcessor.Settings">
+            <summary>
+            Image processor settings.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.Image.ImageProcessor.#ctor(DocumentAtom.Documents.Image.ImageProcessorSettings)">
+            <summary>
+            Create atoms from images.  Use of this processor requires that Tesseract be installed on the host.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.Image.ImageProcessor.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.Documents.Image.ImageProcessor.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.Image.ImageProcessor.Extract(System.String)">
+            <summary>
+            Extract atoms from a file.
+            </summary>
+            <param name="filename">Filename.</param>
+            <returns>Atoms.</returns>
+        </member>
+        <member name="T:DocumentAtom.Documents.Image.ImageProcessorSettings">
+            <summary>
+            Settings for image processor.  Use of this processor requires that Tesseract be installed on the host.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Image.ImageProcessorSettings.TesseractDataDirectory">
+            <summary>
+            Tesseract data directory (the tessdata folder).
+            On Windows, the folder is usually in C:\Program Files\Tesseract-OCR\tessdata or C:\Program Files(x86)\Tesseract-OCR\tessdata.
+            On Ubuntu, the folder is usually in /usr/share/tesseract-ocr/4.00/tessdata or /usr/local/share/tessdata.
+            On Mac, the folder is usually in /usr/local/share/tessdata or /opt/homebrew/share/tessdata.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Image.ImageProcessorSettings.TesseractLanguage">
+            <summary>
+            Tesseract trained language file, i.e. {language}.traineddata in the tessdata folder.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Image.ImageProcessorSettings.LineThreshold">
+            <summary>
+            The vertical distance threshold (in pixels) used to group text elements into lines.
+            Default value is 5 pixels. 
+            Minimum value is 1 pixel. 
+            Increasing this value will make the extractor more tolerant of vertical spacing variations.
+            Decreasing it will enforce stricter line grouping.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Image.ImageProcessorSettings.ParagraphThreshold">
+            <summary>
+            The vertical distance threshold (in pixels) used to identify paragraph breaks.
+            Default value is 30 pixels. 
+            Minimum value is 1 pixel. 
+            Increasing this value will merge more text blocks into single paragraphs.
+            Decreasing it will create more paragraph breaks.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Image.ImageProcessorSettings.HorizontalLineLength">
+            <summary>
+            The minimum length (in pixels) required to identify a horizontal line in tables.
+            Default value is 80 pixels. 
+            Minimum value is 1 pixel. 
+            Increasing this value will require longer lines for table detection.
+            Decreasing it may detect more table-like structures.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Image.ImageProcessorSettings.VerticalLineLength">
+            <summary>
+            The minimum length (in pixels) required to identify a vertical line in tables.
+            Default value is 40 pixels. 
+            Minimum value is 1 pixel. 
+            Increasing this value will require taller lines for table detection.
+            Decreasing it may detect more table-like structures.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Image.ImageProcessorSettings.TableMinArea">
+            <summary>
+            The minimum area (in square pixels) required for a region to be considered a table.
+            Default value is 5000 pixels². 
+            Minimum value is 1 pixel². 
+            Increasing this value will only detect larger tables.
+            Decreasing it may detect smaller table-like structures.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Image.ImageProcessorSettings.ColumnAlignmentTolerance">
+            <summary>
+            The horizontal pixel tolerance for aligning elements into columns.
+            Default value is 10 pixels. 
+            Minimum value is 1 pixel. 
+            Increasing this value will be more lenient in column alignment.
+            Decreasing it will enforce stricter column alignment.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Image.ImageProcessorSettings.ProximityThreshold">
+            <summary>
+            The distance threshold (in pixels) used to determine if elements are related.
+            Default value is 20 pixels. 
+            Minimum value is 1 pixel. 
+            Increasing this value will group more distant elements together.
+            Decreasing it will create more separate groups.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Image.ImageProcessorSettings.ListMarkers">
+            <summary>
+            The collection of characters used to identify list items in the text.
+            Default includes common bullet point and list markers. 
+            Adding markers will allow detection of additional list styles.
+            Removing markers will limit list detection.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Image.ImageProcessorSettings.ListNumberingPatterns">
+            <summary>
+            Collection of regular expression patterns used to identify numbered list items.
+            Default patterns include common formats like "1.", "a)", "(1)", "i.", etc.
+            Adding patterns will enable detection of additional numbering styles.
+            Removing patterns will limit detection of those styles.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.Image.ImageProcessorSettings.#ctor">
+            <summary>
+            Settings for image processor.  Use of this processor requires that Tesseract be installed on the host.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Documents.Ocr.ExtractionResult">
+            <summary>
+            Extraction result.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Ocr.ExtractionResult.TextElements">
+            <summary>
+            Text elements.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Ocr.ExtractionResult.Tables">
+            <summary>
+            Tables.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Ocr.ExtractionResult.Lists">
+            <summary>
+            Lists.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.Ocr.ExtractionResult.#ctor">
+            <summary>
+            Extraction result.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Documents.Ocr.ImageContentExtractor">
+            <summary>
+            Image context entractor.  This library requires that you have Tesseract installed on the host and that you have awareness of the location of the tessdata directory.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Ocr.ImageContentExtractor.LineThreshold">
+            <summary>
+            Line threshold.
+            </summary>   
+        </member>
+        <member name="P:DocumentAtom.Documents.Ocr.ImageContentExtractor.ParagraphThreshold">
+            <summary>
+            Paragraph threshold.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Ocr.ImageContentExtractor.HorizontalLineLength">
+            <summary>
+            Horizontal line length.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Ocr.ImageContentExtractor.VerticalLineLength">
+            <summary>
+            Vertical line length.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Ocr.ImageContentExtractor.TableMinimumArea">
+            <summary>
+            Table minimum area.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Ocr.ImageContentExtractor.ColumnAlignmentTolerance">
+            <summary>
+            Column alignment tolerance.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Ocr.ImageContentExtractor.ProximityThreshold">
+            <summary>
+            Proximity threshold.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Ocr.ImageContentExtractor.ListMarkers">
+            <summary>
+            List markers.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Ocr.ImageContentExtractor.ListNumberingPatterns">
+            <summary>
+            List numbering patterns.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.Ocr.ImageContentExtractor.#ctor(System.String,System.String)">
+            <summary>
+            Image context entractor.  This library requires that you have Tesseract installed on the host and that you have awareness of the location of the tessdata directory.
+            </summary>
+            <param name="tessdataPath">Tesseract data folder.  
+            For Windows, the folder is generally C:\Program Files\Tesseract-OCR\tessdata.
+            For MacOS, the folder is generally /usr/local/share/tessdata or /opt/local/share/tessdata.
+            For Linux, the folder is generally /usr/share/tessdata or /usr/local/share/tessdata.
+            </param>
+            <param name="languageFile">The default language file to use.  Defaults to eng.  This file, with extension .traineddata, must exist in the data directory.</param>
+        </member>
+        <member name="M:DocumentAtom.Documents.Ocr.ImageContentExtractor.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.Documents.Ocr.ImageContentExtractor.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.Ocr.ImageContentExtractor.ExtractContent(System.Byte[])">
+            <summary>
+            Extract content from PNG data.
+            </summary>
+            <param name="pngData">PNG data.</param>
+            <returns>Extraction result.</returns>
+        </member>
+        <member name="T:DocumentAtom.Documents.Ocr.ListStructure">
+            <summary>
+            List structure.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Ocr.ListStructure.Items">
+            <summary>
+            List items.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Ocr.ListStructure.IsOrdered">
+            <summary>
+            Boolean indicating if the list is ordered.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Ocr.ListStructure.Bounds">
+            <summary>
+            Bounds.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.Ocr.ListStructure.#ctor">
+            <summary>
+            List structure.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Documents.Ocr.TableStructure">
+            <summary>
+            Table structure.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Ocr.TableStructure.Cells">
+            <summary>
+            Cells.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Ocr.TableStructure.Bounds">
+            <summary>
+            Bounds.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Ocr.TableStructure.Rows">
+            <summary>
+            Rows.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Ocr.TableStructure.Columns">
+            <summary>
+            Counts.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.Ocr.TableStructure.#ctor">
+            <summary>
+            Table structure.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Documents.Ocr.TextElement">
+            <summary>
+            Text element.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Ocr.TextElement.Text">
+            <summary>
+            Text.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Ocr.TextElement.Bounds">
+            <summary>
+            Bounds.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Ocr.TextElement.Confidence">
+            <summary>
+            Confidence.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.Ocr.TextElement.#ctor">
+            <summary>
+            Text element.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Documents.Pdf.PdfProcessor">
+            <summary>
+            Create atoms from PDF documents.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Pdf.PdfProcessor.Settings">
+            <summary>
+            PDF processor settings.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.Pdf.PdfProcessor.#ctor(DocumentAtom.Documents.Pdf.PdfProcessorSettings,DocumentAtom.Documents.Image.ImageProcessorSettings)">
+            <summary>
+            Create atoms from PDF documents.
+            </summary>
+            <param name="settings">Processor settings.</param>
+            <param name="imageSettings">Image processor settings.</param>
+        </member>
+        <member name="M:DocumentAtom.Documents.Pdf.PdfProcessor.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.Documents.Pdf.PdfProcessor.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.Pdf.PdfProcessor.Extract(System.String)">
+            <summary>
+            Extract atoms from a file.
+            </summary>
+            <param name="filename">Filename.</param>
+            <returns>Atoms.</returns>
+        </member>
+        <member name="M:DocumentAtom.Documents.Pdf.PdfProcessor.GetMetadata(System.String)">
+            <summary>
+            Retrieve metadata from a file.
+            </summary>
+            <param name="filename">Filename.</param>
+            <returns>Dictionary.</returns>
+        </member>
+        <member name="T:DocumentAtom.Documents.Pdf.PdfProcessorSettings">
+            <summary>
+            Settings for PDF processor.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.Pdf.PdfProcessorSettings.#ctor">
+            <summary>
+            Settings for PDF processor.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Documents.Pdf.PdfRegion">
+            <summary>
+            PDF region.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Pdf.PdfRegion.BoundingBox">
+            <summary>
+            Bounding box.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Pdf.PdfRegion.Type">
+            <summary>
+            Type.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Pdf.PdfRegion.Processed">
+            <summary>
+            Boolean indicating if the region was processed.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.Pdf.PdfRegion.#ctor">
+            <summary>
+            PDF region.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Documents.Pdf.PdfTableRegion">
+            <summary>
+            PDF table region.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Pdf.PdfTableRegion.Table">
+            <summary>
+            Table..
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.Pdf.PdfTableRegion.#ctor">
+            <summary>
+            PDF table region.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Documents.Pdf.PdfListRegion">
+            <summary>
+            PDF list region.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Pdf.PdfListRegion.Items">
+            <summary>
+            Items.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Pdf.PdfListRegion.IsOrdered">
+            <summary>
+            Boolean indicating if the list is ordered.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.Pdf.PdfListRegion.#ctor">
+            <summary>
+            PDF list region.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Documents.Pdf.SectionHeader">
+            <summary>
+            Section header.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Pdf.SectionHeader.Text">
+            <summary>
+            Text.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.Pdf.SectionHeader.#ctor">
+            <summary>
+            Section header.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Documents.Pdf.PdfRegionTypeEnum">
+            <summary>
+            PDF region type.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.Pdf.PdfRegionTypeEnum.Header">
+            <summary>
+            HEader.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.Pdf.PdfRegionTypeEnum.Table">
+            <summary>
+            Table.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.Pdf.PdfRegionTypeEnum.List">
+            <summary>
+            List.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.Pdf.PdfRegionTypeEnum.Text">
+            <summary>
+            Text.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Documents.PowerPoint.PptxProcessor">
+            <summary>
+            Create atoms from Microsoft PowerPoint .pptx documents.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.PowerPoint.PptxProcessor.Settings">
+            <summary>
+            Pptx processor settings.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.PowerPoint.PptxProcessor.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.Documents.PowerPoint.PptxProcessor.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.PowerPoint.PptxProcessor.#ctor(DocumentAtom.Documents.PowerPoint.PptxProcessorSettings,DocumentAtom.Documents.Image.ImageProcessorSettings)">
+            <summary>
+            Create atoms from PowerPoint presentations.
+            </summary>
+            <param name="settings">Processor settings.</param>
+            <param name="imageSettings">Image processor settings.</param>
+        </member>
+        <member name="M:DocumentAtom.Documents.PowerPoint.PptxProcessor.Extract(System.String)">
+            <summary>
+            Extract atoms from a file.
+            </summary>
+            <param name="filename">Filename.</param>
+            <returns>Atoms.</returns>
+        </member>
+        <member name="M:DocumentAtom.Documents.PowerPoint.PptxProcessor.GetMetadata(System.String)">
+            <summary>
+            Retrieve metadata from a file.
+            </summary>
+            <param name="filename">Filename.</param>
+            <returns>Dictionary.</returns>
+        </member>
+        <member name="M:DocumentAtom.Documents.PowerPoint.PptxProcessor.BuildHierarchy(System.Collections.Generic.List{DocumentAtom.Core.Atoms.Atom})">
+            <summary>
+            Build hierarchical structure from flat list of atoms.
+            Groups atoms by PageNumber, making the first atom on each page the parent.
+            </summary>
+            <param name="flatAtoms">Flat list of atoms.</param>
+            <returns>Root-level atoms with hierarchical structure.</returns>
+        </member>
+        <member name="T:DocumentAtom.Documents.PowerPoint.PptxProcessorSettings">
+            <summary>
+            Settings for Microsoft PowerPoint .pptx processor.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.PowerPoint.PptxProcessorSettings.BuildHierarchy">
+            <summary>
+            Enable or disable hierarchical structure building.
+            When true, atoms will be organized in a tree structure based on slide (page) grouping.
+            When false, atoms will be returned as a flat list.
+            Default is true.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.PowerPoint.PptxProcessorSettings.#ctor">
+            <summary>
+            Settings for Microsoft PowerPoint .pptx processor.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Documents.PowerPoint.SlideTitleInfo">
+            <summary>
+            Represents title and subtitle information extracted from a slide.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.PowerPoint.SlideTitleInfo.Title">
+            <summary>
+            Gets or sets the slide title.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.PowerPoint.SlideTitleInfo.Subtitle">
+            <summary>
+            Gets or sets the slide subtitle.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.PowerPoint.SlideTitleInfo.#ctor">
+            <summary>
+            Initializes a new instance of the SlideTitleInfo class.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.PowerPoint.SlideTitleInfo.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the SlideTitleInfo class with specified values.
+            </summary>
+            <param name="title">The slide title.</param>
+            <param name="subtitle">The slide subtitle.</param>
+        </member>
+        <member name="T:DocumentAtom.Documents.RichText.RtfDestination">
+            <summary>
+            RTF destination types.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfDestination.Normal">
+            <summary>
+            Normal destination.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfDestination.FontTable">
+            <summary>
+            Font table destination.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfDestination.ColorTable">
+            <summary>
+            Color table destination.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfDestination.StyleSheet">
+            <summary>
+            Style sheet destination.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfDestination.Info">
+            <summary>
+            Info destination.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfDestination.Picture">
+            <summary>
+            Picture destination.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfDestination.ListTable">
+            <summary>
+            List table destination.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfDestination.ListOverrideTable">
+            <summary>
+            List override table destination.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfDestination.IgnoredDestination">
+            <summary>
+            Ignored destination.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfDestination.ShapeInst">
+            <summary>
+            Shape instance destination.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfDestination.ShapeProperty">
+            <summary>
+            Shape property destination.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfDestination.UnknownDestination">
+            <summary>
+            Unknown destination.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Documents.RichText.RtfDocument">
+            <summary>
+            Represents an RTF document structure.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfDocument.ParseContext">
+            <summary>
+            Parse context used during parsing.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfDocument.Elements">
+            <summary>
+            Document elements.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.RichText.RtfDocument.AddText(System.String,DocumentAtom.Documents.RichText.RtfParseContext)">
+            <summary>
+            Add text to the document.
+            </summary>
+            <param name="text">Text to add.</param>
+            <param name="context">Parsing context.</param>
+        </member>
+        <member name="M:DocumentAtom.Documents.RichText.RtfDocument.AddTableCell(DocumentAtom.Documents.RichText.RtfParseContext)">
+            <summary>
+            Add a table cell.
+            </summary>
+            <param name="context">Parsing context.</param>
+        </member>
+        <member name="M:DocumentAtom.Documents.RichText.RtfDocument.EndCurrentList">
+            <summary>
+            End the current list.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.RichText.RtfDocument.EndTableRow">
+            <summary>
+            End the current table row.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.RichText.RtfDocument.EndParagraph">
+            <summary>
+            End the current paragraph.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.RichText.RtfDocument.FinalizeTables">
+            <summary>
+            Finalize any pending tables.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Documents.RichText.RtfDocumentElement">
+            <summary>
+            Represents an element within an RTF document.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfDocumentElement.Type">
+            <summary>
+            Type of the element.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfDocumentElement.Text">
+            <summary>
+            Text content of the element.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfDocumentElement.RawRtf">
+            <summary>
+            Raw RTF content.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfDocumentElement.IsOrderedList">
+            <summary>
+            Whether this is an ordered list.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfDocumentElement.TableData">
+            <summary>
+            Table data if this element is a table.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfDocumentElement.ListItems">
+            <summary>
+            List items if this element is a list.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Documents.RichText.RtfElementType">
+            <summary>
+            Type of RTF document element.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfElementType.Paragraph">
+            <summary>
+            Paragraph element.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfElementType.Header1">
+            <summary>
+            Header level 1 element.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfElementType.Header2">
+            <summary>
+            Header level 2 element.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfElementType.Header3">
+            <summary>
+            Header level 3 element.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfElementType.ListItem">
+            <summary>
+            List item element.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfElementType.List">
+            <summary>
+            List element.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfElementType.Table">
+            <summary>
+            Table element.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfElementType.TableCell">
+            <summary>
+            Table cell element.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Documents.RichText.RtfParseContext">
+            <summary>
+            RTF parsing context.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfParseContext.State">
+            <summary>
+            Current parsing state.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfParseContext.CurrentDestination">
+            <summary>
+            Current RTF destination.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfParseContext.DestinationStack">
+            <summary>
+            Stack of RTF destinations.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfParseContext.Bold">
+            <summary>
+            Whether text is bold.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfParseContext.Italic">
+            <summary>
+            Whether text is italic.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfParseContext.FontSize">
+            <summary>
+            Current font size.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfParseContext.FontIndex">
+            <summary>
+            Current font index.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfParseContext.StyleIndex">
+            <summary>
+            Current style index.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfParseContext.OutlineLevel">
+            <summary>
+            Current outline level.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfParseContext.ListStyle">
+            <summary>
+            Current list style.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfParseContext.ListLevel">
+            <summary>
+            Current list level.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfParseContext.InListText">
+            <summary>
+            Whether currently in list text.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfParseContext.InListSequence">
+            <summary>
+            Whether currently in list sequence.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfParseContext.InTable">
+            <summary>
+            Whether currently in table.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfParseContext.InTableCell">
+            <summary>
+            Whether currently in table cell.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfParseContext.GroupLevel">
+            <summary>
+            Current group level.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfParseContext.CurrentListItems">
+            <summary>
+            Current list items.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfParseContext.CurrentTable">
+            <summary>
+            Current table being parsed.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfParseContext.CurrentTableRow">
+            <summary>
+            Current table row being parsed.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfParseContext.CurrentCellText">
+            <summary>
+            Current table cell text.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfParseContext.CurrentText">
+            <summary>
+            Current text being parsed.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfParseContext.IsOrderedList">
+            <summary>
+            Whether current list is ordered.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfParseContext.PendingListMarker">
+            <summary>
+            Pending list marker.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfParseContext.CurrentImageData">
+            <summary>
+            Current image data being parsed.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfParseContext.ExtractedImages">
+            <summary>
+            Extracted images.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.RichText.RtfParseContext.ShouldIgnoreContent">
+            <summary>
+            Check if we should ignore content in the current destination.
+            </summary>
+            <returns>True if content should be ignored.</returns>
+        </member>
+        <member name="M:DocumentAtom.Documents.RichText.RtfParseContext.Clone">
+            <summary>
+            Clone the context.
+            </summary>
+            <returns>Cloned context.</returns>
+        </member>
+        <member name="M:DocumentAtom.Documents.RichText.RtfParseContext.ResetParagraph">
+            <summary>
+            Reset paragraph-specific properties.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Documents.RichText.RtfParseState">
+            <summary>
+            RTF parser state.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfParseState.Normal">
+            <summary>
+            Normal parsing state.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfParseState.InHeader">
+            <summary>
+            In header parsing state.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfParseState.InList">
+            <summary>
+            In list parsing state.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfParseState.InTable">
+            <summary>
+            In table parsing state.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfParseState.InImage">
+            <summary>
+            In image parsing state.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfParseState.SkipGroup">
+            <summary>
+            Skip group parsing state.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Documents.RichText.RtfProcessor">
+            <summary>
+            Create atoms from Rich Text Format .rtf documents.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfProcessor.Settings">
+            <summary>
+            RTF processor settings for controlling document processing behavior.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown when attempting to set to null.</exception>
+        </member>
+        <member name="M:DocumentAtom.Documents.RichText.RtfProcessor.Dispose(System.Boolean)">
+            <summary>
+            Dispose of managed and unmanaged resources.
+            </summary>
+            <param name="disposing">True to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
+        </member>
+        <member name="M:DocumentAtom.Documents.RichText.RtfProcessor.Dispose">
+            <summary>
+            Dispose of all resources used by the RTF processor.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.RichText.RtfProcessor.#ctor(DocumentAtom.Documents.RichText.RtfProcessorSettings,DocumentAtom.Documents.Image.ImageProcessorSettings)">
+            <summary>
+            Create atoms from RTF documents.
+            </summary>
+            <param name="settings">RTF processor settings, defaults to new instance if null.</param>
+            <param name="imageSettings">Image processor settings for handling embedded images, can be null.</param>
+        </member>
+        <member name="M:DocumentAtom.Documents.RichText.RtfProcessor.Extract(System.String)">
+            <summary>
+            Extract atoms from an RTF file.
+            </summary>
+            <param name="filename">Path to the RTF file to process.</param>
+            <returns>Enumerable collection of atoms representing document structure and content.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when filename is null or empty.</exception>
+        </member>
+        <member name="M:DocumentAtom.Documents.RichText.RtfProcessor.GetMetadata(System.String)">
+            <summary>
+            Retrieve metadata from an RTF file.
+            </summary>
+            <param name="filename">Path to the RTF file.</param>
+            <returns>Dictionary containing metadata key-value pairs extracted from RTF document properties.</returns>
+            <exception cref="T:System.ArgumentNullException">Thrown when filename is null or empty.</exception>
+        </member>
+        <member name="T:DocumentAtom.Documents.RichText.RtfProcessorSettings">
+            <summary>
+            Settings for Rich Text Format .rtf processor.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.RichText.RtfProcessorSettings.#ctor">
+            <summary>
+            Settings for Rich Text Format .rtf processor.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Documents.RichText.RtfTableData">
+            <summary>
+            Represents table data extracted from RTF.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfTableData.DataTable">
+            <summary>
+            DataTable containing the extracted table data.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfTableData.RawRtf">
+            <summary>
+            Raw RTF content for this table.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Documents.RichText.RtfToken">
+            <summary>
+            Represents an RTF token.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfToken.Type">
+            <summary>
+            Token type.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfToken.Text">
+            <summary>
+            Token text.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.RichText.RtfToken.Parameter">
+            <summary>
+            Parameter value for control words.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Documents.RichText.RtfTokenType">
+            <summary>
+            RTF token types.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfTokenType.GroupStart">
+            <summary>
+            Group start token.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfTokenType.GroupEnd">
+            <summary>
+            Group end token.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfTokenType.ControlWord">
+            <summary>
+            Control word token.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfTokenType.ControlSymbol">
+            <summary>
+            Control symbol token.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Documents.RichText.RtfTokenType.Text">
+            <summary>
+            Text token.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Documents.Word.DocxProcessor">
+            <summary>
+            Create atoms from Microsoft Word .docx documents.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Word.DocxProcessor.Settings">
+            <summary>
+            Docx processor settings.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.Word.DocxProcessor.Dispose(System.Boolean)">
+            <summary>
+            Dispose.
+            </summary>
+            <param name="disposing">Disposing.</param>
+        </member>
+        <member name="M:DocumentAtom.Documents.Word.DocxProcessor.Dispose">
+            <summary>
+            Dispose.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.Word.DocxProcessor.#ctor(DocumentAtom.Documents.Word.DocxProcessorSettings,DocumentAtom.Documents.Image.ImageProcessorSettings)">
+            <summary>
+            Create atoms from text documents.
+            </summary>
+            <param name="settings">Processor settings.</param>
+            <param name="imageSettings">Image processor settings.</param>
+        </member>
+        <member name="M:DocumentAtom.Documents.Word.DocxProcessor.Extract(System.String)">
+            <summary>
+            Extract atoms from a file.
+            </summary>
+            <param name="filename">Filename.</param>
+            <returns>Atoms.</returns>
+        </member>
+        <member name="M:DocumentAtom.Documents.Word.DocxProcessor.GetMetadata(System.String)">
+            <summary>
+            Retrieve metadata from a file.
+            </summary>
+            <param name="filename">Filename.</param>
+            <returns>Dictionary.</returns>
+        </member>
+        <member name="M:DocumentAtom.Documents.Word.DocxProcessor.BuildHierarchy(System.Collections.Generic.List{DocumentAtom.Core.Atoms.Atom})">
+            <summary>
+            Build hierarchical structure from flat list of atoms.
+            </summary>
+            <param name="flatAtoms">Flat list of atoms.</param>
+            <returns>Root-level atoms with hierarchical structure.</returns>
+        </member>
+        <member name="M:DocumentAtom.Documents.Word.DocxProcessor.FindParentHeader(System.Collections.Generic.Dictionary{System.Int32,DocumentAtom.Core.Atoms.Atom},System.Int32)">
+            <summary>
+            Find the parent header for a given header level.
+            Returns the nearest header with level less than the specified level.
+            </summary>
+            <param name="currentHeaders">Dictionary of current headers by level.</param>
+            <param name="level">Header level to find parent for.</param>
+            <returns>Parent header atom, or null if no parent exists.</returns>
+        </member>
+        <member name="M:DocumentAtom.Documents.Word.DocxProcessor.FindDeepestHeader(System.Collections.Generic.Dictionary{System.Int32,DocumentAtom.Core.Atoms.Atom})">
+            <summary>
+            Find the deepest (highest level number) current header.
+            </summary>
+            <param name="currentHeaders">Dictionary of current headers by level.</param>
+            <returns>Deepest header atom, or null if no headers exist.</returns>
+        </member>
+        <member name="M:DocumentAtom.Documents.Word.DocxProcessor.ClearDeeperLevels(System.Collections.Generic.Dictionary{System.Int32,DocumentAtom.Core.Atoms.Atom},System.Int32)">
+            <summary>
+            Clear tracking for header levels deeper than the specified level.
+            </summary>
+            <param name="currentHeaders">Dictionary of current headers by level.</param>
+            <param name="level">Current level.</param>
+        </member>
+        <member name="M:DocumentAtom.Documents.Word.DocxProcessor.GetHeadingLevel(DocumentFormat.OpenXml.Wordprocessing.Paragraph)">
+            <summary>
+            Get the heading level from a paragraph's style.
+            </summary>
+            <param name="paragraph">Paragraph to analyze.</param>
+            <returns>Heading level (1-9) or null if not a heading.</returns>
+        </member>
+        <member name="T:DocumentAtom.Documents.Word.DocxProcessorSettings">
+            <summary>
+            Settings for Microsoft Word .docx processor.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Documents.Word.DocxProcessorSettings.BuildHierarchy">
+            <summary>
+            Enable or disable hierarchical structure building.
+            When true, atoms will be organized in a tree structure based on heading styles (Heading 1, Heading 2, etc.).
+            When false, atoms will be returned as a flat list.
+            Default is true.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Documents.Word.DocxProcessorSettings.#ctor">
+            <summary>
+            Settings for Microsoft Word .docx processor.
+            </summary>
+        </member>
+    </members>
+</doc>

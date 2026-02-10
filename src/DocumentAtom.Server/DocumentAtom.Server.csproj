@@ -1,62 +1,39 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFramework>net8.0</TargetFramework>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="SyslogLogging" Version="2.0.10" />
-	  <PackageReference Include="Watson" Version="6.3.15" />
+		<PackageReference Include="SyslogLogging" Version="2.0.10" />
+		<PackageReference Include="Watson" Version="6.3.15" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\DocumentAtom.Csv\DocumentAtom.Csv.csproj" />
-	  <ProjectReference Include="..\DocumentAtom.Excel\DocumentAtom.Excel.csproj" />
-	  <ProjectReference Include="..\DocumentAtom.Html\DocumentAtom.Html.csproj" />
-	  <ProjectReference Include="..\DocumentAtom.Image\DocumentAtom.Image.csproj" />
-	  <ProjectReference Include="..\DocumentAtom.Json\DocumentAtom.Json.csproj" />
-	  <ProjectReference Include="..\DocumentAtom.Markdown\DocumentAtom.Markdown.csproj" />
-	  <ProjectReference Include="..\DocumentAtom.Pdf\DocumentAtom.Pdf.csproj" />
-	  <ProjectReference Include="..\DocumentAtom.PowerPoint\DocumentAtom.PowerPoint.csproj" />
-	  <ProjectReference Include="..\DocumentAtom.Text\DocumentAtom.Text.csproj" />
-	  <ProjectReference Include="..\DocumentAtom.TypeDetection\DocumentAtom.TypeDetection.csproj" />
-	  <ProjectReference Include="..\DocumentAtom.Word\DocumentAtom.Word.csproj" />
-	  <ProjectReference Include="..\DocumentAtom.RichText\DocumentAtom.RichText.csproj" />
-	  <ProjectReference Include="..\DocumentAtom.Xml\DocumentAtom.Xml.csproj" />
+		<ProjectReference Include="..\DocumentAtom.Core\DocumentAtom.Core.csproj" />
+		<ProjectReference Include="..\DocumentAtom.Text\DocumentAtom.Text.csproj" />
+		<ProjectReference Include="..\DocumentAtom.Documents\DocumentAtom.Documents.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="assets\icon.ico">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="assets\icon.png">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="clean.bat">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="clean.sh">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Dockerfile">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="Dockerrun.sh">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="x64\leptonica-1.82.0.dll">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="x64\tesseract50.dll">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="x86\leptonica-1.82.0.dll">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	  <None Update="x86\tesseract50.dll">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
+		<None Update="assets\icon.ico">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="assets\icon.png">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="clean.bat">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="clean.sh">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Dockerfile">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+		<None Update="Dockerrun.sh">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
 	</ItemGroup>
 
 </Project>

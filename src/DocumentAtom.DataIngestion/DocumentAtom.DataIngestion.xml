@@ -1029,7 +1029,7 @@
             </summary>
             <param name="options">Reader options.</param>
         </member>
-        <member name="M:DocumentAtom.DataIngestion.Readers.DefaultProcessorFactory.CreateProcessor(DocumentAtom.TypeDetection.DocumentTypeEnum,System.String)">
+        <member name="M:DocumentAtom.DataIngestion.Readers.DefaultProcessorFactory.CreateProcessor(DocumentAtom.Core.TypeDetection.DocumentTypeEnum,System.String)">
             <summary>
             Create a processor for the specified document type.
             </summary>
@@ -1042,7 +1042,7 @@
             Factory interface for creating DocumentAtom processors based on document type.
             </summary>
         </member>
-        <member name="M:DocumentAtom.DataIngestion.Readers.IProcessorFactory.CreateProcessor(DocumentAtom.TypeDetection.DocumentTypeEnum,System.String)">
+        <member name="M:DocumentAtom.DataIngestion.Readers.IProcessorFactory.CreateProcessor(DocumentAtom.Core.TypeDetection.DocumentTypeEnum,System.String)">
             <summary>
             Create a processor for the specified document type.
             </summary>
