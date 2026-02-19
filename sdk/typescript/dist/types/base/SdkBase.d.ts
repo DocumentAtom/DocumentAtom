@@ -28,4 +28,13 @@ export default class SdkBase {
      * @throws {Error | ApiErrorResponse} Rejects if the URL or data is invalid or if the request fails.
      */
     protected upload<T>(url: string, data: Buffer | File, cancellationToken?: AbortController): Promise<T>;
+    /**
+     * Submits a JSON body using a POST request to a given URL.
+     * @param {string} url - The URL to post data to.
+     * @param {object} body - The JSON body to send.
+     * @param {AbortController} [cancellationToken] - Optional cancellation token for cancelling the request.
+     * @return {Promise<T>} Resolves with the response data.
+     * @throws {Error | ApiErrorResponse} Rejects if the URL or body is invalid or if the request fails.
+     */
+    protected postJson<T>(url: string, body: object, cancellationToken?: AbortController): Promise<T>;
 }

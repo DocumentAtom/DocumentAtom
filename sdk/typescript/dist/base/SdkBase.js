@@ -78,6 +78,42 @@ class SdkBase {
       });
     });
   }
+
+  /**
+   * Submits a JSON body using a POST request to a given URL.
+   * @param {string} url - The URL to post data to.
+   * @param {object} body - The JSON body to send.
+   * @param {AbortController} [cancellationToken] - Optional cancellation token for cancelling the request.
+   * @return {Promise<T>} Resolves with the response data.
+   * @throws {Error | ApiErrorResponse} Rejects if the URL or body is invalid or if the request fails.
+   */
+  postJson(url, body, cancellationToken) {
+    return new Promise((resolve, reject) => {
+      if (!url) return reject(new Error('URL cannot be null or empty.'));
+      if (!body) return reject(new Error('Body cannot be null.'));
+      const request = _superagent.default.post(url).set(this.config.defaultHeaders).set('Content-Type', 'application/json').send(body).timeout({
+        response: this.config.timeoutMs
+      });
+      if (cancellationToken) {
+        cancellationToken.abort = () => {
+          request.abort();
+          this.log(_SeverityEnum.SeverityEnum.Debug, `Request aborted to ${request.method}: ${url}.`);
+        };
+      }
+      request.then(res => {
+        this.log(_SeverityEnum.SeverityEnum.Debug, `Success reported from ${request.method}: ${url}: ${res.status}`);
+        resolve(_Serializer.default.deserializeJson(res.text || '{}'));
+      }).catch(err => {
+        this.log(_SeverityEnum.SeverityEnum.Warn, `Failed to retrieve object from ${request.method}: ${url}: ${err.message}`);
+        const errorResponse = err?.response?.body || null;
+        if (errorResponse) {
+          reject(errorResponse);
+        } else {
+          reject(err.message ? err.message : err);
+        }
+      });
+    });
+  }
 }
 exports.default = SdkBase;
 //# sourceMappingURL=SdkBase.js.map

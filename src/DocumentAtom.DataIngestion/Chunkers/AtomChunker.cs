@@ -4,13 +4,15 @@ namespace DocumentAtom.DataIngestion.Chunkers
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.CompilerServices;
-    using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
+    using DocumentAtom.Core.Chunking;
+    using DocumentAtom.Core.Enums;
     using DocumentAtom.DataIngestion.Metadata;
 
     /// <summary>
     /// Default chunker implementation for IngestionDocuments.
+    /// Delegates content splitting to ChunkingEngine.
     /// </summary>
     public class AtomChunker : IAtomChunker
     {
@@ -37,6 +39,7 @@ namespace DocumentAtom.DataIngestion.Chunkers
         #region Private-Members
 
         private AtomChunkerOptions _Options;
+        private readonly ChunkingEngine _Engine;
 
         #endregion
 
@@ -49,6 +52,7 @@ namespace DocumentAtom.DataIngestion.Chunkers
         public AtomChunker(AtomChunkerOptions? options = null)
         {
             _Options = options ?? new AtomChunkerOptions();
+            _Engine = new ChunkingEngine();
         }
 
         #endregion
@@ -100,19 +104,16 @@ namespace DocumentAtom.DataIngestion.Chunkers
 
             foreach (IngestionDocumentElement element in document.Elements)
             {
-                // Track header context
                 if (element.ElementType == IngestionElementType.Header && !string.IsNullOrEmpty(element.Content))
                 {
                     currentHeaderContext = element.Content;
                 }
 
-                // Skip elements without content
                 if (string.IsNullOrEmpty(element.Content))
                 {
                     continue;
                 }
 
-                // Check if element has quarks and we should use them
                 if (_Options.UseQuarksIfAvailable &&
                     element.Metadata.TryGetValue(AtomMetadataKeys.AtomHasQuarks, out object? hasQuarksObj) &&
                     hasQuarksObj is bool hasQuarks && hasQuarks)
@@ -120,16 +121,13 @@ namespace DocumentAtom.DataIngestion.Chunkers
                     continue;
                 }
 
-                // Check if this is a quark element
                 bool isQuark = element.Metadata.ContainsKey(AtomMetadataKeys.AtomParentAtomGuid);
 
-                // Chunk the element content
-                List<IngestionChunk> elementChunks = ChunkText(
-                    element.Content,
+                List<IngestionChunk> elementChunks = ChunkElement(
+                    element,
                     document.Id,
                     chunkIndex,
                     currentHeaderContext,
-                    element,
                     isQuark);
 
                 results.AddRange(elementChunks);
@@ -139,149 +137,58 @@ namespace DocumentAtom.DataIngestion.Chunkers
             return results;
         }
 
-        private List<IngestionChunk> ChunkText(
-            string text,
+        private List<IngestionChunk> ChunkElement(
+            IngestionDocumentElement sourceElement,
             string documentId,
             int startIndex,
             string? headerContext,
-            IngestionDocumentElement sourceElement,
             bool isQuark)
         {
             List<IngestionChunk> results = new List<IngestionChunk>();
-            int currentIndex = startIndex;
+            string text = sourceElement.Content;
 
             if (string.IsNullOrEmpty(text))
             {
                 return results;
             }
 
-            // For quarks, use content directly without re-chunking
             if (isQuark)
             {
-                IngestionChunk chunk = CreateChunk(text, documentId, currentIndex, headerContext, sourceElement);
+                IngestionChunk chunk = CreateChunk(text, documentId, startIndex, headerContext, sourceElement);
                 chunk.Metadata[AtomMetadataKeys.ChunkSource] = "quark";
                 results.Add(chunk);
                 return results;
             }
 
-            // Check if content fits in a single chunk
-            string contextPrefix = _Options.IncludeHeaderContext && !string.IsNullOrEmpty(headerContext)
-                ? headerContext + _Options.HeaderContextSeparator
-                : string.Empty;
+            List<Chunk> engineChunks = _Engine.Chunk(
+                AtomTypeEnum.Text,
+                text,
+                null,
+                null,
+                null,
+                _Options.Chunking);
 
-            if (text.Length + contextPrefix.Length <= _Options.MaxChunkSize)
+            int currentIndex = startIndex;
+
+            foreach (Chunk engineChunk in engineChunks)
             {
-                results.Add(CreateChunk(text, documentId, currentIndex, headerContext, sourceElement));
-                return results;
-            }
+                string chunkText = engineChunk.Text;
 
-            // Split content into chunks
-            List<string> segments = SplitText(text);
-            StringBuilder currentChunk = new StringBuilder();
-            int splitIndex = 0;
-
-            foreach (string segment in segments)
-            {
-                // Check if adding this segment would exceed max size
-                int projectedLength = currentChunk.Length + segment.Length + contextPrefix.Length;
-
-                if (projectedLength > _Options.MaxChunkSize && currentChunk.Length > 0)
+                if (!string.IsNullOrEmpty(chunkText) && chunkText.Length >= _Options.MinChunkSize)
                 {
-                    // Emit current chunk
-                    string chunkText = currentChunk.ToString().Trim();
-
-                    if (chunkText.Length >= _Options.MinChunkSize)
-                    {
-                        IngestionChunk chunk = CreateChunk(chunkText, documentId, currentIndex++, headerContext, sourceElement);
-                        chunk.Metadata[AtomMetadataKeys.ChunkSplitIndex] = splitIndex++;
-                        results.Add(chunk);
-                    }
-
-                    // Start new chunk with overlap
-                    currentChunk.Clear();
-
-                    if (_Options.ChunkOverlap > 0 && chunkText.Length > _Options.ChunkOverlap)
-                    {
-                        string overlap = chunkText.Substring(chunkText.Length - _Options.ChunkOverlap);
-                        currentChunk.Append(overlap);
-                    }
-                }
-
-                currentChunk.Append(segment);
-
-                // Add back separator that may have been lost
-                if (!segment.EndsWith(" ") && !segment.EndsWith("\n"))
-                {
-                    currentChunk.Append(" ");
+                    IngestionChunk ingestionChunk = CreateChunk(chunkText, documentId, currentIndex, headerContext, sourceElement);
+                    ingestionChunk.Metadata[AtomMetadataKeys.ChunkSplitIndex] = engineChunk.Position;
+                    results.Add(ingestionChunk);
+                    currentIndex++;
                 }
             }
 
-            // Emit final chunk
-            if (currentChunk.Length > 0)
+            if (results.Count == 0 && !string.IsNullOrEmpty(text))
             {
-                string finalText = currentChunk.ToString().Trim();
-
-                if (finalText.Length >= _Options.MinChunkSize)
-                {
-                    IngestionChunk chunk = CreateChunk(finalText, documentId, currentIndex, headerContext, sourceElement);
-                    chunk.Metadata[AtomMetadataKeys.ChunkSplitIndex] = splitIndex;
-                    results.Add(chunk);
-                }
+                results.Add(CreateChunk(text, documentId, startIndex, headerContext, sourceElement));
             }
 
             return results;
-        }
-
-        private List<string> SplitText(string text)
-        {
-            List<string> segments = new List<string>();
-
-            // Try to split by each separator in order of preference
-            if (_Options.PreserveParagraphs)
-            {
-                foreach (string separator in _Options.SplitSeparators)
-                {
-                    if (text.Contains(separator))
-                    {
-                        string[] parts = text.Split(new[] { separator }, StringSplitOptions.None);
-
-                        for (int i = 0; i < parts.Length; i++)
-                        {
-                            string part = parts[i];
-
-                            if (i < parts.Length - 1)
-                            {
-                                part += separator; // Preserve separator for context
-                            }
-
-                            if (!string.IsNullOrWhiteSpace(part))
-                            {
-                                segments.Add(part);
-                            }
-                        }
-
-                        if (segments.Count > 1)
-                        {
-                            return segments;
-                        }
-
-                        segments.Clear();
-                    }
-                }
-            }
-
-            // Fallback: split by words
-            string[] words = text.Split(' ');
-
-            foreach (string word in words)
-            {
-                if (!string.IsNullOrWhiteSpace(word))
-                {
-                    segments.Add(word + " ");
-                }
-            }
-
-            return segments;
         }
 
         private IngestionChunk CreateChunk(
@@ -297,7 +204,6 @@ namespace DocumentAtom.DataIngestion.Chunkers
                 ChunkIndex = index
             };
 
-            // Add header context if configured
             if (_Options.IncludeHeaderContext && !string.IsNullOrEmpty(headerContext))
             {
                 chunk.Content = headerContext + _Options.HeaderContextSeparator + content;
@@ -308,7 +214,6 @@ namespace DocumentAtom.DataIngestion.Chunkers
                 chunk.Content = content;
             }
 
-            // Copy selected metadata from source element
             if (_Options.PreserveElementMetadata)
             {
                 string[] keysToPreserve = new[]

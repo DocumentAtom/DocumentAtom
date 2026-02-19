@@ -26,15 +26,282 @@ SDKs are available for multiple languages in the `sdk/` directory:
 | Python | `sdk/python/` | Python SDK for data science workflows |
 | C# | `sdk/csharp/` | .NET SDK client library |
 
-## New in v2.0.0
+## New in v3.0.0 (Breaking)
+
+v3.0 replaces the raw-binary POST API with a structured **JSON envelope**. Every extraction request now carries an optional `Settings` object alongside the document data, giving callers per-request control over parsing, processing, and chunking — without any server-side configuration changes.
+
+### Why a JSON Envelope?
+
+In v2, callers uploaded raw bytes and got back atoms produced with whatever defaults the server happened to have. If you needed OCR, you appended `?ocr=true`. If you needed different CSV delimiters, paragraph grouping, or chunk sizes, you had to change server configuration and redeploy.
+
+v3 puts the caller in control:
+
+- **Tune parsing per request.** Tell the CSV processor that your file uses `|` delimiters and has no header row — in the same request that uploads the file. Process one HTML page with script extraction enabled and another without.
+- **Enable and configure chunking on the fly.** Choose from 11 chunking strategies, set token budgets, pick an overlap mode, and get back pre-chunked content ready for embedding or retrieval — all without touching the server.
+- **Keep sensible defaults.** Every setting is optional. Send `"Settings": null` and the server behaves exactly like v2 defaults. Override only what you need.
+- **One API surface, any language.** The same JSON envelope works identically across the C#, TypeScript, and Python SDKs, the REST API, and the dashboard.
+
+### Breaking Changes
+
+- **JSON envelope required**: All `/atom/*` endpoints now accept `application/json` with base64-encoded document data instead of raw binary upload
+- **`?ocr` query parameter removed**: Use `Settings.ExtractAtomsFromImages` in the JSON body instead
+- **SDK method signatures changed**: All SDK methods now accept an optional settings object instead of `bool extractOcr`
+
+### JSON Envelope Format
+
+All atom extraction requests use this format:
+
+```json
+{
+  "Settings": {
+    "TrimText": true,
+    "ExtractAtomsFromImages": true,
+    "Chunking": {
+      "Enable": true,
+      "Strategy": "SentenceBased",
+      "FixedTokenCount": 256,
+      "OverlapCount": 2,
+      "OverlapStrategy": "SentenceBoundaryAware"
+    }
+  },
+  "Data": "<base64-encoded-document>"
+}
+```
+
+When `Settings` is `null`, the server uses default processor settings for the target document type. Any field you omit from `Settings` retains its server default — you only specify the values you want to override.
+
+### Per-Request Processing Settings
+
+Every setting in the `Settings` object is optional. Omitted fields keep server defaults.
+
+**Common settings** (available on all processor types except HTML):
+
+| Setting | Type | Description |
+|---------|------|-------------|
+| `TrimText` | `bool` | Trim whitespace from extracted text |
+| `RemoveBinaryFromText` | `bool` | Strip binary data from text output |
+| `ExtractAtomsFromImages` | `bool` | Enable OCR on embedded images (requires Tesseract on host) |
+| `Chunking` | `object` | Chunking configuration (see below) |
+
+**Type-specific settings:**
+
+| Setting | Type | Applies To | Description |
+|---------|------|------------|-------------|
+| `RowDelimiter` | `string` | CSV | Row delimiter string |
+| `ColumnDelimiter` | `char` | CSV | Column delimiter character |
+| `HasHeaderRow` | `bool` | CSV | Whether first row is a header |
+| `RowsPerAtom` | `int` | CSV | Number of rows per atom |
+| `BuildHierarchy` | `bool` | Excel, HTML, JSON, Markdown, Word, PowerPoint, XML | Build hierarchical atom structure from headings/sections |
+| `Delimiters` | `string[]` | Markdown, Text | Custom content delimiters |
+| `MaxDepth` | `int` | JSON, XML | Maximum nesting depth to process |
+| `IncludeAttributes` | `bool` | XML | Include XML attributes in atoms |
+| `PreserveWhitespace` | `bool` | HTML, XML | Preserve whitespace in output |
+| `HeaderRowScoreThreshold` | `int` | Excel | Threshold score for header row detection |
+| `ProcessInlineStyles` | `bool` | HTML | Process inline CSS styles |
+| `ProcessMetaTags` | `bool` | HTML | Include meta tag content |
+| `ProcessScripts` | `bool` | HTML | Include script content |
+| `ProcessComments` | `bool` | HTML | Include HTML comments |
+| `MaxTextLength` | `int` | HTML | Maximum text length to process |
+| `ProcessSvg` | `bool` | HTML | Process SVG elements |
+| `ExtractDataAttributes` | `bool` | HTML | Extract `data-*` attributes |
+| `LineThreshold` | `int` | OCR, PNG | Line detection threshold |
+| `ParagraphThreshold` | `int` | OCR, PNG | Paragraph detection threshold |
+| `HorizontalLineLength` | `int` | OCR, PNG | Minimum horizontal line length |
+| `VerticalLineLength` | `int` | OCR, PNG | Minimum vertical line length |
+| `TableMinArea` | `int` | OCR, PNG | Minimum area for table detection |
+| `ColumnAlignmentTolerance` | `int` | OCR, PNG | Column alignment tolerance |
+| `ProximityThreshold` | `int` | OCR, PNG | Element proximity threshold |
+
+### Server-Side Chunking
+
+v3.0 introduces server-side chunking with 11 strategies. When enabled, each `Atom` in the response includes a `Chunks` array of content fragments — ready for embedding, vector storage, or retrieval without any client-side post-processing.
+
+**Chunking Strategies:**
+
+| Strategy | Description | Use Case |
+|----------|-------------|----------|
+| `FixedTokenCount` | Splits text into fixed token-count windows using cl100k_base | Embedding models with fixed context windows |
+| `SentenceBased` | Groups sentences up to a token budget | RAG pipelines, semantic search |
+| `ParagraphBased` | Groups paragraphs up to a token budget | Summarization, longer context |
+| `RegexBased` | Splits on a user-supplied regex pattern | Domain-specific delimiters |
+| `WholeList` | Serializes an entire list atom as one chunk | Short lists that shouldn't be split |
+| `ListEntry` | Each list item becomes its own chunk | FAQ lists, bullet-point extraction |
+| `Row` | Each table row becomes a chunk (no headers) | Simple tabular data |
+| `RowWithHeaders` | Each row becomes a chunk prefixed with column headers | Tabular data needing context |
+| `RowGroupWithHeaders` | Groups N rows together with headers | Large tables, batch processing |
+| `KeyValuePairs` | Each row becomes `Header: Value` pairs | Structured data extraction |
+| `WholeTable` | Entire table serialized as one chunk | Small tables, preserving structure |
+
+**Overlap Strategies** (for text-based chunking):
+
+| Strategy | Description |
+|----------|-------------|
+| `SlidingWindow` | Overlaps by raw token/sentence/paragraph count |
+| `SentenceBoundaryAware` | Overlap snaps to sentence boundaries |
+| `SemanticBoundaryAware` | Overlap snaps to paragraph boundaries |
+
+**ChunkingConfiguration Fields:**
+
+| Field | Type | Default | Description |
+|-------|------|---------|-------------|
+| `Enable` | `bool` | `false` | Enable/disable chunking |
+| `Strategy` | `string` | `FixedTokenCount` | One of the 11 strategies above |
+| `FixedTokenCount` | `int` | `256` | Token budget per chunk (min: 1) |
+| `OverlapCount` | `int` | `0` | Number of overlap units (min: 0) |
+| `OverlapPercentage` | `double` | `null` | Overlap as percentage (0.0-1.0); when set, takes precedence over `OverlapCount` |
+| `OverlapStrategy` | `string` | `SlidingWindow` | One of the 3 overlap strategies |
+| `RowGroupSize` | `int` | `5` | Rows per group for `RowGroupWithHeaders` (min: 1) |
+| `ContextPrefix` | `string` | `null` | Text prepended to each chunk |
+| `RegexPattern` | `string` | `null` | Split pattern for `RegexBased` strategy |
+
+### Chunks vs Quarks
+
+- **Quarks** are structural sub-atoms produced during extraction. They represent the document's inherent hierarchy and parent-child relationships — for example, cells within a table row, items within a list, or paragraphs within a heading section.
+- **Chunks** are fragments of an atom's content produced by the chunking engine based on the selected chunking strategy. They are designed for downstream consumption such as embedding, vector storage, and retrieval.
+
+An atom can have both quarks (structure, hierarchy, parent-child relationships) and chunks (fragments of atom data based on chunking strategy).
+
+### SDK Examples
+
+**C#:**
+```csharp
+using DocumentAtom.Sdk;
+using DocumentAtom.Core.Api;
+
+var sdk = new DocumentAtomSdk("http://localhost:8000");
+byte[] data = File.ReadAllBytes("document.pdf");
+
+// Without settings (server defaults)
+List<Atom>? atoms = await sdk.Atom.ProcessPdf(data);
+
+// With settings: enable OCR and sentence-based chunking
+var settings = new ApiProcessorSettings
+{
+    ExtractAtomsFromImages = true,
+    Chunking = new ChunkingConfiguration
+    {
+        Enable = true,
+        Strategy = ChunkStrategyEnum.SentenceBased,
+        FixedTokenCount = 256,
+        OverlapCount = 2,
+        OverlapStrategy = OverlapStrategyEnum.SentenceBoundaryAware
+    }
+};
+List<Atom>? atoms = await sdk.Atom.ProcessPdf(data, settings);
+```
+
+**TypeScript:**
+```typescript
+import DocumentAtomSdk from 'document-atom-sdk';
+
+const sdk = new DocumentAtomSdk({ endpoint: 'http://localhost:8000' });
+const fileBuffer = fs.readFileSync('document.pdf');
+
+// Without settings
+const atoms = await sdk.extractAtom.pdf(fileBuffer);
+
+// With settings: enable OCR and sentence-based chunking
+const atoms = await sdk.extractAtom.pdf(fileBuffer, {
+  ExtractAtomsFromImages: true,
+  Chunking: {
+    Enable: true,
+    Strategy: 'SentenceBased',
+    FixedTokenCount: 256,
+    OverlapCount: 2,
+    OverlapStrategy: 'SentenceBoundaryAware',
+  },
+});
+```
+
+**Python:**
+```python
+from document_atom_sdk import DocumentAtomSdk, ApiProcessorSettingsModel, ChunkingConfigurationModel
+
+sdk = DocumentAtomSdk(endpoint="http://localhost:8000")
+
+with open("document.pdf", "rb") as f:
+    data = f.read()
+
+# Without settings
+atoms = sdk.atom.extract_atoms_pdf(data)
+
+# With settings: enable OCR and sentence-based chunking
+settings = ApiProcessorSettingsModel(
+    extract_atoms_from_images=True,
+    chunking=ChunkingConfigurationModel(
+        enable=True,
+        strategy="SentenceBased",
+        fixed_token_count=256,
+        overlap_count=2,
+        overlap_strategy="SentenceBoundaryAware",
+    ),
+)
+atoms = sdk.atom.extract_atoms_pdf(data, settings=settings)
+```
+
+### v2 to v3 Migration Guide
+
+**API calls**: Replace raw binary POST with JSON envelope:
+```
+# v2 (no longer supported)
+POST /atom/pdf
+Content-Type: application/octet-stream
+Body: <raw bytes>
+
+# v3
+POST /atom/pdf
+Content-Type: application/json
+Body: { "Settings": null, "Data": "<base64>" }
+```
+
+**OCR extraction**: Replace `?ocr=true` query parameter:
+```
+# v2 (no longer supported)
+POST /atom/pdf?ocr=true
+
+# v3
+POST /atom/pdf
+Body: { "Settings": { "ExtractAtomsFromImages": true }, "Data": "<base64>" }
+```
+
+**C# SDK**: Replace `bool extractOcr` parameter with `ApiProcessorSettings?`:
+```csharp
+// v2
+var atoms = await sdk.Atom.ProcessPdf(data, extractOcr: true);
+
+// v3
+var settings = new ApiProcessorSettings { ExtractAtomsFromImages = true };
+var atoms = await sdk.Atom.ProcessPdf(data, settings);
+```
+
+**TypeScript SDK**: Replace individual parameters with settings object:
+```typescript
+// v2
+const atoms = await sdk.extractAtom.pdf(fileBuffer);
+
+// v3 (same for no settings, but now accepts optional settings)
+const atoms = await sdk.extractAtom.pdf(fileBuffer, { ExtractAtomsFromImages: true });
+```
+
+**Python SDK**: Replace `ocr` parameter with `settings`:
+```python
+# v2
+atoms = sdk.atom.extract_atoms_pdf(data, ocr=True)
+
+# v3
+settings = ApiProcessorSettingsModel(extract_atoms_from_images=True)
+atoms = sdk.atom.extract_atoms_pdf(data, settings=settings)
+```
+
+## Previous Releases
+
+### v2.0.0
 
 - **Consolidated Packages**: Reduced from 17+ packages to 4 main packages
 - **Monorepo Structure**: All SDKs (TypeScript, Python, C#) are now part of the main repository
 - **Unified Versioning**: All packages share the same version number via `Directory.Build.props`
 - **Simplified Dependencies**: Single Tesseract native DLL location in DocumentAtom.Documents
 - **Migration Guide**: See [MIGRATION.md](MIGRATION.md) for upgrading from v1.x
-
-## Previous Releases
 
 ### v1.2.x
 
@@ -104,7 +371,8 @@ DocumentAtom parses input data assets into a variety of `Atom` objects.  Each `A
 - `MD5Hash` - the MD5 hash of the `Atom` content
 - `SHA1Hash` - the SHA1 hash of the `Atom` content
 - `SHA256Hash` - the SHA256 hash of the `Atom` content
-- `Quarks` - sub-atomic particles created from the `Atom` content, for instance, when chunking text
+- `Quarks` - structural sub-atoms from the document (e.g., cells in a table row, items in a list)
+- `Chunks` - content fragments produced by the chunking engine when chunking is enabled via `Settings`
 
 The `AtomBase` class provides the aforementioned metadata, and several type-specific `Atom`s are returned from the various processors, including:
 - `BinaryAtom` - includes a `Bytes` property
@@ -128,6 +396,7 @@ DocumentAtom is built on the shoulders of several libraries, without which, this
 - [HTML Agility Pack](https://github.com/zzzprojects/html-agility-pack)
 - [PdfPig](https://github.com/UglyToad/PdfPig)
 - [RtfPipe](github.com/erdomke/RtfPipe)
+- [SharpToken](https://github.com/dmitry-brazhenko/SharpToken) - cl100k_base tokenizer for token-aware chunking
 - [SixLabors.ImageSharp](https://github.com/SixLabors/ImageSharp)
 - [Tabula](https://github.com/BobLd/tabula-sharp)
 - [Tesseract](https://github.com/charlesw/tesseract/)
@@ -179,8 +448,14 @@ services.AddDocumentAtomIngestion(
         reader.BuildHierarchy = true;
     },
     chunker => {
-        chunker.MaxChunkSize = 500;
-        chunker.ChunkOverlap = 50;
+        chunker.Chunking = new ChunkingConfiguration
+        {
+            Enable = true,
+            Strategy = ChunkStrategyEnum.SentenceBased,
+            FixedTokenCount = 500,
+            OverlapCount = 2,
+            OverlapStrategy = OverlapStrategyEnum.SentenceBoundaryAware
+        };
     });
 ```
 
@@ -195,11 +470,11 @@ services.AddDocumentAtomIngestion(
 
 ### Processing Options
 
-| Method | Best For |
-|--------|----------|
-| `AtomDocumentProcessorOptions.ForRag()` | Vector database ingestion, semantic search |
-| `AtomDocumentProcessorOptions.ForSummarization()` | Document summarization, analysis |
-| `AtomChunkerOptions.ForLargeContext()` | Large context window models |
+| Method | Strategy | Token Budget | Best For |
+|--------|----------|-------------|----------|
+| `AtomDocumentProcessorOptions.ForRag()` | SentenceBased | 256 | Vector database ingestion, semantic search |
+| `AtomDocumentProcessorOptions.ForSummarization()` | ParagraphBased | 1024 | Document summarization, analysis |
+| `AtomDocumentProcessorOptions.ForLargeContext()` | ParagraphBased | 2048 | Large context window models |
 
 ## RESTful API and Docker
 

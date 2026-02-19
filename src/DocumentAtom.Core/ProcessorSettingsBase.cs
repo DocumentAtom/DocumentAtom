@@ -1,5 +1,7 @@
 ﻿namespace DocumentAtom.Core
 {
+    using DocumentAtom.Core.Chunking;
+
     /// <summary>
     /// Processor settings base class.
     /// </summary>
@@ -74,9 +76,9 @@
         }
 
         /// <summary>
-        /// Chunking settings, that is, breaking atoms into smaller, more manageable quarks.
+        /// Chunking configuration for breaking atom content into smaller chunks.
         /// </summary>
-        public ChunkingSettings Chunking
+        public ChunkingConfiguration Chunking
         {
             get
             {
@@ -95,7 +97,7 @@
 
         private string _TempDirectory = "./temp/";
         private int _StreamBufferSize = 8192;
-        private ChunkingSettings _Chunking = new ChunkingSettings();
+        private ChunkingConfiguration _Chunking = new ChunkingConfiguration();
 
         #endregion
 

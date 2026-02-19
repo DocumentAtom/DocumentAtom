@@ -6,8 +6,8 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-Write-Host "DocumentAtom v2.0 NuGet Publish Script" -ForegroundColor Cyan
-Write-Host "=======================================" -ForegroundColor Cyan
+Write-Host "DocumentAtom v3.0.0 NuGet Publish Script" -ForegroundColor Cyan
+Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 
 # Clean previous builds
@@ -44,7 +44,8 @@ $packages = @(
     "DocumentAtom.Text",
     "DocumentAtom.Documents",
     "DocumentAtom",
-    "DocumentAtom.DataIngestion"
+    "DocumentAtom.DataIngestion",
+    "DocumentAtom.Sdk"
 )
 
 Write-Host ""

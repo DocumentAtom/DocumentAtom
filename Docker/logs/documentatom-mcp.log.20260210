@@ -1,0 +1,5 @@
+2026-02-10 05:29:57 e63b99fa2b81 Debug [DocumentAtom.McpServer] logging initialized
+2026-02-10 05:29:57 e63b99fa2b81 Debug [DocumentAtom.McpServer] Initializing DocumentAtom SDK
+2026-02-10 05:29:57 e63b99fa2b81 Debug [DocumentAtom.McpServer] Connecting to DocumentAtom server at: http://localhost:8000
+2026-02-10 05:29:57 e63b99fa2b81 Info [DocumentAtom.McpServer] starting at 02/10/2026 05:29:57 using process ID 1
+

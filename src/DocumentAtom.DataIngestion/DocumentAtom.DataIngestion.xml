@@ -7,6 +7,7 @@
         <member name="T:DocumentAtom.DataIngestion.Chunkers.AtomChunker">
             <summary>
             Default chunker implementation for IngestionDocuments.
+            Delegates content splitting to ChunkingEngine.
             </summary>
         </member>
         <member name="P:DocumentAtom.DataIngestion.Chunkers.AtomChunker.Options">
@@ -40,22 +41,10 @@
             Options for the AtomChunker.
             </summary>
         </member>
-        <member name="P:DocumentAtom.DataIngestion.Chunkers.AtomChunkerOptions.MaxChunkSize">
+        <member name="P:DocumentAtom.DataIngestion.Chunkers.AtomChunkerOptions.Chunking">
             <summary>
-            Maximum number of characters per chunk.
-            Default is 1000.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.DataIngestion.Chunkers.AtomChunkerOptions.ChunkOverlap">
-            <summary>
-            Number of overlapping characters between chunks.
-            Default is 100.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.DataIngestion.Chunkers.AtomChunkerOptions.PreserveParagraphs">
-            <summary>
-            Whether to preserve paragraph boundaries during chunking.
-            Default is true.
+            Chunking configuration controlling the strategy, token budget, and overlap.
+            Default uses FixedTokenCount strategy with 256 tokens.
             </summary>
         </member>
         <member name="P:DocumentAtom.DataIngestion.Chunkers.AtomChunkerOptions.IncludeHeaderContext">
@@ -84,15 +73,9 @@
         </member>
         <member name="P:DocumentAtom.DataIngestion.Chunkers.AtomChunkerOptions.MinChunkSize">
             <summary>
-            Minimum chunk size to produce.
+            Minimum chunk size in characters to produce.
             Chunks smaller than this will be merged with adjacent content.
             Default is 50.
-            </summary>
-        </member>
-        <member name="P:DocumentAtom.DataIngestion.Chunkers.AtomChunkerOptions.SplitSeparators">
-            <summary>
-            Separator pattern to use when splitting text.
-            Default splits on paragraphs.
             </summary>
         </member>
         <member name="M:DocumentAtom.DataIngestion.Chunkers.AtomChunkerOptions.#ctor">
@@ -103,24 +86,29 @@
         <member name="M:DocumentAtom.DataIngestion.Chunkers.AtomChunkerOptions.ForRag">
             <summary>
             Create options optimized for RAG applications.
+            Uses sentence-based chunking with 256 tokens and 2-sentence overlap.
             </summary>
             <returns>Chunker options.</returns>
         </member>
         <member name="M:DocumentAtom.DataIngestion.Chunkers.AtomChunkerOptions.ForSummarization">
             <summary>
             Create options optimized for summarization.
+            Uses paragraph-based chunking with 1024 tokens and 1-paragraph overlap.
             </summary>
             <returns>Chunker options.</returns>
         </member>
         <member name="M:DocumentAtom.DataIngestion.Chunkers.AtomChunkerOptions.ForLargeContext">
             <summary>
             Create options for large context windows.
+            Uses paragraph-based chunking with 2048 tokens and 1-paragraph overlap.
             </summary>
             <returns>Chunker options.</returns>
         </member>
         <member name="T:DocumentAtom.DataIngestion.Chunkers.HierarchyAwareChunker">
             <summary>
             Chunker that preserves document hierarchy and context.
+            Delegates content splitting to ChunkingEngine while maintaining
+            header breadcrumbs, section grouping, and hierarchy metadata.
             </summary>
         </member>
         <member name="P:DocumentAtom.DataIngestion.Chunkers.HierarchyAwareChunker.Options">
@@ -882,6 +870,13 @@
             </summary>
             <returns>Processor options.</returns>
         </member>
+        <member name="M:DocumentAtom.DataIngestion.Processors.AtomDocumentProcessorOptions.ForLargeContext">
+            <summary>
+            Create options for large context windows.
+            Uses paragraph-based chunking with 2048 tokens.
+            </summary>
+            <returns>Processor options.</returns>
+        </member>
         <member name="T:DocumentAtom.DataIngestion.Readers.AtomDocumentReader">
             <summary>
             Reads documents and converts them to IngestionDocument format.
@@ -1000,7 +995,7 @@
         </member>
         <member name="P:DocumentAtom.DataIngestion.Readers.AtomDocumentReaderOptions.ChunkingSettings">
             <summary>
-            Settings for chunking during extraction.
+            Configuration for chunking during extraction.
             </summary>
         </member>
         <member name="P:DocumentAtom.DataIngestion.Readers.AtomDocumentReaderOptions.ProcessorSettings">

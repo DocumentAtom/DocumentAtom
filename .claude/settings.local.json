@@ -5,7 +5,14 @@
       "Read(//c/code/view/backend/core/src/View.SemanticCellExtractor/**)",
       "Bash(dotnet build:*)",
       "Read(//c/code/view/backend/core/src/Test.SemanticCellExtractor/Sample/**)",
-      "Bash(dotnet clean:*)"
+      "Bash(dotnet clean:*)",
+      "Bash(powershell.exe -NoProfile -Command 'Get-NetTCPConnection -State Listen | Where-Object {$_.LocalPort -ge 3000 -and $_.LocalPort -le 3010} | Select-Object LocalPort,OwningProcess')",
+      "Bash(npm run build:*)",
+      "Bash(npm run clean:*)",
+      "Bash(npm run build:types:*)",
+      "Bash(npm run build:js:*)",
+      "Bash(python:*)",
+      "Bash(chmod:*)"
     ],
     "deny": [],
     "ask": []

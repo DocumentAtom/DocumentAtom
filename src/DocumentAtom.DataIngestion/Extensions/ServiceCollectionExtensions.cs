@@ -1,6 +1,8 @@
 namespace DocumentAtom.DataIngestion.Extensions
 {
     using System;
+    using DocumentAtom.Core.Chunking;
+    using DocumentAtom.Core.Enums;
     using DocumentAtom.DataIngestion.Chunkers;
     using DocumentAtom.DataIngestion.Converters;
     using DocumentAtom.DataIngestion.Processors;
@@ -88,9 +90,14 @@ namespace DocumentAtom.DataIngestion.Extensions
                 },
                 chunker =>
                 {
-                    chunker.MaxChunkSize = 500;
-                    chunker.ChunkOverlap = 50;
-                    chunker.PreserveParagraphs = true;
+                    chunker.Chunking = new ChunkingConfiguration
+                    {
+                        Enable = true,
+                        Strategy = ChunkStrategyEnum.SentenceBased,
+                        FixedTokenCount = 256,
+                        OverlapCount = 2,
+                        OverlapStrategy = OverlapStrategyEnum.SentenceBoundaryAware
+                    };
                     chunker.IncludeHeaderContext = true;
                     chunker.UseQuarksIfAvailable = true;
                 });
@@ -112,9 +119,13 @@ namespace DocumentAtom.DataIngestion.Extensions
                 },
                 chunker =>
                 {
-                    chunker.MaxChunkSize = 2000;
-                    chunker.ChunkOverlap = 200;
-                    chunker.PreserveParagraphs = true;
+                    chunker.Chunking = new ChunkingConfiguration
+                    {
+                        Enable = true,
+                        Strategy = ChunkStrategyEnum.ParagraphBased,
+                        FixedTokenCount = 1024,
+                        OverlapCount = 1
+                    };
                     chunker.IncludeHeaderContext = true;
                     chunker.UseQuarksIfAvailable = false;
                 });

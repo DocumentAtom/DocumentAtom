@@ -2,406 +2,588 @@
 	"info": {
 		"_postman_id": "30e67384-f5bf-442f-b093-5257bf797c91",
 		"name": "DocumentAtom",
+		"description": "DocumentAtom v3.0 API Collection.\n\nAll atom extraction requests use the JSON envelope format:\n```json\n{\n  \"Settings\": { ... } | null,\n  \"Data\": \"<base64-encoded-file-data>\"\n}\n```\n\nWhen `Settings` is `null`, the server uses default processor settings for the target type.\n\nTo encode a file as base64 in Postman, use a pre-request script:\n```js\nconst fs = require('fs');\nconst fileData = fs.readFileSync('/path/to/your/file');\npm.collectionVariables.set('base64_data', fileData.toString('base64'));\n```\n\nOr encode via command line:\n- Linux/macOS: `base64 -i file.pdf`\n- Windows PowerShell: `[Convert]::ToBase64String([IO.File]::ReadAllBytes('file.pdf'))`",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "720438"
 	},
 	"item": [
 		{
-			"name": "Validate connectivity",
-			"request": {
-				"method": "HEAD",
-				"header": [],
-				"url": {
-					"raw": "{{protocol}}://{{hostname}}:{{port}}",
-					"protocol": "{{protocol}}",
-					"host": [
-						"{{hostname}}"
-					],
-					"port": "{{port}}"
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Type detection",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "file",
-					"file": {
-						"src": "/C:/Code/LiteGraph/LiteGraph-3.1/CHANGELOG.md"
-					}
-				},
-				"url": {
-					"raw": "{{protocol}}://{{hostname}}:{{port}}/typedetect",
-					"protocol": "{{protocol}}",
-					"host": [
-						"{{hostname}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"typedetect"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Extract atoms (CSV)",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "file",
-					"file": {
-						"src": "/C:/Code/DocumentAtom/src/Test.CsvProcessor/Sample/1.csv"
-					}
-				},
-				"url": {
-					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/csv",
-					"protocol": "{{protocol}}",
-					"host": [
-						"{{hostname}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"atom",
-						"csv"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Extract atoms (Excel)",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "file",
-					"file": {
-						"src": "/G:/Shared drives/View Systems/Test Files/SampleFilesByType/Excel/3.xlsx"
-					}
-				},
-				"url": {
-					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/excel",
-					"protocol": "{{protocol}}",
-					"host": [
-						"{{hostname}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"atom",
-						"excel"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Extract atoms (HTML)",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "file",
-					"file": {
-						"src": "/G:/Shared drives/View Systems/Test Files/SampleFilesByType/Excel/3.xlsx"
-					}
-				},
-				"url": {
-					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/html",
-					"protocol": "{{protocol}}",
-					"host": [
-						"{{hostname}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"atom",
-						"html"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Extract atoms (JSON)",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "file",
-					"file": {
-						"src": "/C:/Code/DocumentAtom/src/Test.JsonProcessor/Sample/1.json"
-					}
-				},
-				"url": {
-					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/json",
-					"protocol": "{{protocol}}",
-					"host": [
-						"{{hostname}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"atom",
-						"json"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Extract atoms (Markdown)",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "file",
-					"file": {
-						"src": "/C:/Code/DocumentAtom/README.md"
-					}
-				},
-				"url": {
-					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/markdown",
-					"protocol": "{{protocol}}",
-					"host": [
-						"{{hostname}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"atom",
-						"markdown"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Extract atoms (OCR)",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "file",
-					"file": {
-						"src": "/G:/Shared drives/View Systems/Test Files/Ocr/1.png"
-					}
-				},
-				"url": {
-					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/ocr",
-					"protocol": "{{protocol}}",
-					"host": [
-						"{{hostname}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"atom",
-						"ocr"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Extract atoms (PDF)",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "file",
-					"file": {
-						"src": "/G:/Shared drives/View Systems/Test Files/SampleFilesByType/PDF/3.pdf"
-					}
-				},
-				"url": {
-					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/pdf?ocr",
-					"protocol": "{{protocol}}",
-					"host": [
-						"{{hostname}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"atom",
-						"pdf"
-					],
-					"query": [
-						{
-							"key": "ocr",
-							"value": null
+			"name": "Connectivity",
+			"item": [
+				{
+					"name": "Validate connectivity",
+					"request": {
+						"method": "HEAD",
+						"header": [],
+						"url": {
+							"raw": "{{protocol}}://{{hostname}}:{{port}}",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}"
 						}
-					]
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Extract atoms (PNG)",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "file",
-					"file": {
-						"src": "/G:/Shared drives/View Systems/Test Files/Ocr/1.png"
-					}
-				},
-				"url": {
-					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/png",
-					"protocol": "{{protocol}}",
-					"host": [
-						"{{hostname}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"atom",
-						"png"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Extract atoms (PowerPoint)",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "file",
-					"file": {
-						"src": "/G:/Shared drives/View Systems/Test Files/SampleFilesByType/Ppt/3.pptx"
-					}
-				},
-				"url": {
-					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/powerpoint?ocr",
-					"protocol": "{{protocol}}",
-					"host": [
-						"{{hostname}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"atom",
-						"powerpoint"
-					],
-					"query": [
-						{
-							"key": "ocr",
-							"value": null
+			"name": "Type Detection",
+			"item": [
+				{
+					"name": "Type detection",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "file",
+							"file": {
+								"src": ""
+							}
+						},
+						"url": {
+							"raw": "{{protocol}}://{{hostname}}:{{port}}/typedetect",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"typedetect"
+							]
 						}
-					]
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "Extract atoms (RTF)",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "file",
-					"file": {
-						"src": "/G:/Shared drives/View Systems/Test Files/SampleFilesByType/Ppt/3.pptx"
-					}
-				},
-				"url": {
-					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/rtf?ocr",
-					"protocol": "{{protocol}}",
-					"host": [
-						"{{hostname}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"atom",
-						"rtf"
-					],
-					"query": [
-						{
-							"key": "ocr",
-							"value": null
+			"name": "Atom Extraction",
+			"item": [
+				{
+					"name": "Extract atoms (CSV)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Settings\": null,\n  \"Data\": \"{{base64_data}}\"\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/csv",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"atom",
+								"csv"
+							]
 						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Extract atoms (Text)",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "file",
-					"file": {
-						"src": "/G:/Shared drives/View Systems/Test Files/SampleFilesByType/Text/3.txt"
-					}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/text",
-					"protocol": "{{protocol}}",
-					"host": [
-						"{{hostname}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"atom",
-						"text"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Extract atoms (Word)",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "file",
-					"file": {
-						"src": "/G:/Shared drives/View Systems/Test Files/SampleFilesByType/Word/3.docx"
-					}
+				{
+					"name": "Extract atoms (Excel)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Settings\": null,\n  \"Data\": \"{{base64_data}}\"\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/excel",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"atom",
+								"excel"
+							]
+						}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/word",
-					"protocol": "{{protocol}}",
-					"host": [
-						"{{hostname}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"atom",
-						"word"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "Extract atoms (XML)",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "file",
-					"file": {
-						"src": "/G:/Shared drives/View Systems/Test Files/SampleFilesByType/Word/3.docx"
-					}
+				{
+					"name": "Extract atoms (HTML)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Settings\": null,\n  \"Data\": \"{{base64_data}}\"\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/html",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"atom",
+								"html"
+							]
+						}
+					},
+					"response": []
 				},
-				"url": {
-					"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/xml",
-					"protocol": "{{protocol}}",
-					"host": [
-						"{{hostname}}"
-					],
-					"port": "{{port}}",
-					"path": [
-						"atom",
-						"xml"
-					]
+				{
+					"name": "Extract atoms (JSON)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Settings\": null,\n  \"Data\": \"{{base64_data}}\"\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/json",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"atom",
+								"json"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Extract atoms (Markdown)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Settings\": null,\n  \"Data\": \"{{base64_data}}\"\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/markdown",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"atom",
+								"markdown"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Extract atoms (OCR)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Settings\": null,\n  \"Data\": \"{{base64_data}}\"\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/ocr",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"atom",
+								"ocr"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Extract atoms (PDF)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Settings\": null,\n  \"Data\": \"{{base64_data}}\"\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/pdf",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"atom",
+								"pdf"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Extract atoms (PNG)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Settings\": null,\n  \"Data\": \"{{base64_data}}\"\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/png",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"atom",
+								"png"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Extract atoms (PowerPoint)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Settings\": null,\n  \"Data\": \"{{base64_data}}\"\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/powerpoint",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"atom",
+								"powerpoint"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Extract atoms (RTF)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Settings\": null,\n  \"Data\": \"{{base64_data}}\"\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/rtf",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"atom",
+								"rtf"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Extract atoms (Text)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Settings\": null,\n  \"Data\": \"{{base64_data}}\"\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/text",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"atom",
+								"text"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Extract atoms (Word)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Settings\": null,\n  \"Data\": \"{{base64_data}}\"\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/word",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"atom",
+								"word"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Extract atoms (XML)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Settings\": null,\n  \"Data\": \"{{base64_data}}\"\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/xml",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"atom",
+								"xml"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Extract atoms (PDF) with OCR and chunking",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Settings\": {\n    \"ExtractAtomsFromImages\": true,\n    \"Chunking\": {\n      \"Enable\": true,\n      \"Strategy\": \"SentenceBased\",\n      \"FixedTokenCount\": 512,\n      \"OverlapCount\": 2,\n      \"OverlapStrategy\": \"SentenceBoundaryAware\"\n    }\n  },\n  \"Data\": \"{{base64_data}}\"\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/pdf",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"atom",
+								"pdf"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Extract atoms (CSV) with settings",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Settings\": {\n    \"HasHeaderRow\": true,\n    \"ColumnDelimiter\": \",\",\n    \"RowsPerAtom\": 10,\n    \"Chunking\": {\n      \"Enable\": true,\n      \"Strategy\": \"FixedTokenCount\",\n      \"FixedTokenCount\": 256\n    }\n  },\n  \"Data\": \"{{base64_data}}\"\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/csv",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"atom",
+								"csv"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Extract atoms (HTML) with settings",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Settings\": {\n    \"BuildHierarchy\": true,\n    \"ProcessMetaTags\": false,\n    \"ProcessScripts\": false,\n    \"MaxTextLength\": 50000\n  },\n  \"Data\": \"{{base64_data}}\"\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/html",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"atom",
+								"html"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Extract atoms (Markdown) with chunking",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Settings\": {\n    \"BuildHierarchy\": true,\n    \"Chunking\": {\n      \"Enable\": true,\n      \"Strategy\": \"ParagraphBased\",\n      \"FixedTokenCount\": 1024,\n      \"OverlapCount\": 1,\n      \"OverlapStrategy\": \"SemanticBoundaryAware\"\n    }\n  },\n  \"Data\": \"{{base64_data}}\"\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/markdown",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"atom",
+								"markdown"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Extract atoms (Text) with chunking",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"Settings\": {\n    \"Chunking\": {\n      \"Enable\": true,\n      \"Strategy\": \"SentenceBased\",\n      \"FixedTokenCount\": 256,\n      \"OverlapCount\": 2\n    }\n  },\n  \"Data\": \"{{base64_data}}\"\n}"
+						},
+						"url": {
+							"raw": "{{protocol}}://{{hostname}}:{{port}}/atom/text",
+							"protocol": "{{protocol}}",
+							"host": [
+								"{{hostname}}"
+							],
+							"port": "{{port}}",
+							"path": [
+								"atom",
+								"text"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		}
 	],
 	"event": [
@@ -441,6 +623,12 @@
 			"key": "port",
 			"value": "8000",
 			"type": "string"
+		},
+		{
+			"key": "base64_data",
+			"value": "",
+			"type": "string",
+			"description": "Base64-encoded file data. Encode your file before sending: PowerShell: [Convert]::ToBase64String([IO.File]::ReadAllBytes('file.pdf')) | Linux/macOS: base64 -i file.pdf"
 		}
 	]
 }

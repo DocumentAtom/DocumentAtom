@@ -6,11 +6,12 @@ namespace Test.DocumentAtomSdk
     using System.Linq;
     using System.Text.Json;
     using System.Threading.Tasks;
-    using DocumentAtom.Sdk;  
+    using DocumentAtom.Core.Api;
+    using DocumentAtom.Core.Atoms;
     using DocumentAtom.Core.Enums;
     using DocumentAtom.Core.TypeDetection;
+    using DocumentAtom.Sdk;
     using GetSomeInput;
-    using DocumentAtom.Core.Atoms;
 
     /// <summary>
     /// Test application for DocumentAtom SDK demonstrating all available methods.
@@ -44,8 +45,15 @@ namespace Test.DocumentAtomSdk
             Console.WriteLine("=================================");
             Console.WriteLine();
 
+            bool endpointFromArgs = false;
+            if (args.Length > 0 && !string.IsNullOrEmpty(args[0]))
+            {
+                _Endpoint = args[0];
+                endpointFromArgs = true;
+            }
+
             // Initialize SDK
-            InitializeSdk();
+            InitializeSdk(endpointFromArgs);
 
             while (_RunForever)
             {
@@ -88,11 +96,13 @@ namespace Test.DocumentAtomSdk
 
         #region Private-Methods
 
-        private static void InitializeSdk()
+        private static void InitializeSdk(bool skipPrompt = false)
         {
             try
             {
-                _Endpoint = Inputty.GetString("Endpoint:", _Endpoint, false);
+                if (!skipPrompt)
+                    _Endpoint = Inputty.GetString("Endpoint:", _Endpoint, false);
+
                 _Sdk = new DocumentAtomSdk(_Endpoint, _AccessKey);
                 _Sdk.LogRequests = _Debug;
                 _Sdk.LogResponses = _Debug;
@@ -270,83 +280,83 @@ namespace Test.DocumentAtomSdk
 
         private static async Task TestCsvProcessing()
         {
-            await TestDocumentProcessing("CSV", async (data, extractOcr) =>
-                await _Sdk!.Atom.ProcessCsv(data, extractOcr));
+            await TestDocumentProcessing("CSV", async (data, settings) =>
+                await _Sdk!.Atom.ProcessCsv(data, settings));
         }
 
         private static async Task TestExcelProcessing()
         {
-            await TestDocumentProcessing("Excel", async (data, extractOcr) =>
-                await _Sdk!.Atom.ProcessExcel(data, extractOcr));
+            await TestDocumentProcessing("Excel", async (data, settings) =>
+                await _Sdk!.Atom.ProcessExcel(data, settings));
         }
 
         private static async Task TestHtmlProcessing()
         {
-            await TestDocumentProcessing("HTML", async (data, extractOcr) =>
-                await _Sdk!.Atom.ProcessHtml(data));
+            await TestDocumentProcessing("HTML", async (data, settings) =>
+                await _Sdk!.Atom.ProcessHtml(data, settings));
         }
 
         private static async Task TestJsonProcessing()
         {
-            await TestDocumentProcessing("JSON", async (data, extractOcr) =>
-                await _Sdk!.Atom.ProcessJson(data));
+            await TestDocumentProcessing("JSON", async (data, settings) =>
+                await _Sdk!.Atom.ProcessJson(data, settings));
         }
 
         private static async Task TestMarkdownProcessing()
         {
-            await TestDocumentProcessing("Markdown", async (data, extractOcr) =>
-                await _Sdk!.Atom.ProcessMarkdown(data));
+            await TestDocumentProcessing("Markdown", async (data, settings) =>
+                await _Sdk!.Atom.ProcessMarkdown(data, settings));
         }
 
         private static async Task TestOcrProcessing()
         {
-            await TestDocumentProcessing("OCR", async (data, extractOcr) =>
-                await _Sdk!.Atom.ProcessOcr(data));
+            await TestDocumentProcessing("OCR", async (data, settings) =>
+                await _Sdk!.Atom.ProcessOcr(data, settings));
         }
 
         private static async Task TestPdfProcessing()
         {
-            await TestDocumentProcessing("PDF", async (data, extractOcr) =>
-                await _Sdk!.Atom.ProcessPdf(data, extractOcr));
+            await TestDocumentProcessing("PDF", async (data, settings) =>
+                await _Sdk!.Atom.ProcessPdf(data, settings));
         }
 
         private static async Task TestPngProcessing()
         {
-            await TestDocumentProcessing("PNG", async (data, extractOcr) =>
-                await _Sdk!.Atom.ProcessPng(data));
+            await TestDocumentProcessing("PNG", async (data, settings) =>
+                await _Sdk!.Atom.ProcessPng(data, settings));
         }
 
         private static async Task TestPowerPointProcessing()
         {
-            await TestDocumentProcessing("PowerPoint", async (data, extractOcr) =>
-                await _Sdk!.Atom.ProcessPowerPoint(data, extractOcr));
+            await TestDocumentProcessing("PowerPoint", async (data, settings) =>
+                await _Sdk!.Atom.ProcessPowerPoint(data, settings));
         }
 
         private static async Task TestRtfProcessing()
         {
-            await TestDocumentProcessing("RTF", async (data, extractOcr) =>
-                await _Sdk!.Atom.ProcessRtf(data, extractOcr));
+            await TestDocumentProcessing("RTF", async (data, settings) =>
+                await _Sdk!.Atom.ProcessRtf(data, settings));
         }
 
         private static async Task TestTextProcessing()
         {
-            await TestDocumentProcessing("Text", async (data, extractOcr) =>
-                await _Sdk!.Atom.ProcessText(data));
+            await TestDocumentProcessing("Text", async (data, settings) =>
+                await _Sdk!.Atom.ProcessText(data, settings));
         }
 
         private static async Task TestWordProcessing()
         {
-            await TestDocumentProcessing("Word", async (data, extractOcr) =>
-                await _Sdk!.Atom.ProcessWord(data, extractOcr));
+            await TestDocumentProcessing("Word", async (data, settings) =>
+                await _Sdk!.Atom.ProcessWord(data, settings));
         }
 
         private static async Task TestXmlProcessing()
         {
-            await TestDocumentProcessing("XML", async (data, extractOcr) =>
-                await _Sdk!.Atom.ProcessXml(data));
+            await TestDocumentProcessing("XML", async (data, settings) =>
+                await _Sdk!.Atom.ProcessXml(data, settings));
         }
 
-        private static async Task TestDocumentProcessing(string documentType, Func<byte[], bool, Task<List<Atom>?>> processor)
+        private static async Task TestDocumentProcessing(string documentType, Func<byte[], ApiProcessorSettings?, Task<List<Atom>?>> processor)
         {
             if (_Sdk == null)
             {
@@ -363,18 +373,56 @@ namespace Test.DocumentAtomSdk
                     return;
                 }
 
-                bool extractOcr = false;
-                if (documentType == "PDF" || documentType == "Word" || documentType == "Excel" ||
-                    documentType == "PowerPoint" || documentType == "RTF")
+                ApiProcessorSettings? settings = null;
+                bool configureSettings = Inputty.GetBoolean("Configure processor settings?", false);
+                if (configureSettings)
                 {
-                    extractOcr = Inputty.GetBoolean("Extract OCR from images?", false);
+                    settings = new ApiProcessorSettings();
+
+                    if (documentType == "PDF" || documentType == "Word" || documentType == "Excel" ||
+                        documentType == "PowerPoint" || documentType == "RTF")
+                    {
+                        bool extractOcr = Inputty.GetBoolean("Extract atoms from images (OCR)?", false);
+                        if (extractOcr) settings.ExtractAtomsFromImages = true;
+                    }
+
+                    bool enableChunking = Inputty.GetBoolean("Enable chunking?", false);
+                    if (enableChunking)
+                    {
+                        settings.Chunking = new DocumentAtom.Core.Chunking.ChunkingConfiguration
+                        {
+                            Enable = true
+                        };
+
+                        string strategy = Inputty.GetString(
+                            "Chunking strategy [FixedTokenCount/SentenceBased/ParagraphBased/RegexBased/WholeList/ListEntry/Row/RowWithHeaders/RowGroupWithHeaders/KeyValuePairs/WholeTable]:",
+                            "FixedTokenCount",
+                            false);
+
+                        if (Enum.TryParse<DocumentAtom.Core.Enums.ChunkStrategyEnum>(strategy, true, out DocumentAtom.Core.Enums.ChunkStrategyEnum parsedStrategy))
+                            settings.Chunking.Strategy = parsedStrategy;
+
+                        int fixedTokenCount = Inputty.GetInteger("Fixed token count:", 128, true, true);
+                        settings.Chunking.FixedTokenCount = fixedTokenCount;
+
+                        string overlapStrategy = Inputty.GetString(
+                            "Overlap strategy [SlidingWindow/SentenceBoundaryAware/SemanticBoundaryAware]:",
+                            "SlidingWindow",
+                            false);
+
+                        if (Enum.TryParse<DocumentAtom.Core.Enums.OverlapStrategyEnum>(overlapStrategy, true, out DocumentAtom.Core.Enums.OverlapStrategyEnum parsedOverlap))
+                            settings.Chunking.OverlapStrategy = parsedOverlap;
+
+                        int overlapCount = Inputty.GetInteger("Overlap count:", 0, true, true);
+                        settings.Chunking.OverlapCount = overlapCount;
+                    }
                 }
 
                 byte[] data = await File.ReadAllBytesAsync(filename);
                 Console.WriteLine($"Processing {documentType} file: {filename} ({data.Length} bytes)...");
 
                 DateTime startTime = DateTime.UtcNow;
-                List<Atom>? atoms = await processor(data, extractOcr);
+                List<Atom>? atoms = await processor(data, settings);
                 DateTime endTime = DateTime.UtcNow;
 
                 if (atoms != null)
@@ -407,12 +455,35 @@ namespace Test.DocumentAtomSdk
                             content = "No text content";
                         }
 
-                        Console.WriteLine($"Atom: {atom.Type} - {content}...");
+                        Console.WriteLine($"  Atom [{atom.Position}]: {atom.Type} - {content}");
+
+                        if (atom.Chunks != null && atom.Chunks.Count > 0)
+                        {
+                            Console.WriteLine($"    Chunks: {atom.Chunks.Count}");
+                            foreach (DocumentAtom.Core.Chunking.Chunk chunk in atom.Chunks.Take(3))
+                            {
+                                string chunkPreview = chunk.Text != null
+                                    ? chunk.Text.Substring(0, Math.Min(100, chunk.Text.Length))
+                                    : "No text";
+                                Console.WriteLine($"      Chunk [{chunk.Position}]: {chunk.Length} chars - {chunkPreview}...");
+                            }
+                            if (atom.Chunks.Count > 3)
+                                Console.WriteLine($"      ... and {atom.Chunks.Count - 3} more chunks");
+                        }
                     }
 
                     if (atoms.Count > 5)
                     {
                         Console.WriteLine($"... and {atoms.Count - 5} more atoms");
+                    }
+
+                    // Summary of chunking results
+                    int atomsWithChunks = atoms.Count(a => a.Chunks != null && a.Chunks.Count > 0);
+                    int totalChunks = atoms.Where(a => a.Chunks != null).Sum(a => a.Chunks.Count);
+                    if (atomsWithChunks > 0)
+                    {
+                        Console.WriteLine();
+                        Console.WriteLine($"Chunking summary: {atomsWithChunks} atoms with chunks, {totalChunks} total chunks");
                     }
 
                     Console.WriteLine();

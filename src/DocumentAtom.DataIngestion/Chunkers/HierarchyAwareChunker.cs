@@ -7,10 +7,14 @@ namespace DocumentAtom.DataIngestion.Chunkers
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
+    using DocumentAtom.Core.Chunking;
+    using DocumentAtom.Core.Enums;
     using DocumentAtom.DataIngestion.Metadata;
 
     /// <summary>
     /// Chunker that preserves document hierarchy and context.
+    /// Delegates content splitting to ChunkingEngine while maintaining
+    /// header breadcrumbs, section grouping, and hierarchy metadata.
     /// </summary>
     public class HierarchyAwareChunker : IAtomChunker
     {
@@ -37,6 +41,7 @@ namespace DocumentAtom.DataIngestion.Chunkers
         #region Private-Members
 
         private AtomChunkerOptions _Options;
+        private readonly ChunkingEngine _Engine;
 
         #endregion
 
@@ -49,6 +54,7 @@ namespace DocumentAtom.DataIngestion.Chunkers
         public HierarchyAwareChunker(AtomChunkerOptions? options = null)
         {
             _Options = options ?? new AtomChunkerOptions();
+            _Engine = new ChunkingEngine();
         }
 
         #endregion
@@ -126,7 +132,6 @@ namespace DocumentAtom.DataIngestion.Chunkers
                         Title = element.Content ?? "Untitled"
                     };
 
-                    // Pop stack until we find a parent with lower level
                     while (stack.Count > 0 && stack.Peek().Level >= level)
                     {
                         stack.Pop();
@@ -148,14 +153,12 @@ namespace DocumentAtom.DataIngestion.Chunkers
                 }
                 else
                 {
-                    // Add content to current section or root
                     if (currentSection != null)
                     {
                         currentSection.ContentElements.Add(element);
                     }
                     else
                     {
-                        // No header yet, create implicit root
                         if (roots.Count == 0 || roots.Last().HeaderElement != null)
                         {
                             HierarchyNode implicitRoot = new HierarchyNode
@@ -183,7 +186,7 @@ namespace DocumentAtom.DataIngestion.Chunkers
                 if (int.TryParse(levelObj?.ToString(), out int parsedLevel)) return parsedLevel;
             }
 
-            return 1; // Default to H1
+            return 1;
         }
 
         private List<IngestionChunk> ChunkNode(HierarchyNode node, string documentId, int startIndex)
@@ -191,7 +194,6 @@ namespace DocumentAtom.DataIngestion.Chunkers
             List<IngestionChunk> results = new List<IngestionChunk>();
             int currentIndex = startIndex;
 
-            // Build header breadcrumb
             List<string> breadcrumb = new List<string>();
             HierarchyNode? current = node;
 
@@ -206,7 +208,6 @@ namespace DocumentAtom.DataIngestion.Chunkers
 
             string headerContext = breadcrumb.Count > 0 ? string.Join(" > ", breadcrumb) : string.Empty;
 
-            // Chunk content elements
             StringBuilder contentBuilder = new StringBuilder();
 
             foreach (IngestionDocumentElement element in node.ContentElements)
@@ -221,12 +222,38 @@ namespace DocumentAtom.DataIngestion.Chunkers
 
             if (!string.IsNullOrEmpty(content))
             {
-                // Check if content fits in one chunk
                 string prefix = _Options.IncludeHeaderContext && !string.IsNullOrEmpty(headerContext)
                     ? headerContext + _Options.HeaderContextSeparator
                     : string.Empty;
 
-                if (content.Length + prefix.Length <= _Options.MaxChunkSize)
+                List<Chunk> engineChunks = _Engine.Chunk(
+                    AtomTypeEnum.Text,
+                    content,
+                    null,
+                    null,
+                    null,
+                    _Options.Chunking);
+
+                foreach (Chunk engineChunk in engineChunks)
+                {
+                    string chunkText = engineChunk.Text;
+
+                    if (!string.IsNullOrEmpty(chunkText) && chunkText.Length >= _Options.MinChunkSize)
+                    {
+                        IngestionChunk chunk = new IngestionChunk
+                        {
+                            DocumentId = documentId,
+                            ChunkIndex = currentIndex++,
+                            Content = prefix + chunkText
+                        };
+
+                        AddHierarchyMetadata(chunk, node, headerContext);
+                        chunk.Metadata[AtomMetadataKeys.ChunkSplitIndex] = engineChunk.Position;
+                        results.Add(chunk);
+                    }
+                }
+
+                if (results.Count == 0 && !string.IsNullOrEmpty(content))
                 {
                     IngestionChunk chunk = new IngestionChunk
                     {
@@ -238,16 +265,8 @@ namespace DocumentAtom.DataIngestion.Chunkers
                     AddHierarchyMetadata(chunk, node, headerContext);
                     results.Add(chunk);
                 }
-                else
-                {
-                    // Split content
-                    List<IngestionChunk> splitChunks = SplitContent(content, documentId, currentIndex, headerContext, node);
-                    results.AddRange(splitChunks);
-                    currentIndex += splitChunks.Count;
-                }
             }
 
-            // Recursively chunk children
             foreach (HierarchyNode child in node.Children)
             {
                 List<IngestionChunk> childChunks = ChunkNode(child, documentId, currentIndex);
@@ -256,132 +275,6 @@ namespace DocumentAtom.DataIngestion.Chunkers
             }
 
             return results;
-        }
-
-        private List<IngestionChunk> SplitContent(
-            string content,
-            string documentId,
-            int startIndex,
-            string headerContext,
-            HierarchyNode node)
-        {
-            List<IngestionChunk> results = new List<IngestionChunk>();
-            int currentIndex = startIndex;
-
-            string prefix = _Options.IncludeHeaderContext && !string.IsNullOrEmpty(headerContext)
-                ? headerContext + _Options.HeaderContextSeparator
-                : string.Empty;
-
-            int maxContentSize = _Options.MaxChunkSize - prefix.Length;
-            List<string> segments = SplitText(content);
-            StringBuilder currentChunk = new StringBuilder();
-            int splitIndex = 0;
-
-            foreach (string segment in segments)
-            {
-                if (currentChunk.Length + segment.Length > maxContentSize && currentChunk.Length > 0)
-                {
-                    string chunkText = currentChunk.ToString().Trim();
-
-                    if (chunkText.Length >= _Options.MinChunkSize)
-                    {
-                        IngestionChunk chunk = new IngestionChunk
-                        {
-                            DocumentId = documentId,
-                            ChunkIndex = currentIndex++,
-                            Content = prefix + chunkText
-                        };
-
-                        AddHierarchyMetadata(chunk, node, headerContext);
-                        chunk.Metadata[AtomMetadataKeys.ChunkSplitIndex] = splitIndex++;
-                        results.Add(chunk);
-                    }
-
-                    currentChunk.Clear();
-
-                    // Add overlap
-                    if (_Options.ChunkOverlap > 0 && chunkText.Length > _Options.ChunkOverlap)
-                    {
-                        string overlap = chunkText.Substring(chunkText.Length - _Options.ChunkOverlap);
-                        currentChunk.Append(overlap);
-                    }
-                }
-
-                currentChunk.Append(segment);
-
-                if (!segment.EndsWith(" ") && !segment.EndsWith("\n"))
-                {
-                    currentChunk.Append(" ");
-                }
-            }
-
-            // Final chunk
-            if (currentChunk.Length > 0)
-            {
-                string finalText = currentChunk.ToString().Trim();
-
-                if (finalText.Length >= _Options.MinChunkSize)
-                {
-                    IngestionChunk chunk = new IngestionChunk
-                    {
-                        DocumentId = documentId,
-                        ChunkIndex = currentIndex,
-                        Content = prefix + finalText
-                    };
-
-                    AddHierarchyMetadata(chunk, node, headerContext);
-                    chunk.Metadata[AtomMetadataKeys.ChunkSplitIndex] = splitIndex;
-                    results.Add(chunk);
-                }
-            }
-
-            return results;
-        }
-
-        private List<string> SplitText(string text)
-        {
-            List<string> segments = new List<string>();
-
-            foreach (string separator in _Options.SplitSeparators)
-            {
-                if (text.Contains(separator))
-                {
-                    string[] parts = text.Split(new[] { separator }, StringSplitOptions.None);
-
-                    for (int i = 0; i < parts.Length; i++)
-                    {
-                        string part = parts[i];
-
-                        if (i < parts.Length - 1)
-                        {
-                            part += separator;
-                        }
-
-                        if (!string.IsNullOrWhiteSpace(part))
-                        {
-                            segments.Add(part);
-                        }
-                    }
-
-                    if (segments.Count > 1)
-                    {
-                        return segments;
-                    }
-
-                    segments.Clear();
-                }
-            }
-
-            // Fallback to words
-            foreach (string word in text.Split(' '))
-            {
-                if (!string.IsNullOrWhiteSpace(word))
-                {
-                    segments.Add(word + " ");
-                }
-            }
-
-            return segments;
         }
 
         private void AddHierarchyMetadata(IngestionChunk chunk, HierarchyNode node, string headerContext)

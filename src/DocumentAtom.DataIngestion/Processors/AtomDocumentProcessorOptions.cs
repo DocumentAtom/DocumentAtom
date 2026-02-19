@@ -103,6 +103,23 @@ namespace DocumentAtom.DataIngestion.Processors
             };
         }
 
+        /// <summary>
+        /// Create options for large context windows.
+        /// Uses paragraph-based chunking with 2048 tokens.
+        /// </summary>
+        /// <returns>Processor options.</returns>
+        public static AtomDocumentProcessorOptions ForLargeContext()
+        {
+            return new AtomDocumentProcessorOptions
+            {
+                ChunkerOptions = AtomChunkerOptions.ForLargeContext(),
+                UseHierarchyAwareChunking = true,
+                RemoveDuplicates = false,
+                SkipEmptyChunks = true,
+                MinimumChunkLength = 20
+            };
+        }
+
         #endregion
     }
 }

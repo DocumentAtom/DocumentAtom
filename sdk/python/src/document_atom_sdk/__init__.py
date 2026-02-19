@@ -21,8 +21,13 @@ from .exceptions import (
     get_exception_for_error_code,
 )
 from .models.api_error import ApiErrorResponseModel
-from .models.atom import AtomModel
-from .models.atom_extraction_result import AtomExtractionResultModel
+from .models.atom import AtomModel, ChunkModel
+from .models.atom_extraction_result import AtomListAdapter
+from .models.processor_settings import (
+    ApiProcessorSettingsModel,
+    AtomRequestModel,
+    ChunkingConfigurationModel,
+)
 from .models.type_detection_result import TypeDetectionResultModel
 from .resources.atom_extraction import AtomExtraction
 from .resources.connectivity import Connectivity

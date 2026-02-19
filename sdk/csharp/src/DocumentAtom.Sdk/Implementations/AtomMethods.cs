@@ -1,5 +1,11 @@
 namespace DocumentAtom.Sdk.Implementations
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
+    using DocumentAtom.Core.Api;
     using DocumentAtom.Core.Atoms;
     using DocumentAtom.Core.Enums;
     using DocumentAtom.Core.Image;
@@ -32,52 +38,42 @@ namespace DocumentAtom.Sdk.Implementations
         #region Public-Methods
 
         /// <inheritdoc />
-        public async Task<List<Atom>?> ProcessCsv(byte[] data, bool extractOcr = false, CancellationToken cancellationToken = default)
+        public async Task<List<Atom>?> ProcessCsv(byte[] data, ApiProcessorSettings? settings = null, CancellationToken cancellationToken = default)
         {
-            string url = _Sdk.Endpoint + "/atom/csv";
-            if (extractOcr)
-                url += "?ocr=true";
-
-            return await _Sdk.PostAsync<List<Atom>>(url, data, cancellationToken).ConfigureAwait(false);
+            return await PostAtomRequest("/atom/csv", data, settings, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<List<Atom>?> ProcessExcel(byte[] data, bool extractOcr = false, CancellationToken cancellationToken = default)
+        public async Task<List<Atom>?> ProcessExcel(byte[] data, ApiProcessorSettings? settings = null, CancellationToken cancellationToken = default)
         {
-            string url = _Sdk.Endpoint + "/atom/excel";
-            if (extractOcr)
-                url += "?ocr=true";
-
-            return await _Sdk.PostAsync<List<Atom>>(url, data, cancellationToken).ConfigureAwait(false);
+            return await PostAtomRequest("/atom/excel", data, settings, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<List<Atom>?> ProcessHtml(byte[] data, CancellationToken cancellationToken = default)
+        public async Task<List<Atom>?> ProcessHtml(byte[] data, ApiProcessorSettings? settings = null, CancellationToken cancellationToken = default)
         {
-            string url = _Sdk.Endpoint + "/atom/html";
-            return await _Sdk.PostAsync<List<Atom>>(url, data, cancellationToken).ConfigureAwait(false);
+            return await PostAtomRequest("/atom/html", data, settings, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<List<Atom>?> ProcessJson(byte[] data, CancellationToken cancellationToken = default)
+        public async Task<List<Atom>?> ProcessJson(byte[] data, ApiProcessorSettings? settings = null, CancellationToken cancellationToken = default)
         {
-            string url = _Sdk.Endpoint + "/atom/json";
-            return await _Sdk.PostAsync<List<Atom>>(url, data, cancellationToken).ConfigureAwait(false);
+            return await PostAtomRequest("/atom/json", data, settings, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<List<Atom>?> ProcessMarkdown(byte[] data, CancellationToken cancellationToken = default)
+        public async Task<List<Atom>?> ProcessMarkdown(byte[] data, ApiProcessorSettings? settings = null, CancellationToken cancellationToken = default)
         {
-            string url = _Sdk.Endpoint + "/atom/markdown";
-            return await _Sdk.PostAsync<List<Atom>>(url, data, cancellationToken).ConfigureAwait(false);
+            return await PostAtomRequest("/atom/markdown", data, settings, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<List<Atom>?> ProcessOcr(byte[] data, CancellationToken cancellationToken = default)
+        public async Task<List<Atom>?> ProcessOcr(byte[] data, ApiProcessorSettings? settings = null, CancellationToken cancellationToken = default)
         {
             string url = _Sdk.Endpoint + "/atom/ocr";
+            AtomRequest request = BuildAtomRequest(data, settings);
 
-            ExtractionResult? extractionResult = await _Sdk.PostAsync<ExtractionResult>(url, data, cancellationToken).ConfigureAwait(false);
+            ExtractionResult? extractionResult = await _Sdk.PostJsonAsync<ExtractionResult>(url, request, cancellationToken).ConfigureAwait(false);
 
             if (extractionResult == null)
                 return null;
@@ -135,64 +131,71 @@ namespace DocumentAtom.Sdk.Implementations
         }
 
         /// <inheritdoc />
-        public async Task<List<Atom>?> ProcessPdf(byte[] data, bool extractOcr = false, CancellationToken cancellationToken = default)
+        public async Task<List<Atom>?> ProcessPdf(byte[] data, ApiProcessorSettings? settings = null, CancellationToken cancellationToken = default)
         {
-            string url = _Sdk.Endpoint + "/atom/pdf";
-            if (extractOcr)
-                url += "?ocr=true";
-
-            return await _Sdk.PostAsync<List<Atom>>(url, data, cancellationToken).ConfigureAwait(false);
+            return await PostAtomRequest("/atom/pdf", data, settings, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<List<Atom>?> ProcessPng(byte[] data, CancellationToken cancellationToken = default)
+        public async Task<List<Atom>?> ProcessPng(byte[] data, ApiProcessorSettings? settings = null, CancellationToken cancellationToken = default)
         {
-            string url = _Sdk.Endpoint + "/atom/png";
-            return await _Sdk.PostAsync<List<Atom>>(url, data, cancellationToken).ConfigureAwait(false);
+            return await PostAtomRequest("/atom/png", data, settings, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<List<Atom>?> ProcessPowerPoint(byte[] data, bool extractOcr = false, CancellationToken cancellationToken = default)
+        public async Task<List<Atom>?> ProcessPowerPoint(byte[] data, ApiProcessorSettings? settings = null, CancellationToken cancellationToken = default)
         {
-            string url = _Sdk.Endpoint + "/atom/powerpoint";
-            if (extractOcr)
-                url += "?ocr=true";
-
-            return await _Sdk.PostAsync<List<Atom>>(url, data, cancellationToken).ConfigureAwait(false);
+            return await PostAtomRequest("/atom/powerpoint", data, settings, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<List<Atom>?> ProcessRtf(byte[] data, bool extractOcr = false, CancellationToken cancellationToken = default)
+        public async Task<List<Atom>?> ProcessRtf(byte[] data, ApiProcessorSettings? settings = null, CancellationToken cancellationToken = default)
         {
-            string url = _Sdk.Endpoint + "/atom/rtf";
-            if (extractOcr)
-                url += "?ocr=true";
-
-            return await _Sdk.PostAsync<List<Atom>>(url, data, cancellationToken).ConfigureAwait(false);
+            return await PostAtomRequest("/atom/rtf", data, settings, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<List<Atom>?> ProcessText(byte[] data, CancellationToken cancellationToken = default)
+        public async Task<List<Atom>?> ProcessText(byte[] data, ApiProcessorSettings? settings = null, CancellationToken cancellationToken = default)
         {
-            string url = _Sdk.Endpoint + "/atom/text";
-            return await _Sdk.PostAsync<List<Atom>>(url, data, cancellationToken).ConfigureAwait(false);
+            return await PostAtomRequest("/atom/text", data, settings, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<List<Atom>?> ProcessWord(byte[] data, bool extractOcr = false, CancellationToken cancellationToken = default)
+        public async Task<List<Atom>?> ProcessWord(byte[] data, ApiProcessorSettings? settings = null, CancellationToken cancellationToken = default)
         {
-            string url = _Sdk.Endpoint + "/atom/word";
-            if (extractOcr)
-                url += "?ocr=true";
-
-            return await _Sdk.PostAsync<List<Atom>>(url, data, cancellationToken).ConfigureAwait(false);
+            return await PostAtomRequest("/atom/word", data, settings, cancellationToken).ConfigureAwait(false);
         }
 
         /// <inheritdoc />
-        public async Task<List<Atom>?> ProcessXml(byte[] data, CancellationToken cancellationToken = default)
+        public async Task<List<Atom>?> ProcessXml(byte[] data, ApiProcessorSettings? settings = null, CancellationToken cancellationToken = default)
         {
-            string url = _Sdk.Endpoint + "/atom/xml";
-            return await _Sdk.PostAsync<List<Atom>>(url, data, cancellationToken).ConfigureAwait(false);
+            return await PostAtomRequest("/atom/xml", data, settings, cancellationToken).ConfigureAwait(false);
+        }
+
+        #endregion
+
+        #region Private-Methods
+
+        private AtomRequest BuildAtomRequest(byte[] data, ApiProcessorSettings? settings)
+        {
+            if (data == null) throw new ArgumentNullException(nameof(data));
+
+            return new AtomRequest
+            {
+                Data = Convert.ToBase64String(data),
+                Settings = settings
+            };
+        }
+
+        private async Task<List<Atom>?> PostAtomRequest(
+            string route,
+            byte[] data,
+            ApiProcessorSettings? settings,
+            CancellationToken cancellationToken)
+        {
+            string url = _Sdk.Endpoint + route;
+            AtomRequest request = BuildAtomRequest(data, settings);
+            return await _Sdk.PostJsonAsync<List<Atom>>(url, request, cancellationToken).ConfigureAwait(false);
         }
 
         #endregion
