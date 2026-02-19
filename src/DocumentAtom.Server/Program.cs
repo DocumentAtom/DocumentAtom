@@ -320,7 +320,12 @@
 
         private static async Task PostRoutingRoute(HttpContextBase ctx)
         {
-            _Logging.Debug(_Header + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress + ": " + ctx.Response.StatusCode);
+            _Logging.Debug(
+                _Header + 
+                ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " " +
+                "from " + ctx.Request.Source.IpAddress + ": " + 
+                ctx.Response.StatusCode + " " +
+                "(" + ctx.Timestamp.TotalMs!.Value.ToString("F2") + "ms)");
         }
 
         private static async Task RootRoute(HttpContextBase ctx)
