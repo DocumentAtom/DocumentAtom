@@ -7,9 +7,16 @@ export enum SdkSliceTags {
 
 import { sdk } from "#/services/sdk.service";
 import {
+  ApiProcessorSettings,
   ExtractAtomResponse,
   TypeDetectionResponse,
 } from "documentatom-sdk/dist/types/types";
+
+interface ExtractMutationArg {
+  file: File;
+  settings?: ApiProcessorSettings;
+}
+
 const enhancedSdk = sdkSlice.enhanceEndpoints({
   addTagTypes: [SdkSliceTags.SDK],
 });
@@ -32,54 +39,54 @@ const sdkSliceInstance = enhancedSdk.injectEndpoints({
         callback: () => sdk.TypeDetection.detectType(fileBinary),
       }),
     }),
-    extarctExcels: build.mutation<ExtractAtomResponse, File>({
-      query: (fileBinary: File) => ({
-        callback: () => sdk.ExtractAtom.excel(fileBinary),
+    extarctExcels: build.mutation<ExtractAtomResponse, ExtractMutationArg>({
+      query: ({ file, settings }: ExtractMutationArg) => ({
+        callback: () => sdk.ExtractAtom.excel(file, settings),
       }),
     }),
-    extractHtml: build.mutation<ExtractAtomResponse, File>({
-      query: (fileBinary: File) => ({
-        callback: () => sdk.ExtractAtom.html(fileBinary),
+    extractHtml: build.mutation<ExtractAtomResponse, ExtractMutationArg>({
+      query: ({ file, settings }: ExtractMutationArg) => ({
+        callback: () => sdk.ExtractAtom.html(file, settings),
       }),
     }),
-    extractMarkdown: build.mutation<ExtractAtomResponse, File>({
-      query: (fileBinary: File) => ({
-        callback: () => sdk.ExtractAtom.markdown(fileBinary),
+    extractMarkdown: build.mutation<ExtractAtomResponse, ExtractMutationArg>({
+      query: ({ file, settings }: ExtractMutationArg) => ({
+        callback: () => sdk.ExtractAtom.markdown(file, settings),
       }),
     }),
-    ocr: build.mutation<ExtractAtomResponse, File>({
-      query: (fileBinary: File) => ({
-        callback: () => sdk.ExtractAtom.ocr(fileBinary),
+    ocr: build.mutation<ExtractAtomResponse, ExtractMutationArg>({
+      query: ({ file, settings }: ExtractMutationArg) => ({
+        callback: () => sdk.ExtractAtom.ocr(file, settings),
       }),
     }),
-    extractPdfs: build.mutation<ExtractAtomResponse, File>({
-      query: (fileBinary: File) => ({
-        callback: () => sdk.ExtractAtom.pdf(fileBinary),
+    extractPdfs: build.mutation<ExtractAtomResponse, ExtractMutationArg>({
+      query: ({ file, settings }: ExtractMutationArg) => ({
+        callback: () => sdk.ExtractAtom.pdf(file, settings),
       }),
     }),
-    extractPngs: build.mutation<ExtractAtomResponse, File>({
-      query: (fileBinary: File) => ({
-        callback: () => sdk.ExtractAtom.png(fileBinary),
+    extractPngs: build.mutation<ExtractAtomResponse, ExtractMutationArg>({
+      query: ({ file, settings }: ExtractMutationArg) => ({
+        callback: () => sdk.ExtractAtom.png(file, settings),
       }),
     }),
-    extractPpts: build.mutation<ExtractAtomResponse, File>({
-      query: (fileBinary: File) => ({
-        callback: () => sdk.ExtractAtom.powerpoint(fileBinary),
+    extractPpts: build.mutation<ExtractAtomResponse, ExtractMutationArg>({
+      query: ({ file, settings }: ExtractMutationArg) => ({
+        callback: () => sdk.ExtractAtom.powerpoint(file, settings),
       }),
     }),
-    extractRtf: build.mutation<ExtractAtomResponse, File>({
-      query: (fileBinary: File) => ({
-        callback: () => sdk.ExtractAtom.rtf(fileBinary),
+    extractRtf: build.mutation<ExtractAtomResponse, ExtractMutationArg>({
+      query: ({ file, settings }: ExtractMutationArg) => ({
+        callback: () => sdk.ExtractAtom.rtf(file, settings),
       }),
     }),
-    extractTxt: build.mutation<ExtractAtomResponse, File>({
-      query: (fileBinary: File) => ({
-        callback: () => sdk.ExtractAtom.text(fileBinary),
+    extractTxt: build.mutation<ExtractAtomResponse, ExtractMutationArg>({
+      query: ({ file, settings }: ExtractMutationArg) => ({
+        callback: () => sdk.ExtractAtom.text(file, settings),
       }),
     }),
-    extractWordDocs: build.mutation<ExtractAtomResponse, File>({
-      query: (fileBinary: File) => ({
-        callback: () => sdk.ExtractAtom.word(fileBinary),
+    extractWordDocs: build.mutation<ExtractAtomResponse, ExtractMutationArg>({
+      query: ({ file, settings }: ExtractMutationArg) => ({
+        callback: () => sdk.ExtractAtom.word(file, settings),
       }),
     }),
   }),

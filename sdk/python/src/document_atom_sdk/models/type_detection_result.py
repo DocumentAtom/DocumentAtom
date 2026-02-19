@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional
+from typing import Optional
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -8,7 +8,7 @@ class TypeDetectionResultModel(BaseModel):
     Result from type detection API.
     """
 
-    file_type: str = Field(alias="FileType")
-    confidence: Optional[float] = Field(default=None, alias="Confidence")
-    metadata: Optional[Dict[str, Any]] = Field(default=None, alias="Metadata")
+    mime_type: Optional[str] = Field(default=None, alias="MimeType")
+    extension: Optional[str] = Field(default=None, alias="Extension")
+    type: Optional[str] = Field(default=None, alias="Type")
     model_config = ConfigDict(populate_by_name=True)

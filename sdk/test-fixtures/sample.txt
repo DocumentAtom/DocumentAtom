@@ -1,0 +1,25 @@
+DocumentAtom SDK Test Sample
+
+This is a sample text file for testing the DocumentAtom SDK.
+It contains multiple paragraphs to demonstrate text processing capabilities.
+
+The DocumentAtom library is designed to break documents into "atoms" 
+for AI and machine learning processing. Each atom represents a meaningful 
+chunk of content that can be processed independently.
+
+This sample file includes:
+- Multiple paragraphs
+- Different sentence structures
+- Various punctuation marks
+- Numbers and special characters: 123, 456, 789
+- Mixed case text: UPPERCASE, lowercase, Title Case
+
+The SDK provides a comprehensive set of methods for processing various 
+document types including PDF, Word, Excel, PowerPoint, HTML, JSON, XML, 
+Markdown, RTF, CSV, and plain text files.
+
+Each document type has its own processing method that extracts atoms 
+based on the document's structure and content. The atoms can then be 
+used for further analysis, indexing, or machine learning tasks.
+
+This concludes our sample text file for testing purposes.

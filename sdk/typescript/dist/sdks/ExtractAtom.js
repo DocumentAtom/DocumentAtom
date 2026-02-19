@@ -11,144 +11,175 @@ class ExtractAtom extends _SdkBase.default {
   constructor(config) {
     super(config);
   }
+
   /**
-   * Extracts the atoms from the document.
-   * @param {Buffer | File} fileBinary - The binary of the Excel file.
+   * Extracts the atoms from an Excel document.
+   * @param {Buffer} fileBinary - The binary of the Excel file.
+   * @param {ApiProcessorSettings} [settings] - Optional processor settings.
    * @param {AbortController} [cancellationToken] - The cancellation token.
    * @returns {Promise<ExtractAtomResponse>} The atoms from the document.
    */
-  excel(fileBinary, cancellationToken) {
-    if (!fileBinary) {
-      _GenericExceptionHandlers.default.ArgumentNullException('fileBinary');
-    }
-    const url = `${this.config.endpoint}atom/excel`;
-    return this.upload(url, fileBinary, cancellationToken);
+  excel(fileBinary, settings, cancellationToken) {
+    return this.postAtomRequest('atom/excel', fileBinary, settings, cancellationToken);
+  }
+
+  /**
+   * Extracts the atoms from a CSV document.
+   * @param {Buffer} fileBinary - The binary of the CSV file.
+   * @param {ApiProcessorSettings} [settings] - Optional processor settings.
+   * @param {AbortController} [cancellationToken] - The cancellation token.
+   * @returns {Promise<ExtractAtomResponse>} The atoms from the CSV document.
+   */
+  csv(fileBinary, settings, cancellationToken) {
+    return this.postAtomRequest('atom/csv', fileBinary, settings, cancellationToken);
   }
 
   /**
    * Extracts the atoms from an HTML document.
-   * @param {Buffer | File} fileBinary - The binary of the HTML file.
+   * @param {Buffer} fileBinary - The binary of the HTML file.
+   * @param {ApiProcessorSettings} [settings] - Optional processor settings.
    * @param {AbortController} [cancellationToken] - The cancellation token.
    * @returns {Promise<ExtractAtomResponse>} The atoms from the HTML document.
    */
-  html(fileBinary, cancellationToken) {
-    if (!fileBinary) {
-      _GenericExceptionHandlers.default.ArgumentNullException('fileBinary');
-    }
-    const url = `${this.config.endpoint}atom/html`;
-    return this.upload(url, fileBinary, cancellationToken);
+  html(fileBinary, settings, cancellationToken) {
+    return this.postAtomRequest('atom/html', fileBinary, settings, cancellationToken);
+  }
+
+  /**
+   * Extracts the atoms from a JSON document.
+   * @param {Buffer} fileBinary - The binary of the JSON file.
+   * @param {ApiProcessorSettings} [settings] - Optional processor settings.
+   * @param {AbortController} [cancellationToken] - The cancellation token.
+   * @returns {Promise<ExtractAtomResponse>} The atoms from the JSON document.
+   */
+  json(fileBinary, settings, cancellationToken) {
+    return this.postAtomRequest('atom/json', fileBinary, settings, cancellationToken);
   }
 
   /**
    * Extracts the atoms from a Markdown document.
-   * @param {Buffer | File} fileBinary - The binary of the Markdown file.
+   * @param {Buffer} fileBinary - The binary of the Markdown file.
+   * @param {ApiProcessorSettings} [settings] - Optional processor settings.
    * @param {AbortController} [cancellationToken] - The cancellation token.
    * @returns {Promise<ExtractAtomResponse>} The atoms extracted from the Markdown file.
    */
-  markdown(fileBinary, cancellationToken) {
-    if (!fileBinary) {
-      _GenericExceptionHandlers.default.ArgumentNullException('fileBinary');
-    }
-    const url = `${this.config.endpoint}atom/markdown`;
-    return this.upload(url, fileBinary, cancellationToken);
+  markdown(fileBinary, settings, cancellationToken) {
+    return this.postAtomRequest('atom/markdown', fileBinary, settings, cancellationToken);
   }
 
   /**
    * Extracts the atoms from an OCR (image-based) document.
-   * @param {Buffer | File} fileBinary - The binary of the OCR file.
+   * @param {Buffer} fileBinary - The binary of the OCR file.
+   * @param {ApiProcessorSettings} [settings] - Optional processor settings.
    * @param {AbortController} [cancellationToken] - The cancellation token.
    * @returns {Promise<ExtractAtomResponse>} The atoms extracted from the OCR file.
    */
-  ocr(fileBinary, cancellationToken) {
-    if (!fileBinary) {
-      _GenericExceptionHandlers.default.ArgumentNullException('fileBinary');
-    }
-    const url = `${this.config.endpoint}atom/ocr`;
-    return this.upload(url, fileBinary, cancellationToken);
+  ocr(fileBinary, settings, cancellationToken) {
+    return this.postAtomRequest('atom/ocr', fileBinary, settings, cancellationToken);
   }
 
   /**
    * Extracts the atoms from a PDF document.
-   * @param {Buffer | File} fileBinary - The binary of the PDF file.
+   * @param {Buffer} fileBinary - The binary of the PDF file.
+   * @param {ApiProcessorSettings} [settings] - Optional processor settings.
    * @param {AbortController} [cancellationToken] - The cancellation token.
    * @returns {Promise<ExtractAtomResponse>} The atoms extracted from the PDF file.
    */
-  pdf(fileBinary, cancellationToken) {
-    if (!fileBinary) {
-      _GenericExceptionHandlers.default.ArgumentNullException('fileBinary');
-    }
-    const url = `${this.config.endpoint}atom/pdf`;
-    return this.upload(url, fileBinary, cancellationToken);
+  pdf(fileBinary, settings, cancellationToken) {
+    return this.postAtomRequest('atom/pdf', fileBinary, settings, cancellationToken);
   }
 
   /**
    * Extracts the atoms from a PNG image document.
-   * @param {Buffer | File} fileBinary - The binary of the PNG file.
+   * @param {Buffer} fileBinary - The binary of the PNG file.
+   * @param {ApiProcessorSettings} [settings] - Optional processor settings.
    * @param {AbortController} [cancellationToken] - The cancellation token.
    * @returns {Promise<ExtractAtomResponse>} The atoms extracted from the PNG file.
    */
-  png(fileBinary, cancellationToken) {
-    if (!fileBinary) {
-      _GenericExceptionHandlers.default.ArgumentNullException('fileBinary');
-    }
-    const url = `${this.config.endpoint}atom/png`;
-    return this.upload(url, fileBinary, cancellationToken);
+  png(fileBinary, settings, cancellationToken) {
+    return this.postAtomRequest('atom/png', fileBinary, settings, cancellationToken);
   }
 
   /**
    * Extracts the atoms from a PowerPoint (PPT or PPTX) document.
-   * @param {Buffer | File} fileBinary - The binary of the PowerPoint file.
+   * @param {Buffer} fileBinary - The binary of the PowerPoint file.
+   * @param {ApiProcessorSettings} [settings] - Optional processor settings.
    * @param {AbortController} [cancellationToken] - The cancellation token.
    * @returns {Promise<ExtractAtomResponse>} The atoms extracted from the PowerPoint file.
    */
-  powerpoint(fileBinary, cancellationToken) {
-    if (!fileBinary) {
-      _GenericExceptionHandlers.default.ArgumentNullException('fileBinary');
-    }
-    const url = `${this.config.endpoint}atom/powerpoint?ocr`;
-    return this.upload(url, fileBinary, cancellationToken);
+  powerpoint(fileBinary, settings, cancellationToken) {
+    return this.postAtomRequest('atom/powerpoint', fileBinary, settings, cancellationToken);
   }
 
   /**
    * Extracts the atoms from an RTF (Rich Text Format) document.
-   * @param {Buffer | File} fileBinary - The binary of the RTF file.
+   * @param {Buffer} fileBinary - The binary of the RTF file.
+   * @param {ApiProcessorSettings} [settings] - Optional processor settings.
    * @param {AbortController} [cancellationToken] - The cancellation token.
    * @returns {Promise<ExtractAtomResponse>} The atoms extracted from the RTF file.
    */
-  rtf(fileBinary, cancellationToken) {
-    if (!fileBinary) {
-      _GenericExceptionHandlers.default.ArgumentNullException('fileBinary');
-    }
-    const url = `${this.config.endpoint}atom/rtf`;
-    return this.upload(url, fileBinary, cancellationToken);
+  rtf(fileBinary, settings, cancellationToken) {
+    return this.postAtomRequest('atom/rtf', fileBinary, settings, cancellationToken);
   }
 
   /**
    * Extracts the atoms from a plain text (TXT) document.
-   * @param {Buffer | File} fileBinary - The binary of the TXT file.
+   * @param {Buffer} fileBinary - The binary of the TXT file.
+   * @param {ApiProcessorSettings} [settings] - Optional processor settings.
    * @param {AbortController} [cancellationToken] - The cancellation token.
    * @returns {Promise<ExtractAtomResponse>} The atoms extracted from the TXT file.
    */
-  text(fileBinary, cancellationToken) {
-    if (!fileBinary) {
-      _GenericExceptionHandlers.default.ArgumentNullException('fileBinary');
-    }
-    const url = `${this.config.endpoint}atom/text`;
-    return this.upload(url, fileBinary, cancellationToken);
+  text(fileBinary, settings, cancellationToken) {
+    return this.postAtomRequest('atom/text', fileBinary, settings, cancellationToken);
   }
 
   /**
    * Extracts the atoms from a Word document (DOC or DOCX).
-   * @param {Buffer | File} fileBinary - The binary of the Word file.
+   * @param {Buffer} fileBinary - The binary of the Word file.
+   * @param {ApiProcessorSettings} [settings] - Optional processor settings.
    * @param {AbortController} [cancellationToken] - The cancellation token.
    * @returns {Promise<ExtractAtomResponse>} The atoms extracted from the Word file.
    */
-  word(fileBinary, cancellationToken) {
-    if (!fileBinary) {
-      _GenericExceptionHandlers.default.ArgumentNullException('filePath');
+  word(fileBinary, settings, cancellationToken) {
+    return this.postAtomRequest('atom/word', fileBinary, settings, cancellationToken);
+  }
+
+  /**
+   * Extracts the atoms from an XML document.
+   * @param {Buffer} fileBinary - The binary of the XML file.
+   * @param {ApiProcessorSettings} [settings] - Optional processor settings.
+   * @param {AbortController} [cancellationToken] - The cancellation token.
+   * @returns {Promise<ExtractAtomResponse>} The atoms extracted from the XML file.
+   */
+  xml(fileBinary, settings, cancellationToken) {
+    return this.postAtomRequest('atom/xml', fileBinary, settings, cancellationToken);
+  }
+  async toBase64(fileBinary) {
+    if (fileBinary instanceof File) {
+      const arrayBuffer = await fileBinary.arrayBuffer();
+      const bytes = new Uint8Array(arrayBuffer);
+      let binary = '';
+      for (let i = 0; i < bytes.length; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      return btoa(binary);
     }
-    const url = `${this.config.endpoint}atom/word`;
-    return this.upload(url, fileBinary, cancellationToken);
+    return fileBinary.toString('base64');
+  }
+  async buildAtomRequest(fileBinary, settings) {
+    const base64Data = await this.toBase64(fileBinary);
+    return {
+      Data: base64Data,
+      Settings: settings
+    };
+  }
+  async postAtomRequest(route, fileBinary, settings, cancellationToken) {
+    if (!fileBinary) {
+      _GenericExceptionHandlers.default.ArgumentNullException('fileBinary');
+    }
+    const url = `${this.config.endpoint}${route}`;
+    const body = await this.buildAtomRequest(fileBinary, settings);
+    return this.postJson(url, body, cancellationToken);
   }
 }
 exports.default = ExtractAtom;

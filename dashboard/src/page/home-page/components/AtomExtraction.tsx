@@ -1,13 +1,14 @@
 "use client";
 import React, { useRef, useState } from "react";
 import { App } from "antd";
-import { UploadOutlined } from "@ant-design/icons";
+import { SettingOutlined, UploadOutlined } from "@ant-design/icons";
 import DocuAtomButton from "#/components/base/button/Button";
 import DocuAtomUpload from "#/components/base/upload/Upload";
 import DocuAtomTitle from "#/components/base/typograpghy/Title";
 import DocuAtomDivider from "#/components/base/divider/Divider";
 import DocuAtomSelect from "#/components/base/select/Select";
 import JSONEditor from "#/components/base/json-editor/JSONEditor";
+import ProcessorSettingsModal from "#/page/home-page/components/ProcessorSettingsModal";
 import {
   useExtarctExcelsMutation,
   useExtractHtmlMutation,
@@ -25,6 +26,7 @@ import {
   FILE_EXTRACTION_OPTIONS,
   FILE_TYPE_ACCEPT_MAP,
 } from "#/page/home-page/components/utils";
+import type { ApiProcessorSettings } from "documentatom-sdk/dist/types/types";
 
 import { uuid } from "#/utils/stringUtils";
 import DocuAtomFlex from "#/components/base/flex/Flex";
@@ -35,6 +37,9 @@ const FileExtraction = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [fileType, setFileType] = useState<FileExtractionType | null>(null);
   const [responseData, setResponseData] = useState<any>(null);
+  const [processorSettings, setProcessorSettings] =
+    useState<ApiProcessorSettings | null>(null);
+  const [settingsModalOpen, setSettingsModalOpen] = useState(false);
   const uniqueKey = useRef<string>(uuid());
 
   // Initialize all mutation hooks
@@ -115,7 +120,10 @@ const FileExtraction = () => {
       }
 
       // Call the mutation
-      const response = await mutationFn(selectedFile).unwrap();
+      const response = await mutationFn({
+        file: selectedFile,
+        settings: processorSettings ?? undefined,
+      }).unwrap();
 
       // Store the response
       setResponseData(response);
@@ -179,6 +187,12 @@ const FileExtraction = () => {
 
         <DocuAtomDivider type="vertical" />
         <DocuAtomButton
+          icon={<SettingOutlined />}
+          onClick={() => setSettingsModalOpen(true)}
+        >
+          Settings{processorSettings ? " *" : ""}
+        </DocuAtomButton>
+        <DocuAtomButton
           type="primary"
           onClick={handleSubmit}
           loading={isLoading}
@@ -187,6 +201,15 @@ const FileExtraction = () => {
           Submit
         </DocuAtomButton>
       </DocuAtomFlex>
+
+      <ProcessorSettingsModal
+        open={settingsModalOpen}
+        onOk={(settings) => {
+          setProcessorSettings(settings);
+          setSettingsModalOpen(false);
+        }}
+        onCancel={() => setSettingsModalOpen(false)}
+      />
 
       {responseData && (
         <>

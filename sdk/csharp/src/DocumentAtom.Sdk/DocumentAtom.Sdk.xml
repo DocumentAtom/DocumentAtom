@@ -79,13 +79,13 @@
             <param name="severity">Log severity level.</param>
             <param name="message">Message to log.</param>
         </member>
-        <member name="M:DocumentAtom.Sdk.DocumentAtomSdk.PostAsync``1(System.String,System.Byte[],System.Threading.CancellationToken)">
+        <member name="M:DocumentAtom.Sdk.DocumentAtomSdk.PostJsonAsync``1(System.String,System.Object,System.Threading.CancellationToken)">
             <summary>
-            Send a POST request with binary data and return typed response.
+            Send a POST request with a JSON body and return typed response.
             </summary>
             <typeparam name="T">Response type.</typeparam>
             <param name="url">Full URL to send request to.</param>
-            <param name="data">Binary data to send.</param>
+            <param name="body">Object to serialize as JSON body.</param>
             <param name="cancellationToken">Cancellation token.</param>
             <returns>Deserialized response of type T.</returns>
         </member>
@@ -134,43 +134,43 @@
             </summary>
             <param name="sdk">DocumentAtom SDK instance.</param>
         </member>
-        <member name="M:DocumentAtom.Sdk.Implementations.AtomMethods.ProcessCsv(System.Byte[],System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:DocumentAtom.Sdk.Implementations.AtomMethods.ProcessCsv(System.Byte[],DocumentAtom.Core.Api.ApiProcessorSettings,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:DocumentAtom.Sdk.Implementations.AtomMethods.ProcessExcel(System.Byte[],System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:DocumentAtom.Sdk.Implementations.AtomMethods.ProcessExcel(System.Byte[],DocumentAtom.Core.Api.ApiProcessorSettings,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:DocumentAtom.Sdk.Implementations.AtomMethods.ProcessHtml(System.Byte[],System.Threading.CancellationToken)">
+        <member name="M:DocumentAtom.Sdk.Implementations.AtomMethods.ProcessHtml(System.Byte[],DocumentAtom.Core.Api.ApiProcessorSettings,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:DocumentAtom.Sdk.Implementations.AtomMethods.ProcessJson(System.Byte[],System.Threading.CancellationToken)">
+        <member name="M:DocumentAtom.Sdk.Implementations.AtomMethods.ProcessJson(System.Byte[],DocumentAtom.Core.Api.ApiProcessorSettings,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:DocumentAtom.Sdk.Implementations.AtomMethods.ProcessMarkdown(System.Byte[],System.Threading.CancellationToken)">
+        <member name="M:DocumentAtom.Sdk.Implementations.AtomMethods.ProcessMarkdown(System.Byte[],DocumentAtom.Core.Api.ApiProcessorSettings,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:DocumentAtom.Sdk.Implementations.AtomMethods.ProcessOcr(System.Byte[],System.Threading.CancellationToken)">
+        <member name="M:DocumentAtom.Sdk.Implementations.AtomMethods.ProcessOcr(System.Byte[],DocumentAtom.Core.Api.ApiProcessorSettings,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:DocumentAtom.Sdk.Implementations.AtomMethods.ProcessPdf(System.Byte[],System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:DocumentAtom.Sdk.Implementations.AtomMethods.ProcessPdf(System.Byte[],DocumentAtom.Core.Api.ApiProcessorSettings,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:DocumentAtom.Sdk.Implementations.AtomMethods.ProcessPng(System.Byte[],System.Threading.CancellationToken)">
+        <member name="M:DocumentAtom.Sdk.Implementations.AtomMethods.ProcessPng(System.Byte[],DocumentAtom.Core.Api.ApiProcessorSettings,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:DocumentAtom.Sdk.Implementations.AtomMethods.ProcessPowerPoint(System.Byte[],System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:DocumentAtom.Sdk.Implementations.AtomMethods.ProcessPowerPoint(System.Byte[],DocumentAtom.Core.Api.ApiProcessorSettings,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:DocumentAtom.Sdk.Implementations.AtomMethods.ProcessRtf(System.Byte[],System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:DocumentAtom.Sdk.Implementations.AtomMethods.ProcessRtf(System.Byte[],DocumentAtom.Core.Api.ApiProcessorSettings,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:DocumentAtom.Sdk.Implementations.AtomMethods.ProcessText(System.Byte[],System.Threading.CancellationToken)">
+        <member name="M:DocumentAtom.Sdk.Implementations.AtomMethods.ProcessText(System.Byte[],DocumentAtom.Core.Api.ApiProcessorSettings,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:DocumentAtom.Sdk.Implementations.AtomMethods.ProcessWord(System.Byte[],System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:DocumentAtom.Sdk.Implementations.AtomMethods.ProcessWord(System.Byte[],DocumentAtom.Core.Api.ApiProcessorSettings,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
-        <member name="M:DocumentAtom.Sdk.Implementations.AtomMethods.ProcessXml(System.Byte[],System.Threading.CancellationToken)">
+        <member name="M:DocumentAtom.Sdk.Implementations.AtomMethods.ProcessXml(System.Byte[],DocumentAtom.Core.Api.ApiProcessorSettings,System.Threading.CancellationToken)">
             <inheritdoc />
         </member>
         <member name="T:DocumentAtom.Sdk.Implementations.HealthMethods">
@@ -209,113 +209,120 @@
             Interface for document atomization methods.
             </summary>
         </member>
-        <member name="M:DocumentAtom.Sdk.Interfaces.IAtomMethods.ProcessCsv(System.Byte[],System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:DocumentAtom.Sdk.Interfaces.IAtomMethods.ProcessCsv(System.Byte[],DocumentAtom.Core.Api.ApiProcessorSettings,System.Threading.CancellationToken)">
             <summary>
             Process CSV document and extract atoms.
             </summary>
             <param name="data">CSV file data as byte array.</param>
-            <param name="extractOcr">Whether to extract text from images using OCR.</param>
+            <param name="settings">Optional processor settings.</param>
             <param name="cancellationToken">Cancellation token.</param>
             <returns>List of extracted atoms.</returns>
         </member>
-        <member name="M:DocumentAtom.Sdk.Interfaces.IAtomMethods.ProcessExcel(System.Byte[],System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:DocumentAtom.Sdk.Interfaces.IAtomMethods.ProcessExcel(System.Byte[],DocumentAtom.Core.Api.ApiProcessorSettings,System.Threading.CancellationToken)">
             <summary>
             Process Excel document and extract atoms.
             </summary>
             <param name="data">Excel file data as byte array.</param>
-            <param name="extractOcr">Whether to extract text from images using OCR.</param>
+            <param name="settings">Optional processor settings.</param>
             <param name="cancellationToken">Cancellation token.</param>
             <returns>List of extracted atoms.</returns>
         </member>
-        <member name="M:DocumentAtom.Sdk.Interfaces.IAtomMethods.ProcessHtml(System.Byte[],System.Threading.CancellationToken)">
+        <member name="M:DocumentAtom.Sdk.Interfaces.IAtomMethods.ProcessHtml(System.Byte[],DocumentAtom.Core.Api.ApiProcessorSettings,System.Threading.CancellationToken)">
             <summary>
             Process HTML document and extract atoms.
             </summary>
             <param name="data">HTML file data as byte array.</param>
+            <param name="settings">Optional processor settings.</param>
             <param name="cancellationToken">Cancellation token.</param>
             <returns>List of extracted atoms.</returns>
         </member>
-        <member name="M:DocumentAtom.Sdk.Interfaces.IAtomMethods.ProcessJson(System.Byte[],System.Threading.CancellationToken)">
+        <member name="M:DocumentAtom.Sdk.Interfaces.IAtomMethods.ProcessJson(System.Byte[],DocumentAtom.Core.Api.ApiProcessorSettings,System.Threading.CancellationToken)">
             <summary>
             Process JSON document and extract atoms.
             </summary>
             <param name="data">JSON file data as byte array.</param>
+            <param name="settings">Optional processor settings.</param>
             <param name="cancellationToken">Cancellation token.</param>
             <returns>List of extracted atoms.</returns>
         </member>
-        <member name="M:DocumentAtom.Sdk.Interfaces.IAtomMethods.ProcessMarkdown(System.Byte[],System.Threading.CancellationToken)">
+        <member name="M:DocumentAtom.Sdk.Interfaces.IAtomMethods.ProcessMarkdown(System.Byte[],DocumentAtom.Core.Api.ApiProcessorSettings,System.Threading.CancellationToken)">
             <summary>
             Process Markdown document and extract atoms.
             </summary>
             <param name="data">Markdown file data as byte array.</param>
+            <param name="settings">Optional processor settings.</param>
             <param name="cancellationToken">Cancellation token.</param>
             <returns>List of extracted atoms.</returns>
         </member>
-        <member name="M:DocumentAtom.Sdk.Interfaces.IAtomMethods.ProcessOcr(System.Byte[],System.Threading.CancellationToken)">
+        <member name="M:DocumentAtom.Sdk.Interfaces.IAtomMethods.ProcessOcr(System.Byte[],DocumentAtom.Core.Api.ApiProcessorSettings,System.Threading.CancellationToken)">
             <summary>
             Process OCR on image and extract atoms.
             </summary>
             <param name="data">Image file data as byte array.</param>
+            <param name="settings">Optional processor settings.</param>
             <param name="cancellationToken">Cancellation token.</param>
             <returns>List of extracted atoms.</returns>
         </member>
-        <member name="M:DocumentAtom.Sdk.Interfaces.IAtomMethods.ProcessPdf(System.Byte[],System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:DocumentAtom.Sdk.Interfaces.IAtomMethods.ProcessPdf(System.Byte[],DocumentAtom.Core.Api.ApiProcessorSettings,System.Threading.CancellationToken)">
             <summary>
             Process PDF document and extract atoms.
             </summary>
             <param name="data">PDF file data as byte array.</param>
-            <param name="extractOcr">Whether to extract text from images using OCR.</param>
+            <param name="settings">Optional processor settings.</param>
             <param name="cancellationToken">Cancellation token.</param>
             <returns>List of extracted atoms.</returns>
         </member>
-        <member name="M:DocumentAtom.Sdk.Interfaces.IAtomMethods.ProcessPng(System.Byte[],System.Threading.CancellationToken)">
+        <member name="M:DocumentAtom.Sdk.Interfaces.IAtomMethods.ProcessPng(System.Byte[],DocumentAtom.Core.Api.ApiProcessorSettings,System.Threading.CancellationToken)">
             <summary>
             Process PNG image and extract atoms.
             </summary>
             <param name="data">PNG file data as byte array.</param>
+            <param name="settings">Optional processor settings.</param>
             <param name="cancellationToken">Cancellation token.</param>
             <returns>List of extracted atoms.</returns>
         </member>
-        <member name="M:DocumentAtom.Sdk.Interfaces.IAtomMethods.ProcessPowerPoint(System.Byte[],System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:DocumentAtom.Sdk.Interfaces.IAtomMethods.ProcessPowerPoint(System.Byte[],DocumentAtom.Core.Api.ApiProcessorSettings,System.Threading.CancellationToken)">
             <summary>
             Process PowerPoint document and extract atoms.
             </summary>
             <param name="data">PowerPoint file data as byte array.</param>
-            <param name="extractOcr">Whether to extract text from images using OCR.</param>
+            <param name="settings">Optional processor settings.</param>
             <param name="cancellationToken">Cancellation token.</param>
             <returns>List of extracted atoms.</returns>
         </member>
-        <member name="M:DocumentAtom.Sdk.Interfaces.IAtomMethods.ProcessRtf(System.Byte[],System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:DocumentAtom.Sdk.Interfaces.IAtomMethods.ProcessRtf(System.Byte[],DocumentAtom.Core.Api.ApiProcessorSettings,System.Threading.CancellationToken)">
             <summary>
             Process RTF document and extract atoms.
             </summary>
             <param name="data">RTF file data as byte array.</param>
-            <param name="extractOcr">Whether to extract text from images using OCR.</param>
+            <param name="settings">Optional processor settings.</param>
             <param name="cancellationToken">Cancellation token.</param>
             <returns>List of extracted atoms.</returns>
         </member>
-        <member name="M:DocumentAtom.Sdk.Interfaces.IAtomMethods.ProcessText(System.Byte[],System.Threading.CancellationToken)">
+        <member name="M:DocumentAtom.Sdk.Interfaces.IAtomMethods.ProcessText(System.Byte[],DocumentAtom.Core.Api.ApiProcessorSettings,System.Threading.CancellationToken)">
             <summary>
             Process text document and extract atoms.
             </summary>
             <param name="data">Text file data as byte array.</param>
+            <param name="settings">Optional processor settings.</param>
             <param name="cancellationToken">Cancellation token.</param>
             <returns>List of extracted atoms.</returns>
         </member>
-        <member name="M:DocumentAtom.Sdk.Interfaces.IAtomMethods.ProcessWord(System.Byte[],System.Boolean,System.Threading.CancellationToken)">
+        <member name="M:DocumentAtom.Sdk.Interfaces.IAtomMethods.ProcessWord(System.Byte[],DocumentAtom.Core.Api.ApiProcessorSettings,System.Threading.CancellationToken)">
             <summary>
             Process Word document and extract atoms.
             </summary>
             <param name="data">Word file data as byte array.</param>
-            <param name="extractOcr">Whether to extract text from images using OCR.</param>
+            <param name="settings">Optional processor settings.</param>
             <param name="cancellationToken">Cancellation token.</param>
             <returns>List of extracted atoms.</returns>
         </member>
-        <member name="M:DocumentAtom.Sdk.Interfaces.IAtomMethods.ProcessXml(System.Byte[],System.Threading.CancellationToken)">
+        <member name="M:DocumentAtom.Sdk.Interfaces.IAtomMethods.ProcessXml(System.Byte[],DocumentAtom.Core.Api.ApiProcessorSettings,System.Threading.CancellationToken)">
             <summary>
             Process XML document and extract atoms.
             </summary>
             <param name="data">XML file data as byte array.</param>
+            <param name="settings">Optional processor settings.</param>
             <param name="cancellationToken">Cancellation token.</param>
             <returns>List of extracted atoms.</returns>
         </member>

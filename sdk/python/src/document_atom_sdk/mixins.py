@@ -1,4 +1,6 @@
+import base64
 import io
+import json
 from pathlib import Path
 from typing import Any, BinaryIO, Dict, Optional, Union
 
@@ -193,24 +195,6 @@ class AtomExtractableAPIResource:
         "word",
         "xml",
     }
-    FORMATS_WITH_OCR = {"pdf", "powerpoint", "rtf"}
-
-    # MIME type mapping based on format
-    MIME_TYPES = {
-        "csv": "text/csv",
-        "excel": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        "html": "text/html",
-        "json": "application/json",
-        "markdown": "text/markdown",
-        "ocr": "application/octet-stream",
-        "pdf": "application/pdf",
-        "png": "image/png",
-        "powerpoint": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-        "rtf": "application/rtf",
-        "text": "text/plain",
-        "word": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        "xml": "application/xml",
-    }
 
     @classmethod
     def _prepare_file_input(
@@ -261,7 +245,7 @@ class AtomExtractableAPIResource:
         cls,
         file_input: Union[str, bytes, BinaryIO, io.BytesIO],
         format_type: str,
-        ocr: Optional[bool] = None,
+        settings: Optional[Any] = None,
         filename: Optional[str] = None,
     ) -> Dict[str, Any]:
         """
@@ -270,7 +254,7 @@ class AtomExtractableAPIResource:
         Args:
             file_input: File path (str), bytes, or file-like object (BinaryIO/BytesIO)
             format_type: Format type (csv, excel, html, json, markdown, ocr, pdf, png, powerpoint, rtf, text, word, xml)
-            ocr: Whether to use OCR (only for pdf, powerpoint, rtf). If None, uses default behavior.
+            settings: Optional processor settings (dict or ApiProcessorSettingsModel)
             filename: Optional filename (required if file_input is bytes or file-like object without a name)
 
         Returns:
@@ -292,32 +276,39 @@ class AtomExtractableAPIResource:
         # Prepare file input (handles path, bytes, or file-like object)
         file_obj, file_name = cls._prepare_file_input(file_input, filename)
 
-        # Build query parameters
-        params = {}
-        if format_type in cls.FORMATS_WITH_OCR and ocr is not None:
-            if ocr:
-                params["ocr"] = None  # Query param without value
-
         # Build URL with format type as path segment
-        url = _get_url_base(cls, format_type, **params)
-
-        # Get MIME type for the format
-        content_type = cls.MIME_TYPES.get(format_type, "application/octet-stream")
+        url = _get_url_base(cls, format_type)
 
         try:
             # Reset file pointer if it's a file-like object
             if hasattr(file_obj, "seek"):
                 file_obj.seek(0)
 
-            # Read file content as bytes
+            # Read file content as bytes and base64-encode
             file_content = file_obj.read()
+            encoded_data = base64.b64encode(file_content).decode("utf-8")
 
-            # Send raw binary data with Content-Type header
+            # Build settings dict
+            settings_dict = None
+            if settings is not None:
+                if isinstance(settings, dict):
+                    settings_dict = settings
+                else:
+                    # Assume it's a Pydantic model (ApiProcessorSettingsModel)
+                    settings_dict = settings.model_dump(by_alias=True, exclude_none=True)
+
+            # Build JSON request envelope
+            request_body = {
+                "Settings": settings_dict,
+                "Data": encoded_data,
+            }
+
+            # Send as JSON
             result = client.request(
                 "POST",
                 url,
-                content=file_content,
-                headers={"Content-Type": content_type},
+                content=json.dumps(request_body).encode("utf-8"),
+                headers={"Content-Type": "application/json"},
             )
         finally:
             # Close file if we opened it (file path case)
@@ -330,118 +321,128 @@ class AtomExtractableAPIResource:
     def extract_atoms_csv(
         cls,
         file_input: Union[str, bytes, BinaryIO, io.BytesIO],
+        settings: Optional[Any] = None,
         filename: Optional[str] = None,
     ) -> Dict[str, Any]:
         """Extract atoms from a CSV file."""
-        return cls.extract_atoms(file_input, "csv", filename=filename)
+        return cls.extract_atoms(file_input, "csv", settings=settings, filename=filename)
 
     @classmethod
     def extract_atoms_excel(
         cls,
         file_input: Union[str, bytes, BinaryIO, io.BytesIO],
+        settings: Optional[Any] = None,
         filename: Optional[str] = None,
     ) -> Dict[str, Any]:
         """Extract atoms from an Excel file."""
-        return cls.extract_atoms(file_input, "excel", filename=filename)
+        return cls.extract_atoms(file_input, "excel", settings=settings, filename=filename)
 
     @classmethod
     def extract_atoms_html(
         cls,
         file_input: Union[str, bytes, BinaryIO, io.BytesIO],
+        settings: Optional[Any] = None,
         filename: Optional[str] = None,
     ) -> Dict[str, Any]:
         """Extract atoms from an HTML file."""
-        return cls.extract_atoms(file_input, "html", filename=filename)
+        return cls.extract_atoms(file_input, "html", settings=settings, filename=filename)
 
     @classmethod
     def extract_atoms_json(
         cls,
         file_input: Union[str, bytes, BinaryIO, io.BytesIO],
+        settings: Optional[Any] = None,
         filename: Optional[str] = None,
     ) -> Dict[str, Any]:
         """Extract atoms from a JSON file."""
-        return cls.extract_atoms(file_input, "json", filename=filename)
+        return cls.extract_atoms(file_input, "json", settings=settings, filename=filename)
 
     @classmethod
     def extract_atoms_markdown(
         cls,
         file_input: Union[str, bytes, BinaryIO, io.BytesIO],
+        settings: Optional[Any] = None,
         filename: Optional[str] = None,
     ) -> Dict[str, Any]:
         """Extract atoms from a Markdown file."""
-        return cls.extract_atoms(file_input, "markdown", filename=filename)
+        return cls.extract_atoms(file_input, "markdown", settings=settings, filename=filename)
 
     @classmethod
     def extract_atoms_ocr(
         cls,
         file_input: Union[str, bytes, BinaryIO, io.BytesIO],
+        settings: Optional[Any] = None,
         filename: Optional[str] = None,
     ) -> Dict[str, Any]:
         """Extract atoms using OCR."""
-        return cls.extract_atoms(file_input, "ocr", filename=filename)
+        return cls.extract_atoms(file_input, "ocr", settings=settings, filename=filename)
 
     @classmethod
     def extract_atoms_pdf(
         cls,
         file_input: Union[str, bytes, BinaryIO, io.BytesIO],
-        ocr: Optional[bool] = None,
+        settings: Optional[Any] = None,
         filename: Optional[str] = None,
     ) -> Dict[str, Any]:
         """Extract atoms from a PDF file."""
-        return cls.extract_atoms(file_input, "pdf", ocr=ocr, filename=filename)
+        return cls.extract_atoms(file_input, "pdf", settings=settings, filename=filename)
 
     @classmethod
     def extract_atoms_png(
         cls,
         file_input: Union[str, bytes, BinaryIO, io.BytesIO],
+        settings: Optional[Any] = None,
         filename: Optional[str] = None,
     ) -> Dict[str, Any]:
         """Extract atoms from a PNG file."""
-        return cls.extract_atoms(file_input, "png", filename=filename)
+        return cls.extract_atoms(file_input, "png", settings=settings, filename=filename)
 
     @classmethod
     def extract_atoms_powerpoint(
         cls,
         file_input: Union[str, bytes, BinaryIO, io.BytesIO],
-        ocr: Optional[bool] = None,
+        settings: Optional[Any] = None,
         filename: Optional[str] = None,
     ) -> Dict[str, Any]:
         """Extract atoms from a PowerPoint file."""
-        return cls.extract_atoms(file_input, "powerpoint", ocr=ocr, filename=filename)
+        return cls.extract_atoms(file_input, "powerpoint", settings=settings, filename=filename)
 
     @classmethod
     def extract_atoms_rtf(
         cls,
         file_input: Union[str, bytes, BinaryIO, io.BytesIO],
-        ocr: Optional[bool] = None,
+        settings: Optional[Any] = None,
         filename: Optional[str] = None,
     ) -> Dict[str, Any]:
         """Extract atoms from an RTF file."""
-        return cls.extract_atoms(file_input, "rtf", ocr=ocr, filename=filename)
+        return cls.extract_atoms(file_input, "rtf", settings=settings, filename=filename)
 
     @classmethod
     def extract_atoms_text(
         cls,
         file_input: Union[str, bytes, BinaryIO, io.BytesIO],
+        settings: Optional[Any] = None,
         filename: Optional[str] = None,
     ) -> Dict[str, Any]:
         """Extract atoms from a text file."""
-        return cls.extract_atoms(file_input, "text", filename=filename)
+        return cls.extract_atoms(file_input, "text", settings=settings, filename=filename)
 
     @classmethod
     def extract_atoms_word(
         cls,
         file_input: Union[str, bytes, BinaryIO, io.BytesIO],
+        settings: Optional[Any] = None,
         filename: Optional[str] = None,
     ) -> Dict[str, Any]:
         """Extract atoms from a Word file."""
-        return cls.extract_atoms(file_input, "word", filename=filename)
+        return cls.extract_atoms(file_input, "word", settings=settings, filename=filename)
 
     @classmethod
     def extract_atoms_xml(
         cls,
         file_input: Union[str, bytes, BinaryIO, io.BytesIO],
+        settings: Optional[Any] = None,
         filename: Optional[str] = None,
     ) -> Dict[str, Any]:
         """Extract atoms from an XML file."""
-        return cls.extract_atoms(file_input, "xml", filename=filename)
+        return cls.extract_atoms(file_input, "xml", settings=settings, filename=filename)

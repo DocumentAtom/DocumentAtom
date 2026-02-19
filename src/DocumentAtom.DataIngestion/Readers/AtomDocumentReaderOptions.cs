@@ -4,6 +4,7 @@ namespace DocumentAtom.DataIngestion.Readers
     using System.Collections.Generic;
     using System.IO;
     using DocumentAtom.Core;
+    using DocumentAtom.Core.Chunking;
     using DocumentAtom.Core.TypeDetection;
 
     /// <summary>
@@ -76,9 +77,9 @@ namespace DocumentAtom.DataIngestion.Readers
         }
 
         /// <summary>
-        /// Settings for chunking during extraction.
+        /// Configuration for chunking during extraction.
         /// </summary>
-        public ChunkingSettings? ChunkingSettings { get; set; } = null;
+        public ChunkingConfiguration? ChunkingSettings { get; set; } = null;
 
         /// <summary>
         /// Custom processor settings by document type.

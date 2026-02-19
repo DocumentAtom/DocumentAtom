@@ -1,16 +1,9 @@
-from typing import Any, Dict, List, Optional
+from typing import List
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import TypeAdapter
 
 from .atom import AtomModel
 
-
-class AtomExtractionResultModel(BaseModel):
-    """
-    Result from atom extraction API.
-    """
-
-    atoms: List[AtomModel] = Field(default_factory=list, alias="Atoms")
-    metadata: Optional[Dict[str, Any]] = Field(default=None, alias="Metadata")
-    file_type: Optional[str] = Field(default=None, alias="FileType")
-    model_config = ConfigDict(populate_by_name=True)
+# The server returns a JSON array of Atom objects (List<Atom>), not a wrapper object.
+# Use a TypeAdapter to validate the list directly.
+AtomListAdapter = TypeAdapter(List[AtomModel])

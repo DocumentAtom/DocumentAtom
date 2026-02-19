@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <metadata>
+        <title>DocumentAtom SDK Test Document</title>
+        <author>DocumentAtom Team</author>
+        <created>2024-01-15</created>
+        <version>1.0.0</version>
+    </metadata>
+    
+    <content>
+        <section id="introduction">
+            <heading>Introduction</heading>
+            <paragraph>
+                The DocumentAtom SDK is a comprehensive C# library for document processing and atomization. 
+                It provides a unified interface for processing various document formats and extracting 
+                meaningful content chunks called "atoms".
+            </paragraph>
+        </section>
+        
+        <section id="features">
+            <heading>Key Features</heading>
+            <list type="unordered">
+                <item>Multi-format document support</item>
+                <item>OCR text extraction from images</item>
+                <item>Batch processing capabilities</item>
+                <item>Type-safe C# SDK</item>
+                <item>Async/await support</item>
+                <item>Comprehensive error handling</item>
+            </list>
+        </section>
+        
+        <section id="supported-formats">
+            <heading>Supported Document Formats</heading>
+            <table>
+                <header>
+                    <column>Format</column>
+                    <column>Extension</column>
+                    <column>OCR Support</column>
+                </header>
+                <row>
+                    <cell>PDF</cell>
+                    <cell>.pdf</cell>
+                    <cell>Yes</cell>
+                </row>
+                <row>
+                    <cell>Microsoft Word</cell>
+                    <cell>.docx</cell>
+                    <cell>Yes</cell>
+                </row>
+                <row>
+                    <cell>Microsoft Excel</cell>
+                    <cell>.xlsx</cell>
+                    <cell>Yes</cell>
+                </row>
+                <row>
+                    <cell>Microsoft PowerPoint</cell>
+                    <cell>.pptx</cell>
+                    <cell>Yes</cell>
+                </row>
+                <row>
+                    <cell>HTML</cell>
+                    <cell>.html, .htm</cell>
+                    <cell>No</cell>
+                </row>
+                <row>
+                    <cell>JSON</cell>
+                    <cell>.json</cell>
+                    <cell>No</cell>
+                </row>
+                <row>
+                    <cell>XML</cell>
+                    <cell>.xml</cell>
+                    <cell>No</cell>
+                </row>
+                <row>
+                    <cell>Markdown</cell>
+                    <cell>.md</cell>
+                    <cell>No</cell>
+                </row>
+                <row>
+                    <cell>RTF</cell>
+                    <cell>.rtf</cell>
+                    <cell>Yes</cell>
+                </row>
+                <row>
+                    <cell>CSV</cell>
+                    <cell>.csv</cell>
+                    <cell>No</cell>
+                </row>
+                <row>
+                    <cell>Plain Text</cell>
+                    <cell>.txt</cell>
+                    <cell>No</cell>
+                </row>
+            </table>
+        </section>
+        
+        <section id="usage">
+            <heading>Usage Example</heading>
+            <code language="csharp">
+                <![CDATA[
+// Initialize the SDK
+var sdk = new DocumentAtomSdk("http://localhost:8080");
+
+// Process a PDF document
+byte[] pdfData = File.ReadAllBytes("document.pdf");
+var atoms = await sdk.Atom.ProcessPdf(pdfData, extractOcr: true);
+
+// Display results
+foreach (var atom in atoms)
+{
+    Console.WriteLine($"Type: {atom.Type}, Content: {atom.Content}");
+}
+                ]]>
+            </code>
+        </section>
+        
+        <section id="configuration">
+            <heading>Configuration Options</heading>
+            <paragraph>
+                The SDK supports various configuration options including endpoint URL, access key 
+                for authentication, timeout settings, and logging configuration.
+            </paragraph>
+            <list type="ordered">
+                <item>Endpoint URL: Server address for DocumentAtom API</item>
+                <item>Access Key: Optional authentication token</item>
+                <item>Timeout: Request timeout in milliseconds (default: 300000)</item>
+                <item>Logging: Enable/disable request and response logging</item>
+            </list>
+        </section>
+        
+        <section id="conclusion">
+            <heading>Conclusion</heading>
+            <paragraph>
+                The DocumentAtom SDK provides a powerful and flexible solution for document 
+                processing in C# applications. With support for multiple formats, OCR capabilities, 
+                and a clean, type-safe API, it simplifies the integration of document atomization 
+                into your projects.
+            </paragraph>
+        </section>
+    </content>
+    
+    <footer>
+        <copyright>© 2024 DocumentAtom Technologies. All rights reserved.</copyright>
+    </footer>
+</document>

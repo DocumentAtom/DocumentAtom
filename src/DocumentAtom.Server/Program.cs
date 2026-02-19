@@ -14,8 +14,12 @@
     using WatsonWebserver;
     using WatsonWebserver.Core;
 
+    using System.Text.Json;
+    using System.Text.Json.Serialization;
     using DocumentAtom.Core;
+    using DocumentAtom.Core.Api;
     using DocumentAtom.Core.Atoms;
+    using DocumentAtom.Core.Chunking;
     using DocumentAtom.Core.Helpers;
     using DocumentAtom.Text;
     using DocumentAtom.Text.Csv;
@@ -63,6 +67,12 @@
 
         private static CancellationTokenSource _TokenSource = new CancellationTokenSource();
         private static CancellationToken _Token;
+
+        private static readonly JsonSerializerOptions _JsonOptions = new JsonSerializerOptions
+        {
+            PropertyNameCaseInsensitive = true,
+            Converters = { new JsonStringEnumConverter() }
+        };
 
         #endregion
 
@@ -394,25 +404,212 @@
             await ctx.Response.Send();
         }
 
+        private static (byte[] data, ApiProcessorSettings settings) ParseRequest(HttpContextBase ctx)
+        {
+            if (ctx.Request.DataAsBytes == null || ctx.Request.ContentLength < 1)
+                throw new InvalidOperationException("RequestBodyMissing");
+
+            string json = Encoding.UTF8.GetString(ctx.Request.DataAsBytes);
+            AtomRequest request = System.Text.Json.JsonSerializer.Deserialize<AtomRequest>(json, _JsonOptions);
+            if (request == null)
+                throw new InvalidOperationException("DeserializationError");
+
+            byte[] data = request.GetDataBytes();
+            return (data, request.Settings);
+        }
+
+        private static void ApplyBaseSettings(ProcessorSettingsBase defaults, ApiProcessorSettings api)
+        {
+            if (api == null) return;
+            if (api.TrimText.HasValue) defaults.TrimText = api.TrimText.Value;
+            if (api.RemoveBinaryFromText.HasValue) defaults.RemoveBinaryFromText = api.RemoveBinaryFromText.Value;
+            if (api.ExtractAtomsFromImages.HasValue) defaults.ExtractAtomsFromImages = api.ExtractAtomsFromImages.Value;
+            if (api.Chunking != null) defaults.Chunking = api.Chunking;
+        }
+
+        private static CsvProcessorSettings ApplyApiSettings(CsvProcessorSettings defaults, ApiProcessorSettings api)
+        {
+            if (api == null) return defaults;
+            ApplyBaseSettings(defaults, api);
+            if (api.RowDelimiter != null) defaults.RowDelimiter = api.RowDelimiter;
+            if (api.ColumnDelimiter.HasValue) defaults.ColumnDelimiter = api.ColumnDelimiter.Value;
+            if (api.HasHeaderRow.HasValue) defaults.HasHeaderRow = api.HasHeaderRow.Value;
+            if (api.RowsPerAtom.HasValue) defaults.RowsPerAtom = api.RowsPerAtom.Value;
+            return defaults;
+        }
+
+        private static XlsxProcessorSettings ApplyApiSettings(XlsxProcessorSettings defaults, ApiProcessorSettings api)
+        {
+            if (api == null) return defaults;
+            ApplyBaseSettings(defaults, api);
+            if (api.BuildHierarchy.HasValue) defaults.BuildHierarchy = api.BuildHierarchy.Value;
+            if (api.HeaderRowScoreThreshold.HasValue) defaults.HeaderRowScoreThreshold = api.HeaderRowScoreThreshold.Value;
+            return defaults;
+        }
+
+        private static HtmlProcessorSettings ApplyApiSettings(HtmlProcessorSettings defaults, ApiProcessorSettings api)
+        {
+            if (api == null) return defaults;
+            if (api.ProcessInlineStyles.HasValue) defaults.ProcessInlineStyles = api.ProcessInlineStyles.Value;
+            if (api.ProcessMetaTags.HasValue) defaults.ProcessMetaTags = api.ProcessMetaTags.Value;
+            if (api.ProcessScripts.HasValue) defaults.ProcessScripts = api.ProcessScripts.Value;
+            if (api.ProcessComments.HasValue) defaults.ProcessComments = api.ProcessComments.Value;
+            if (api.PreserveWhitespace.HasValue) defaults.PreserveWhitespace = api.PreserveWhitespace.Value;
+            if (api.MaxTextLength.HasValue) defaults.MaxTextLength = api.MaxTextLength.Value;
+            if (api.ProcessSvg.HasValue) defaults.ProcessSvg = api.ProcessSvg.Value;
+            if (api.ExtractDataAttributes.HasValue) defaults.ExtractDataAttributes = api.ExtractDataAttributes.Value;
+            if (api.BuildHierarchy.HasValue) defaults.BuildHierarchy = api.BuildHierarchy.Value;
+            return defaults;
+        }
+
+        private static JsonProcessorSettings ApplyApiSettings(JsonProcessorSettings defaults, ApiProcessorSettings api)
+        {
+            if (api == null) return defaults;
+            ApplyBaseSettings(defaults, api);
+            if (api.BuildHierarchy.HasValue) defaults.BuildHierarchy = api.BuildHierarchy.Value;
+            if (api.MaxDepth.HasValue) defaults.MaxDepth = api.MaxDepth.Value;
+            return defaults;
+        }
+
+        private static MarkdownProcessorSettings ApplyApiSettings(MarkdownProcessorSettings defaults, ApiProcessorSettings api)
+        {
+            if (api == null) return defaults;
+            ApplyBaseSettings(defaults, api);
+            if (api.Delimiters != null) defaults.Delimiters = api.Delimiters;
+            if (api.BuildHierarchy.HasValue) defaults.BuildHierarchy = api.BuildHierarchy.Value;
+            return defaults;
+        }
+
+        private static TextProcessorSettings ApplyApiSettings(TextProcessorSettings defaults, ApiProcessorSettings api)
+        {
+            if (api == null) return defaults;
+            ApplyBaseSettings(defaults, api);
+            if (api.Delimiters != null) defaults.Delimiters = api.Delimiters;
+            return defaults;
+        }
+
+        private static XmlProcessorSettings ApplyApiSettings(XmlProcessorSettings defaults, ApiProcessorSettings api)
+        {
+            if (api == null) return defaults;
+            ApplyBaseSettings(defaults, api);
+            if (api.BuildHierarchy.HasValue) defaults.BuildHierarchy = api.BuildHierarchy.Value;
+            if (api.MaxDepth.HasValue) defaults.MaxDepth = api.MaxDepth.Value;
+            if (api.IncludeAttributes.HasValue) defaults.IncludeAttributes = api.IncludeAttributes.Value;
+            if (api.PreserveWhitespace.HasValue) defaults.PreserveWhitespace = api.PreserveWhitespace.Value;
+            return defaults;
+        }
+
+        private static PdfProcessorSettings ApplyApiSettings(PdfProcessorSettings defaults, ApiProcessorSettings api)
+        {
+            if (api == null) return defaults;
+            ApplyBaseSettings(defaults, api);
+            return defaults;
+        }
+
+        private static DocxProcessorSettings ApplyApiSettings(DocxProcessorSettings defaults, ApiProcessorSettings api)
+        {
+            if (api == null) return defaults;
+            ApplyBaseSettings(defaults, api);
+            if (api.BuildHierarchy.HasValue) defaults.BuildHierarchy = api.BuildHierarchy.Value;
+            return defaults;
+        }
+
+        private static PptxProcessorSettings ApplyApiSettings(PptxProcessorSettings defaults, ApiProcessorSettings api)
+        {
+            if (api == null) return defaults;
+            ApplyBaseSettings(defaults, api);
+            if (api.BuildHierarchy.HasValue) defaults.BuildHierarchy = api.BuildHierarchy.Value;
+            return defaults;
+        }
+
+        private static RtfProcessorSettings ApplyApiSettings(RtfProcessorSettings defaults, ApiProcessorSettings api)
+        {
+            if (api == null) return defaults;
+            ApplyBaseSettings(defaults, api);
+            return defaults;
+        }
+
+        private static ImageProcessorSettings ApplyApiSettings(ImageProcessorSettings defaults, ApiProcessorSettings api)
+        {
+            if (api == null) return defaults;
+            ApplyBaseSettings(defaults, api);
+            if (api.LineThreshold.HasValue) defaults.LineThreshold = api.LineThreshold.Value;
+            if (api.ParagraphThreshold.HasValue) defaults.ParagraphThreshold = api.ParagraphThreshold.Value;
+            if (api.HorizontalLineLength.HasValue) defaults.HorizontalLineLength = api.HorizontalLineLength.Value;
+            if (api.VerticalLineLength.HasValue) defaults.VerticalLineLength = api.VerticalLineLength.Value;
+            if (api.TableMinArea.HasValue) defaults.TableMinArea = api.TableMinArea.Value;
+            if (api.ColumnAlignmentTolerance.HasValue) defaults.ColumnAlignmentTolerance = api.ColumnAlignmentTolerance.Value;
+            if (api.ProximityThreshold.HasValue) defaults.ProximityThreshold = api.ProximityThreshold.Value;
+            return defaults;
+        }
+
+        private static ImageProcessorSettings BuildImageSettings(ApiProcessorSettings api)
+        {
+            ImageProcessorSettings imageSettings = new ImageProcessorSettings
+            {
+                TesseractDataDirectory = _Settings.Tesseract.DataDirectory,
+                TesseractLanguage = _Settings.Tesseract.Language,
+            };
+            return ApplyApiSettings(imageSettings, api);
+        }
+
+        private static void ApplyChunking(List<Atom> atoms, ChunkingConfiguration config)
+        {
+            if (config == null) return;
+            if (!config.Enable) return;
+
+            ChunkingEngine engine = new ChunkingEngine();
+
+            foreach (Atom atom in atoms)
+            {
+                List<List<string>> tableData = null;
+                if (atom.Table != null)
+                    tableData = ChunkingEngine.SerializableDataTableToList(atom.Table);
+
+                List<DocumentAtom.Core.Chunking.Chunk> chunks = engine.Chunk(
+                    atom.Type,
+                    atom.Text,
+                    atom.OrderedList,
+                    atom.UnorderedList,
+                    tableData,
+                    config);
+
+                if (chunks != null && chunks.Count > 0)
+                    atom.Chunks = chunks;
+            }
+        }
+
         private static async Task CsvAtomRoute(HttpContextBase ctx)
         {
-            if (ctx.Request.DataAsBytes == null && ctx.Request.ContentLength < 1)
+            byte[] data;
+            ApiProcessorSettings apiSettings;
+
+            try
             {
-                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress + " from " + ctx.Request.Source.IpAddress);
+                (data, apiSettings) = ParseRequest(ctx);
+            }
+            catch (InvalidOperationException ex) when (ex.Message == "RequestBodyMissing")
+            {
                 ctx.Response.StatusCode = 400;
                 await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.RequestBodyMissing, null, "No request body found."), true));
                 return;
             }
+            catch (Exception ex)
+            {
+                ctx.Response.StatusCode = 400;
+                await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.BadRequest, null, "Deserialization error: " + ex.Message), true));
+                return;
+            }
 
-            CsvProcessorSettings settings = new CsvProcessorSettings();
-            settings.ExtractAtomsFromImages = ctx.Request.QuerystringExists(Constants.OcrQuerystring);
+            CsvProcessorSettings settings = ApplyApiSettings(new CsvProcessorSettings(), apiSettings);
 
             List<Atom> ret = new List<Atom>();
 
             using (CsvProcessor processor = new CsvProcessor(settings))
             {
-                IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
-                if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
+                IEnumerable<Atom> atoms = processor.Extract(data).ToList();
+                if (atoms != null && atoms.Any()) ret = atoms.ToList();
+                ApplyChunking(ret, settings.Chunking);
 
                 ctx.Response.StatusCode = 200;
                 await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
@@ -422,34 +619,41 @@
 
         private static async Task ExcelAtomRoute(HttpContextBase ctx)
         {
-            if (ctx.Request.DataAsBytes == null && ctx.Request.ContentLength < 1)
+            byte[] data;
+            ApiProcessorSettings apiSettings;
+
+            try
             {
-                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress + " from " + ctx.Request.Source.IpAddress);
+                (data, apiSettings) = ParseRequest(ctx);
+            }
+            catch (InvalidOperationException ex) when (ex.Message == "RequestBodyMissing")
+            {
                 ctx.Response.StatusCode = 400;
                 await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.RequestBodyMissing, null, "No request body found."), true));
                 return;
             }
+            catch (Exception ex)
+            {
+                ctx.Response.StatusCode = 400;
+                await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.BadRequest, null, "Deserialization error: " + ex.Message), true));
+                return;
+            }
 
-            XlsxProcessorSettings settings = new XlsxProcessorSettings();
-            settings.ExtractAtomsFromImages = ctx.Request.QuerystringExists(Constants.OcrQuerystring);
+            XlsxProcessorSettings settings = ApplyApiSettings(new XlsxProcessorSettings(), apiSettings);
 
             ImageProcessorSettings imageSettings = null;
             if (settings.ExtractAtomsFromImages)
             {
-                imageSettings = new ImageProcessorSettings
-                {
-                    TesseractDataDirectory = _Settings.Tesseract.DataDirectory,
-                    TesseractLanguage = _Settings.Tesseract.Language,
-
-                };
+                imageSettings = BuildImageSettings(apiSettings);
             }
 
             List<Atom> ret = new List<Atom>();
 
             using (XlsxProcessor processor = new XlsxProcessor(settings, imageSettings))
             {
-                IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
-                if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
+                IEnumerable<Atom> atoms = processor.Extract(data).ToList();
+                if (atoms != null && atoms.Any()) ret = atoms.ToList();
+                ApplyChunking(ret, settings.Chunking);
 
                 ctx.Response.StatusCode = 200;
                 await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
@@ -459,22 +663,35 @@
 
         private static async Task HtmlAtomRoute(HttpContextBase ctx)
         {
-            if (ctx.Request.DataAsBytes == null && ctx.Request.ContentLength < 1)
+            byte[] data;
+            ApiProcessorSettings apiSettings;
+
+            try
             {
-                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress + " from " + ctx.Request.Source.IpAddress);
+                (data, apiSettings) = ParseRequest(ctx);
+            }
+            catch (InvalidOperationException ex) when (ex.Message == "RequestBodyMissing")
+            {
                 ctx.Response.StatusCode = 400;
                 await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.RequestBodyMissing, null, "No request body found."), true));
                 return;
             }
+            catch (Exception ex)
+            {
+                ctx.Response.StatusCode = 400;
+                await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.BadRequest, null, "Deserialization error: " + ex.Message), true));
+                return;
+            }
 
-            HtmlProcessorSettings settings = new HtmlProcessorSettings();
+            HtmlProcessorSettings settings = ApplyApiSettings(new HtmlProcessorSettings(), apiSettings);
 
             List<Atom> ret = new List<Atom>();
 
             using (HtmlProcessor processor = new HtmlProcessor(settings))
             {
-                IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
-                if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
+                IEnumerable<Atom> atoms = processor.Extract(data).ToList();
+                if (atoms != null && atoms.Any()) ret = atoms.ToList();
+                ApplyChunking(ret, apiSettings?.Chunking);
 
                 ctx.Response.StatusCode = 200;
                 await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
@@ -484,22 +701,35 @@
 
         private static async Task JsonAtomRoute(HttpContextBase ctx)
         {
-            if (ctx.Request.DataAsBytes == null && ctx.Request.ContentLength < 1)
+            byte[] data;
+            ApiProcessorSettings apiSettings;
+
+            try
             {
-                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress + " from " + ctx.Request.Source.IpAddress);
+                (data, apiSettings) = ParseRequest(ctx);
+            }
+            catch (InvalidOperationException ex) when (ex.Message == "RequestBodyMissing")
+            {
                 ctx.Response.StatusCode = 400;
                 await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.RequestBodyMissing, null, "No request body found."), true));
                 return;
             }
+            catch (Exception ex)
+            {
+                ctx.Response.StatusCode = 400;
+                await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.BadRequest, null, "Deserialization error: " + ex.Message), true));
+                return;
+            }
 
-            JsonProcessorSettings settings = new JsonProcessorSettings();
+            JsonProcessorSettings settings = ApplyApiSettings(new JsonProcessorSettings(), apiSettings);
 
             List<Atom> ret = new List<Atom>();
 
             using (JsonProcessor processor = new JsonProcessor(settings))
             {
-                IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
-                if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
+                IEnumerable<Atom> atoms = processor.Extract(data).ToList();
+                if (atoms != null && atoms.Any()) ret = atoms.ToList();
+                ApplyChunking(ret, settings.Chunking);
 
                 ctx.Response.StatusCode = 200;
                 await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
@@ -509,20 +739,35 @@
 
         private static async Task MarkdownAtomRoute(HttpContextBase ctx)
         {
-            if (ctx.Request.DataAsBytes == null && ctx.Request.ContentLength < 1)
+            byte[] data;
+            ApiProcessorSettings apiSettings;
+
+            try
             {
-                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress);
+                (data, apiSettings) = ParseRequest(ctx);
+            }
+            catch (InvalidOperationException ex) when (ex.Message == "RequestBodyMissing")
+            {
                 ctx.Response.StatusCode = 400;
                 await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.RequestBodyMissing, null, "No request body found."), true));
                 return;
             }
+            catch (Exception ex)
+            {
+                ctx.Response.StatusCode = 400;
+                await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.BadRequest, null, "Deserialization error: " + ex.Message), true));
+                return;
+            }
+
+            MarkdownProcessorSettings settings = ApplyApiSettings(new MarkdownProcessorSettings(), apiSettings);
 
             List<Atom> ret = new List<Atom>();
 
-            using (MarkdownProcessor processor = new MarkdownProcessor(new MarkdownProcessorSettings()))
+            using (MarkdownProcessor processor = new MarkdownProcessor(settings))
             {
-                IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
-                if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
+                IEnumerable<Atom> atoms = processor.Extract(data).ToList();
+                if (atoms != null && atoms.Any()) ret = atoms.ToList();
+                ApplyChunking(ret, settings.Chunking);
 
                 ctx.Response.StatusCode = 200;
                 await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
@@ -532,23 +777,29 @@
 
         private static async Task OcrAtomRoute(HttpContextBase ctx)
         {
-            if (ctx.Request.DataAsBytes == null && ctx.Request.ContentLength < 1)
+            byte[] data;
+            ApiProcessorSettings apiSettings;
+
+            try
             {
-                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress);
+                (data, apiSettings) = ParseRequest(ctx);
+            }
+            catch (InvalidOperationException ex) when (ex.Message == "RequestBodyMissing")
+            {
                 ctx.Response.StatusCode = 400;
                 await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.RequestBodyMissing, null, "No request body found."), true));
                 return;
             }
-
-            ImageProcessorSettings settings = new ImageProcessorSettings
+            catch (Exception ex)
             {
-                TesseractDataDirectory = _Settings.Tesseract.DataDirectory,
-                TesseractLanguage = _Settings.Tesseract.Language,
-            };
+                ctx.Response.StatusCode = 400;
+                await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.BadRequest, null, "Deserialization error: " + ex.Message), true));
+                return;
+            }
 
             using (ImageContentExtractor ice = new ImageContentExtractor(_Settings.Tesseract.DataDirectory, _Settings.Tesseract.Language))
             {
-                ExtractionResult er = ice.ExtractContent(ctx.Request.DataAsBytes);
+                ExtractionResult er = ice.ExtractContent(data);
                 ctx.Response.StatusCode = 200;
                 await ctx.Response.Send(_Serializer.SerializeJson(er, true));
                 return;
@@ -557,34 +808,41 @@
 
         private static async Task PdfAtomRoute(HttpContextBase ctx)
         {
-            if (ctx.Request.DataAsBytes == null && ctx.Request.ContentLength < 1)
+            byte[] data;
+            ApiProcessorSettings apiSettings;
+
+            try
             {
-                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress);
+                (data, apiSettings) = ParseRequest(ctx);
+            }
+            catch (InvalidOperationException ex) when (ex.Message == "RequestBodyMissing")
+            {
                 ctx.Response.StatusCode = 400;
                 await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.RequestBodyMissing, null, "No request body found."), true));
                 return;
             }
+            catch (Exception ex)
+            {
+                ctx.Response.StatusCode = 400;
+                await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.BadRequest, null, "Deserialization error: " + ex.Message), true));
+                return;
+            }
 
-            PdfProcessorSettings settings = new PdfProcessorSettings();
-            settings.ExtractAtomsFromImages = ctx.Request.QuerystringExists(Constants.OcrQuerystring);
+            PdfProcessorSettings settings = ApplyApiSettings(new PdfProcessorSettings(), apiSettings);
 
             ImageProcessorSettings imageSettings = null;
             if (settings.ExtractAtomsFromImages)
             {
-                imageSettings = new ImageProcessorSettings
-                {
-                    TesseractDataDirectory = _Settings.Tesseract.DataDirectory,
-                    TesseractLanguage = _Settings.Tesseract.Language,
-
-                };
+                imageSettings = BuildImageSettings(apiSettings);
             }
 
             List<Atom> ret = new List<Atom>();
 
             using (PdfProcessor processor = new PdfProcessor(settings, imageSettings))
             {
-                IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
-                if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
+                IEnumerable<Atom> atoms = processor.Extract(data).ToList();
+                if (atoms != null && atoms.Any()) ret = atoms.ToList();
+                ApplyChunking(ret, settings.Chunking);
 
                 ctx.Response.StatusCode = 200;
                 await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
@@ -594,26 +852,35 @@
 
         private static async Task PngAtomRoute(HttpContextBase ctx)
         {
-            if (ctx.Request.DataAsBytes == null && ctx.Request.ContentLength < 1)
+            byte[] data;
+            ApiProcessorSettings apiSettings;
+
+            try
             {
-                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress);
+                (data, apiSettings) = ParseRequest(ctx);
+            }
+            catch (InvalidOperationException ex) when (ex.Message == "RequestBodyMissing")
+            {
                 ctx.Response.StatusCode = 400;
                 await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.RequestBodyMissing, null, "No request body found."), true));
                 return;
             }
-
-            ImageProcessorSettings settings = new ImageProcessorSettings
+            catch (Exception ex)
             {
-                TesseractDataDirectory = _Settings.Tesseract.DataDirectory,
-                TesseractLanguage = _Settings.Tesseract.Language,
-            };
+                ctx.Response.StatusCode = 400;
+                await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.BadRequest, null, "Deserialization error: " + ex.Message), true));
+                return;
+            }
+
+            ImageProcessorSettings settings = BuildImageSettings(apiSettings);
 
             List<Atom> ret = new List<Atom>();
 
             using (ImageProcessor processor = new ImageProcessor(settings))
             {
-                IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
-                if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
+                IEnumerable<Atom> atoms = processor.Extract(data).ToList();
+                if (atoms != null && atoms.Any()) ret = atoms.ToList();
+                ApplyChunking(ret, settings.Chunking);
 
                 ctx.Response.StatusCode = 200;
                 await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
@@ -623,34 +890,41 @@
 
         private static async Task PowerPointAtomRoute(HttpContextBase ctx)
         {
-            if (ctx.Request.DataAsBytes == null && ctx.Request.ContentLength < 1)
+            byte[] data;
+            ApiProcessorSettings apiSettings;
+
+            try
             {
-                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress);
+                (data, apiSettings) = ParseRequest(ctx);
+            }
+            catch (InvalidOperationException ex) when (ex.Message == "RequestBodyMissing")
+            {
                 ctx.Response.StatusCode = 400;
                 await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.RequestBodyMissing, null, "No request body found."), true));
                 return;
             }
+            catch (Exception ex)
+            {
+                ctx.Response.StatusCode = 400;
+                await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.BadRequest, null, "Deserialization error: " + ex.Message), true));
+                return;
+            }
 
-            PptxProcessorSettings settings = new PptxProcessorSettings();
-            settings.ExtractAtomsFromImages = ctx.Request.QuerystringExists(Constants.OcrQuerystring);
+            PptxProcessorSettings settings = ApplyApiSettings(new PptxProcessorSettings(), apiSettings);
 
             ImageProcessorSettings imageSettings = null;
             if (settings.ExtractAtomsFromImages)
             {
-                imageSettings = new ImageProcessorSettings
-                {
-                    TesseractDataDirectory = _Settings.Tesseract.DataDirectory,
-                    TesseractLanguage = _Settings.Tesseract.Language,
-
-                };
+                imageSettings = BuildImageSettings(apiSettings);
             }
 
             List<Atom> ret = new List<Atom>();
 
             using (PptxProcessor processor = new PptxProcessor(settings, imageSettings))
             {
-                IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
-                if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
+                IEnumerable<Atom> atoms = processor.Extract(data).ToList();
+                if (atoms != null && atoms.Any()) ret = atoms.ToList();
+                ApplyChunking(ret, settings.Chunking);
 
                 ctx.Response.StatusCode = 200;
                 await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
@@ -660,34 +934,41 @@
 
         private static async Task RtfAtomRoute(HttpContextBase ctx)
         {
-            if (ctx.Request.DataAsBytes == null && ctx.Request.ContentLength < 1)
+            byte[] data;
+            ApiProcessorSettings apiSettings;
+
+            try
             {
-                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress);
+                (data, apiSettings) = ParseRequest(ctx);
+            }
+            catch (InvalidOperationException ex) when (ex.Message == "RequestBodyMissing")
+            {
                 ctx.Response.StatusCode = 400;
                 await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.RequestBodyMissing, null, "No request body found."), true));
                 return;
             }
+            catch (Exception ex)
+            {
+                ctx.Response.StatusCode = 400;
+                await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.BadRequest, null, "Deserialization error: " + ex.Message), true));
+                return;
+            }
 
-            RtfProcessorSettings settings = new RtfProcessorSettings();
-            settings.ExtractAtomsFromImages = ctx.Request.QuerystringExists(Constants.OcrQuerystring);
+            RtfProcessorSettings settings = ApplyApiSettings(new RtfProcessorSettings(), apiSettings);
 
             ImageProcessorSettings imageSettings = null;
             if (settings.ExtractAtomsFromImages)
             {
-                imageSettings = new ImageProcessorSettings
-                {
-                    TesseractDataDirectory = _Settings.Tesseract.DataDirectory,
-                    TesseractLanguage = _Settings.Tesseract.Language,
-
-                };
+                imageSettings = BuildImageSettings(apiSettings);
             }
 
             List<Atom> ret = new List<Atom>();
 
             using (RtfProcessor processor = new RtfProcessor(settings, imageSettings))
             {
-                IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
-                if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
+                IEnumerable<Atom> atoms = processor.Extract(data).ToList();
+                if (atoms != null && atoms.Any()) ret = atoms.ToList();
+                ApplyChunking(ret, settings.Chunking);
 
                 ctx.Response.StatusCode = 200;
                 await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
@@ -697,20 +978,35 @@
 
         private static async Task TextAtomRoute(HttpContextBase ctx)
         {
-            if (ctx.Request.DataAsBytes == null && ctx.Request.ContentLength < 1)
+            byte[] data;
+            ApiProcessorSettings apiSettings;
+
+            try
             {
-                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress);
+                (data, apiSettings) = ParseRequest(ctx);
+            }
+            catch (InvalidOperationException ex) when (ex.Message == "RequestBodyMissing")
+            {
                 ctx.Response.StatusCode = 400;
                 await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.RequestBodyMissing, null, "No request body found."), true));
                 return;
             }
+            catch (Exception ex)
+            {
+                ctx.Response.StatusCode = 400;
+                await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.BadRequest, null, "Deserialization error: " + ex.Message), true));
+                return;
+            }
+
+            TextProcessorSettings settings = ApplyApiSettings(new TextProcessorSettings(), apiSettings);
 
             List<Atom> ret = new List<Atom>();
 
-            using (TextProcessor processor = new TextProcessor(new TextProcessorSettings()))
+            using (TextProcessor processor = new TextProcessor(settings))
             {
-                IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
-                if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
+                IEnumerable<Atom> atoms = processor.Extract(data).ToList();
+                if (atoms != null && atoms.Any()) ret = atoms.ToList();
+                ApplyChunking(ret, settings.Chunking);
 
                 ctx.Response.StatusCode = 200;
                 await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
@@ -720,34 +1016,41 @@
 
         private static async Task WordAtomRoute(HttpContextBase ctx)
         {
-            if (ctx.Request.DataAsBytes == null && ctx.Request.ContentLength < 1)
+            byte[] data;
+            ApiProcessorSettings apiSettings;
+
+            try
             {
-                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress);
+                (data, apiSettings) = ParseRequest(ctx);
+            }
+            catch (InvalidOperationException ex) when (ex.Message == "RequestBodyMissing")
+            {
                 ctx.Response.StatusCode = 400;
                 await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.RequestBodyMissing, null, "No request body found."), true));
                 return;
             }
+            catch (Exception ex)
+            {
+                ctx.Response.StatusCode = 400;
+                await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.BadRequest, null, "Deserialization error: " + ex.Message), true));
+                return;
+            }
 
-            DocxProcessorSettings settings = new DocxProcessorSettings();
-            settings.ExtractAtomsFromImages = ctx.Request.QuerystringExists(Constants.OcrQuerystring);
+            DocxProcessorSettings settings = ApplyApiSettings(new DocxProcessorSettings(), apiSettings);
 
             ImageProcessorSettings imageSettings = null;
             if (settings.ExtractAtomsFromImages)
             {
-                imageSettings = new ImageProcessorSettings
-                {
-                    TesseractDataDirectory = _Settings.Tesseract.DataDirectory,
-                    TesseractLanguage = _Settings.Tesseract.Language,
-
-                };
+                imageSettings = BuildImageSettings(apiSettings);
             }
 
             List<Atom> ret = new List<Atom>();
 
             using (DocxProcessor processor = new DocxProcessor(settings, imageSettings))
             {
-                IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
-                if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
+                IEnumerable<Atom> atoms = processor.Extract(data).ToList();
+                if (atoms != null && atoms.Any()) ret = atoms.ToList();
+                ApplyChunking(ret, settings.Chunking);
 
                 ctx.Response.StatusCode = 200;
                 await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
@@ -757,22 +1060,35 @@
 
         private static async Task XmlAtomRoute(HttpContextBase ctx)
         {
-            if (ctx.Request.DataAsBytes == null && ctx.Request.ContentLength < 1)
+            byte[] data;
+            ApiProcessorSettings apiSettings;
+
+            try
             {
-                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress);
+                (data, apiSettings) = ParseRequest(ctx);
+            }
+            catch (InvalidOperationException ex) when (ex.Message == "RequestBodyMissing")
+            {
                 ctx.Response.StatusCode = 400;
                 await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.RequestBodyMissing, null, "No request body found."), true));
                 return;
             }
+            catch (Exception ex)
+            {
+                ctx.Response.StatusCode = 400;
+                await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.BadRequest, null, "Deserialization error: " + ex.Message), true));
+                return;
+            }
 
-            XmlProcessorSettings settings = new XmlProcessorSettings();
+            XmlProcessorSettings settings = ApplyApiSettings(new XmlProcessorSettings(), apiSettings);
 
             List<Atom> ret = new List<Atom>();
 
             using (XmlProcessor processor = new XmlProcessor(settings))
             {
-                IEnumerable<Atom> atoms = processor.Extract(ctx.Request.DataAsBytes).ToList();
-                if (atoms != null && atoms.Count() > 0) ret = atoms.ToList();
+                IEnumerable<Atom> atoms = processor.Extract(data).ToList();
+                if (atoms != null && atoms.Any()) ret = atoms.ToList();
+                ApplyChunking(ret, settings.Chunking);
 
                 ctx.Response.StatusCode = 200;
                 await ctx.Response.Send(_Serializer.SerializeJson(ret, true));
@@ -782,13 +1098,18 @@
 
         private static async Task TypeDetectionRoute(HttpContextBase ctx)
         {
-            if (ctx.Request.DataAsBytes == null && ctx.Request.ContentLength < 1)
+            if (ctx.Request.DataAsBytes == null || ctx.Request.ContentLength < 1)
             {
-                _Logging.Warn(_Header + "request body missing for " + ctx.Request.Method + " " + ctx.Request.Url.RawWithQuery + " from " + ctx.Request.Source.IpAddress);
                 ctx.Response.StatusCode = 400;
                 await ctx.Response.Send(_Serializer.SerializeJson(new ApiErrorResponse(ApiErrorEnum.RequestBodyMissing, null, "No request body found."), true));
                 return;
             }
+
+            byte[] data = ctx.Request.DataAsBytes;
+
+            string contentType = ctx.Request.ContentType;
+            if (String.IsNullOrEmpty(contentType))
+                contentType = "application/octet-stream";
 
             string dir = "./" + Guid.NewGuid() + "/";
             TypeResult tr = new TypeResult();
@@ -797,7 +1118,7 @@
             {
                 using (TypeDetector td = new TypeDetector(dir))
                 {
-                    tr = td.Process(ctx.Request.DataAsBytes, ctx.Request.ContentType);
+                    tr = td.Process(data, contentType);
                 }
             }
             finally

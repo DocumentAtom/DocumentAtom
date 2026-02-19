@@ -3,6 +3,7 @@ namespace DocumentAtom.McpServer.Registrations
     using System;
     using System.Text.Json;
     using DocumentAtom.McpServer.Classes;
+    using DocumentAtom.Core.Api;
     using DocumentAtom.Core.Atoms;
     using DocumentAtom.Sdk;
     using SerializationHelper;
@@ -44,9 +45,11 @@ namespace DocumentAtom.McpServer.Registrations
 
                     string base64Data = dataProp.GetString() ?? throw new ArgumentException("PDF data cannot be null");
                     byte[] pdfData = Convert.FromBase64String(base64Data);
-                    bool extractOcr = DocumentAtomMcpServerHelpers.GetBoolOrDefault(args.Value, "extractOcr", false);
+                    ApiProcessorSettings? settings = DocumentAtomMcpServerHelpers.GetBoolOrDefault(args.Value, "extractOcr", false)
+                        ? new ApiProcessorSettings { ExtractAtomsFromImages = true }
+                        : null;
 
-                    List<Atom> atoms = sdk.Atom.ProcessPdf(pdfData, extractOcr).GetAwaiter().GetResult();
+                    List<Atom> atoms = sdk.Atom.ProcessPdf(pdfData, settings).GetAwaiter().GetResult();
                     return serializer.SerializeJson(atoms, true);
                 });
         }
@@ -71,9 +74,11 @@ namespace DocumentAtom.McpServer.Registrations
 
                 string base64Data = dataProp.GetString() ?? throw new ArgumentException("PDF data cannot be null");
                 byte[] pdfData = Convert.FromBase64String(base64Data);
-                bool extractOcr = DocumentAtomMcpServerHelpers.GetBoolOrDefault(args.Value, "extractOcr", false);
+                ApiProcessorSettings? settings = DocumentAtomMcpServerHelpers.GetBoolOrDefault(args.Value, "extractOcr", false)
+                    ? new ApiProcessorSettings { ExtractAtomsFromImages = true }
+                    : null;
 
-                List<Atom> atoms =sdk.Atom.ProcessPdf(pdfData, extractOcr).GetAwaiter().GetResult();
+                List<Atom> atoms = sdk.Atom.ProcessPdf(pdfData, settings).GetAwaiter().GetResult();
                 return serializer.SerializeJson(atoms, true);
             });
         }
@@ -98,9 +103,11 @@ namespace DocumentAtom.McpServer.Registrations
 
                 string base64Data = dataProp.GetString() ?? throw new ArgumentException("PDF data cannot be null");
                 byte[] pdfData = Convert.FromBase64String(base64Data);
-                bool extractOcr = DocumentAtomMcpServerHelpers.GetBoolOrDefault(args.Value, "extractOcr", false);
+                ApiProcessorSettings? settings = DocumentAtomMcpServerHelpers.GetBoolOrDefault(args.Value, "extractOcr", false)
+                    ? new ApiProcessorSettings { ExtractAtomsFromImages = true }
+                    : null;
 
-                List<Atom> atoms =sdk.Atom.ProcessPdf(pdfData, extractOcr).GetAwaiter().GetResult();
+                List<Atom> atoms = sdk.Atom.ProcessPdf(pdfData, settings).GetAwaiter().GetResult();
                 return serializer.SerializeJson(atoms, true);
             });
         }

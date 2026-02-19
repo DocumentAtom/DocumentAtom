@@ -4,6 +4,190 @@
         <name>DocumentAtom.Core</name>
     </assembly>
     <members>
+        <member name="T:DocumentAtom.Core.Api.ApiProcessorSettings">
+            <summary>
+            Flat settings class for API requests.
+            All fields are nullable so callers can override only the settings they care about.
+            Each route handler maps relevant fields to its processor-specific settings type.
+            Security-sensitive fields (TempDirectory, TesseractDataDirectory, TesseractLanguage,
+            StreamBufferSize, CommonHeaderRowTerms, HeaderRowPatternWeights, ListMarkers,
+            ListNumberingPatterns, QuoteCharacters, DebugLogging) are intentionally excluded.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Api.ApiProcessorSettings.TrimText">
+            <summary>
+            True to trim any text output.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Api.ApiProcessorSettings.RemoveBinaryFromText">
+            <summary>
+            True to remove binary data from input text data.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Api.ApiProcessorSettings.ExtractAtomsFromImages">
+            <summary>
+            True to extract atoms from images using OCR.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Api.ApiProcessorSettings.Chunking">
+            <summary>
+            Chunking configuration.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Api.ApiProcessorSettings.Delimiters">
+            <summary>
+            Delimiters for text and markdown processing.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Api.ApiProcessorSettings.BuildHierarchy">
+            <summary>
+            Whether to build document hierarchy from heading structure.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Api.ApiProcessorSettings.RowDelimiter">
+            <summary>
+            Row delimiter for CSV processing.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Api.ApiProcessorSettings.ColumnDelimiter">
+            <summary>
+            Column delimiter for CSV processing.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Api.ApiProcessorSettings.HasHeaderRow">
+            <summary>
+            Whether the CSV has a header row.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Api.ApiProcessorSettings.RowsPerAtom">
+            <summary>
+            Number of rows per atom for CSV processing.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Api.ApiProcessorSettings.ProcessInlineStyles">
+            <summary>
+            Whether to process inline styles in HTML.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Api.ApiProcessorSettings.ProcessMetaTags">
+            <summary>
+            Whether to process meta tags in HTML.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Api.ApiProcessorSettings.ProcessScripts">
+            <summary>
+            Whether to process scripts in HTML.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Api.ApiProcessorSettings.ProcessComments">
+            <summary>
+            Whether to process comments in HTML.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Api.ApiProcessorSettings.PreserveWhitespace">
+            <summary>
+            Whether to preserve whitespace in HTML.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Api.ApiProcessorSettings.MaxTextLength">
+            <summary>
+            Maximum text length for HTML processing.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Api.ApiProcessorSettings.ProcessSvg">
+            <summary>
+            Whether to process SVG in HTML.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Api.ApiProcessorSettings.ExtractDataAttributes">
+            <summary>
+            Whether to extract data attributes in HTML.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Api.ApiProcessorSettings.MaxDepth">
+            <summary>
+            Maximum depth for JSON and XML processing.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Api.ApiProcessorSettings.IncludeAttributes">
+            <summary>
+            Whether to include attributes in XML processing.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Api.ApiProcessorSettings.HeaderRowScoreThreshold">
+            <summary>
+            Header row score threshold for Excel processing.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Api.ApiProcessorSettings.LineThreshold">
+            <summary>
+            Line threshold for OCR processing.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Api.ApiProcessorSettings.ParagraphThreshold">
+            <summary>
+            Paragraph threshold for OCR processing.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Api.ApiProcessorSettings.HorizontalLineLength">
+            <summary>
+            Horizontal line length for OCR processing.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Api.ApiProcessorSettings.VerticalLineLength">
+            <summary>
+            Vertical line length for OCR processing.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Api.ApiProcessorSettings.TableMinArea">
+            <summary>
+            Table minimum area for OCR processing.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Api.ApiProcessorSettings.ColumnAlignmentTolerance">
+            <summary>
+            Column alignment tolerance for OCR processing.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Api.ApiProcessorSettings.ProximityThreshold">
+            <summary>
+            Proximity threshold for OCR processing.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Api.ApiProcessorSettings.#ctor">
+            <summary>
+            Flat settings class for API requests.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Core.Api.AtomRequest">
+            <summary>
+            Request envelope for atomization API endpoints.
+            Contains optional processing settings and base64-encoded document data.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Api.AtomRequest.Settings">
+            <summary>
+            Processing settings for the atomization operation.
+            When null, server defaults are used.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Api.AtomRequest.Data">
+            <summary>
+            Base64-encoded document data.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Api.AtomRequest.#ctor">
+            <summary>
+            Request envelope for atomization API endpoints.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Api.AtomRequest.GetDataBytes">
+            <summary>
+            Decode the base64-encoded data to a byte array.
+            </summary>
+            <returns>Byte array of the decoded data.</returns>
+            <exception cref="T:System.FormatException">Thrown when the data is not valid base64.</exception>
+        </member>
         <member name="T:DocumentAtom.Core.Atoms.Atom">
             <summary>
             An atom is a small, self-contained unit of content from a document.
@@ -128,6 +312,15 @@
         <member name="P:DocumentAtom.Core.Atoms.Atom.Quarks">
             <summary>
             A quark is a subset of the content from an atom, used when intentionally breaking content into smaller chunks.
+            Quarks are structural child atoms produced by processors during document hierarchy extraction.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Atoms.Atom.Chunks">
+            <summary>
+            Content fragments produced by running a chunking strategy on this atom's content.
+            Unlike quarks (which are structural child atoms from document hierarchy), chunks are
+            lightweight text segments with positional tracking and content hashes.
+            An atom can have both quarks and chunks simultaneously as they are orthogonal concerns.
             </summary>
         </member>
         <member name="M:DocumentAtom.Core.Atoms.Atom.#ctor">
@@ -159,22 +352,22 @@
             <param name="table">Table structure.</param>
             <returns>Table atom.</returns>
         </member>
-        <member name="M:DocumentAtom.Core.Atoms.Atom.FromTextContent(System.String,System.Int32,DocumentAtom.Core.ChunkingSettings)">
+        <member name="M:DocumentAtom.Core.Atoms.Atom.FromTextContent(System.String,System.Int32,DocumentAtom.Core.Chunking.ChunkingConfiguration)">
             <summary>
             Create an atom from text content.
             </summary>
             <param name="text">Text.</param>
             <param name="position">Position.</param>
-            <param name="settings">Settings.</param>
-            <returns></returns>
+            <param name="settings">Chunking configuration.</param>
+            <returns>Text atom.</returns>
         </member>
-        <member name="M:DocumentAtom.Core.Atoms.Atom.FromMarkdownContent(System.String,System.Int32,DocumentAtom.Core.ChunkingSettings)">
+        <member name="M:DocumentAtom.Core.Atoms.Atom.FromMarkdownContent(System.String,System.Int32,DocumentAtom.Core.Chunking.ChunkingConfiguration)">
             <summary>
-            Produce an atom with quarks, if chunking is enabled.
+            Produce an atom from markdown content, with optional chunking.
             </summary>
             <param name="text">Text content.</param>
             <param name="position">Atom position.</param>
-            <param name="settings">Chunking settings.</param>
+            <param name="settings">Chunking configuration.</param>
             <returns>Markdown atom.</returns>
         </member>
         <member name="M:DocumentAtom.Core.Atoms.Atom.IsMarkdownUnorderedListItem(System.String)">
@@ -317,39 +510,295 @@
             </summary>
             <returns>String.</returns>
         </member>
-        <member name="T:DocumentAtom.Core.ChunkingSettings">
+        <member name="T:DocumentAtom.Core.Chunking.Chunk">
             <summary>
-            Chunking settings, that is, breaking atoms into quarks.
+            A chunk is a content fragment produced by running a chunking strategy on an atom's content.
+            Unlike quarks (which are structural child atoms), chunks are lightweight text segments
+            with positional tracking and content hashes.
             </summary>
         </member>
-        <member name="P:DocumentAtom.Core.ChunkingSettings.Enable">
+        <member name="P:DocumentAtom.Core.Chunking.Chunk.Position">
             <summary>
-            Enable or disable chunking, that is, breaking atoms into quarks.
+            Ordinal index (0, 1, 2, ...) within the parent atom's chunk list.
+            Must be greater than or equal to zero.
             </summary>
         </member>
-        <member name="P:DocumentAtom.Core.ChunkingSettings.MaximumLength">
+        <member name="P:DocumentAtom.Core.Chunking.Chunk.Length">
             <summary>
-            Maximum quark content length.  Minimum is 256 and maximum is 16384.  Default is 512.
+            Content length.
+            Must be greater than or equal to zero.
             </summary>
         </member>
-        <member name="P:DocumentAtom.Core.ChunkingSettings.ShiftSize">
+        <member name="P:DocumentAtom.Core.Chunking.Chunk.MD5Hash">
             <summary>
-            Shift size, used to determine overlap amongst neighboring quarks.
-            When set to the same value as the maximum quark content length, no overlap will exist amongst neighboring quarks.
-            When set to a smaller amount than the maximum quark content length, overlap will exist amongst neighboring quarks.
-            This value must be equal to or less than the maximum quark content length.
+            MD5 hash of the text content.
             </summary>
         </member>
-        <member name="P:DocumentAtom.Core.ChunkingSettings.MaximumWords">
+        <member name="P:DocumentAtom.Core.Chunking.Chunk.SHA1Hash">
             <summary>
-            The maximum number of words to retrieve.
-            Default value is 256.
+            SHA1 hash of the text content.
             </summary>
         </member>
-        <member name="M:DocumentAtom.Core.ChunkingSettings.#ctor">
+        <member name="P:DocumentAtom.Core.Chunking.Chunk.SHA256Hash">
             <summary>
-            Chunking settings, that is, breaking atoms into quarks.
+            SHA256 hash of the text content.
             </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Chunking.Chunk.Text">
+            <summary>
+            Chunk text content.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Chunking.Chunk.#ctor">
+            <summary>
+            A chunk is a content fragment produced by running a chunking strategy on an atom's content.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Chunking.Chunk.FromText(System.String,System.Int32)">
+            <summary>
+            Create a chunk from text content with computed hashes.
+            </summary>
+            <param name="text">Text content.</param>
+            <param name="position">Ordinal position within the parent atom's chunk list.</param>
+            <returns>Chunk with computed hashes.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Chunking.Chunk.ToString">
+            <summary>
+            Produce a human-readable string of this object.
+            </summary>
+            <returns>String.</returns>
+        </member>
+        <member name="T:DocumentAtom.Core.Chunking.ChunkingConfiguration">
+            <summary>
+            Configuration for how content is chunked.
+            Controls the chunking strategy, token budget, overlap, and strategy-specific parameters.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Chunking.ChunkingConfiguration.Enable">
+            <summary>
+            Enable or disable chunking.
+            Default is false.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Chunking.ChunkingConfiguration.Strategy">
+            <summary>
+            Chunking strategy to use.
+            Default is FixedTokenCount.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Chunking.ChunkingConfiguration.FixedTokenCount">
+            <summary>
+            Number of tokens per chunk.
+            Also used as the token budget for sentence-based and paragraph-based strategies.
+            Default is 256.  Minimum is 1.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Chunking.ChunkingConfiguration.OverlapCount">
+            <summary>
+            Number of tokens, sentences, or paragraphs to overlap between chunks depending on strategy.
+            Default is 0.  Minimum is 0.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Chunking.ChunkingConfiguration.OverlapPercentage">
+            <summary>
+            Alternative overlap as a percentage of chunk size (0.0 to 1.0).
+            When set, takes precedence over OverlapCount.
+            Default is null (disabled).
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Chunking.ChunkingConfiguration.OverlapStrategy">
+            <summary>
+            Strategy for handling overlap boundaries.
+            Default is SlidingWindow.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Chunking.ChunkingConfiguration.RowGroupSize">
+            <summary>
+            Number of rows per group for the RowGroupWithHeaders table strategy.
+            Default is 5.  Minimum is 1.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Chunking.ChunkingConfiguration.ContextPrefix">
+            <summary>
+            Text prefix prepended to each chunk.
+            Default is null (disabled).
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Core.Chunking.ChunkingConfiguration.RegexPattern">
+            <summary>
+            Regular expression pattern used as a split delimiter for the RegexBased strategy.
+            Required when Strategy is RegexBased.
+            Default is null.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Chunking.ChunkingConfiguration.#ctor">
+            <summary>
+            Configuration for how content is chunked.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Core.Chunking.ChunkingEngine">
+            <summary>
+            Factory/dispatcher for chunking operations across different strategies and atom types.
+            Routes chunking requests by atom type and strategy to the appropriate chunker implementation.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Chunking.ChunkingEngine.#ctor(System.Action{DocumentAtom.Core.Enums.SeverityEnum,System.String})">
+            <summary>
+            Initialize a new ChunkingEngine.
+            </summary>
+            <param name="logger">Optional logger callback.  May be null.</param>
+        </member>
+        <member name="M:DocumentAtom.Core.Chunking.ChunkingEngine.Chunk(DocumentAtom.Core.Enums.AtomTypeEnum,System.String,System.Collections.Generic.List{System.String},System.Collections.Generic.List{System.String},System.Collections.Generic.List{System.Collections.Generic.List{System.String}},DocumentAtom.Core.Chunking.ChunkingConfiguration)">
+            <summary>
+            Chunk content based on atom type and configuration.
+            </summary>
+            <param name="type">The type of the atom being chunked.</param>
+            <param name="text">Text content (for text, code, hyperlink, meta, unknown atoms).</param>
+            <param name="orderedList">Ordered list items (for list atoms).</param>
+            <param name="unorderedList">Unordered list items (for list atoms).</param>
+            <param name="table">Table data as list of rows (for table atoms).  Row 0 is assumed to be headers.</param>
+            <param name="config">Chunking configuration.</param>
+            <returns>List of Chunk objects with text, hashes, and position indices.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Chunking.ChunkingEngine.SerializableDataTableToList(SerializableDataTables.SerializableDataTable)">
+            <summary>
+            Convert a SerializableDataTable to a List of List of strings.
+            Row 0 contains column headers.
+            </summary>
+            <param name="sdt">SerializableDataTable to convert.</param>
+            <returns>List of rows, each row being a list of cell values.</returns>
+        </member>
+        <member name="T:DocumentAtom.Core.Chunking.FixedTokenChunker">
+            <summary>
+            Splits text into chunks of a fixed token count with optional overlap.
+            Supports all three overlap strategies: SlidingWindow, SentenceBoundaryAware, and SemanticBoundaryAware.
+            Uses SharpToken cl100k_base encoding for tokenization.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Chunking.FixedTokenChunker.Chunk(System.String,DocumentAtom.Core.Chunking.ChunkingConfiguration,SharpToken.GptEncoding)">
+            <summary>
+            Chunk text into fixed-token-count segments with optional overlap.
+            </summary>
+            <param name="text">Text to chunk.</param>
+            <param name="config">Chunking configuration.</param>
+            <param name="encoding">Token encoding instance.</param>
+            <returns>List of chunked text segments.</returns>
+        </member>
+        <member name="T:DocumentAtom.Core.Chunking.ListEntryChunker">
+            <summary>
+            Each list item becomes its own chunk.
+            Filters out whitespace-only items.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Chunking.ListEntryChunker.Chunk(System.Collections.Generic.List{System.String})">
+            <summary>
+            Create one chunk per list item.
+            </summary>
+            <param name="items">List items to chunk.</param>
+            <returns>List of chunked text segments, one per non-empty item.</returns>
+        </member>
+        <member name="T:DocumentAtom.Core.Chunking.ParagraphChunker">
+            <summary>
+            Splits text at paragraph boundaries (double newline), grouping paragraphs to fill a token budget.
+            Overlap is measured in paragraph count.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Chunking.ParagraphChunker.Chunk(System.String,DocumentAtom.Core.Chunking.ChunkingConfiguration,SharpToken.GptEncoding)">
+            <summary>
+            Chunk text by paragraph boundaries, grouping paragraphs to fill a token budget.
+            </summary>
+            <param name="text">Text to chunk.</param>
+            <param name="config">Chunking configuration.</param>
+            <param name="encoding">Token encoding instance.</param>
+            <returns>List of chunked text segments.</returns>
+        </member>
+        <member name="T:DocumentAtom.Core.Chunking.RegexChunker">
+            <summary>
+            Splits text at boundaries defined by a user-supplied regular expression.
+            Compiled with RegexOptions.Compiled | RegexOptions.Multiline and a 5-second timeout for ReDoS protection.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Chunking.RegexChunker.Chunk(System.String,DocumentAtom.Core.Chunking.ChunkingConfiguration,SharpToken.GptEncoding)">
+            <summary>
+            Chunk text by regex-defined boundaries.
+            </summary>
+            <param name="text">Text to chunk.</param>
+            <param name="config">Chunking configuration.  RegexPattern must be non-empty.</param>
+            <param name="encoding">Token encoding instance.</param>
+            <returns>List of chunked text segments.</returns>
+            <exception cref="T:System.ArgumentException">Thrown when RegexPattern is null or empty.</exception>
+        </member>
+        <member name="T:DocumentAtom.Core.Chunking.SentenceChunker">
+            <summary>
+            Splits text at sentence boundaries, grouping sentences to fill a token budget.
+            Overlap is measured in sentence count.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Chunking.SentenceChunker.Chunk(System.String,DocumentAtom.Core.Chunking.ChunkingConfiguration,SharpToken.GptEncoding)">
+            <summary>
+            Chunk text by sentence boundaries.
+            </summary>
+            <param name="text">Text to chunk.</param>
+            <param name="config">Chunking configuration.</param>
+            <param name="encoding">Token encoding instance.</param>
+            <returns>List of chunked text segments.</returns>
+        </member>
+        <member name="T:DocumentAtom.Core.Chunking.TableChunker">
+            <summary>
+            Static methods for table-specific chunking strategies.
+            All methods assume table[0] is the header row.
+            Tables with 0 or 1 rows (header only) return empty.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Chunking.TableChunker.ChunkByRow(System.Collections.Generic.List{System.Collections.Generic.List{System.String}})">
+            <summary>
+            Each data row as space-separated values (no headers).
+            </summary>
+            <param name="table">Table data where table[0] is the header row.</param>
+            <returns>List of chunked text segments.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Chunking.TableChunker.ChunkByRowWithHeaders(System.Collections.Generic.List{System.Collections.Generic.List{System.String}})">
+            <summary>
+            Each data row as a markdown table with headers prepended.
+            </summary>
+            <param name="table">Table data where table[0] is the header row.</param>
+            <returns>List of chunked text segments.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Chunking.TableChunker.ChunkByRowGroupWithHeaders(System.Collections.Generic.List{System.Collections.Generic.List{System.String}},System.Int32)">
+            <summary>
+            Groups of N data rows with headers prepended (markdown table format).
+            </summary>
+            <param name="table">Table data where table[0] is the header row.</param>
+            <param name="groupSize">Number of data rows per group.  Minimum is 1.</param>
+            <returns>List of chunked text segments.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Chunking.TableChunker.ChunkByKeyValuePairs(System.Collections.Generic.List{System.Collections.Generic.List{System.String}})">
+            <summary>
+            Each data row as key-value pairs: "key1: val1, key2: val2, ...".
+            </summary>
+            <param name="table">Table data where table[0] is the header row.</param>
+            <returns>List of chunked text segments.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Chunking.TableChunker.ChunkWholeTable(System.Collections.Generic.List{System.Collections.Generic.List{System.String}})">
+            <summary>
+            Entire table as a single markdown table chunk.
+            </summary>
+            <param name="table">Table data where table[0] is the header row.</param>
+            <returns>List containing a single chunked text segment.</returns>
+        </member>
+        <member name="T:DocumentAtom.Core.Chunking.WholeListChunker">
+            <summary>
+            Treats the entire list as a single chunk.
+            Serializes as numbered (ordered) or bulleted (unordered) list.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Chunking.WholeListChunker.Chunk(System.Collections.Generic.List{System.String},System.Boolean)">
+            <summary>
+            Serialize an entire list into a single chunk.
+            </summary>
+            <param name="items">List items.</param>
+            <param name="ordered">True for numbered list, false for bulleted list.</param>
+            <returns>List containing a single chunked text segment.</returns>
         </member>
         <member name="T:DocumentAtom.Core.Enums.AtomTypeEnum">
             <summary>
@@ -399,6 +848,66 @@
         <member name="F:DocumentAtom.Core.Enums.AtomTypeEnum.Meta">
             <summary>
             Meta atom.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Core.Enums.ChunkStrategyEnum">
+            <summary>
+            Chunking strategy for breaking content into chunks.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.ChunkStrategyEnum.FixedTokenCount">
+            <summary>
+            Fixed-size token chunks using a sliding window.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.ChunkStrategyEnum.SentenceBased">
+            <summary>
+            Split at sentence boundaries, group to token budget.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.ChunkStrategyEnum.ParagraphBased">
+            <summary>
+            Split at paragraph boundaries, group to token budget.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.ChunkStrategyEnum.RegexBased">
+            <summary>
+            Split at user-supplied regex pattern.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.ChunkStrategyEnum.WholeList">
+            <summary>
+            Entire list as a single chunk.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.ChunkStrategyEnum.ListEntry">
+            <summary>
+            Each list item as its own chunk.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.ChunkStrategyEnum.Row">
+            <summary>
+            Each table data row as space-separated values (no headers).
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.ChunkStrategyEnum.RowWithHeaders">
+            <summary>
+            Each data row as a markdown table with headers.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.ChunkStrategyEnum.RowGroupWithHeaders">
+            <summary>
+            Groups of N rows with headers as markdown tables.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.ChunkStrategyEnum.KeyValuePairs">
+            <summary>
+            Each row as key-value pairs: "col1: val1, col2: val2".
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.ChunkStrategyEnum.WholeTable">
+            <summary>
+            Entire table as a single markdown table chunk.
             </summary>
         </member>
         <member name="T:DocumentAtom.Core.Enums.MarkdownFormattingEnum">
@@ -464,6 +973,26 @@
         <member name="F:DocumentAtom.Core.Enums.MarkdownTableLineTypeEnum.Content">
             <summary>
             A content line (header or data)
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Core.Enums.OverlapStrategyEnum">
+            <summary>
+            Strategy for handling overlap boundaries between chunks.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.OverlapStrategyEnum.SlidingWindow">
+            <summary>
+            Mechanical overlap by token count.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.OverlapStrategyEnum.SentenceBoundaryAware">
+            <summary>
+            Adjust overlap to nearest sentence end.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Enums.OverlapStrategyEnum.SemanticBoundaryAware">
+            <summary>
+            Adjust overlap to nearest paragraph boundary.
             </summary>
         </member>
         <member name="T:DocumentAtom.Core.Enums.SeverityEnum">
@@ -1003,7 +1532,7 @@
         </member>
         <member name="P:DocumentAtom.Core.ProcessorSettingsBase.Chunking">
             <summary>
-            Chunking settings, that is, breaking atoms into smaller, more manageable quarks.
+            Chunking configuration for breaking atom content into smaller chunks.
             </summary>
         </member>
         <member name="M:DocumentAtom.Core.ProcessorSettingsBase.#ctor">

@@ -1,5 +1,6 @@
 ﻿namespace DocumentAtom.Core.Atoms
 {
+    using DocumentAtom.Core.Chunking;
     using DocumentAtom.Core.Enums;
     using DocumentAtom.Core.Helpers;
     using DocumentAtom.Core.Image;
@@ -198,8 +199,17 @@
 
         /// <summary>
         /// A quark is a subset of the content from an atom, used when intentionally breaking content into smaller chunks.
+        /// Quarks are structural child atoms produced by processors during document hierarchy extraction.
         /// </summary>
         public List<Atom> Quarks { get; set; } = null;
+
+        /// <summary>
+        /// Content fragments produced by running a chunking strategy on this atom's content.
+        /// Unlike quarks (which are structural child atoms from document hierarchy), chunks are
+        /// lightweight text segments with positional tracking and content hashes.
+        /// An atom can have both quarks and chunks simultaneously as they are orthogonal concerns.
+        /// </summary>
+        public List<Chunk> Chunks { get; set; } = null;
 
         #endregion
 
@@ -286,6 +296,11 @@
                 }
             }
 
+            if (Chunks != null && Chunks.Count > 0)
+            {
+                sb.Append("| Chunks        : " + Chunks.Count + Environment.NewLine);
+            }
+
             return sb.ToString();
         }
 
@@ -348,13 +363,13 @@
         /// </summary>
         /// <param name="text">Text.</param>
         /// <param name="position">Position.</param>
-        /// <param name="settings">Settings.</param>
-        /// <returns></returns>
-        public static Atom FromTextContent(string text, int position, ChunkingSettings settings)
+        /// <param name="settings">Chunking configuration.</param>
+        /// <returns>Text atom.</returns>
+        public static Atom FromTextContent(string text, int position, ChunkingConfiguration settings)
         {
             if (string.IsNullOrEmpty(text)) throw new ArgumentNullException(nameof(text));
             if (position < 0) throw new ArgumentOutOfRangeException(nameof(position));
-            if (settings == null) settings = new ChunkingSettings();
+            if (settings == null) settings = new ChunkingConfiguration();
 
             byte[] bytes = Encoding.UTF8.GetBytes(text);
 
@@ -371,54 +386,34 @@
 
             if (settings.Enable)
             {
-                if (text.Length >= settings.MaximumLength)
-                {
-                    int quarkPosition = 0;
+                ChunkingEngine engine = new ChunkingEngine();
+                List<Chunk> chunks = engine.Chunk(
+                    AtomTypeEnum.Text,
+                    text,
+                    null,
+                    null,
+                    null,
+                    settings);
 
-                    IEnumerable<string> subStrings = StringHelper.GetSubstringsFromString(text, settings.MaximumLength, settings.ShiftSize, settings.MaximumWords);
-
-                    atom.Quarks = new List<Atom>();
-
-                    foreach (string substring in subStrings)
-                    {
-                        if (!string.IsNullOrEmpty(substring))
-                        {
-                            byte[] substringBytes = Encoding.UTF8.GetBytes(substring);
-
-                            Atom quark = new Atom
-                            {
-                                Type = AtomTypeEnum.Text,
-                                Position = quarkPosition,
-                                Length = substring.Length,
-                                Text = substring,
-                                MD5Hash = HashHelper.MD5Hash(substringBytes),
-                                SHA1Hash = HashHelper.SHA1Hash(substringBytes),
-                                SHA256Hash = HashHelper.SHA256Hash(substringBytes),
-                                Quarks = null
-                            };
-
-                            atom.Quarks.Add(quark);
-                            quarkPosition++;
-                        }
-                    }
-                }
+                if (chunks != null && chunks.Count > 0)
+                    atom.Chunks = chunks;
             }
 
             return atom;
         }
 
         /// <summary>
-        /// Produce an atom with quarks, if chunking is enabled.
+        /// Produce an atom from markdown content, with optional chunking.
         /// </summary>
         /// <param name="text">Text content.</param>
         /// <param name="position">Atom position.</param>
-        /// <param name="settings">Chunking settings.</param>
+        /// <param name="settings">Chunking configuration.</param>
         /// <returns>Markdown atom.</returns>
-        public static Atom FromMarkdownContent(string text, int position, ChunkingSettings settings)
+        public static Atom FromMarkdownContent(string text, int position, ChunkingConfiguration settings)
         {
             if (string.IsNullOrEmpty(text)) throw new ArgumentNullException(nameof(text));
             if (position < 0) throw new ArgumentOutOfRangeException(nameof(position));
-            if (settings == null) settings = new ChunkingSettings();
+            if (settings == null) settings = new ChunkingConfiguration();
 
             byte[] bytes = Encoding.UTF8.GetBytes(text);
 
@@ -475,37 +470,17 @@
             {
                 #region Chunk-Text
 
-                if (text.Length >= settings.MaximumLength)
-                {
-                    int quarkPosition = 0;
+                ChunkingEngine engine = new ChunkingEngine();
+                List<Chunk> chunks = engine.Chunk(
+                    AtomTypeEnum.Text,
+                    text,
+                    null,
+                    null,
+                    null,
+                    settings);
 
-                    IEnumerable<string> subStrings = StringHelper.GetSubstringsFromString(text, settings.MaximumLength, settings.ShiftSize, settings.MaximumWords);
-
-                    atom.Quarks = new List<Atom>();
-
-                    foreach (string substring in subStrings)
-                    {
-                        if (!string.IsNullOrEmpty(substring))
-                        {
-                            byte[] substringBytes = Encoding.UTF8.GetBytes(substring);
-
-                            Atom quark = new Atom
-                            {
-                                Type = AtomTypeEnum.Text,
-                                Position = quarkPosition,
-                                Length = substring.Length,
-                                Text = substring,
-                                MD5Hash = HashHelper.MD5Hash(substringBytes),
-                                SHA1Hash = HashHelper.SHA1Hash(substringBytes),
-                                SHA256Hash = HashHelper.SHA256Hash(substringBytes),
-                                Quarks = null
-                            };
-
-                            atom.Quarks.Add(quark);
-                            quarkPosition++;
-                        }
-                    }
-                }
+                if (chunks != null && chunks.Count > 0)
+                    atom.Chunks = chunks;
 
                 #endregion
             }

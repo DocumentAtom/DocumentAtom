@@ -1,5 +1,6 @@
 namespace DocumentAtom.Sdk
 {
+    using System.Text;
     using System.Text.Json;
     using System.Text.Json.Serialization;
     using DocumentAtom.Core.Enums;
@@ -130,32 +131,35 @@ namespace DocumentAtom.Sdk
         }
 
         /// <summary>
-        /// Send a POST request with binary data and return typed response.
+        /// Send a POST request with a JSON body and return typed response.
         /// </summary>
         /// <typeparam name="T">Response type.</typeparam>
         /// <param name="url">Full URL to send request to.</param>
-        /// <param name="data">Binary data to send.</param>
+        /// <param name="body">Object to serialize as JSON body.</param>
         /// <param name="cancellationToken">Cancellation token.</param>
         /// <returns>Deserialized response of type T.</returns>
-        public async Task<T?> PostAsync<T>(string url, byte[] data, CancellationToken cancellationToken = default)
+        public async Task<T?> PostJsonAsync<T>(string url, object body, CancellationToken cancellationToken = default)
         {
             if (string.IsNullOrEmpty(url))
                 throw new ArgumentNullException(nameof(url));
-            if (data == null)
-                throw new ArgumentNullException(nameof(data));
+            if (body == null)
+                throw new ArgumentNullException(nameof(body));
+
+            string jsonBody = JsonSerializer.Serialize(body, _JsonOptions);
+            byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonBody);
 
             using (RestRequest req = new RestRequest(url, HttpMethod.Post))
             {
                 req.TimeoutMilliseconds = TimeoutMs;
-                req.ContentType = "application/octet-stream";
+                req.ContentType = "application/json";
 
                 if (!string.IsNullOrEmpty(AccessKey))
                     req.Authorization.BearerToken = AccessKey;
 
                 if (LogRequests)
-                    Log(SeverityEnum.Debug, $"POST request to {url} with {data.Length} bytes");
+                    Log(SeverityEnum.Debug, $"POST JSON request to {url} ({jsonBytes.Length} bytes)");
 
-                using (RestResponse resp = await req.SendAsync(data, cancellationToken).ConfigureAwait(false))
+                using (RestResponse resp = await req.SendAsync(jsonBytes, cancellationToken).ConfigureAwait(false))
                 {
                     if (resp != null)
                     {

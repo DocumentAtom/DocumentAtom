@@ -127,7 +127,7 @@ export const darkTheme: ThemeConfig = {
       borderColor: "#d1d5db",
     },
     Collapse: {
-      headerBg: DocumentAtomTheme.white,
+      headerBg: "#2a2a2a",
     },
     Input: {
       borderRadiusLG: 3,

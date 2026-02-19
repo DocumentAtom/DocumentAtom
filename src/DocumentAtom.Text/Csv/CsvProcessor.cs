@@ -4,6 +4,7 @@
     using CsvHelper.Configuration;
     using DocumentAtom.Core;
     using DocumentAtom.Core.Atoms;
+    using DocumentAtom.Core.Chunking;
     using DocumentAtom.Core.Enums;
     using DocumentAtom.Core.Helpers;
     using SerializableDataTables;
@@ -280,52 +281,38 @@
             yield return atom;
         }
 
-        private IEnumerable<Atom> ChunkAtom(Atom atom, ChunkingSettings settings)
+        private IEnumerable<Atom> ChunkAtom(Atom atom, ChunkingConfiguration settings)
         {
             if (atom == null || String.IsNullOrEmpty(atom.Text)) yield break;
             if (settings == null || !settings.Enable) yield break;
 
-            string text = atom.Text;
-            int maxLength = settings.MaximumLength;
-            int shiftSize = settings.ShiftSize;
+            ChunkingEngine engine = new ChunkingEngine();
+            List<Chunk> chunks = engine.Chunk(
+                AtomTypeEnum.Text,
+                atom.Text,
+                null,
+                null,
+                null,
+                settings);
 
-            if (text.Length <= maxLength)
+            foreach (Chunk chunk in chunks)
             {
-                yield break;
-            }
+                byte[] chunkBytes = Encoding.UTF8.GetBytes(chunk.Text);
 
-            int chunkPosition = 0;
-            int currentPosition = 0;
-
-            while (currentPosition < text.Length)
-            {
-                int chunkLength = Math.Min(maxLength, text.Length - currentPosition);
-                string chunkText = text.Substring(currentPosition, chunkLength);
-
-                byte[] chunkBytes = Encoding.UTF8.GetBytes(chunkText);
-
-                Atom chunk = new Atom
+                Atom chunkAtom = new Atom
                 {
                     GUID = Guid.NewGuid(),
                     ParentGUID = atom.GUID,
-                    Position = chunkPosition,
+                    Position = chunk.Position,
                     Type = AtomTypeEnum.Text,
-                    Text = chunkText,
+                    Text = chunk.Text,
                     Length = chunkBytes.Length,
                     MD5Hash = HashHelper.MD5Hash(chunkBytes),
                     SHA1Hash = HashHelper.SHA1Hash(chunkBytes),
                     SHA256Hash = HashHelper.SHA256Hash(chunkBytes)
                 };
 
-                yield return chunk;
-
-                chunkPosition++;
-                currentPosition += shiftSize;
-
-                if (currentPosition >= text.Length)
-                {
-                    break;
-                }
+                yield return chunkAtom;
             }
         }
 

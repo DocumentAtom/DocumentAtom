@@ -1,6 +1,8 @@
 namespace DocumentAtom.DataIngestion.Chunkers
 {
     using System;
+    using DocumentAtom.Core.Chunking;
+    using DocumentAtom.Core.Enums;
 
     /// <summary>
     /// Options for the AtomChunker.
@@ -10,44 +12,21 @@ namespace DocumentAtom.DataIngestion.Chunkers
         #region Public-Members
 
         /// <summary>
-        /// Maximum number of characters per chunk.
-        /// Default is 1000.
+        /// Chunking configuration controlling the strategy, token budget, and overlap.
+        /// Default uses FixedTokenCount strategy with 256 tokens.
         /// </summary>
-        public int MaxChunkSize
+        public ChunkingConfiguration Chunking
         {
             get
             {
-                return _MaxChunkSize;
+                return _Chunking;
             }
             set
             {
-                if (value < 100) throw new ArgumentOutOfRangeException(nameof(MaxChunkSize), "MaxChunkSize must be at least 100.");
-                _MaxChunkSize = value;
+                if (value == null) throw new ArgumentNullException(nameof(Chunking));
+                _Chunking = value;
             }
         }
-
-        /// <summary>
-        /// Number of overlapping characters between chunks.
-        /// Default is 100.
-        /// </summary>
-        public int ChunkOverlap
-        {
-            get
-            {
-                return _ChunkOverlap;
-            }
-            set
-            {
-                if (value < 0) throw new ArgumentOutOfRangeException(nameof(ChunkOverlap), "ChunkOverlap cannot be negative.");
-                _ChunkOverlap = value;
-            }
-        }
-
-        /// <summary>
-        /// Whether to preserve paragraph boundaries during chunking.
-        /// Default is true.
-        /// </summary>
-        public bool PreserveParagraphs { get; set; } = true;
 
         /// <summary>
         /// Whether to include header context in chunks.
@@ -74,7 +53,7 @@ namespace DocumentAtom.DataIngestion.Chunkers
         public bool UseQuarksIfAvailable { get; set; } = true;
 
         /// <summary>
-        /// Minimum chunk size to produce.
+        /// Minimum chunk size in characters to produce.
         /// Chunks smaller than this will be merged with adjacent content.
         /// Default is 50.
         /// </summary>
@@ -91,18 +70,18 @@ namespace DocumentAtom.DataIngestion.Chunkers
             }
         }
 
-        /// <summary>
-        /// Separator pattern to use when splitting text.
-        /// Default splits on paragraphs.
-        /// </summary>
-        public string[] SplitSeparators { get; set; } = new[] { "\n\n", "\n", ". ", " " };
-
         #endregion
 
         #region Private-Members
 
-        private int _MaxChunkSize = 1000;
-        private int _ChunkOverlap = 100;
+        private ChunkingConfiguration _Chunking = new ChunkingConfiguration
+        {
+            Enable = true,
+            Strategy = ChunkStrategyEnum.FixedTokenCount,
+            FixedTokenCount = 256,
+            OverlapCount = 0
+        };
+
         private int _MinChunkSize = 50;
 
         #endregion
@@ -118,15 +97,21 @@ namespace DocumentAtom.DataIngestion.Chunkers
 
         /// <summary>
         /// Create options optimized for RAG applications.
+        /// Uses sentence-based chunking with 256 tokens and 2-sentence overlap.
         /// </summary>
         /// <returns>Chunker options.</returns>
         public static AtomChunkerOptions ForRag()
         {
             return new AtomChunkerOptions
             {
-                MaxChunkSize = 500,
-                ChunkOverlap = 50,
-                PreserveParagraphs = true,
+                Chunking = new ChunkingConfiguration
+                {
+                    Enable = true,
+                    Strategy = ChunkStrategyEnum.SentenceBased,
+                    FixedTokenCount = 256,
+                    OverlapCount = 2,
+                    OverlapStrategy = OverlapStrategyEnum.SentenceBoundaryAware
+                },
                 IncludeHeaderContext = true,
                 UseQuarksIfAvailable = true
             };
@@ -134,15 +119,20 @@ namespace DocumentAtom.DataIngestion.Chunkers
 
         /// <summary>
         /// Create options optimized for summarization.
+        /// Uses paragraph-based chunking with 1024 tokens and 1-paragraph overlap.
         /// </summary>
         /// <returns>Chunker options.</returns>
         public static AtomChunkerOptions ForSummarization()
         {
             return new AtomChunkerOptions
             {
-                MaxChunkSize = 2000,
-                ChunkOverlap = 200,
-                PreserveParagraphs = true,
+                Chunking = new ChunkingConfiguration
+                {
+                    Enable = true,
+                    Strategy = ChunkStrategyEnum.ParagraphBased,
+                    FixedTokenCount = 1024,
+                    OverlapCount = 1
+                },
                 IncludeHeaderContext = true,
                 UseQuarksIfAvailable = false
             };
@@ -150,15 +140,20 @@ namespace DocumentAtom.DataIngestion.Chunkers
 
         /// <summary>
         /// Create options for large context windows.
+        /// Uses paragraph-based chunking with 2048 tokens and 1-paragraph overlap.
         /// </summary>
         /// <returns>Chunker options.</returns>
         public static AtomChunkerOptions ForLargeContext()
         {
             return new AtomChunkerOptions
             {
-                MaxChunkSize = 4000,
-                ChunkOverlap = 400,
-                PreserveParagraphs = true,
+                Chunking = new ChunkingConfiguration
+                {
+                    Enable = true,
+                    Strategy = ChunkStrategyEnum.ParagraphBased,
+                    FixedTokenCount = 2048,
+                    OverlapCount = 1
+                },
                 IncludeHeaderContext = true,
                 UseQuarksIfAvailable = false
             };
