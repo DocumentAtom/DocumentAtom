@@ -39,7 +39,7 @@ services:
     stdin_open: true
     tty: true
     environment:
-      - DOCUMENTATOM_SERVER_URL=http://documentatom-server:8800
+      - DOCUMENTATOM_SERVER_URL=http://documentatom-server:8000
     depends_on:
       - documentatom-server
     healthcheck:
