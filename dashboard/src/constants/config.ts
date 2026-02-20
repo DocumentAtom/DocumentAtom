@@ -1,4 +1,4 @@
-export const apiEndpointURL = "http://localhost:8000/";
+export const apiEndpointURL = "http://localhost:3000";
 
 export const MIN_PASSWORD_LENGTH = 8;
 

@@ -35,6 +35,8 @@ services:
       - '3000:3000'
     stdin_open: true
     tty: true
+    environment:
+      - DOCUMENTATOM_SERVER_URL=http://documentatom-server:8000
     depends_on:
       - documentatom-server
     healthcheck:

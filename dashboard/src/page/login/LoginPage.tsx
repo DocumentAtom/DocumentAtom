@@ -15,16 +15,19 @@ import {
   CloseCircleOutlined,
 } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
-import { apiEndpointURL } from "#/constants/config";
 import { useValidateConnectivityMutation } from "#/store/slice/sdkSlice";
 import { updateSdkEndPoint } from "#/services/sdk.service";
 import { localStorageKeys, paths } from "#/constants/constant";
 
+interface LoginPageProps {
+  defaultServerUrl?: string;
+}
+
 //eslint-disable-next-line max-lines-per-function
-const LoginPage = () => {
+const LoginPage = ({ defaultServerUrl = "http://localhost:3000" }: LoginPageProps) => {
   const { message } = App.useApp();
   const [loading, setLoading] = useState(false);
-  const [documentAtomAPIUrl, setDocumentAtomAPIUrl] = useState(apiEndpointURL);
+  const [documentAtomAPIUrl, setDocumentAtomAPIUrl] = useState(defaultServerUrl);
   const [form] = Form.useForm();
   const router = useRouter();
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);

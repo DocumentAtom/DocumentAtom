@@ -7,5 +7,7 @@ export const metadata: Metadata = {
 };
 
 export default function Home() {
-  return <LoginPage />;
+  const serverUrl =
+    process.env.DOCUMENTATOM_SERVER_URL || "http://localhost:3000";
+  return <LoginPage defaultServerUrl={serverUrl} />;
 }
