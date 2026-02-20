@@ -1,0 +1,20 @@
+2026-02-20 21:53:12 acb17e738475 Debug [DocumentAtom.McpServer] logging initialized
+2026-02-20 21:53:12 acb17e738475 Debug [DocumentAtom.McpServer] Initializing DocumentAtom SDK
+2026-02-20 21:53:12 acb17e738475 Debug [DocumentAtom.McpServer] Connecting to DocumentAtom server at: http://localhost:8000
+2026-02-20 21:53:12 acb17e738475 Info [DocumentAtom.McpServer] starting at 02/20/2026 21:53:12 using process ID 1
+
+2026-02-20 21:54:01 f3962dfbbaad Debug [DocumentAtom.McpServer] logging initialized
+2026-02-20 21:54:01 f3962dfbbaad Debug [DocumentAtom.McpServer] Initializing DocumentAtom SDK
+2026-02-20 21:54:01 f3962dfbbaad Debug [DocumentAtom.McpServer] Connecting to DocumentAtom server at: http://localhost:8000
+2026-02-20 21:54:01 f3962dfbbaad Info [DocumentAtom.McpServer] starting at 02/20/2026 21:54:01 using process ID 1
+
+2026-02-20 22:13:12 861885ad404e Debug [DocumentAtom.McpServer] logging initialized
+2026-02-20 22:13:12 861885ad404e Debug [DocumentAtom.McpServer] Initializing DocumentAtom SDK
+2026-02-20 22:13:12 861885ad404e Debug [DocumentAtom.McpServer] Connecting to DocumentAtom server at: http://localhost:8000
+2026-02-20 22:13:12 861885ad404e Info [DocumentAtom.McpServer] starting at 02/20/2026 22:13:12 using process ID 1
+
+2026-02-20 22:18:17 80558fda5f84 Debug [DocumentAtom.McpServer] logging initialized
+2026-02-20 22:18:17 80558fda5f84 Debug [DocumentAtom.McpServer] Initializing DocumentAtom SDK
+2026-02-20 22:18:17 80558fda5f84 Debug [DocumentAtom.McpServer] Connecting to DocumentAtom server at: http://localhost:8000
+2026-02-20 22:18:17 80558fda5f84 Info [DocumentAtom.McpServer] starting at 02/20/2026 22:18:17 using process ID 1
+

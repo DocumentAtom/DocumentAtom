@@ -31,12 +31,15 @@ services:
   documentatom-dashboard:
     container_name: 'documentatom-dashboard'
     image: 'jchristn77/documentatom-ui:latest'
+    build:
+      context: ../
+      dockerfile: dashboard/Dockerfile
     ports:
       - '3000:3000'
     stdin_open: true
     tty: true
     environment:
-      - DOCUMENTATOM_SERVER_URL=http://documentatom-server:8000
+      - DOCUMENTATOM_SERVER_URL=http://documentatom-server:8800
     depends_on:
       - documentatom-server
     healthcheck:
