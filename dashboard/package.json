@@ -27,7 +27,7 @@
     "jsoneditor-react": "^3.1.2",
     "lodash": "^4.17.23",
     "moment": "^2.30.1",
-    "next": "^16.1.6",
+    "next": "^16.2.1",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-password-checklist": "^1.8.1",
@@ -61,6 +61,10 @@
     },
     "qs": "^6.14.1",
     "glob": "^10.5.0",
-    "js-yaml": "^4.1.1"
+    "js-yaml": "^4.1.1",
+    "brace-expansion": "^2.0.3",
+    "flatted": "^3.4.2",
+    "picomatch": "^4.0.4",
+    "yaml": "^2.8.3"
   }
 }
