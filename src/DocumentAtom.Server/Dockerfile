@@ -5,26 +5,6 @@ ARG TARGETARCH
 ENV ARCH=${TARGETARCH}
 RUN echo "Building for TARGETARCH: ${TARGETARCH}"
 
-# Install required packages
-RUN apt-get update && apt-get install -y \
-    iputils-ping \
-    traceroute \
-    net-tools \
-    curl \
-    wget \
-    dnsutils \
-    iproute2 \
-    vim \
-    file \
-    python3-full \
-    pip \
-    libleptonica-dev \
-    libc6-dev \
-    tesseract-ocr \
-    libtesseract-dev \
-    tesseract-ocr-eng \
-    && rm -rf /var/lib/apt/lists/*
-
 # Set working directory for build
 WORKDIR /src
 
@@ -81,16 +61,8 @@ ENV ARCH=${TARGETARCH}
 RUN echo "Runtime for TARGETARCH: ${TARGETARCH}"
 
 # Install runtime dependencies
-RUN apt-get update && apt-get install -y \
-    iputils-ping \
-    traceroute \
-    net-tools \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
-    wget \
-    dnsutils \
-    iproute2 \
-    vim \
-    file \
     python3-full \
     pip \
     libleptonica-dev \
@@ -167,7 +139,7 @@ ENV TESSDATA_PREFIX=/usr/share/tesseract-ocr/5/tessdata
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1
 
 # Python setup
-RUN pip install --break-system-packages pdfplumber && \
+RUN pip install --no-cache-dir --break-system-packages pdfplumber && \
     ln -s $(which python3) /usr/bin/py
 
 ENV PATH="/usr/lib/libreoffice/program:${PATH}"
