@@ -8,7 +8,9 @@ services:
 
   documentatom-server:
     container_name: 'documentatom-server'
-    image: 'jchristn77/documentatom:latest'
+    build:
+      context: ../src
+      dockerfile: DocumentAtom.Server/Dockerfile
     ports:
       - '8000:8000'
     stdin_open: true
@@ -30,7 +32,6 @@ services:
 
   documentatom-dashboard:
     container_name: 'documentatom-dashboard'
-    image: 'jchristn77/documentatom-ui:latest'
     build:
       context: ../
       dockerfile: dashboard/Dockerfile
@@ -57,7 +58,9 @@ services:
 
   documentatom-mcp:
     container_name: 'documentatom-mcp'
-    image: 'jchristn77/documentatom-mcp:latest'
+    build:
+      context: ../
+      dockerfile: src/DocumentAtom.McpServer/Dockerfile
     ports:
       - '8200:8200'
       - '8201:8201'
