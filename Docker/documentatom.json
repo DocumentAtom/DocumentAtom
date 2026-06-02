@@ -17,6 +17,25 @@
     "DataDirectory": "/usr/share/tesseract-ocr/5/tessdata",
     "Language": "eng"
   },
+  "Cors": {
+    "Enable": true,
+    "AllowOrigin": "*",
+    "AllowMethods": [
+      "OPTIONS",
+      "HEAD",
+      "GET",
+      "POST"
+    ],
+    "AllowHeaders": [
+      "*",
+      "Content-Type",
+      "X-Requested-With"
+    ],
+    "ExposeHeaders": [
+      "Content-Type",
+      "X-Requested-With"
+    ]
+  },
   "Webserver": {
     "Hostname": "*",
     "Port": 8000,

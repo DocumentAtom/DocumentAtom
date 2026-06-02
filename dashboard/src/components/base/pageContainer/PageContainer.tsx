@@ -20,6 +20,7 @@ const PageContainer = ({
   is100vh = false,
   style,
   pageTitleClassName,
+  pageContentClassName,
 }: {
   children: React.ReactNode;
   className?: string;
@@ -33,6 +34,7 @@ const PageContainer = ({
   is100vh?: boolean;
   style?: React.CSSProperties;
   pageTitleClassName?: string;
+  pageContentClassName?: string;
 }) => {
   return (
     <Content
@@ -72,7 +74,9 @@ const PageContainer = ({
           </DocuAtomFlex>
         </>
       )}
-      <div className={styles.pageContent}>{children}</div>
+      <div className={classNames(styles.pageContent, pageContentClassName)}>
+        {children}
+      </div>
     </Content>
   );
 };

@@ -11,6 +11,22 @@
         #region Public-Members
 
         /// <summary>
+        /// CORS settings.
+        /// </summary>
+        public CorsSettings Cors
+        {
+            get
+            {
+                return _Cors;
+            }
+            set
+            {
+                if (value == null) throw new ArgumentNullException(nameof(Cors));
+                _Cors = value;
+            }
+        }
+
+        /// <summary>
         /// Logging settings.
         /// </summary>
         public LoggingSettings Logging
@@ -65,6 +81,7 @@
         private LoggingSettings _Logging = new LoggingSettings();
         private TesseractSettings _Tesseract = new TesseractSettings();
         private WebserverSettings _Webserver = new WebserverSettings("localhost", 8000, false);
+        private CorsSettings _Cors = new CorsSettings();
 
         #endregion
 

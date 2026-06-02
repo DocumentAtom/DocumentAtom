@@ -39,11 +39,11 @@ namespace Test.Chunking
 
             List<Chunk> result = _Engine.Chunk(
                 AtomTypeEnum.Code,
-                "var x = 1;",
+                "let x = 1;",
                 null, null, null, config);
 
             Assert.NotEmpty(result);
-            Assert.Contains("var x = 1;", result[0].Text);
+            Assert.Contains("let x = 1;", result[0].Text);
         }
 
         [Fact]

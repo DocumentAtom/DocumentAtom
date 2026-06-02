@@ -14,28 +14,28 @@ namespace Test.AutomatedHarness
         private static string _FixtureDir = Path.GetFullPath(
             Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "..", "test-fixtures"));
 
-        private static readonly List<(string Status, double Duration, string Name, string Message)> _Results = new();
+        private static readonly List<TestResult> _Results = new List<TestResult>();
 
-        private static readonly (string File, string Format)[] _Fixtures =
+        private static readonly Fixture[] _Fixtures =
         {
-            ("sample.csv",  "csv"),
-            ("sample.html", "html"),
-            ("sample.json", "json"),
-            ("sample.md",   "markdown"),
-            ("sample.txt",  "text"),
-            ("sample.xml",  "xml"),
-            ("sample.rtf",  "rtf"),
-            ("sample.pdf",  "pdf"),
-            ("sample.docx", "word"),
-            ("sample.xlsx", "excel"),
-            ("sample.pptx", "powerpoint"),
-            ("sample.png",  "png"),
-            ("sample.jpg",  "ocr"),
+            new Fixture("sample.csv", "csv"),
+            new Fixture("sample.html", "html"),
+            new Fixture("sample.json", "json"),
+            new Fixture("sample.md", "markdown"),
+            new Fixture("sample.txt", "text"),
+            new Fixture("sample.xml", "xml"),
+            new Fixture("sample.rtf", "rtf"),
+            new Fixture("sample.pdf", "pdf"),
+            new Fixture("sample.docx", "word"),
+            new Fixture("sample.xlsx", "excel"),
+            new Fixture("sample.pptx", "powerpoint"),
+            new Fixture("sample.png", "png"),
+            new Fixture("sample.jpg", "ocr"),
         };
 
-        private static readonly HashSet<string> _ImageFormats = new() { "png", "ocr" };
-        private static readonly HashSet<string> _ChunkingSkip = new() { "png", "ocr" };
-        private static readonly HashSet<string> _OcrFormats = new() { "pdf", "word", "powerpoint" };
+        private static readonly HashSet<string> _ImageFormats = new HashSet<string> { "png", "ocr" };
+        private static readonly HashSet<string> _ChunkingSkip = new HashSet<string> { "png", "ocr" };
+        private static readonly HashSet<string> _OcrFormats = new HashSet<string> { "pdf", "word", "powerpoint" };
 
         #endregion
 
@@ -77,15 +77,15 @@ namespace Test.AutomatedHarness
             });
 
             // 2. Type Detection (13 tests)
-            foreach ((string file, string format) in _Fixtures)
+            foreach (Fixture fixture in _Fixtures)
             {
-                byte[]? data = LoadFixture(file);
+                byte[]? data = LoadFixture(fixture.File);
                 if (data == null)
                 {
-                    Skip($"Type detection: {file}", "fixture not found");
+                    Skip($"Type detection: {fixture.File}", "fixture not found");
                     continue;
                 }
-                await RunTest($"Type detection: {file}", async () =>
+                await RunTest($"Type detection: {fixture.File}", async () =>
                 {
                     DocumentAtom.Core.TypeDetection.TypeResult? result = await sdk.TypeDetection.DetectType(data);
                     if (result == null) throw new Exception("DetectType returned null");
@@ -93,18 +93,18 @@ namespace Test.AutomatedHarness
             }
 
             // 3. Extraction — No Settings (13 tests)
-            foreach ((string file, string format) in _Fixtures)
+            foreach (Fixture fixture in _Fixtures)
             {
-                byte[]? data = LoadFixture(file);
+                byte[]? data = LoadFixture(fixture.File);
                 if (data == null)
                 {
-                    Skip($"Extraction (default): {file}", "fixture not found");
+                    Skip($"Extraction (default): {fixture.File}", "fixture not found");
                     continue;
                 }
-                await RunTest($"Extraction (default): {file}", async () =>
+                await RunTest($"Extraction (default): {fixture.File}", async () =>
                 {
-                    List<Atom>? atoms = await CallExtraction(sdk, format, data);
-                    if (_ImageFormats.Contains(format))
+                    List<Atom>? atoms = await CallExtraction(sdk, fixture.Format, data);
+                    if (_ImageFormats.Contains(fixture.Format))
                     {
                         // Minimal test images have no text; just verify the call succeeded
                         if (atoms == null)
@@ -119,20 +119,20 @@ namespace Test.AutomatedHarness
             }
 
             // 4. Extraction — With Chunking (11 tests, skip PNG/JPG)
-            foreach ((string file, string format) in _Fixtures)
+            foreach (Fixture fixture in _Fixtures)
             {
-                if (_ChunkingSkip.Contains(format))
+                if (_ChunkingSkip.Contains(fixture.Format))
                 {
-                    Skip($"Extraction (chunking): {file}", "chunking not applicable for images");
+                    Skip($"Extraction (chunking): {fixture.File}", "chunking not applicable for images");
                     continue;
                 }
-                byte[]? data = LoadFixture(file);
+                byte[]? data = LoadFixture(fixture.File);
                 if (data == null)
                 {
-                    Skip($"Extraction (chunking): {file}", "fixture not found");
+                    Skip($"Extraction (chunking): {fixture.File}", "fixture not found");
                     continue;
                 }
-                await RunTest($"Extraction (chunking): {file}", async () =>
+                await RunTest($"Extraction (chunking): {fixture.File}", async () =>
                 {
                     ApiProcessorSettings settings = new ApiProcessorSettings
                     {
@@ -144,7 +144,7 @@ namespace Test.AutomatedHarness
                             OverlapCount = 0,
                         }
                     };
-                    List<Atom>? atoms = await CallExtraction(sdk, format, data, settings);
+                    List<Atom>? atoms = await CallExtraction(sdk, fixture.Format, data, settings);
                     if (atoms == null || atoms.Count < 1)
                         throw new Exception($"expected >= 1 atom, got {atoms?.Count ?? 0}");
                     bool hasChunks = atoms.Any(a => a.Chunks != null && a.Chunks.Count > 0);
@@ -154,22 +154,22 @@ namespace Test.AutomatedHarness
             }
 
             // 5. Extraction — With OCR Setting (3 tests: PDF, Word, PowerPoint)
-            foreach ((string file, string format) in _Fixtures)
+            foreach (Fixture fixture in _Fixtures)
             {
-                if (!_OcrFormats.Contains(format)) continue;
-                byte[]? data = LoadFixture(file);
+                if (!_OcrFormats.Contains(fixture.Format)) continue;
+                byte[]? data = LoadFixture(fixture.File);
                 if (data == null)
                 {
-                    Skip($"Extraction (OCR setting): {file}", "fixture not found");
+                    Skip($"Extraction (OCR setting): {fixture.File}", "fixture not found");
                     continue;
                 }
-                await RunTest($"Extraction (OCR setting): {file}", async () =>
+                await RunTest($"Extraction (OCR setting): {fixture.File}", async () =>
                 {
                     ApiProcessorSettings settings = new ApiProcessorSettings
                     {
                         ExtractAtomsFromImages = true
                     };
-                    List<Atom>? atoms = await CallExtraction(sdk, format, data, settings);
+                    List<Atom>? atoms = await CallExtraction(sdk, fixture.Format, data, settings);
                     if (atoms == null || atoms.Count < 1)
                         throw new Exception($"expected >= 1 atom, got {atoms?.Count ?? 0}");
                 });
@@ -221,7 +221,7 @@ namespace Test.AutomatedHarness
             int failed = _Results.Count(r => r.Status == "FAIL");
             int skipped = _Results.Count(r => r.Status == "SKIP");
             int total = _Results.Count;
-            List<(string Status, double Duration, string Name, string Message)> failedTests =
+            List<TestResult> failedTests =
                 _Results.Where(r => r.Status == "FAIL").ToList();
 
             Console.WriteLine();
@@ -238,8 +238,8 @@ namespace Test.AutomatedHarness
             {
                 Console.WriteLine();
                 Console.WriteLine("Failed tests:");
-                foreach ((string _, double _, string name, string msg) in failedTests)
-                    Console.WriteLine($"  - {name} - {msg}");
+                foreach (TestResult failedTest in failedTests)
+                    Console.WriteLine($"  - {failedTest.Name} - {failedTest.Message}");
             }
 
             Console.WriteLine(new string('=', 60));
@@ -260,7 +260,7 @@ namespace Test.AutomatedHarness
 
         private static void Record(string status, double duration, string name, string message = "")
         {
-            _Results.Add((status, duration, name, message));
+            _Results.Add(new TestResult(status, duration, name, message));
             string tag = status switch
             {
                 "PASS" => "[PASS]",
@@ -318,6 +318,38 @@ namespace Test.AutomatedHarness
                 "ocr" => await sdk.Atom.ProcessOcr(data, settings),
                 _ => throw new ArgumentException($"Unknown format: {format}")
             };
+        }
+
+        private sealed class Fixture
+        {
+            public string File { get; set; }
+
+            public string Format { get; set; }
+
+            public Fixture(string file, string format)
+            {
+                File = file;
+                Format = format;
+            }
+        }
+
+        private sealed class TestResult
+        {
+            public string Status { get; set; }
+
+            public double Duration { get; set; }
+
+            public string Name { get; set; }
+
+            public string Message { get; set; }
+
+            public TestResult(string status, double duration, string name, string message)
+            {
+                Status = status;
+                Duration = duration;
+                Name = name;
+                Message = message;
+            }
         }
 
         #endregion

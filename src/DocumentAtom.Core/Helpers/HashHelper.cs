@@ -233,7 +233,7 @@
 
             foreach (DataRow row in dt.Rows)
             {
-                foreach (var item in row.ItemArray)
+                foreach (object item in row.ItemArray)
                 {
                     // Convert to string, handling nulls
                     string value = item?.ToString() ?? "NULL";

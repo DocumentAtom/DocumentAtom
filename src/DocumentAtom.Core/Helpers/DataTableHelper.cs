@@ -31,7 +31,7 @@
             // Sum lengths of all cell values
             foreach (DataRow row in dt.Rows)
             {
-                foreach (var item in row.ItemArray)
+                foreach (object item in row.ItemArray)
                 {
                     if (item != null)
                     {

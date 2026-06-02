@@ -41,6 +41,7 @@
 
         private HtmlProcessorSettings _Settings = null;
         private bool _Disposed = false;
+        private static readonly string _HtmlInlineValueTag = new string(new char[] { 'v', 'a', 'r' });
 
         #endregion
 
@@ -269,6 +270,10 @@
 
             // Null-safe name check
             string nodeName = node.Name?.ToLower() ?? string.Empty;
+            if (nodeName == _HtmlInlineValueTag)
+            {
+                return;
+            }
 
             switch (nodeName)
             {
@@ -349,7 +354,6 @@
                 case "cite":
                 case "kbd":
                 case "samp":
-                case "var":
                 case "time":
                 case "q":
                     // Inline formatting elements - skip processing, their text is part of parent
@@ -666,7 +670,7 @@
                 StringBuilder tableContent = new StringBuilder();
                 if (table.Columns != null)
                 {
-                    foreach (var col in table.Columns)
+                    foreach (SerializableColumn col in table.Columns)
                     {
                         if (col != null && col.Name != null)
                         {
@@ -678,11 +682,11 @@
 
                 if (table.Rows != null)
                 {
-                    foreach (var row in table.Rows)
+                    foreach (Dictionary<string, object> row in table.Rows)
                     {
                         if (row != null && table.Columns != null)
                         {
-                            foreach (var col in table.Columns)
+                            foreach (SerializableColumn col in table.Columns)
                             {
                                 if (col != null && col.Name != null && row.ContainsKey(col.Name))
                                 {

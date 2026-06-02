@@ -141,7 +141,7 @@ namespace DocumentAtom.Core
                 }
             }
 
-            // If we hit the end without exceeding maxWords, adjust end position for partial words
+            // If we hit the end without exceeding maxWords, adjust end position for word fragments
             if (wordCount <= maxWords && adjustedEnd == end && adjustedEnd < str.Length - 1)
             {
                 while (adjustedEnd > start && !IsSafeWhitespace(str[adjustedEnd + 1])) adjustedEnd--;

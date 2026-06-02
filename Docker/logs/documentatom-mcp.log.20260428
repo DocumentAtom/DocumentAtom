@@ -1,0 +1,17 @@
+2026-04-28 05:33:55 3cff129850fb Debug [DocumentAtom.McpServer] logging initialized
+2026-04-28 05:33:55 3cff129850fb Debug [DocumentAtom.McpServer] Initializing DocumentAtom SDK
+2026-04-28 05:33:55 3cff129850fb Debug [DocumentAtom.McpServer] Connecting to DocumentAtom server at: http://localhost:8000
+2026-04-28 05:33:55 3cff129850fb Info [DocumentAtom.McpServer] starting at 04/28/2026 05:33:55 using process ID 1
+
+2026-04-28 05:56:28 3cff129850fb Debug [DocumentAtom.McpServer] client connection started with session ID 8a4d6ff6-75a1-4778-94b1-d11d8210b089 (Http)
+2026-04-28 05:56:28 3cff129850fb Debug [DocumentAtom.McpServer] client session 8a4d6ff6-75a1-4778-94b1-d11d8210b089 request initialize
+2026-04-28 05:56:28 3cff129850fb Debug [DocumentAtom.McpServer] client session 8a4d6ff6-75a1-4778-94b1-d11d8210b089 request initialize completed (7.5321ms)
+2026-04-28 05:56:28 3cff129850fb Debug [DocumentAtom.McpServer] client connection started with session ID 0401cafe-403d-49f9-b1a4-0ccb3257c92a (Http)
+2026-04-28 05:56:28 3cff129850fb Debug [DocumentAtom.McpServer] client session 0401cafe-403d-49f9-b1a4-0ccb3257c92a request notifications/initialized
+2026-04-28 05:56:28 3cff129850fb Debug [DocumentAtom.McpServer] client session 0401cafe-403d-49f9-b1a4-0ccb3257c92a request notifications/initialized completed (15.9048ms)
+2026-04-28 05:56:28 3cff129850fb Debug [DocumentAtom.McpServer] client connection started with session ID afc294a4-439c-469a-9f56-186807dceb10 (Http)
+2026-04-28 05:56:28 3cff129850fb Debug [DocumentAtom.McpServer] client session afc294a4-439c-469a-9f56-186807dceb10 request tools/list
+2026-04-28 05:56:28 3cff129850fb Debug [DocumentAtom.McpServer] client session afc294a4-439c-469a-9f56-186807dceb10 request tools/list completed (16.4478ms)
+2026-04-28 06:01:55 3cff129850fb Debug [DocumentAtom.McpServer] client connection terminated with session ID 0401cafe-403d-49f9-b1a4-0ccb3257c92a (Http)
+2026-04-28 06:01:55 3cff129850fb Debug [DocumentAtom.McpServer] client connection terminated with session ID 8a4d6ff6-75a1-4778-94b1-d11d8210b089 (Http)
+2026-04-28 06:01:55 3cff129850fb Debug [DocumentAtom.McpServer] client connection terminated with session ID afc294a4-439c-469a-9f56-186807dceb10 (Http)

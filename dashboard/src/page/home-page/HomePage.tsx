@@ -22,6 +22,7 @@ const HomePage = () => {
   return (
     <PageContainer
       pageTitleClassName={styles.pageTitleContainer}
+      pageContentClassName={styles.pageContent}
       pageTitle={
         <DocuAtomTabs
           className={styles.tabsContainer}

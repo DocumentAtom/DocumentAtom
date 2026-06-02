@@ -29,6 +29,7 @@ import type { ApiProcessorSettings } from "documentatom-sdk/dist/types/types";
 import { uuid } from "#/utils/stringUtils";
 import DocuAtomFlex from "#/components/base/flex/Flex";
 import ResponseViewer from "#/page/home-page/components/ResponseViewer";
+import styles from "#/page/home-page/home-page.module.scss";
 
 //eslint-disable-next-line max-lines-per-function
 const FileExtraction = () => {
@@ -142,7 +143,7 @@ const FileExtraction = () => {
   const acceptedFileTypes = fileType ? FILE_TYPE_ACCEPT_MAP[fileType] : "*";
 
   return (
-    <>
+    <div className={styles.workflow}>
       <DocuAtomFlex gap="20px" align="center">
         <DocuAtomFlex gap="20px" align="center">
           <label
@@ -216,7 +217,7 @@ const FileExtraction = () => {
           <ResponseViewer value={responseData} uniqueKey={uniqueKey.current} />
         </>
       )}
-    </>
+    </div>
   );
 };
 

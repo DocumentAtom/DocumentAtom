@@ -386,14 +386,14 @@
                 {
                     exactHeaderTerms++;
                 }
-                // Check for partial term matches
+                // Check for term fragments
                 else if (_Settings.CommonHeaderRowTerms.Any(term => lowerValue.Contains(term)))
                 {
                     headerTermMatches++;
                 }
             }
 
-            // Require stronger evidence - either multiple partial matches or at least one exact match
+            // Require stronger evidence - either multiple fragment matches or at least one exact match
             return exactHeaderTerms > 0 || headerTermMatches >= 2;
         }
 

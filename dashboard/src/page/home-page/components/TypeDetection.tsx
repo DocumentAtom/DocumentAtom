@@ -10,6 +10,7 @@ import DocuAtomDivider from "#/components/base/divider/Divider";
 import { uuid } from "#/utils/stringUtils";
 import DocuAtomFlex from "#/components/base/flex/Flex";
 import ResponseViewer from "#/page/home-page/components/ResponseViewer";
+import styles from "#/page/home-page/home-page.module.scss";
 
 const TypeDetection = () => {
   const { message } = App.useApp();
@@ -47,7 +48,7 @@ const TypeDetection = () => {
   };
 
   return (
-    <>
+    <div className={styles.workflow}>
       <DocuAtomFlex gap="20px" align="center">
         <DocuAtomUpload
           beforeUpload={handleFileChange}
@@ -73,7 +74,7 @@ const TypeDetection = () => {
           <ResponseViewer value={responseData} uniqueKey={uniqueKey.current} />
         </>
       )}
-    </>
+    </div>
   );
 };
 

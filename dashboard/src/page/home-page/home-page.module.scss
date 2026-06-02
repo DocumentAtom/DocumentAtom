@@ -10,3 +10,19 @@
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 }
+
+.pageContent {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 132px);
+  min-height: 0;
+  overflow: hidden !important;
+}
+
+.workflow {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}

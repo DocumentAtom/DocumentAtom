@@ -78,7 +78,7 @@ const ResponseViewer = ({ value, uniqueKey }: ResponseViewerProps) => {
   };
 
   return (
-    <>
+    <div className={styles.responseViewer}>
       <div className={styles.responseHeader}>
         <DocuAtomTitle level={5} className={styles.responseTitle}>
           Response
@@ -108,15 +108,17 @@ const ResponseViewer = ({ value, uniqueKey }: ResponseViewerProps) => {
       {showRawJson ? (
         <pre className={styles.jsonBox}>{jsonText}</pre>
       ) : (
-        <JSONEditor
-          value={value}
-          onChange={() => {}}
-          mode="tree"
-          uniqueKey={uniqueKey}
-          expandOnStart={true}
-        />
+        <div className={styles.editorBox}>
+          <JSONEditor
+            value={value}
+            onChange={() => {}}
+            mode="tree"
+            uniqueKey={uniqueKey}
+            expandOnStart={true}
+          />
+        </div>
       )}
-    </>
+    </div>
   );
 };
 

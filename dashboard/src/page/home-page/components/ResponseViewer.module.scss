@@ -1,3 +1,10 @@
+.responseViewer {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
 .responseHeader {
   display: flex;
   align-items: center;
@@ -16,16 +23,29 @@
   gap: 6px;
 }
 
+.editorBox {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.editorBox :global(.jsoneditor-react-container),
+.editorBox :global(.jsoneditor) {
+  height: 100%;
+}
+
 .jsonBox {
   width: 100%;
-  max-height: 520px;
+  flex: 1;
+  min-height: 0;
   margin: 0;
   padding: 12px;
   border: 1px solid var(--ant-color-border);
   border-radius: 6px;
   background: var(--ant-color-bg-container);
   color: var(--ant-color-text);
-  font-family: var(--font-geist-mono), Consolas, "Courier New", monospace;
+  font-family: var(--font-geist-mono, ui-monospace), SFMono-Regular, Menlo,
+    Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   font-size: 13px;
   line-height: 1.5;
   overflow: auto;

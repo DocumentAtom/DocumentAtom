@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, ComponentType } from "react";
+import { theme } from "antd";
 import { useValidateConnectivityMutation } from "#/store/slice/sdkSlice";
 import PageLoading from "../components/base/loading/PageLoading";
 import FallBack from "../components/base/fallback/FallBack";
@@ -39,6 +40,7 @@ export function withConnectivityValidation<P extends object>(
   const retryEnabled = true;
 
   const ConnectivityValidatedComponent: React.FC<P> = (props: P) => {
+    const { token } = theme.useToken();
     const [validateConnectivity, { isLoading, isSuccess, isError, error }] =
       useValidateConnectivityMutation();
 
@@ -58,7 +60,7 @@ export function withConnectivityValidation<P extends object>(
       return (
         <PageContainer
           style={{
-            backgroundColor: "var(--ant-color-bg-base)",
+            backgroundColor: token.colorBgBase,
             height: "100vh",
           }}
         >
@@ -72,7 +74,7 @@ export function withConnectivityValidation<P extends object>(
       return (
         <FallBack
           style={{
-            backgroundColor: "var(--ant-color-bg-base)",
+            backgroundColor: token.colorBgBase,
             height: "100vh",
           }}
         >

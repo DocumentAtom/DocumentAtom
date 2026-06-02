@@ -677,7 +677,7 @@
                 .Select(line => line.Trim())
                 .Where(line => !string.IsNullOrWhiteSpace(line));
 
-            foreach (var line in lines)
+            foreach (string line in lines)
             {
                 string content = null;
 
