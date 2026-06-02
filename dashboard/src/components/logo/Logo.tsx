@@ -7,10 +7,12 @@ const DocuAtomLogo = ({
   showOnlyIcon,
   size = 20,
   imageSize = 45,
+  text = "Document Atom",
 }: {
   showOnlyIcon?: boolean;
   size?: number;
   imageSize?: number;
+  text?: string;
 }) => {
   return (
     <DocuAtomFlex align="center" gap={10}>
@@ -20,9 +22,7 @@ const DocuAtomLogo = ({
         height={imageSize}
         width={imageSize}
       />
-      {!showOnlyIcon && (
-        <DocuAtomText fontSize={size}>Document Atom</DocuAtomText>
-      )}
+      {!showOnlyIcon && <DocuAtomText fontSize={size}>{text}</DocuAtomText>}
     </DocuAtomFlex>
   );
 };

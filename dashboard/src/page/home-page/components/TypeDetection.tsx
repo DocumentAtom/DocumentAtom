@@ -6,11 +6,10 @@ import { UploadOutlined } from "@ant-design/icons";
 import DocuAtomButton from "#/components/base/button/Button";
 import DocuAtomUpload from "#/components/base/upload/Upload";
 import { useTypeDetectionMutation } from "#/store/slice/sdkSlice";
-import DocuAtomTitle from "#/components/base/typograpghy/Title";
 import DocuAtomDivider from "#/components/base/divider/Divider";
-import JSONEditor from "#/components/base/json-editor/JSONEditor";
 import { uuid } from "#/utils/stringUtils";
 import DocuAtomFlex from "#/components/base/flex/Flex";
+import ResponseViewer from "#/page/home-page/components/ResponseViewer";
 
 const TypeDetection = () => {
   const { message } = App.useApp();
@@ -71,14 +70,7 @@ const TypeDetection = () => {
       {responseData && (
         <>
           <DocuAtomDivider />
-          <DocuAtomTitle level={5}>Response</DocuAtomTitle>
-          <JSONEditor
-            value={responseData}
-            onChange={() => {}}
-            mode="tree"
-            uniqueKey={uniqueKey.current}
-            expandOnStart={true}
-          />
+          <ResponseViewer value={responseData} uniqueKey={uniqueKey.current} />
         </>
       )}
     </>

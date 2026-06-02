@@ -4,10 +4,8 @@ import { App } from "antd";
 import { SettingOutlined, UploadOutlined } from "@ant-design/icons";
 import DocuAtomButton from "#/components/base/button/Button";
 import DocuAtomUpload from "#/components/base/upload/Upload";
-import DocuAtomTitle from "#/components/base/typograpghy/Title";
 import DocuAtomDivider from "#/components/base/divider/Divider";
 import DocuAtomSelect from "#/components/base/select/Select";
-import JSONEditor from "#/components/base/json-editor/JSONEditor";
 import ProcessorSettingsModal from "#/page/home-page/components/ProcessorSettingsModal";
 import {
   useExtarctExcelsMutation,
@@ -30,6 +28,7 @@ import type { ApiProcessorSettings } from "documentatom-sdk/dist/types/types";
 
 import { uuid } from "#/utils/stringUtils";
 import DocuAtomFlex from "#/components/base/flex/Flex";
+import ResponseViewer from "#/page/home-page/components/ResponseViewer";
 
 //eslint-disable-next-line max-lines-per-function
 const FileExtraction = () => {
@@ -214,14 +213,7 @@ const FileExtraction = () => {
       {responseData && (
         <>
           <DocuAtomDivider />
-          <DocuAtomTitle level={5}>Response</DocuAtomTitle>
-          <JSONEditor
-            value={responseData}
-            onChange={() => {}}
-            mode="tree"
-            uniqueKey={uniqueKey.current}
-            expandOnStart={true}
-          />
+          <ResponseViewer value={responseData} uniqueKey={uniqueKey.current} />
         </>
       )}
     </>

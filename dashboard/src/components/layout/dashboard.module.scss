@@ -50,6 +50,24 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
+}
+
+.serverUrl {
+  position: absolute;
+  left: 50%;
+  max-width: min(50vw, 620px);
+  transform: translateX(-50%);
+  color: var(--ant-color-text-tertiary);
+  font-size: 14px;
+  font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.headerActions {
+  margin-left: auto;
 }
 
 .header :global(.label) {
