@@ -10,6 +10,7 @@ describe("TableSearch", () => {
   const mockClose = jest.fn();
 
   const defaultProps: FilterDropdownProps & { placeholder?: string } = {
+    prefixCls: "ant-table-filter-dropdown",
     setSelectedKeys: mockSetSelectedKeys,
     selectedKeys: [],
     confirm: mockConfirm,
