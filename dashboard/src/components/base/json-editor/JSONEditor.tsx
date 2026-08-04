@@ -1,6 +1,6 @@
 import React from "react";
 import { JsonEditor } from "jsoneditor-react";
-import "jsoneditor-react/es/editor.min.css";
+import "jsoneditor/dist/jsoneditor.min.css";
 
 interface JSONEditorProps {
   value: any;

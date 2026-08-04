@@ -5,7 +5,7 @@ import { darkTheme, primaryTheme } from "#/theme/theme";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { StyleProvider } from "@ant-design/cssinjs";
 import StoreProvider from "#/store/StoreProvider";
-import "jsoneditor-react/es/editor.min.css";
+import "jsoneditor/dist/jsoneditor.min.css";
 import "#/assets/css/globals.scss";
 import { AppContext } from "#/hooks/appHooks";
 import { ThemeEnum } from "#/types/types";
