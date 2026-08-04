@@ -26,12 +26,24 @@
 .editorBox {
   flex: 1;
   min-height: 0;
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
 }
 
-.editorBox :global(.jsoneditor-react-container),
+// jsoneditor-react renders an (otherwise unstyled) wrapper div into which the
+// jsoneditor mounts. Flex the whole chain so the editor gets a definite height
+// and its internal .jsoneditor-tree (overflow: auto) can actually scroll.
+.editorBox :global(.jsoneditor-react-container) {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
 .editorBox :global(.jsoneditor) {
-  height: 100%;
+  flex: 1;
+  min-height: 0;
 }
 
 .jsonBox {

@@ -36,6 +36,7 @@ const JSONEditor = ({
       data-testid={testId}
       expandOnStart={expandOnStart}
       search={false}
+      htmlElementProps={{ className: "jsoneditor-react-container" }}
     />
   );
 };
