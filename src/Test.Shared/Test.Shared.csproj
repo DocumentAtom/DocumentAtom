@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFrameworks>net8.0;net10.0</TargetFrameworks>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<IsPackable>false</IsPackable>
+		<GenerateDocumentationFile>false</GenerateDocumentationFile>
+		<NoWarn>$(NoWarn);CS1591</NoWarn>
+		<RootNamespace>DocumentAtom.Testing.Shared</RootNamespace>
+		<AssemblyName>DocumentAtom.Testing.Shared</AssemblyName>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Touchstone.Core" Version="0.1.12" />
+		<PackageReference Include="SharpToken" Version="2.0.3" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\DocumentAtom.Core\DocumentAtom.Core.csproj" />
+		<ProjectReference Include="..\DocumentAtom.Text\DocumentAtom.Text.csproj" />
+		<ProjectReference Include="..\DocumentAtom.Documents\DocumentAtom.Documents.csproj" />
+		<ProjectReference Include="..\DocumentAtom.DataIngestion\DocumentAtom.DataIngestion.csproj" />
+	</ItemGroup>
+
+</Project>
