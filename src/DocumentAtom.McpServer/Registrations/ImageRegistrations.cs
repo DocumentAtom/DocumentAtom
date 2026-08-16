@@ -38,7 +38,7 @@ namespace DocumentAtom.McpServer.Registrations
                 (args) =>
                 {
                     if (!args.HasValue) throw new ArgumentException("Parameters required");
-                    if (!args.Value.TryGetProperty("data", out JsonElement dataProp))
+                    if (!args.ToJsonElement().TryGetProperty("data", out JsonElement dataProp))
                         throw new ArgumentException("Image data is required");
 
                     string base64Data = dataProp.GetString() ?? throw new ArgumentException("Image data cannot be null");
@@ -63,13 +63,13 @@ namespace DocumentAtom.McpServer.Registrations
                 (args) =>
                 {
                     if (!args.HasValue) throw new ArgumentException("Parameters required");
-                    if (!args.Value.TryGetProperty("data", out JsonElement dataProp))
+                    if (!args.ToJsonElement().TryGetProperty("data", out JsonElement dataProp))
                         throw new ArgumentException("Image data is required");
 
                     string base64Data = dataProp.GetString() ?? throw new ArgumentException("Image data cannot be null");
                     byte[] imageData = Convert.FromBase64String(base64Data);
 
-                    string filename = DocumentAtomMcpServerHelpers.GetStringOrDefault(args.Value, "filename", "");
+                    string filename = DocumentAtomMcpServerHelpers.GetStringOrDefault(args.ToJsonElement(), "filename", "");
 
                 List<Atom> atoms = sdk.Atom.ProcessOcr(imageData).GetAwaiter().GetResult();
                 return serializer.SerializeJson(atoms, true);
@@ -91,7 +91,7 @@ namespace DocumentAtom.McpServer.Registrations
             server.RegisterMethod("image/process", (args) =>
             {
                 if (!args.HasValue) throw new ArgumentException("Parameters required");
-                if (!args.Value.TryGetProperty("data", out JsonElement dataProp))
+                if (!args.ToJsonElement().TryGetProperty("data", out JsonElement dataProp))
                     throw new ArgumentException("Image data is required");
 
                 string base64Data = dataProp.GetString() ?? throw new ArgumentException("Image data cannot be null");
@@ -104,7 +104,7 @@ namespace DocumentAtom.McpServer.Registrations
             server.RegisterMethod("image/ocr", (args) =>
             {
                 if (!args.HasValue) throw new ArgumentException("Parameters required");
-                if (!args.Value.TryGetProperty("data", out JsonElement dataProp))
+                if (!args.ToJsonElement().TryGetProperty("data", out JsonElement dataProp))
                     throw new ArgumentException("Image data is required");
 
                 string base64Data = dataProp.GetString() ?? throw new ArgumentException("Image data cannot be null");
@@ -130,7 +130,7 @@ namespace DocumentAtom.McpServer.Registrations
             server.RegisterMethod("image/process", (args) =>
             {
                 if (!args.HasValue) throw new ArgumentException("Parameters required");
-                if (!args.Value.TryGetProperty("data", out JsonElement dataProp))
+                if (!args.ToJsonElement().TryGetProperty("data", out JsonElement dataProp))
                     throw new ArgumentException("Image data is required");
 
                 string base64Data = dataProp.GetString() ?? throw new ArgumentException("Image data cannot be null");
@@ -143,7 +143,7 @@ namespace DocumentAtom.McpServer.Registrations
             server.RegisterMethod("image/ocr", (args) =>
             {
                 if (!args.HasValue) throw new ArgumentException("Parameters required");
-                if (!args.Value.TryGetProperty("data", out JsonElement dataProp))
+                if (!args.ToJsonElement().TryGetProperty("data", out JsonElement dataProp))
                     throw new ArgumentException("Image data is required");
 
                 string base64Data = dataProp.GetString() ?? throw new ArgumentException("Image data cannot be null");

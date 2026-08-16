@@ -41,7 +41,10 @@ describe("DocuAtomTag", () => {
       );
 
       const tag = container.querySelector(".ant-tag");
-      expect(tag).toHaveStyle({ backgroundColor: "#f50" });
+      expect((tag as HTMLElement).style.backgroundColor).toBe(
+        "rgb(255, 238, 229)"
+      );
+      expect((tag as HTMLElement).style.color).toBe("rgb(255, 85, 0)");
     });
 
     it("should render different predefined colors", () => {
@@ -120,7 +123,7 @@ describe("DocuAtomTag", () => {
         <DocuAtomTag bordered={false}>Borderless</DocuAtomTag>
       );
 
-      const tag = container.querySelector(".ant-tag-borderless");
+      const tag = container.querySelector(".ant-tag-filled");
       expect(tag).toBeInTheDocument();
     });
   });

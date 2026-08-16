@@ -16,7 +16,9 @@ describe("Dashboard Page", () => {
   it("should render HomePage component", () => {
     renderWithRedux(<DashboardPage />);
 
-    expect(screen.getByText("Home")).toBeInTheDocument();
+    expect(
+      screen.getByRole("tab", { name: "Type Detection" })
+    ).toBeInTheDocument();
   });
 
   it("should render tabs", () => {
@@ -35,7 +37,7 @@ describe("Dashboard Page", () => {
 
     await waitFor(() => {
       expect(
-        screen.getByText("Type Detection", { selector: "h4" })
+        screen.getByRole("tab", { name: "Type Detection", selected: true })
       ).toBeInTheDocument();
     });
   });

@@ -81,8 +81,7 @@ describe("DocuAtomButton", () => {
       render(<DocuAtomButton>Normal Button</DocuAtomButton>);
 
       const button = screen.getByRole("button");
-      // fontWeight should be undefined or not explicitly set
-      expect(button).not.toHaveStyle({ fontWeight: expect.anything() });
+      expect(button.style.fontWeight).toBe("");
     });
   });
 
@@ -93,7 +92,10 @@ describe("DocuAtomButton", () => {
       const button = screen.getByRole("button");
       expect(button).toBeDisabled();
       expect(button).toHaveClass(
-        "ant-btn css-dev-only-do-not-override-1d4w9r2 ant-btn-default ant-btn-color-default ant-btn-variant-outlined"
+        "ant-btn",
+        "ant-btn-default",
+        "ant-btn-color-default",
+        "ant-btn-variant-outlined"
       );
     });
 

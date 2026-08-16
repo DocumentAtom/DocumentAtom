@@ -22,7 +22,7 @@
     <PackageIcon>icon.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>v3.1.0 - Dependency updates (RestWrapper 3.2.0)</PackageReleaseNotes>
+    <PackageReleaseNotes>v3.1.0 - Dependency updates (RestWrapper 3.3.0)</PackageReleaseNotes>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <!-- Suppress nullable reference type warnings -->
@@ -45,7 +45,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="RestWrapper" Version="3.2.0" />
+    <PackageReference Include="RestWrapper" Version="3.3.0" />
   </ItemGroup>
 
   <ItemGroup>

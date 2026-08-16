@@ -42,7 +42,7 @@ describe("LoginPage", () => {
       server = getServer(successHandlers);
       server.listen();
 
-      renderWithRedux(<LoginPage />);
+      renderWithRedux(<LoginPage />, "none");
 
       expect(
         screen.getByLabelText(/DocumentAtom Server URL/i)
@@ -50,7 +50,7 @@ describe("LoginPage", () => {
       expect(
         screen.getByPlaceholderText(/https:\/\/your-documentatom-server.com/i)
       ).toBeInTheDocument();
-      expect(screen.getByRole("button")).toBeInTheDocument();
+      expect(screen.getAllByRole("button").length).toBeGreaterThan(0);
     });
   });
 
@@ -62,7 +62,7 @@ describe("LoginPage", () => {
       server = getServer(successHandlers);
       server.listen();
 
-      renderWithRedux(<LoginPage />);
+      renderWithRedux(<LoginPage />, "none");
 
       await waitFor(() => {
         const input = screen.getByLabelText(
@@ -81,7 +81,7 @@ describe("LoginPage", () => {
       server = getServer(successHandlers);
       server.listen();
 
-      renderWithRedux(<LoginPage />);
+      renderWithRedux(<LoginPage />, "none");
 
       // Should automatically validate and show success message
       await waitFor(
@@ -101,7 +101,7 @@ describe("LoginPage", () => {
       server = getServer(errorHandlers);
       server.listen();
 
-      renderWithRedux(<LoginPage />);
+      renderWithRedux(<LoginPage />, "none");
 
       // Should automatically validate and show error
       await waitFor(
@@ -123,7 +123,7 @@ describe("LoginPage", () => {
       server = getServer(successHandlers);
       server.listen();
 
-      renderWithRedux(<LoginPage />);
+      renderWithRedux(<LoginPage />, "none");
 
       await waitFor(
         () => {

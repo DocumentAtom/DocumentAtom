@@ -6,7 +6,20 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
-  transpilePackages: ["documentatom-sdk"],
+  transpilePackages: [
+    "documentatom-sdk",
+    "uuid",
+    "msw",
+    "@mswjs/interceptors",
+    "@open-draft/deferred-promise",
+    "@open-draft/logger",
+    "headers-polyfill",
+    "is-node-process",
+    "outvariant",
+    "rettime",
+    "strict-event-emitter",
+    "until-async",
+  ],
   webpack: (config) => {
     config.resolve.alias["documentatom-sdk"] = path.resolve(
       __dirname,

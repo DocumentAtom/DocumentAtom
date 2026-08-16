@@ -5,7 +5,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var _SdkBase = _interopRequireDefault(require("../base/SdkBase"));
+var _SdkConfiguration = require("../base/SdkConfiguration");
 var _GenericExceptionHandlers = _interopRequireDefault(require("../exception/GenericExceptionHandlers"));
+var _types = require("../types");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 class ExtractAtom extends _SdkBase.default {
   constructor(config) {

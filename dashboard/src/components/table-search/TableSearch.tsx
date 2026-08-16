@@ -9,12 +9,18 @@ const TableSearch = ({
   confirm,
   placeholder = "Search",
 }: FilterDropdownProps & { placeholder?: string }) => {
+  const selectedValue = selectedKeys[0];
+  const inputValue =
+    selectedValue === undefined || selectedValue === null
+      ? undefined
+      : String(selectedValue);
+
   return (
     <DocuAtomFlex className="p">
       <Input.Search
         autoFocus
         placeholder={placeholder}
-        value={selectedKeys[0]}
+        value={inputValue}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
           setSelectedKeys(e.target.value ? [e.target.value] : []);
 

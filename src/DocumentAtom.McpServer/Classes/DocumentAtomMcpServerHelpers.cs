@@ -2,12 +2,28 @@ namespace DocumentAtom.McpServer.Classes
 {
     using System;
     using System.Text.Json;
+    using Voltaic.Core;
 
     /// <summary>
     /// Helper methods for DocumentAtom MCP Server.
     /// </summary>
     internal static class DocumentAtomMcpServerHelpers
     {
+        /// <summary>
+        /// Converts Voltaic RPC parameters to a JSON object for existing registration handlers.
+        /// </summary>
+        public static JsonElement ToJsonElement(this RpcParameters parameters)
+        {
+            if (parameters == null || !parameters.HasValue)
+                throw new ArgumentException("Parameters required");
+
+            JsonElement element = parameters.Deserialize<JsonElement>();
+            if (element.ValueKind != JsonValueKind.Object)
+                throw new ArgumentException("Parameters must be a JSON object");
+
+            return element;
+        }
+
         /// <summary>
         /// Gets a GUID from JSON element, throwing if not present.
         /// </summary>

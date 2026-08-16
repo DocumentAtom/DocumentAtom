@@ -40,12 +40,12 @@ namespace DocumentAtom.McpServer.Registrations
                 (args) =>
                 {
                     if (!args.HasValue) throw new ArgumentException("Parameters required");
-                    if (!args.Value.TryGetProperty("data", out JsonElement dataProp))
+                    if (!args.ToJsonElement().TryGetProperty("data", out JsonElement dataProp))
                         throw new ArgumentException("Word document data is required");
 
                     string base64Data = dataProp.GetString() ?? throw new ArgumentException("Word document data cannot be null");
                     byte[] wordData = Convert.FromBase64String(base64Data);
-                    ApiProcessorSettings? settings = DocumentAtomMcpServerHelpers.GetBoolOrDefault(args.Value, "extractOcr", false)
+                    ApiProcessorSettings? settings = DocumentAtomMcpServerHelpers.GetBoolOrDefault(args.ToJsonElement(), "extractOcr", false)
                         ? new ApiProcessorSettings { ExtractAtomsFromImages = true }
                         : null;
 
@@ -69,12 +69,12 @@ namespace DocumentAtom.McpServer.Registrations
             server.RegisterMethod("word/process", (args) =>
             {
                 if (!args.HasValue) throw new ArgumentException("Parameters required");
-                if (!args.Value.TryGetProperty("data", out JsonElement dataProp))
+                if (!args.ToJsonElement().TryGetProperty("data", out JsonElement dataProp))
                     throw new ArgumentException("Word document data is required");
 
                 string base64Data = dataProp.GetString() ?? throw new ArgumentException("Word document data cannot be null");
                 byte[] wordData = Convert.FromBase64String(base64Data);
-                ApiProcessorSettings? settings = DocumentAtomMcpServerHelpers.GetBoolOrDefault(args.Value, "extractOcr", false)
+                ApiProcessorSettings? settings = DocumentAtomMcpServerHelpers.GetBoolOrDefault(args.ToJsonElement(), "extractOcr", false)
                     ? new ApiProcessorSettings { ExtractAtomsFromImages = true }
                     : null;
 
@@ -98,12 +98,12 @@ namespace DocumentAtom.McpServer.Registrations
             server.RegisterMethod("word/process", (args) =>
             {
                 if (!args.HasValue) throw new ArgumentException("Parameters required");
-                if (!args.Value.TryGetProperty("data", out JsonElement dataProp))
+                if (!args.ToJsonElement().TryGetProperty("data", out JsonElement dataProp))
                     throw new ArgumentException("Word document data is required");
 
                 string base64Data = dataProp.GetString() ?? throw new ArgumentException("Word document data cannot be null");
                 byte[] wordData = Convert.FromBase64String(base64Data);
-                ApiProcessorSettings? settings = DocumentAtomMcpServerHelpers.GetBoolOrDefault(args.Value, "extractOcr", false)
+                ApiProcessorSettings? settings = DocumentAtomMcpServerHelpers.GetBoolOrDefault(args.ToJsonElement(), "extractOcr", false)
                     ? new ApiProcessorSettings { ExtractAtomsFromImages = true }
                     : null;
 

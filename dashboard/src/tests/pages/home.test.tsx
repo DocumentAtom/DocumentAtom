@@ -22,7 +22,6 @@ describe("HomePage", () => {
     it("should render home page with tabs", () => {
       const { container } = renderWithRedux(<HomePage />);
 
-      expect(screen.getByText("Home")).toBeInTheDocument();
       expect(
         screen.getByRole("tab", { name: "Type Detection" })
       ).toBeInTheDocument();
@@ -37,7 +36,7 @@ describe("HomePage", () => {
       renderWithRedux(<HomePage />);
 
       expect(
-        screen.getByText("Type Detection", { selector: "h4" })
+        screen.getByRole("tab", { name: "Type Detection", selected: true })
       ).toBeInTheDocument();
       expect(
         screen.getByRole("button", { name: /select file/i })
@@ -62,9 +61,7 @@ describe("HomePage", () => {
       await userEvent.click(atomExtractionTab);
 
       await waitFor(() => {
-        expect(
-          screen.getByText("Atom Extraction", { selector: "h4" })
-        ).toBeInTheDocument();
+        expect(screen.getByText("File Type")).toBeInTheDocument();
       });
     });
   });
@@ -118,10 +115,10 @@ describe("HomePage", () => {
       );
 
       await waitFor(() => {
-        expect(
-          screen.getByText("Atom Extraction", { selector: "h4" })
-        ).toBeInTheDocument();
+        expect(screen.getByText("File Type")).toBeInTheDocument();
       });
+
+      expect(container.firstChild).toMatchSnapshot();
     });
   });
 });

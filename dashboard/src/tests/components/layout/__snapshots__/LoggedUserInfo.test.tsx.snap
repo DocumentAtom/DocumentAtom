@@ -1,14 +1,14 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`LoggedUserInfo Snapshots should match snapshot 1`] = `
 <div
-  class="ant-space css-dev-only-do-not-override-1d4w9r2 ant-space-horizontal ant-space-align-center ant-space-gap-row-small ant-space-gap-col-small ant-dropdown-trigger container"
+  class="ant-space css-dev-only-do-not-override-12q6fii ant-space-horizontal ant-space-align-center ant-space-gap-row-small ant-space-gap-col-small ant-dropdown-trigger container css-var-root"
 >
   <div
     class="ant-space-item"
   >
     <span
-      class="ant-typography ant-color-white css-dev-only-do-not-override-1d4w9r2"
+      class="ant-typography ant-color-white css-dev-only-do-not-override-12q6fii css-var-root"
       style="font-weight: 400;"
     >
       <strong>
@@ -20,12 +20,12 @@ exports[`LoggedUserInfo Snapshots should match snapshot 1`] = `
     class="ant-space-item"
   >
     <span
-      class="ant-avatar ant-avatar-sm ant-avatar-circle css-dev-only-do-not-override-1d4w9r2"
+      class="ant-avatar ant-avatar-sm ant-avatar-circle css-var-root ant-avatar-css-var css-dev-only-do-not-override-12q6fii"
       style="background: rgb(34, 175, 121);"
     >
       <span
         class="ant-avatar-string"
-        style="transform: scale(1);"
+        style="-webkit-transform: scale(1); transform: scale(1);"
       >
         U
       </span>

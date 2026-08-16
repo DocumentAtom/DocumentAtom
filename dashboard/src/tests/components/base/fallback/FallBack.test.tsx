@@ -75,7 +75,10 @@ describe("FallBack", () => {
         <FallBack style={{ backgroundColor: "red" }} />
       );
 
-      expect(container.firstChild).toHaveStyle({ backgroundColor: "red" });
+      expect(container.firstChild).toHaveAttribute(
+        "style",
+        expect.stringContaining("background-color: red")
+      );
     });
   });
 

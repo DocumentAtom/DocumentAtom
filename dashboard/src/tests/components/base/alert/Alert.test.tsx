@@ -163,7 +163,10 @@ describe("WeAlert", () => {
       );
 
       const alert = container.querySelector(".ant-alert");
-      expect(alert).toHaveStyle({ backgroundColor: "lightblue" });
+      expect(alert).toHaveAttribute(
+        "style",
+        expect.stringContaining("background-color: lightblue")
+      );
     });
   });
 

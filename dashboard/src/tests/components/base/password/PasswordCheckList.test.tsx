@@ -10,11 +10,11 @@ jest.mock("react-password-checklist", () => ({
     onChange,
   }: any) => (
     <div className={className} data-testid="password-checklist">
-      <div>minLength: {minLength}</div>
-      <div>Rules: {rules.join(", ")}</div>
-      <div>Value: {value}</div>
-      <div>ValueAgain: {valueAgain}</div>
-      <div>Valid: {value === valueAgain && value.length >= minLength}</div>
+      <div>{`minLength: ${minLength}`}</div>
+      <div>{`Rules: ${rules.join(", ")}`}</div>
+      <div>{`Value: ${value}`}</div>
+      <div>{`ValueAgain: ${valueAgain}`}</div>
+      <div>{`Valid: ${value === valueAgain && value.length >= minLength}`}</div>
     </div>
   ),
 }));

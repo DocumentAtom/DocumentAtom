@@ -13,8 +13,11 @@ const config = {
   // setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
   moduleNameMapper: {
     // ...
+    "^#/(.*)$": "<rootDir>/src/$1",
     "^#/components/(.*)$": "<rootDir>/components/$1",
     "^antd/es/(.*)$": "<rootDir>/node_modules/antd/lib/$1",
+    "^@ant-design/colors/es/(.*)$":
+      "<rootDir>/node_modules/@ant-design/colors/lib/$1",
     uuid: require.resolve("uuid"),
   },
   setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],

@@ -11,8 +11,8 @@
 		<DocumentationFile>DocumentAtom.McpServer.xml</DocumentationFile>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="SyslogLogging" Version="2.2.1" />
-		<PackageReference Include="Voltaic" Version="0.1.6" />
+		<PackageReference Include="SyslogLogging" Version="2.2.2" />
+		<PackageReference Include="Voltaic" Version="0.6.1" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\sdk\csharp\src\DocumentAtom.Sdk\DocumentAtom.Sdk.csproj" />

@@ -42,16 +42,16 @@ describe('ExtractAtom', () => {
       expect(result).toEqual(mockAtomResponse);
     });
 
-    it('should throw error for null fileBinary', () => {
+    it('should throw error for null fileBinary', async () => {
       const cancellationToken = new AbortController();
-      expect(() => extractAtom.excel(null as any, cancellationToken)).toThrow(
+      await expect(extractAtom.excel(null as any, cancellationToken)).rejects.toThrow(
         'ArgumentNullException: fileBinary is null or empty'
       );
     });
 
-    it('should throw error for undefined fileBinary', () => {
+    it('should throw error for undefined fileBinary', async () => {
       const cancellationToken = new AbortController();
-      expect(() => extractAtom.excel(undefined as any, cancellationToken)).toThrow(
+      await expect(extractAtom.excel(undefined as any, cancellationToken)).rejects.toThrow(
         'ArgumentNullException: fileBinary is null or empty'
       );
     });
@@ -65,16 +65,16 @@ describe('ExtractAtom', () => {
       expect(result).toEqual(mockAtomResponse);
     });
 
-    it('should throw error for null fileBinary', () => {
+    it('should throw error for null fileBinary', async () => {
       const cancellationToken = new AbortController();
-      expect(() => extractAtom.html(null as any, cancellationToken)).toThrow(
+      await expect(extractAtom.html(null as any, cancellationToken)).rejects.toThrow(
         'ArgumentNullException: fileBinary is null or empty'
       );
     });
 
-    it('should throw error for undefined fileBinary', () => {
+    it('should throw error for undefined fileBinary', async () => {
       const cancellationToken = new AbortController();
-      expect(() => extractAtom.html(undefined as any, cancellationToken)).toThrow(
+      await expect(extractAtom.html(undefined as any, cancellationToken)).rejects.toThrow(
         'ArgumentNullException: fileBinary is null or empty'
       );
     });
@@ -88,16 +88,16 @@ describe('ExtractAtom', () => {
       expect(result).toEqual(mockAtomResponse);
     });
 
-    it('should throw error for null fileBinary', () => {
+    it('should throw error for null fileBinary', async () => {
       const cancellationToken = new AbortController();
-      expect(() => extractAtom.markdown(null as any, cancellationToken)).toThrow(
+      await expect(extractAtom.markdown(null as any, cancellationToken)).rejects.toThrow(
         'ArgumentNullException: fileBinary is null or empty'
       );
     });
 
-    it('should throw error for undefined fileBinary', () => {
+    it('should throw error for undefined fileBinary', async () => {
       const cancellationToken = new AbortController();
-      expect(() => extractAtom.markdown(undefined as any, cancellationToken)).toThrow(
+      await expect(extractAtom.markdown(undefined as any, cancellationToken)).rejects.toThrow(
         'ArgumentNullException: fileBinary is null or empty'
       );
     });
@@ -111,16 +111,16 @@ describe('ExtractAtom', () => {
       expect(result).toEqual(mockAtomResponse);
     });
 
-    it('should throw error for null fileBinary', () => {
+    it('should throw error for null fileBinary', async () => {
       const cancellationToken = new AbortController();
-      expect(() => extractAtom.ocr(null as any, cancellationToken)).toThrow(
+      await expect(extractAtom.ocr(null as any, cancellationToken)).rejects.toThrow(
         'ArgumentNullException: fileBinary is null or empty'
       );
     });
 
-    it('should throw error for undefined fileBinary', () => {
+    it('should throw error for undefined fileBinary', async () => {
       const cancellationToken = new AbortController();
-      expect(() => extractAtom.ocr(undefined as any, cancellationToken)).toThrow(
+      await expect(extractAtom.ocr(undefined as any, cancellationToken)).rejects.toThrow(
         'ArgumentNullException: fileBinary is null or empty'
       );
     });
@@ -134,16 +134,16 @@ describe('ExtractAtom', () => {
       expect(result).toEqual(mockAtomResponse);
     });
 
-    it('should throw error for null fileBinary', () => {
+    it('should throw error for null fileBinary', async () => {
       const cancellationToken = new AbortController();
-      expect(() => extractAtom.pdf(null as any, cancellationToken)).toThrow(
+      await expect(extractAtom.pdf(null as any, cancellationToken)).rejects.toThrow(
         'ArgumentNullException: fileBinary is null or empty'
       );
     });
 
-    it('should throw error for undefined fileBinary', () => {
+    it('should throw error for undefined fileBinary', async () => {
       const cancellationToken = new AbortController();
-      expect(() => extractAtom.pdf(undefined as any, cancellationToken)).toThrow(
+      await expect(extractAtom.pdf(undefined as any, cancellationToken)).rejects.toThrow(
         'ArgumentNullException: fileBinary is null or empty'
       );
     });
@@ -157,16 +157,16 @@ describe('ExtractAtom', () => {
       expect(result).toEqual(mockAtomResponse);
     });
 
-    it('should throw error for null fileBinary', () => {
+    it('should throw error for null fileBinary', async () => {
       const cancellationToken = new AbortController();
-      expect(() => extractAtom.png(null as any, cancellationToken)).toThrow(
+      await expect(extractAtom.png(null as any, cancellationToken)).rejects.toThrow(
         'ArgumentNullException: fileBinary is null or empty'
       );
     });
 
-    it('should throw error for undefined fileBinary', () => {
+    it('should throw error for undefined fileBinary', async () => {
       const cancellationToken = new AbortController();
-      expect(() => extractAtom.png(undefined as any, cancellationToken)).toThrow(
+      await expect(extractAtom.png(undefined as any, cancellationToken)).rejects.toThrow(
         'ArgumentNullException: fileBinary is null or empty'
       );
     });
@@ -180,16 +180,16 @@ describe('ExtractAtom', () => {
       expect(result).toEqual(mockAtomResponse);
     });
 
-    it('should throw error for null fileBinary', () => {
+    it('should throw error for null fileBinary', async () => {
       const cancellationToken = new AbortController();
-      expect(() => extractAtom.powerpoint(null as any, cancellationToken)).toThrow(
+      await expect(extractAtom.powerpoint(null as any, cancellationToken)).rejects.toThrow(
         'ArgumentNullException: fileBinary is null or empty'
       );
     });
 
-    it('should throw error for undefined fileBinary', () => {
+    it('should throw error for undefined fileBinary', async () => {
       const cancellationToken = new AbortController();
-      expect(() => extractAtom.powerpoint(undefined as any, cancellationToken)).toThrow(
+      await expect(extractAtom.powerpoint(undefined as any, cancellationToken)).rejects.toThrow(
         'ArgumentNullException: fileBinary is null or empty'
       );
     });
@@ -203,16 +203,16 @@ describe('ExtractAtom', () => {
       expect(result).toEqual(mockAtomResponse);
     });
 
-    it('should throw error for null fileBinary', () => {
+    it('should throw error for null fileBinary', async () => {
       const cancellationToken = new AbortController();
-      expect(() => extractAtom.rtf(null as any, cancellationToken)).toThrow(
+      await expect(extractAtom.rtf(null as any, cancellationToken)).rejects.toThrow(
         'ArgumentNullException: fileBinary is null or empty'
       );
     });
 
-    it('should throw error for undefined fileBinary', () => {
+    it('should throw error for undefined fileBinary', async () => {
       const cancellationToken = new AbortController();
-      expect(() => extractAtom.rtf(undefined as any, cancellationToken)).toThrow(
+      await expect(extractAtom.rtf(undefined as any, cancellationToken)).rejects.toThrow(
         'ArgumentNullException: fileBinary is null or empty'
       );
     });
@@ -226,16 +226,16 @@ describe('ExtractAtom', () => {
       expect(result).toEqual(mockAtomResponse);
     });
 
-    it('should throw error for null fileBinary', () => {
+    it('should throw error for null fileBinary', async () => {
       const cancellationToken = new AbortController();
-      expect(() => extractAtom.text(null as any, cancellationToken)).toThrow(
+      await expect(extractAtom.text(null as any, cancellationToken)).rejects.toThrow(
         'ArgumentNullException: fileBinary is null or empty'
       );
     });
 
-    it('should throw error for undefined fileBinary', () => {
+    it('should throw error for undefined fileBinary', async () => {
       const cancellationToken = new AbortController();
-      expect(() => extractAtom.text(undefined as any, cancellationToken)).toThrow(
+      await expect(extractAtom.text(undefined as any, cancellationToken)).rejects.toThrow(
         'ArgumentNullException: fileBinary is null or empty'
       );
     });
@@ -249,17 +249,17 @@ describe('ExtractAtom', () => {
       expect(result).toEqual(mockAtomResponse);
     });
 
-    it('should throw error for null fileBinary', () => {
+    it('should throw error for null fileBinary', async () => {
       const cancellationToken = new AbortController();
-      expect(() => extractAtom.word(null as any, cancellationToken)).toThrow(
-        'ArgumentNullException: filePath is null or empty'
+      await expect(extractAtom.word(null as any, cancellationToken)).rejects.toThrow(
+        'ArgumentNullException: fileBinary is null or empty'
       );
     });
 
-    it('should throw error for undefined fileBinary', () => {
+    it('should throw error for undefined fileBinary', async () => {
       const cancellationToken = new AbortController();
-      expect(() => extractAtom.word(undefined as any, cancellationToken)).toThrow(
-        'ArgumentNullException: filePath is null or empty'
+      await expect(extractAtom.word(undefined as any, cancellationToken)).rejects.toThrow(
+        'ArgumentNullException: fileBinary is null or empty'
       );
     });
   });

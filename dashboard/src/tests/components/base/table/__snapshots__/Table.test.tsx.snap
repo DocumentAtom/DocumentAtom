@@ -1,17 +1,19 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`DocuAtomTable Snapshots should match snapshot 1`] = `
 <div
-  class="ant-table-wrapper css-dev-only-do-not-override-1d4w9r2"
+  class="css-var-root ant-table-css-var ant-table-wrapper css-dev-only-do-not-override-12q6fii"
 >
   <div
-    class="ant-spin-nested-loading css-dev-only-do-not-override-1d4w9r2"
+    aria-busy="false"
+    aria-live="polite"
+    class="ant-spin css-dev-only-do-not-override-12q6fii css-var-root"
   >
     <div
       class="ant-spin-container"
     >
       <div
-        class="ant-table css-dev-only-do-not-override-1d4w9r2"
+        class="ant-table css-var-root ant-table-css-var css-dev-only-do-not-override-12q6fii"
       >
         <div
           class="ant-table-container"
@@ -135,7 +137,7 @@ exports[`DocuAtomTable Snapshots should match snapshot 1`] = `
         </div>
       </div>
       <ul
-        class="ant-pagination ant-table-pagination ant-table-pagination-right css-dev-only-do-not-override-1d4w9r2"
+        class="ant-pagination ant-table-pagination ant-table-pagination-end css-dev-only-do-not-override-12q6fii css-var-root"
       >
         <li
           aria-disabled="true"
@@ -220,44 +222,42 @@ exports[`DocuAtomTable Snapshots should match snapshot 1`] = `
 
 exports[`DocuAtomTable Snapshots should match snapshot with loading 1`] = `
 <div
-  class="ant-table-wrapper css-dev-only-do-not-override-1d4w9r2"
+  class="css-var-root ant-table-css-var ant-table-wrapper css-dev-only-do-not-override-12q6fii"
 >
   <div
-    class="ant-spin-nested-loading css-dev-only-do-not-override-1d4w9r2"
+    aria-busy="true"
+    aria-live="polite"
+    class="ant-spin ant-spin-spinning css-dev-only-do-not-override-12q6fii css-var-root"
   >
-    <div>
-      <div
-        aria-busy="true"
-        aria-live="polite"
-        class="ant-spin ant-spin-spinning css-dev-only-do-not-override-1d4w9r2"
+    <div
+      class="ant-spin-section"
+    >
+      <span
+        class="ant-spin-dot-holder"
       >
         <span
-          class="ant-spin-dot-holder"
+          class="ant-spin-dot ant-spin-dot-spin"
         >
-          <span
-            class="ant-spin-dot ant-spin-dot-spin"
-          >
-            <i
-              class="ant-spin-dot-item"
-            />
-            <i
-              class="ant-spin-dot-item"
-            />
-            <i
-              class="ant-spin-dot-item"
-            />
-            <i
-              class="ant-spin-dot-item"
-            />
-          </span>
+          <i
+            class="ant-spin-dot-item"
+          />
+          <i
+            class="ant-spin-dot-item"
+          />
+          <i
+            class="ant-spin-dot-item"
+          />
+          <i
+            class="ant-spin-dot-item"
+          />
         </span>
-      </div>
+      </span>
     </div>
     <div
-      class="ant-spin-container ant-spin-blur"
+      class="ant-spin-container"
     >
       <div
-        class="ant-table css-dev-only-do-not-override-1d4w9r2"
+        class="ant-table css-var-root ant-table-css-var css-dev-only-do-not-override-12q6fii"
       >
         <div
           class="ant-table-container"
@@ -381,7 +381,7 @@ exports[`DocuAtomTable Snapshots should match snapshot with loading 1`] = `
         </div>
       </div>
       <ul
-        class="ant-pagination ant-table-pagination ant-table-pagination-right css-dev-only-do-not-override-1d4w9r2"
+        class="ant-pagination ant-table-pagination ant-table-pagination-end css-dev-only-do-not-override-12q6fii css-var-root"
       >
         <li
           aria-disabled="true"
@@ -466,16 +466,18 @@ exports[`DocuAtomTable Snapshots should match snapshot with loading 1`] = `
 
 exports[`DocuAtomTable Snapshots should match snapshot with pagination 1`] = `
 <div
-  class="ant-table-wrapper css-dev-only-do-not-override-1d4w9r2"
+  class="css-var-root ant-table-css-var ant-table-wrapper css-dev-only-do-not-override-12q6fii"
 >
   <div
-    class="ant-spin-nested-loading css-dev-only-do-not-override-1d4w9r2"
+    aria-busy="false"
+    aria-live="polite"
+    class="ant-spin css-dev-only-do-not-override-12q6fii css-var-root"
   >
     <div
       class="ant-spin-container"
     >
       <div
-        class="ant-table css-dev-only-do-not-override-1d4w9r2"
+        class="ant-table css-var-root ant-table-css-var css-dev-only-do-not-override-12q6fii"
       >
         <div
           class="ant-table-container"
@@ -579,7 +581,7 @@ exports[`DocuAtomTable Snapshots should match snapshot with pagination 1`] = `
         </div>
       </div>
       <ul
-        class="ant-pagination ant-table-pagination ant-table-pagination-right css-dev-only-do-not-override-1d4w9r2"
+        class="ant-pagination ant-table-pagination ant-table-pagination-end css-dev-only-do-not-override-12q6fii css-var-root"
       >
         <li
           aria-disabled="true"

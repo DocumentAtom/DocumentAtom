@@ -1,8 +1,8 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`DocuAtomTitle should match snapshot 1`] = `
 <h1
-  class="ant-typography css-dev-only-do-not-override-1d4w9r2"
+  class="ant-typography css-dev-only-do-not-override-12q6fii css-var-root"
   style="text-align: left;"
 >
   Title

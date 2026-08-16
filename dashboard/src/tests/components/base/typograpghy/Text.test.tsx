@@ -32,7 +32,7 @@ describe("DocuAtomText", () => {
     );
 
     const text = container.querySelector(".ant-typography");
-    expect(text).toHaveStyle({ color: "red" });
+    expect(text).toHaveStyle({ color: "rgb(255, 0, 0)" });
   });
 
   it("should render strong text", () => {

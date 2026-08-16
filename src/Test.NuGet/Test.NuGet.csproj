@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -29,7 +29,7 @@
     <PackageReference Include="DocumentAtom" Version="2.0.0" />
     -->
 
-    <PackageReference Include="SerializationHelper" Version="2.0.3" />
+    <PackageReference Include="SerializationHelper" Version="2.1.0" />
   </ItemGroup>
 
 </Project>

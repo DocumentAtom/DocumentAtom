@@ -1,14 +1,14 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`DocuAtomFormItem should match snapshot 1`] = `
 <div
-  class="ant-form-item css-dev-only-do-not-override-1d4w9r2"
+  class="ant-form-item css-var-root ant-form-css-var css-dev-only-do-not-override-12q6fii ant-form-item-horizontal"
 >
   <div
-    class="ant-row ant-form-item-row css-dev-only-do-not-override-1d4w9r2"
+    class="ant-row ant-form-item-row css-dev-only-do-not-override-12q6fii css-var-root"
   >
     <div
-      class="ant-col ant-form-item-control css-dev-only-do-not-override-1d4w9r2"
+      class="ant-col ant-form-item-control css-dev-only-do-not-override-12q6fii css-var-root"
     >
       <div
         class="ant-form-item-control-input"

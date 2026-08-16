@@ -38,7 +38,7 @@ namespace DocumentAtom.McpServer.Registrations
                 (args) =>
                 {
                     if (!args.HasValue) throw new ArgumentException("Parameters required");
-                    if (!args.Value.TryGetProperty("data", out JsonElement dataProp))
+                    if (!args.ToJsonElement().TryGetProperty("data", out JsonElement dataProp))
                         throw new ArgumentException("HTML data is required");
 
                     string base64Data = dataProp.GetString() ?? throw new ArgumentException("HTML data cannot be null");
@@ -64,7 +64,7 @@ namespace DocumentAtom.McpServer.Registrations
             server.RegisterMethod("html/process", (args) =>
             {
                 if (!args.HasValue) throw new ArgumentException("Parameters required");
-                if (!args.Value.TryGetProperty("data", out JsonElement dataProp))
+                if (!args.ToJsonElement().TryGetProperty("data", out JsonElement dataProp))
                     throw new ArgumentException("HTML data is required");
 
                 string base64Data = dataProp.GetString() ?? throw new ArgumentException("HTML data cannot be null");
@@ -90,7 +90,7 @@ namespace DocumentAtom.McpServer.Registrations
             server.RegisterMethod("html/process", (args) =>
             {
                 if (!args.HasValue) throw new ArgumentException("Parameters required");
-                if (!args.Value.TryGetProperty("data", out JsonElement dataProp))
+                if (!args.ToJsonElement().TryGetProperty("data", out JsonElement dataProp))
                     throw new ArgumentException("HTML data is required");
 
                 string base64Data = dataProp.GetString() ?? throw new ArgumentException("HTML data cannot be null");

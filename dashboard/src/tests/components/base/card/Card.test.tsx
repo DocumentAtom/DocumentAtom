@@ -67,7 +67,10 @@ describe("DocuAtomCard", () => {
       );
 
       const card = container.querySelector(".ant-card");
-      expect(card).toHaveStyle({ backgroundColor: "lightblue" });
+      expect(card).toHaveAttribute(
+        "style",
+        expect.stringContaining("background-color: lightblue")
+      );
     });
   });
 

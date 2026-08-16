@@ -1,11 +1,11 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Loading Component should match snapshot 1`] = `
 <div
-  class="pageLoading mt ant-flex css-dev-only-do-not-override-1d4w9r2 ant-flex-align-center ant-flex-justify-center ant-flex-vertical"
+  class="pageLoading mt ant-flex css-dev-only-do-not-override-12q6fii css-var-root ant-flex-align-center ant-flex-justify-center ant-flex-vertical"
 >
   <span
-    class="ant-typography css-dev-only-do-not-override-1d4w9r2"
+    class="ant-typography css-dev-only-do-not-override-12q6fii css-var-root"
   >
     Loading...
   </span>

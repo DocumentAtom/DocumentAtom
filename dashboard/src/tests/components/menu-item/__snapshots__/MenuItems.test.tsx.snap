@@ -1,16 +1,15 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`MenuItems Snapshots should match snapshot 1`] = `
 <ul
-  class="ant-menu ant-menu-root ant-menu-inline ant-menu-light css-dev-only-do-not-override-1d4w9r2"
+  class="ant-menu ant-menu-root ant-menu-inline ant-menu-light css-dev-only-do-not-override-12q6fii css-var-root ant-menu-css-var"
   data-menu-list="true"
   role="menu"
   tabindex="0"
 >
   <li
-    aria-describedby="test-id"
     class="ant-menu-item ant-menu-item-only-child"
-    data-menu-id="rc-menu-uuid-test-home"
+    data-menu-id="rc-menu-uuid-home"
     path="/dashboard"
     role="menuitem"
     style="padding-left: 24px;"
@@ -21,15 +20,15 @@ exports[`MenuItems Snapshots should match snapshot 1`] = `
     >
       <a
         href="/dashboard"
+        style="color: inherit;"
       >
         Home
       </a>
     </span>
   </li>
   <li
-    aria-describedby="test-id"
     class="ant-menu-item ant-menu-item-only-child"
-    data-menu-id="rc-menu-uuid-test-settings"
+    data-menu-id="rc-menu-uuid-settings"
     path="/dashboard/settings"
     role="menuitem"
     style="padding-left: 24px;"
@@ -40,6 +39,7 @@ exports[`MenuItems Snapshots should match snapshot 1`] = `
     >
       <a
         href="/dashboard/settings"
+        style="color: inherit;"
       >
         Settings
       </a>
@@ -50,15 +50,14 @@ exports[`MenuItems Snapshots should match snapshot 1`] = `
 
 exports[`MenuItems Snapshots should match snapshot when collapsed 1`] = `
 <ul
-  class="ant-menu ant-menu-root ant-menu-inline ant-menu-light css-dev-only-do-not-override-1d4w9r2"
+  class="ant-menu ant-menu-root ant-menu-inline ant-menu-light css-dev-only-do-not-override-12q6fii css-var-root ant-menu-css-var"
   data-menu-list="true"
   role="menu"
   tabindex="0"
 >
   <li
-    aria-describedby="test-id"
     class="ant-menu-item ant-menu-item-only-child"
-    data-menu-id="rc-menu-uuid-test-home"
+    data-menu-id="rc-menu-uuid-home"
     path="/dashboard"
     role="menuitem"
     style="padding-left: 24px;"
@@ -69,15 +68,15 @@ exports[`MenuItems Snapshots should match snapshot when collapsed 1`] = `
     >
       <a
         href="/dashboard"
+        style="color: inherit;"
       >
         Home
       </a>
     </span>
   </li>
   <li
-    aria-describedby="test-id"
     class="ant-menu-item ant-menu-item-only-child"
-    data-menu-id="rc-menu-uuid-test-settings"
+    data-menu-id="rc-menu-uuid-settings"
     path="/dashboard/settings"
     role="menuitem"
     style="padding-left: 24px;"
@@ -88,6 +87,7 @@ exports[`MenuItems Snapshots should match snapshot when collapsed 1`] = `
     >
       <a
         href="/dashboard/settings"
+        style="color: inherit;"
       >
         Settings
       </a>

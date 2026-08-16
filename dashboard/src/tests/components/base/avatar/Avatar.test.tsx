@@ -28,7 +28,10 @@ describe("DocuAtomAvatar", () => {
     );
 
     const avatar = container.querySelector(".ant-avatar");
-    expect(avatar).toHaveStyle({ backgroundColor: "red" });
+    expect(avatar).toHaveAttribute(
+      "style",
+      expect.stringContaining("background-color: red")
+    );
   });
 
   it("should match snapshot", () => {

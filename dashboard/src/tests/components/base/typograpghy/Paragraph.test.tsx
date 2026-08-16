@@ -32,7 +32,7 @@ describe("DocuAtomParagraph", () => {
     );
 
     const paragraph = container.querySelector(".ant-typography");
-    expect(paragraph).toHaveStyle({ color: "blue" });
+    expect(paragraph).toHaveStyle({ color: "rgb(0, 0, 255)" });
   });
 
   it("should match snapshot", () => {

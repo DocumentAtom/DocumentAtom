@@ -39,14 +39,14 @@ namespace DocumentAtom.McpServer.Registrations
                 (args) =>
                 {
                     if (!args.HasValue) throw new ArgumentException("Parameters required");
-                    if (!args.Value.TryGetProperty("data", out JsonElement dataProp))
+                    if (!args.ToJsonElement().TryGetProperty("data", out JsonElement dataProp))
                         throw new ArgumentException("Document data is required");
 
                     string base64Data = dataProp.GetString() ?? throw new ArgumentException("Document data cannot be null");
                     byte[] documentData = Convert.FromBase64String(base64Data);
 
                     string? contentType = null;
-                    if (args.Value.TryGetProperty("contentType", out JsonElement contentTypeProp))
+                    if (args.ToJsonElement().TryGetProperty("contentType", out JsonElement contentTypeProp))
                     {
                         contentType = contentTypeProp.GetString();
                     }
@@ -71,14 +71,14 @@ namespace DocumentAtom.McpServer.Registrations
             server.RegisterMethod("typedetection/detect", (args) =>
             {
                 if (!args.HasValue) throw new ArgumentException("Parameters required");
-                if (!args.Value.TryGetProperty("data", out JsonElement dataProp))
+                if (!args.ToJsonElement().TryGetProperty("data", out JsonElement dataProp))
                     throw new ArgumentException("Document data is required");
 
                 string base64Data = dataProp.GetString() ?? throw new ArgumentException("Document data cannot be null");
                 byte[] documentData = Convert.FromBase64String(base64Data);
 
                 string? contentType = null;
-                if (args.Value.TryGetProperty("contentType", out JsonElement contentTypeProp))
+                if (args.ToJsonElement().TryGetProperty("contentType", out JsonElement contentTypeProp))
                 {
                     contentType = contentTypeProp.GetString();
                 }
@@ -103,14 +103,14 @@ namespace DocumentAtom.McpServer.Registrations
             server.RegisterMethod("typedetection/detect", (args) =>
             {
                 if (!args.HasValue) throw new ArgumentException("Parameters required");
-                if (!args.Value.TryGetProperty("data", out JsonElement dataProp))
+                if (!args.ToJsonElement().TryGetProperty("data", out JsonElement dataProp))
                     throw new ArgumentException("Document data is required");
 
                 string base64Data = dataProp.GetString() ?? throw new ArgumentException("Document data cannot be null");
                 byte[] documentData = Convert.FromBase64String(base64Data);
 
                 string? contentType = null;
-                if (args.Value.TryGetProperty("contentType", out JsonElement contentTypeProp))
+                if (args.ToJsonElement().TryGetProperty("contentType", out JsonElement contentTypeProp))
                 {
                     contentType = contentTypeProp.GetString();
                 }

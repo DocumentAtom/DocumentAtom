@@ -69,6 +69,9 @@ namespace DocumentAtom.Testing.Shared
 
             // Binary document processors
             DocumentProcessorSuites.Build(),
+
+            // MCP server adapters
+            McpServerSuites.Parameters(),
         };
     }
 }

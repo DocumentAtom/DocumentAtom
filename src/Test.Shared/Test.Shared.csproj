@@ -22,6 +22,7 @@
 		<ProjectReference Include="..\DocumentAtom.Text\DocumentAtom.Text.csproj" />
 		<ProjectReference Include="..\DocumentAtom.Documents\DocumentAtom.Documents.csproj" />
 		<ProjectReference Include="..\DocumentAtom.DataIngestion\DocumentAtom.DataIngestion.csproj" />
+		<ProjectReference Include="..\DocumentAtom.McpServer\DocumentAtom.McpServer.csproj" />
 	</ItemGroup>
 
 </Project>

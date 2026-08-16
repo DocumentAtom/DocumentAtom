@@ -10,7 +10,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\DocumentAtom.McpServer\DocumentAtom.McpServer.csproj" />
 		<PackageReference Include="Inputty" Version="1.0.13" />
-		<PackageReference Include="Voltaic" Version="0.1.6" />
+		<PackageReference Include="Voltaic" Version="0.6.1" />
 	</ItemGroup>
 
 	<ItemGroup>

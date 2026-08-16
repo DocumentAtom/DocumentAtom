@@ -24,6 +24,35 @@ window.matchMedia =
     };
   };
 
+class ResizeObserverMock {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+
+global.ResizeObserver = global.ResizeObserver || ResizeObserverMock;
+
+class MessageChannelMock {
+  constructor() {
+    this.port1 = {
+      onmessage: null,
+      close() {},
+    };
+    this.port2 = {
+      postMessage: (message) => {
+        setTimeout(() => {
+          if (this.port1.onmessage) {
+            this.port1.onmessage({ data: message });
+          }
+        }, 0);
+      },
+      close() {},
+    };
+  }
+}
+
+global.MessageChannel = global.MessageChannel || MessageChannelMock;
+
 class BroadcastChannelMock {
   constructor(channelName) {
     this.name = channelName;
@@ -43,12 +72,14 @@ class BroadcastChannelMock {
 
 global.BroadcastChannel = BroadcastChannelMock;
 
-global.TransformStream = class {
-  constructor() {
-    this.readable = {};
-    this.writable = {};
-  }
-};
+global.TransformStream =
+  global.TransformStream ||
+  class {
+    constructor() {
+      this.readable = {};
+      this.writable = {};
+    }
+  };
 
 jest.mock("react-password-checklist", () => () => (
   <div>PasswordChecklistMock</div>

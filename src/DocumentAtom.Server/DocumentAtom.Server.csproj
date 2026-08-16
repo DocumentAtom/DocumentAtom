@@ -6,8 +6,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="SyslogLogging" Version="2.2.1" />
-		<PackageReference Include="Watson" Version="7.1.0" />
+		<PackageReference Include="SyslogLogging" Version="2.2.2" />
+		<PackageReference Include="Watson" Version="7.1.1" />
 	</ItemGroup>
 
 	<ItemGroup>
