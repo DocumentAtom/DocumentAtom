@@ -1,4 +1,4 @@
-﻿namespace DocumentAtom.Text.Html
+namespace DocumentAtom.Text.Html
 {
     using System;
     using System.Collections.Generic;
@@ -615,7 +615,7 @@
                 table.Columns.Add(new SerializableColumn
                 {
                     Name = header,
-                    Type = ColumnValueType.String
+                    Type = ColumnValueTypeEnum.String
                 });
             }
 

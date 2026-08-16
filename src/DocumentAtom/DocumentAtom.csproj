@@ -8,7 +8,7 @@
 		<IncludeBuildOutput>false</IncludeBuildOutput>
 		<Description>Complete document processing library for AI, ML, and analytics. DocumentAtom provides a light, fast library for breaking input documents into constituent parts (atoms), useful for AI, machine learning, processing, analytics, and general analysis.</Description>
 		<PackageTags>semantic cell chunk text processing extract extraction doc docx xlsx pptx ppt keynote pages numbers text txt pdf ai llm rag parse parsing parser word excel powerpoint</PackageTags>
-		<PackageReleaseNotes>v2.0.0 - Consolidated metapackage referencing Core, Text, and Documents</PackageReleaseNotes>
+		<PackageReleaseNotes>v3.1.0 - Dependency updates across Core, Text, and Documents</PackageReleaseNotes>
 		<!-- Suppress metapackage warning since this is expected for metapackages with no lib output -->
 		<NoWarn>$(NoWarn);NU5128</NoWarn>
 	</PropertyGroup>

@@ -9,7 +9,7 @@
 		<DocumentationFile>DocumentAtom.Text.xml</DocumentationFile>
 		<Description>Text format processors for DocumentAtom including plain text, CSV, JSON, XML, HTML, and Markdown. DocumentAtom provides a light, fast library for breaking input documents into constituent parts (atoms), useful for AI, machine learning, processing, analytics, and general analysis.</Description>
 		<PackageTags>semantic cell chunk text processing extract extraction csv json xml html markdown ai llm rag parse parsing parser</PackageTags>
-		<PackageReleaseNotes>v2.0.0 - Consolidated text processors (Text, CSV, JSON, XML, HTML, Markdown, TypeDetection)</PackageReleaseNotes>
+		<PackageReleaseNotes>v3.1.0 - Dependency updates (CsvHelper 33.1.0)</PackageReleaseNotes>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
 
@@ -37,7 +37,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CsvHelper" Version="33.0.1" />
+		<PackageReference Include="CsvHelper" Version="33.1.0" />
 		<PackageReference Include="HtmlAgilityPack" Version="1.12.4" />
 	</ItemGroup>
 

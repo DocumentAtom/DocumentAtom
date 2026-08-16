@@ -9,7 +9,7 @@
 		<DocumentationFile>DocumentAtom.Core.xml</DocumentationFile>
 		<Description>Core classes for DocumentAtom including text processing utilities. DocumentAtom provides a light, fast library for breaking input documents into constituent parts (atoms), useful for AI, machine learning, processing, analytics, and general analysis.</Description>
 		<PackageTags>semantic cell chunk text processing extract extraction doc docx xlsx pptx ppt png csv json xml keynote pages numbers text txt rtf pdf ai llm rag parse parsing parser word excel powerpoint</PackageTags>
-		<PackageReleaseNotes>v2.0.0 - Consolidated package with TextTools merged into Core</PackageReleaseNotes>
+		<PackageReleaseNotes>v3.1.0 - Dependency updates (SerializableDataTable 1.1.0, SharpToken 2.0.6)</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -32,9 +32,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="SerializableDataTable" Version="1.0.4" />
+	  <PackageReference Include="SerializableDataTable" Version="1.1.0" />
 	  <PackageReference Include="SerializationHelper" Version="2.0.3" />
-	  <PackageReference Include="SharpToken" Version="2.0.3" />
+	  <PackageReference Include="SharpToken" Version="2.0.6" />
 	</ItemGroup>
 
 </Project>

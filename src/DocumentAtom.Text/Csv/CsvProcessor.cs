@@ -1,4 +1,4 @@
-﻿namespace DocumentAtom.Text.Csv
+namespace DocumentAtom.Text.Csv
 {
     using CsvHelper;
     using CsvHelper.Configuration;
@@ -244,7 +244,7 @@
                 serializableTable.Columns.Add(new SerializableColumn
                 {
                     Name = col.ColumnName,
-                    Type = ColumnValueType.String
+                    Type = ColumnValueTypeEnum.String
                 });
             }
 

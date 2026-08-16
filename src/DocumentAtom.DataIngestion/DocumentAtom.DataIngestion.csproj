@@ -10,7 +10,7 @@
 		<DocumentationFile>DocumentAtom.DataIngestion.xml</DocumentationFile>
 		<Description>Microsoft.Extensions.AI.DataIngestion integration for DocumentAtom document parsing library. Provides adapters for using DocumentAtom's document processing capabilities in standard .NET AI/RAG pipelines.</Description>
 		<PackageTags>document;parsing;ingestion;rag;ai;vector;embedding;chunking;microsoft;extensions;datatable;pdf;docx;xlsx;pptx</PackageTags>
-		<PackageReleaseNotes>v2.0.0 - Updated to use consolidated DocumentAtom packages</PackageReleaseNotes>
+		<PackageReleaseNotes>v3.1.0 - Dependency updates (Microsoft.Extensions.AI 10.9.0)</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -36,11 +36,11 @@
 
 	<ItemGroup>
 		<!-- Microsoft Extensions AI -->
-		<PackageReference Include="Microsoft.Extensions.AI" Version="10.2.0" />
-		<PackageReference Include="Microsoft.Extensions.AI.Abstractions" Version="10.2.0" />
-		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.2" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.2" />
-		<PackageReference Include="Microsoft.Extensions.Options" Version="10.0.2" />
+		<PackageReference Include="Microsoft.Extensions.AI" Version="10.9.0" />
+		<PackageReference Include="Microsoft.Extensions.AI.Abstractions" Version="10.9.0" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.11" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.11" />
+		<PackageReference Include="Microsoft.Extensions.Options" Version="10.0.11" />
 	</ItemGroup>
 
 </Project>

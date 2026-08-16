@@ -248,8 +248,8 @@
                     RecursiveXYCut xycut = new RecursiveXYCut(new RecursiveXYCut.RecursiveXYCutOptions()
                     {
                         MinimumWidth = page.Width / 3.0,
-                        DominantFontWidthFunc = _ => (page.Letters.Average(l => l.GlyphRectangle.Width) * 2),
-                        DominantFontHeightFunc = _ => (page.Letters.Average(l => l.GlyphRectangle.Height) * 2)
+                        DominantFontWidthFunc = _ => (page.Letters.Average(l => l.BoundingBox.Width) * 2),
+                        DominantFontHeightFunc = _ => (page.Letters.Average(l => l.BoundingBox.Height) * 2)
                     });
 
                     IReadOnlyList<TextBlock> blocks = xycut.GetBlocks(words);
@@ -312,10 +312,10 @@
                                 Binary = bytes,
                                 BoundingBox = new BoundingBox
                                 {
-                                    UpperLeft = new Point(Math.Max(0, (int)image.Bounds.TopLeft.X), Math.Max(0, (int)image.Bounds.TopLeft.Y)),
-                                    UpperRight = new Point(Math.Max(0, (int)image.Bounds.TopRight.X), Math.Max(0, (int)image.Bounds.TopRight.Y)),
-                                    LowerLeft = new Point(Math.Max(0, (int)image.Bounds.BottomLeft.X), Math.Max(0, (int)image.Bounds.BottomLeft.Y)),
-                                    LowerRight = new Point(Math.Max(0, (int)image.Bounds.BottomRight.X), Math.Max(0, (int)image.Bounds.BottomRight.Y))
+                                    UpperLeft = new Point(Math.Max(0, (int)image.BoundingBox.TopLeft.X), Math.Max(0, (int)image.BoundingBox.TopLeft.Y)),
+                                    UpperRight = new Point(Math.Max(0, (int)image.BoundingBox.TopRight.X), Math.Max(0, (int)image.BoundingBox.TopRight.Y)),
+                                    LowerLeft = new Point(Math.Max(0, (int)image.BoundingBox.BottomLeft.X), Math.Max(0, (int)image.BoundingBox.BottomLeft.Y)),
+                                    LowerRight = new Point(Math.Max(0, (int)image.BoundingBox.BottomRight.X), Math.Max(0, (int)image.BoundingBox.BottomRight.Y))
                                 },
                                 PageNumber = pageNumber,
                                 MD5Hash = HashHelper.MD5Hash(bytes),

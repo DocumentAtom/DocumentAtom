@@ -15,6 +15,7 @@ namespace DocumentAtom.Testing.Shared.Suites
     using DocumentAtom.Text.Json;
     using DocumentAtom.Text.Markdown;
     using DocumentAtom.Text.Xml;
+    using SerializableDataTables;
     using Touchstone.Core;
 
     /// <summary>
@@ -99,6 +100,30 @@ namespace DocumentAtom.Testing.Shared.Suites
                     Atom table = atoms[0];
                     Check.Equal(AtomTypeEnum.Table, table.Type);
                     Check.Equal(3, table.Columns);
+                })
+                .Case("Extract.TableContent", "A CSV table atom exposes typed columns and the parsed row values", () =>
+                {
+                    string path = Workspace.WriteText("csv", SampleData.Csv);
+                    using CsvProcessor p = new CsvProcessor();
+                    Atom table = p.Extract(path).First();
+
+                    Check.Equal(AtomTypeEnum.Table, table.Type);
+                    Check.NotNull(table.Table);
+
+                    // Columns are taken from the CSV header and typed as strings by the processor.
+                    List<string> columnNames = table.Table.Columns.Select(c => c.Name).ToList();
+                    Check.Equal(3, columnNames.Count);
+                    Check.Equal("Name", columnNames[0]);
+                    Check.Equal("Age", columnNames[1]);
+                    Check.Equal("City", columnNames[2]);
+                    foreach (SerializableColumn column in table.Table.Columns)
+                        Check.Equal(ColumnValueTypeEnum.String, column.Type);
+
+                    // Rows preserve the parsed cell values in header order.
+                    Check.Equal(3, table.Table.Rows.Count);
+                    Check.Equal("Alice", table.Table.Rows[0]["Name"].ToString());
+                    Check.Equal("30", table.Table.Rows[0]["Age"].ToString());
+                    Check.Equal("Seattle", table.Table.Rows[0]["City"].ToString());
                 })
                 .Case("Extract.RowsPerAtom", "RowsPerAtom of one produces one atom per data row", () =>
                 {

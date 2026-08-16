@@ -1,6 +1,6 @@
 <Project>
   <PropertyGroup>
-    <Version>3.0.0</Version>
+    <Version>3.1.0</Version>
     <Authors>Joel Christner</Authors>
     <Copyright>(c)2026 Joel Christner</Copyright>
     <PackageProjectUrl>https://github.com/jchristn/DocumentAtom</PackageProjectUrl>

@@ -9,7 +9,7 @@
 		<DocumentationFile>DocumentAtom.Documents.xml</DocumentationFile>
 		<Description>Document format processors for DocumentAtom including Word, Excel, PowerPoint, PDF, images, and OCR. DocumentAtom provides a light, fast library for breaking input documents into constituent parts (atoms), useful for AI, machine learning, processing, analytics, and general analysis.</Description>
 		<PackageTags>semantic cell chunk text processing extract extraction doc docx xlsx pptx png pdf rtf image ocr ai llm rag parse parsing parser word excel powerpoint</PackageTags>
-		<PackageReleaseNotes>v2.0.0 - Consolidated document processors (Word, Excel, PowerPoint, PDF, Image, OCR, RichText)</PackageReleaseNotes>
+		<PackageReleaseNotes>v3.1.0 - Dependency updates (DocumentFormat.OpenXml 3.5.1, PdfPig 0.1.15, Tabula 1.0.1, SixLabors.ImageSharp 3.1.12)</PackageReleaseNotes>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
 
@@ -47,10 +47,10 @@
 
 	<ItemGroup>
 		<PackageReference Include="Tesseract" Version="5.2.0" />
-		<PackageReference Include="SixLabors.ImageSharp" Version="3.1.11" />
-		<PackageReference Include="DocumentFormat.OpenXml" Version="3.3.0" />
-		<PackageReference Include="PdfPig" Version="0.1.11" />
-		<PackageReference Include="Tabula" Version="0.1.5" />
+		<PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
+		<PackageReference Include="DocumentFormat.OpenXml" Version="3.5.1" />
+		<PackageReference Include="PdfPig" Version="0.1.15" />
+		<PackageReference Include="Tabula" Version="1.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>

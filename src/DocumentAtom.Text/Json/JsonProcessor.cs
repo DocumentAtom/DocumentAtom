@@ -1,4 +1,4 @@
-﻿namespace DocumentAtom.Text.Json
+namespace DocumentAtom.Text.Json
 {
     using DocumentAtom.Core;
     using DocumentAtom.Core.Atoms;
@@ -305,7 +305,7 @@
                 table.Columns.Add(new SerializableColumn
                 {
                     Name = prop.Name,
-                    Type = ColumnValueType.String
+                    Type = ColumnValueTypeEnum.String
                 });
 
                 // Add value to row
@@ -341,7 +341,7 @@
                 table.Columns.Add(new SerializableColumn
                 {
                     Name = "undefined",
-                    Type = ColumnValueType.String
+                    Type = ColumnValueTypeEnum.String
                 });
                 return table;
             }
@@ -371,7 +371,7 @@
                 table.Columns.Add(new SerializableColumn
                 {
                     Name = "undefined",
-                    Type = ColumnValueType.String
+                    Type = ColumnValueTypeEnum.String
                 });
             }
 
@@ -381,7 +381,7 @@
                 table.Columns.Add(new SerializableColumn
                 {
                     Name = colName,
-                    Type = ColumnValueType.String
+                    Type = ColumnValueTypeEnum.String
                 });
             }
 

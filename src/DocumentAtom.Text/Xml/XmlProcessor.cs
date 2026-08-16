@@ -1,4 +1,4 @@
-﻿namespace DocumentAtom.Text.Xml
+namespace DocumentAtom.Text.Xml
 {
     using DocumentAtom.Core;
     using DocumentAtom.Core.Atoms;
@@ -314,7 +314,7 @@
             table.Columns.Add(new SerializableColumn
             {
                 Name = elementName,
-                Type = ColumnValueType.String
+                Type = ColumnValueTypeEnum.String
             });
 
             string value = _Settings.PreserveWhitespace ? element.Value : element.Value.Trim();
@@ -329,7 +329,7 @@
                     table.Columns.Add(new SerializableColumn
                     {
                         Name = attrColumnName,
-                        Type = ColumnValueType.String
+                        Type = ColumnValueTypeEnum.String
                     });
                     rowData[attrColumnName] = attr.Value;
                 }
@@ -353,7 +353,7 @@
                     table.Columns.Add(new SerializableColumn
                     {
                         Name = attrColumnName,
-                        Type = ColumnValueType.String
+                        Type = ColumnValueTypeEnum.String
                     });
                     rowData[attrColumnName] = attr.Value;
                 }
@@ -370,7 +370,7 @@
                     table.Columns.Add(new SerializableColumn
                     {
                         Name = childName,
-                        Type = ColumnValueType.String
+                        Type = ColumnValueTypeEnum.String
                     });
                 }
 
@@ -398,7 +398,7 @@
                             table.Columns.Add(new SerializableColumn
                             {
                                 Name = attrColumnName,
-                                Type = ColumnValueType.String
+                                Type = ColumnValueTypeEnum.String
                             });
                         }
                         rowData[attrColumnName] = attr.Value;
@@ -476,7 +476,7 @@
                 table.Columns.Add(new SerializableColumn
                 {
                     Name = colName,
-                    Type = ColumnValueType.String
+                    Type = ColumnValueTypeEnum.String
                 });
             }
 
