@@ -7,7 +7,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>DocumentAtom.Sdk</PackageId>
-    <Version>3.1.0</Version>
+    <Version>3.1.1</Version>
     <Authors>Joel Christner</Authors>
     <Description>C# SDK for DocumentAtom - Document atomization and processing library</Description>
     <PackageProjectUrl>https://github.com/documentatom/documentatom</PackageProjectUrl>
@@ -22,7 +22,7 @@
     <PackageIcon>icon.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>v3.1.0 - Dependency updates (RestWrapper 3.3.0)</PackageReleaseNotes>
+    <PackageReleaseNotes>v3.1.1 - Added ActivitySource and Meter diagnostics for SDK HTTP requests and type detection</PackageReleaseNotes>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <!-- Suppress nullable reference type warnings -->

@@ -2,6 +2,24 @@
 
 ## Current Version
 
+v3.1.1
+
+### New Features
+- Added `DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics` with shared `ActivitySource` and `Meter` instances for DocumentAtom hosts and clients
+- Added core processor, type detection, and chunking spans and metrics
+- Added REST server route instrumentation for request duration, status code, active request count, and request body size
+- Added MCP server JSON-RPC instrumentation for request duration, active request count, request outcome, and connection count
+- Added C# SDK outbound HTTP instrumentation for request duration, status code, route, and request body size
+- Added DataIngestion processing instrumentation for document duration and emitted chunk counts
+
+### Packaging
+- Bumped NuGet package versions from `3.1.0` to `3.1.1`
+- Aligned package release notes with the diagnostics release
+- Bumped the non-packable MCP server project patch version from `1.0.0` to `1.0.1`
+- Removed the unused direct `SixLabors.ImageSharp` dependency from `DocumentAtom.Documents`
+
+## Previous Versions
+
 v3.0.x
 
 ### Breaking Changes
@@ -32,8 +50,6 @@ v3.0.x
 ### Other
 - MCP server registrations updated to use `ApiProcessorSettings` instead of `extractOcr` boolean
 - Updated Postman collection to reflect JSON envelope API
-
-## Previous Versions
 
 v2.0.x
 

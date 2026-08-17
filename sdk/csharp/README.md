@@ -36,6 +36,7 @@ dotnet add package DocumentAtom.Sdk
 
 ```csharp
 using DocumentAtom.Sdk;
+using DocumentAtom.Core.Api;
 using DocumentAtom.Core.Atoms;
 
 // Initialize the SDK
@@ -66,6 +67,28 @@ var sdk = new DocumentAtomSdk("http://localhost:8000");
 sdk.LogRequests = true;
 sdk.LogResponses = true;
 sdk.Logger = (severity, message) => Console.WriteLine($"[{severity}] {message}");
+```
+
+### With Processing Settings
+
+```csharp
+var settings = new ApiProcessorSettings
+{
+    ExtractAtomsFromImages = true,
+    BuildHierarchy = true
+};
+
+List<Atom>? atoms = await sdk.Atom.ProcessPdf(documentData, settings);
+```
+
+### With Diagnostics
+
+The SDK emits .NET `ActivitySource` traces and `Meter` metrics through the `DocumentAtom.Sdk` source name. Hosts can subscribe with OpenTelemetry or a custom listener.
+
+```csharp
+builder.Services.AddOpenTelemetry()
+    .WithTracing(tracing => tracing.AddSource("DocumentAtom.Sdk"))
+    .WithMetrics(metrics => metrics.AddMeter("DocumentAtom.Sdk"));
 ```
 
 ## API Reference
@@ -102,30 +125,32 @@ Process various document types and extract atoms:
 
 #### Supported Document Types
 
-- **CSV**: `ProcessCsv(byte[] data, bool extractOcr = false)`
-- **Excel**: `ProcessExcel(byte[] data, bool extractOcr = false)`
-- **HTML**: `ProcessHtml(byte[] data)`
-- **JSON**: `ProcessJson(byte[] data)`
-- **Markdown**: `ProcessMarkdown(byte[] data)`
-- **OCR**: `ProcessOcr(byte[] data)`
-- **PDF**: `ProcessPdf(byte[] data, bool extractOcr = false)`
-- **PNG**: `ProcessPng(byte[] data)`
-- **PowerPoint**: `ProcessPowerPoint(byte[] data, bool extractOcr = false)`
-- **RTF**: `ProcessRtf(byte[] data, bool extractOcr = false)`
-- **Text**: `ProcessText(byte[] data)`
-- **Word**: `ProcessWord(byte[] data, bool extractOcr = false)`
-- **XML**: `ProcessXml(byte[] data)`
+- **CSV**: `ProcessCsv(byte[] data, ApiProcessorSettings? settings = null)`
+- **Excel**: `ProcessExcel(byte[] data, ApiProcessorSettings? settings = null)`
+- **HTML**: `ProcessHtml(byte[] data, ApiProcessorSettings? settings = null)`
+- **JSON**: `ProcessJson(byte[] data, ApiProcessorSettings? settings = null)`
+- **Markdown**: `ProcessMarkdown(byte[] data, ApiProcessorSettings? settings = null)`
+- **OCR**: `ProcessOcr(byte[] data, ApiProcessorSettings? settings = null)`
+- **PDF**: `ProcessPdf(byte[] data, ApiProcessorSettings? settings = null)`
+- **PNG**: `ProcessPng(byte[] data, ApiProcessorSettings? settings = null)`
+- **PowerPoint**: `ProcessPowerPoint(byte[] data, ApiProcessorSettings? settings = null)`
+- **RTF**: `ProcessRtf(byte[] data, ApiProcessorSettings? settings = null)`
+- **Text**: `ProcessText(byte[] data, ApiProcessorSettings? settings = null)`
+- **Word**: `ProcessWord(byte[] data, ApiProcessorSettings? settings = null)`
+- **XML**: `ProcessXml(byte[] data, ApiProcessorSettings? settings = null)`
 
 #### Example: Processing Multiple Document Types
 
 ```csharp
 // Process a PDF document
 byte[] pdfData = await File.ReadAllBytesAsync("document.pdf");
-List<Atom>? pdfAtoms = await sdk.Atom.ProcessPdf(pdfData, extractOcr: true);
+var pdfSettings = new ApiProcessorSettings { ExtractAtomsFromImages = true };
+List<Atom>? pdfAtoms = await sdk.Atom.ProcessPdf(pdfData, pdfSettings);
 
 // Process a Word document
 byte[] wordData = await File.ReadAllBytesAsync("document.docx");
-List<Atom>? wordAtoms = await sdk.Atom.ProcessWord(wordData, extractOcr: true);
+var wordSettings = new ApiProcessorSettings { ExtractAtomsFromImages = true };
+List<Atom>? wordAtoms = await sdk.Atom.ProcessWord(wordData, wordSettings);
 
 // Process an Excel spreadsheet
 byte[] excelData = await File.ReadAllBytesAsync("spreadsheet.xlsx");
@@ -261,6 +286,7 @@ docker run -p 8000:8000 jchristn/documentatom
 
 ```csharp
 using DocumentAtom.Sdk;
+using DocumentAtom.Core.Api;
 using DocumentAtom.Core.Atoms;
 
 public class DocumentProcessor
@@ -289,21 +315,23 @@ public class DocumentProcessor
             // Detect document type
             TypeResult? typeResult = await _sdk.TypeDetection.DetectType(documentData);
             Console.WriteLine($"Detected type: {typeResult?.Type}");
+
+            var ocrSettings = new ApiProcessorSettings { ExtractAtomsFromImages = true };
             
             // Process based on type
             List<Atom>? atoms = typeResult?.Type switch
             {
-                DocumentTypeEnum.Pdf => await _sdk.Atom.ProcessPdf(documentData, extractOcr: true),
-                DocumentTypeEnum.Word => await _sdk.Atom.ProcessWord(documentData, extractOcr: true),
+                DocumentTypeEnum.Pdf => await _sdk.Atom.ProcessPdf(documentData, ocrSettings),
+                DocumentTypeEnum.Word => await _sdk.Atom.ProcessWord(documentData, ocrSettings),
                 DocumentTypeEnum.Excel => await _sdk.Atom.ProcessExcel(documentData),
-                DocumentTypeEnum.PowerPoint => await _sdk.Atom.ProcessPowerPoint(documentData, extractOcr: true),
+                DocumentTypeEnum.PowerPoint => await _sdk.Atom.ProcessPowerPoint(documentData, ocrSettings),
                 DocumentTypeEnum.Html => await _sdk.Atom.ProcessHtml(documentData),
                 DocumentTypeEnum.Markdown => await _sdk.Atom.ProcessMarkdown(documentData),
                 DocumentTypeEnum.Json => await _sdk.Atom.ProcessJson(documentData),
                 DocumentTypeEnum.Xml => await _sdk.Atom.ProcessXml(documentData),
                 DocumentTypeEnum.Csv => await _sdk.Atom.ProcessCsv(documentData),
                 DocumentTypeEnum.Text => await _sdk.Atom.ProcessText(documentData),
-                DocumentTypeEnum.Rtf => await _sdk.Atom.ProcessRtf(documentData, extractOcr: true),
+                DocumentTypeEnum.Rtf => await _sdk.Atom.ProcessRtf(documentData, ocrSettings),
                 DocumentTypeEnum.Png => await _sdk.Atom.ProcessPng(documentData),
                 _ => throw new NotSupportedException($"Document type {typeResult?.Type} is not supported")
             };
@@ -353,10 +381,9 @@ public class DocumentProcessor
 
 ## Dependencies
 
-- **DocumentAtom (1.1.0)**: Core document processing library
-- **DocumentAtom.TypeDetection (1.0.37)**: Document type detection
-- **RestWrapper (3.1.6)**: HTTP client wrapper
-- **System.Text.Json (8.0.5)**: JSON serialization
+- **DocumentAtom.Core (3.1.1)**: Shared atom models, API settings, type detection, and diagnostics
+- **RestWrapper (3.3.0)**: HTTP client wrapper
+- **System.Text.Json**: JSON serialization from the target .NET runtime
 
 ## Version History
 

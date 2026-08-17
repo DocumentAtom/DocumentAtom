@@ -1,7 +1,9 @@
 namespace DocumentAtom.Sdk.Implementations
 {
+    using System.Diagnostics;
     using System.Text.Json;
     using System.Text.Json.Serialization;
+    using DocumentAtom.Core.Diagnostics;
     using DocumentAtom.Core.Enums;
     using DocumentAtom.Sdk.Interfaces;
     using DocumentAtom.Core.TypeDetection;
@@ -36,71 +38,116 @@ namespace DocumentAtom.Sdk.Implementations
         public async Task<TypeResult?> DetectType(byte[] data, string? contentType = null, CancellationToken cancellationToken = default)
         {
             string url = _Sdk.Endpoint + "/typedetect";
+            const string route = "/typedetect";
+            long startTicks = Stopwatch.GetTimestamp();
+            int statusCode = 0;
+            Activity? activity = DocumentAtomDiagnostics.StartSdkHttpClientActivity("POST", route);
 
-            using (RestWrapper.RestRequest req = new RestWrapper.RestRequest(url, HttpMethod.Post))
+            try
             {
-                req.TimeoutMilliseconds = _Sdk.TimeoutMs;
-                req.ContentType = contentType ?? "application/octet-stream";
+                activity?.SetTag("http.request.body.size", data?.Length ?? 0);
 
-                if (!string.IsNullOrEmpty(_Sdk.AccessKey))
+                using (RestWrapper.RestRequest req = new RestWrapper.RestRequest(url, HttpMethod.Post))
                 {
-                    req.Authorization.BearerToken = _Sdk.AccessKey;
-                }
+                    req.TimeoutMilliseconds = _Sdk.TimeoutMs;
+                    req.ContentType = contentType ?? "application/octet-stream";
 
-                if (_Sdk.LogRequests)
-                    _Sdk.Log(SeverityEnum.Debug, $"POST request to {url} with {data.Length} bytes");
-
-                using (RestWrapper.RestResponse resp = await req.SendAsync(data, cancellationToken).ConfigureAwait(false))
-                {
-                    if (resp != null)
+                    if (!string.IsNullOrEmpty(_Sdk.AccessKey))
                     {
-                        string? responseData = await _Sdk.ReadResponse(resp, url, cancellationToken).ConfigureAwait(false);
+                        req.Authorization.BearerToken = _Sdk.AccessKey;
+                    }
 
-                        if (_Sdk.LogResponses)
-                            _Sdk.Log(SeverityEnum.Debug, $"Response from {url} (status {resp.StatusCode}): {responseData}");
+                    if (_Sdk.LogRequests)
+                        _Sdk.Log(SeverityEnum.Debug, $"POST request to {url} with {data.Length} bytes");
 
-                        if (resp.StatusCode >= 200 && resp.StatusCode <= 299)
+                    using (RestWrapper.RestResponse resp = await req.SendAsync(data, cancellationToken).ConfigureAwait(false))
+                    {
+                        if (resp != null)
                         {
-                            _Sdk.Log(SeverityEnum.Debug, $"Success from {url}: {resp.StatusCode}, {resp.ContentLength} bytes");
+                            statusCode = resp.StatusCode;
+                            ApplyActivityStatus(activity, statusCode);
 
-                            if (!string.IsNullOrEmpty(responseData))
+                            string? responseData = await _Sdk.ReadResponse(resp, url, cancellationToken).ConfigureAwait(false);
+
+                            if (_Sdk.LogResponses)
+                                _Sdk.Log(SeverityEnum.Debug, $"Response from {url} (status {resp.StatusCode}): {responseData}");
+
+                            if (resp.StatusCode >= 200 && resp.StatusCode <= 299)
                             {
-                                _Sdk.Log(SeverityEnum.Debug, "Deserializing response body");
-                                try
+                                _Sdk.Log(SeverityEnum.Debug, $"Success from {url}: {resp.StatusCode}, {resp.ContentLength} bytes");
+
+                                if (!string.IsNullOrEmpty(responseData))
                                 {
-                                    JsonSerializerOptions options = new JsonSerializerOptions
+                                    _Sdk.Log(SeverityEnum.Debug, "Deserializing response body");
+                                    try
                                     {
-                                        PropertyNameCaseInsensitive = true
-                                    };
-                                    options.Converters.Add(new JsonStringEnumConverter());
-                                    return System.Text.Json.JsonSerializer.Deserialize<TypeResult>(responseData, options);
+                                        JsonSerializerOptions options = new JsonSerializerOptions
+                                        {
+                                            PropertyNameCaseInsensitive = true
+                                        };
+                                        options.Converters.Add(new JsonStringEnumConverter());
+                                        return System.Text.Json.JsonSerializer.Deserialize<TypeResult>(responseData, options);
+                                    }
+                                    catch (JsonException ex)
+                                    {
+                                        _Sdk.Log(SeverityEnum.Error, $"JSON deserialization error: {ex.Message}");
+                                        _Sdk.Log(SeverityEnum.Error, $"Raw response data: {responseData}");
+                                        return null;
+                                    }
                                 }
-                                catch (JsonException ex)
+                                else
                                 {
-                                    _Sdk.Log(SeverityEnum.Error, $"JSON deserialization error: {ex.Message}");
-                                    _Sdk.Log(SeverityEnum.Error, $"Raw response data: {responseData}");
+                                    _Sdk.Log(SeverityEnum.Debug, "Empty response body, returning null");
                                     return null;
                                 }
                             }
                             else
                             {
-                                _Sdk.Log(SeverityEnum.Debug, "Empty response body, returning null");
+                                _Sdk.Log(SeverityEnum.Warn, $"Non-success from {url}: {resp.StatusCode}, {resp.ContentLength} bytes");
                                 return null;
                             }
                         }
                         else
                         {
-                            _Sdk.Log(SeverityEnum.Warn, $"Non-success from {url}: {resp.StatusCode}, {resp.ContentLength} bytes");
+                            activity?.SetStatus(ActivityStatusCode.Error, "No response");
+                            _Sdk.Log(SeverityEnum.Warn, $"No response from {url}");
                             return null;
                         }
                     }
-                    else
-                    {
-                        _Sdk.Log(SeverityEnum.Warn, $"No response from {url}");
-                        return null;
-                    }
                 }
             }
+            catch (Exception e)
+            {
+                DocumentAtomDiagnostics.RecordException(activity, e);
+                throw;
+            }
+            finally
+            {
+                DocumentAtomDiagnostics.RecordSdkHttpClientRequest(
+                    "POST",
+                    route,
+                    statusCode,
+                    data?.LongLength ?? -1,
+                    DocumentAtomDiagnostics.GetElapsedSeconds(startTicks));
+
+                activity?.Dispose();
+            }
+        }
+
+        #endregion
+
+        #region Private-Methods
+
+        private static void ApplyActivityStatus(Activity? activity, int statusCode)
+        {
+            if (activity == null) return;
+
+            activity.SetTag("http.response.status_code", statusCode);
+
+            if (statusCode >= 200 && statusCode <= 399)
+                activity.SetStatus(ActivityStatusCode.Ok);
+            else
+                activity.SetStatus(ActivityStatusCode.Error, statusCode.ToString());
         }
 
         #endregion

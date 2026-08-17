@@ -15,6 +15,7 @@ DocumentAtom requires that Tesseract v5.0 be installed on the host.  This is req
 | `DocumentAtom.Text` | Text processors (CSV, JSON, XML, HTML, Markdown) | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Text.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Text/) |
 | `DocumentAtom.Documents` | Document processors (Word, Excel, PowerPoint, PDF, Image, OCR) | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Documents.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Documents/) |
 | `DocumentAtom.DataIngestion` | Microsoft.Extensions.AI integration for RAG | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.DataIngestion.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.DataIngestion/) |
+| `DocumentAtom.Sdk` | C# SDK client for DocumentAtom server instances | [![NuGet Version](https://img.shields.io/nuget/v/DocumentAtom.Sdk.svg?style=flat)](https://www.nuget.org/packages/DocumentAtom.Sdk/) |
 
 ## SDKs
 
@@ -25,6 +26,40 @@ SDKs are available for multiple languages in the `sdk/` directory:
 | TypeScript/JavaScript | `sdk/typescript/` | Full-featured SDK for Node.js and browser |
 | Python | `sdk/python/` | Python SDK for data science workflows |
 | C# | `sdk/csharp/` | .NET SDK client library |
+
+## New in v3.1.1
+
+v3.1.1 adds built-in diagnostics for hosts that collect .NET `ActivitySource` traces and `Meter` metrics through OpenTelemetry, Prometheus exporters, or custom listeners.
+
+### Observability
+
+- Shared telemetry contract in `DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics`
+- Stable source names: `DocumentAtom.Core`, `DocumentAtom.Server`, `DocumentAtom.McpServer`, `DocumentAtom.Sdk`, and `DocumentAtom.DataIngestion`
+- Core spans and metrics for processor extraction, type detection, and chunking
+- REST server instrumentation for matched routes, status codes, durations, active requests, and request body sizes
+- MCP server instrumentation for JSON-RPC request duration, request outcome, active requests, and open connections
+- C# SDK instrumentation for outbound DocumentAtom HTTP calls and type detection requests
+- DataIngestion instrumentation for document processing duration and emitted chunk counts
+
+Example source registration:
+
+```csharp
+builder.Services.AddOpenTelemetry()
+    .WithTracing(tracing => tracing
+        .AddSource(
+            "DocumentAtom.Core",
+            "DocumentAtom.Server",
+            "DocumentAtom.McpServer",
+            "DocumentAtom.Sdk",
+            "DocumentAtom.DataIngestion"))
+    .WithMetrics(metrics => metrics
+        .AddMeter(
+            "DocumentAtom.Core",
+            "DocumentAtom.Server",
+            "DocumentAtom.McpServer",
+            "DocumentAtom.Sdk",
+            "DocumentAtom.DataIngestion"));
+```
 
 ## New in v3.0.0 (Breaking)
 
@@ -397,7 +432,6 @@ DocumentAtom is built on the shoulders of several libraries, without which, this
 - [PdfPig](https://github.com/UglyToad/PdfPig)
 - [RtfPipe](github.com/erdomke/RtfPipe)
 - [SharpToken](https://github.com/dmitry-brazhenko/SharpToken) - cl100k_base tokenizer for token-aware chunking
-- [SixLabors.ImageSharp](https://github.com/SixLabors/ImageSharp)
 - [Tabula](https://github.com/BobLd/tabula-sharp)
 - [Tesseract](https://github.com/charlesw/tesseract/)
 

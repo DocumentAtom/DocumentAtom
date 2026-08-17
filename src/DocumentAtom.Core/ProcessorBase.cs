@@ -1,7 +1,9 @@
 ﻿namespace DocumentAtom.Core
 {
+    using System.Diagnostics;
     using System.IO;
     using DocumentAtom.Core.Atoms;
+    using DocumentAtom.Core.Diagnostics;
     using DocumentAtom.Core.Enums;
     using SerializationHelper;
 
@@ -115,24 +117,87 @@
         {
             if (bytes == null || bytes.Length < 1) yield break;
 
+            long startTicks = Stopwatch.GetTimestamp();
+            long atomCount = 0;
+            string outcome = "ok";
+            string processorName = GetType().Name;
+
+            Activity? activity = DocumentAtomDiagnostics.CoreActivitySource.StartActivity(
+                "documentatom.processor.extract",
+                ActivityKind.Internal);
+
+            activity?.SetTag("documentatom.processor", processorName);
+            activity?.SetTag("documentatom.input.kind", "bytes");
+            activity?.SetTag("documentatom.input.size", bytes.LongLength);
+
             Guid guid = Guid.NewGuid();
             string directory = Path.GetFullPath("./" + guid.ToString() + "/");
             if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
 
             string filename = Guid.NewGuid().ToString();
+            string path = directory + filename;
 
             try
             {
-                File.WriteAllBytes(directory + filename, bytes);
-                foreach (Atom atom in Extract(directory + filename))
+                File.WriteAllBytes(path, bytes);
+            }
+            catch (Exception e)
+            {
+                outcome = "error";
+                DocumentAtomDiagnostics.RecordException(activity, e);
+                DocumentAtomDiagnostics.RecordProcessorExtraction(
+                    processorName,
+                    "bytes",
+                    outcome,
+                    atomCount,
+                    DocumentAtomDiagnostics.GetElapsedSeconds(startTicks));
+                activity?.Dispose();
+
+                Helpers.FileHelper.RecursiveDelete(new DirectoryInfo(directory), true);
+                Directory.Delete(directory, true);
+                throw;
+            }
+
+            try
+            {
+                using (IEnumerator<Atom> enumerator = Extract(path).GetEnumerator())
                 {
-                    yield return atom;
+                    while (true)
+                    {
+                        Atom atom;
+
+                        try
+                        {
+                            if (!enumerator.MoveNext()) break;
+                            atom = enumerator.Current;
+                        }
+                        catch (Exception e)
+                        {
+                            outcome = "error";
+                            DocumentAtomDiagnostics.RecordException(activity, e);
+                            throw;
+                        }
+
+                        atomCount++;
+                        yield return atom;
+                    }
                 }
+
+                activity?.SetStatus(ActivityStatusCode.Ok);
             }
             finally
             {
                 Helpers.FileHelper.RecursiveDelete(new DirectoryInfo(directory), true);
                 Directory.Delete(directory, true);
+
+                DocumentAtomDiagnostics.RecordProcessorExtraction(
+                    processorName,
+                    "bytes",
+                    outcome,
+                    atomCount,
+                    DocumentAtomDiagnostics.GetElapsedSeconds(startTicks));
+
+                activity?.Dispose();
             }
         }
 

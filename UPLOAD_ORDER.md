@@ -81,7 +81,7 @@ Total time for complete upload sequence: **10-30 minutes**
 
 ### DocumentAtom.Documents
 - **Dependencies:** DocumentAtom.Core
-- **Package References:** Tesseract, SixLabors.ImageSharp, DocumentFormat.OpenXml, PdfPig, Tabula
+- **Package References:** Tesseract, DocumentFormat.OpenXml, PdfPig, Tabula
 
 ### DocumentAtom.DataIngestion
 - **Dependencies:** DocumentAtom.Core, DocumentAtom.Text, DocumentAtom.Documents

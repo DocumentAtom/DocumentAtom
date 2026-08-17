@@ -6,7 +6,6 @@
     using System.IO;
     using System.Linq;
     using Tesseract;
-    using SixLabors.ImageSharp;
 
     using Rectangle = System.Drawing.Rectangle;
 

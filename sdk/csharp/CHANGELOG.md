@@ -2,6 +2,19 @@
 
 ## Current Version
 
+v3.1.1
+
+### New Features
+- Added `ActivitySource` and `Meter` diagnostics for outbound SDK HTTP requests
+- Added request duration, route, HTTP status code, and request body size metrics for SDK calls
+- Added diagnostics around type detection requests
+
+### Documentation
+- Updated README examples to use `ApiProcessorSettings? settings` instead of the removed `bool extractOcr` parameter
+- Updated dependency documentation for `DocumentAtom.Core` 3.1.1 and `RestWrapper` 3.3.0
+
+## Previous Versions
+
 v1.0.0
 
 - Initial release of DocumentAtom SDK
@@ -41,7 +54,3 @@ v1.0.0
 - Platform support
   - .NET 8.0 minimum requirement
   - Cross-platform compatibility
-
-## Previous Versions
-
-Notes from previous versions will be placed here.

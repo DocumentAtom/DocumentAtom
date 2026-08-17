@@ -2,12 +2,14 @@ namespace DocumentAtom.Core.TypeDetection
 {
     using System;
     using System.Collections.Specialized;
+    using System.Diagnostics;
     using System.IO;
     using System.IO.Compression;
     using System.Linq;
     using System.Text.Json;
     using System.Text;
     using System.Xml;
+    using DocumentAtom.Core.Diagnostics;
 
     /// <summary>
     /// DocumentAtom type detector.
@@ -227,6 +229,15 @@ namespace DocumentAtom.Core.TypeDetection
         public TypeResult Process(byte[] data, string contentType = null)
         {
             if (data == null || data.Length < 1) throw new ArgumentException("No input data supplied.");
+
+            long startTicks = Stopwatch.GetTimestamp();
+            string outcome = "ok";
+            Activity? activity = DocumentAtomDiagnostics.CoreActivitySource.StartActivity(
+                "documentatom.type_detection",
+                ActivityKind.Internal);
+
+            activity?.SetTag("documentatom.input.size", data.Length);
+            if (!String.IsNullOrEmpty(contentType)) activity?.SetTag("http.request.header.content_type", contentType);
 
             TypeResult tr = new TypeResult
             {
@@ -621,8 +632,24 @@ namespace DocumentAtom.Core.TypeDetection
             }
             catch (Exception e)
             {
+                outcome = "error";
+                DocumentAtomDiagnostics.RecordException(activity, e);
                 Logger?.Invoke(_Header + "exception encountered while detecting content type: " + Environment.NewLine + e.ToString());
                 return tr;
+            }
+            finally
+            {
+                activity?.SetTag("documentatom.document.type", tr.Type.ToString());
+                activity?.SetTag("documentatom.mime_type", tr.MimeType);
+                if (outcome == "ok") activity?.SetStatus(ActivityStatusCode.Ok);
+
+                DocumentAtomDiagnostics.RecordTypeDetection(
+                    tr.Type.ToString(),
+                    outcome,
+                    data.LongLength,
+                    DocumentAtomDiagnostics.GetElapsedSeconds(startTicks));
+
+                activity?.Dispose();
             }
         }
 

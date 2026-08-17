@@ -2,8 +2,10 @@ namespace DocumentAtom.Server
 {
     using System;
     using System.Collections.Specialized;
+    using System.Diagnostics;
     using System.IO;
     using System.Threading.Tasks;
+    using DocumentAtom.Core.Diagnostics;
     using WatsonWebserver.Core;
 
     internal sealed class ServerRouteHandlers
@@ -14,6 +16,58 @@ namespace DocumentAtom.Server
         public ServerRouteHandlers(ServerRuntimeContext context)
         {
             _Context = context;
+        }
+
+        public Func<HttpContextBase, Task> InstrumentRoute(string route, Func<HttpContextBase, Task> handler)
+        {
+            if (String.IsNullOrEmpty(route)) throw new ArgumentNullException(nameof(route));
+            if (handler == null) throw new ArgumentNullException(nameof(handler));
+
+            return async ctx =>
+            {
+                string method = ctx.Request.Method.ToString();
+                string scheme = GetScheme();
+                long requestBodyBytes = ctx.Request.ContentLength;
+                long startTicks = Stopwatch.GetTimestamp();
+                int statusCode = 500;
+
+                DocumentAtomDiagnostics.AddHttpServerActiveRequest(method, scheme, 1);
+
+                using (Activity? activity = DocumentAtomDiagnostics.StartHttpServerActivity(method, route, scheme))
+                {
+                    activity?.SetTag("client.address", ctx.Request.Source.IpAddress);
+
+                    try
+                    {
+                        await handler(ctx).ConfigureAwait(false);
+                        statusCode = NormalizeStatusCode(ctx.Response.StatusCode, 200);
+                        activity?.SetTag("http.response.status_code", statusCode);
+
+                        if (statusCode >= 400)
+                            activity?.SetStatus(ActivityStatusCode.Error, statusCode.ToString());
+                        else
+                            activity?.SetStatus(ActivityStatusCode.Ok);
+                    }
+                    catch (Exception e)
+                    {
+                        statusCode = NormalizeStatusCode(ctx.Response.StatusCode, 500);
+                        activity?.SetTag("http.response.status_code", statusCode);
+                        DocumentAtomDiagnostics.RecordException(activity, e);
+                        throw;
+                    }
+                    finally
+                    {
+                        DocumentAtomDiagnostics.RecordHttpServerRequest(
+                            method,
+                            route,
+                            statusCode,
+                            requestBodyBytes,
+                            DocumentAtomDiagnostics.GetElapsedSeconds(startTicks));
+
+                        DocumentAtomDiagnostics.AddHttpServerActiveRequest(method, scheme, -1);
+                    }
+                }
+            };
         }
 
         public async Task PreflightRoute(HttpContextBase ctx)
@@ -81,6 +135,21 @@ namespace DocumentAtom.Server
             headers.Set("Access-Control-Allow-Methods", String.Join(", ", _Context.Settings.Cors.AllowMethods));
             headers.Set("Access-Control-Allow-Headers", allowedHeaders);
             headers.Set("Access-Control-Expose-Headers", String.Join(", ", _Context.Settings.Cors.ExposeHeaders));
+        }
+
+        private string GetScheme()
+        {
+            string prefix = _Context.Settings?.Webserver?.Prefix;
+            if (!String.IsNullOrEmpty(prefix) && prefix.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+                return "https";
+
+            return "http";
+        }
+
+        private static int NormalizeStatusCode(int statusCode, int fallback)
+        {
+            if (statusCode >= 100 && statusCode <= 599) return statusCode;
+            return fallback;
         }
 
         public void ApplyCorsSettingsToWebserverDefaults()

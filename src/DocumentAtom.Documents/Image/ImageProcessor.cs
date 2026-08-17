@@ -9,7 +9,6 @@
     using DocumentAtom.Core.Helpers;
     using DocumentAtom.Core.Image;
     using SerializableDataTables;
-    using SixLabors.ImageSharp;
     using Tesseract;
 
     using Rectangle = System.Drawing.Rectangle;

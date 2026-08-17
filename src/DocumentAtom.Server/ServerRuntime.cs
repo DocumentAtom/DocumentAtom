@@ -205,9 +205,9 @@ namespace DocumentAtom.Server
 
             _RouteHandlers.ApplyCorsSettingsToWebserverDefaults();
 
-            _RestServer = new Webserver(_Settings.Webserver, _RouteHandlers.DefaultRoute);
+            _RestServer = new Webserver(_Settings.Webserver, _RouteHandlers.InstrumentRoute("*", _RouteHandlers.DefaultRoute));
             _RestServer.Routes.PreRouting = _RouteHandlers.PreRoutingRoute;
-            _RestServer.Routes.Preflight = _RouteHandlers.PreflightRoute;
+            _RestServer.Routes.Preflight = _RouteHandlers.InstrumentRoute("OPTIONS *", _RouteHandlers.PreflightRoute);
             _RestServer.Routes.PostRouting = _RouteHandlers.PostRoutingRoute;
 
             OpenApiRouteRegistrar.RegisterRoutes(

@@ -1,8 +1,10 @@
 namespace DocumentAtom.Sdk
 {
+    using System.Diagnostics;
     using System.Text;
     using System.Text.Json;
     using System.Text.Json.Serialization;
+    using DocumentAtom.Core.Diagnostics;
     using DocumentAtom.Core.Enums;
     using DocumentAtom.Sdk.Implementations;
     using DocumentAtom.Sdk.Interfaces;
@@ -147,54 +149,85 @@ namespace DocumentAtom.Sdk
 
             string jsonBody = JsonSerializer.Serialize(body, _JsonOptions);
             byte[] jsonBytes = Encoding.UTF8.GetBytes(jsonBody);
+            string route = GetRouteFromUrl(url);
+            long startTicks = Stopwatch.GetTimestamp();
+            int statusCode = 0;
+            Activity? activity = DocumentAtomDiagnostics.StartSdkHttpClientActivity("POST", route);
 
-            using (RestRequest req = new RestRequest(url, HttpMethod.Post))
+            try
             {
-                req.TimeoutMilliseconds = TimeoutMs;
-                req.ContentType = "application/json";
+                activity?.SetTag("url.scheme", GetSchemeFromUrl(url));
+                activity?.SetTag("server.address", GetHostFromUrl(url));
+                activity?.SetTag("http.request.body.size", jsonBytes.Length);
 
-                if (!string.IsNullOrEmpty(AccessKey))
-                    req.Authorization.BearerToken = AccessKey;
-
-                if (LogRequests)
-                    Log(SeverityEnum.Debug, $"POST JSON request to {url} ({jsonBytes.Length} bytes)");
-
-                using (RestResponse resp = await req.SendAsync(jsonBytes, cancellationToken).ConfigureAwait(false))
+                using (RestRequest req = new RestRequest(url, HttpMethod.Post))
                 {
-                    if (resp != null)
+                    req.TimeoutMilliseconds = TimeoutMs;
+                    req.ContentType = "application/json";
+
+                    if (!string.IsNullOrEmpty(AccessKey))
+                        req.Authorization.BearerToken = AccessKey;
+
+                    if (LogRequests)
+                        Log(SeverityEnum.Debug, $"POST JSON request to {url} ({jsonBytes.Length} bytes)");
+
+                    using (RestResponse resp = await req.SendAsync(jsonBytes, cancellationToken).ConfigureAwait(false))
                     {
-                        string? responseData = await ReadResponse(resp, url, cancellationToken).ConfigureAwait(false);
-
-                        if (LogResponses)
-                            Log(SeverityEnum.Debug, $"Response from {url} (status {resp.StatusCode}): {responseData}");
-
-                        if (resp.StatusCode >= 200 && resp.StatusCode <= 299)
+                        if (resp != null)
                         {
-                            Log(SeverityEnum.Debug, $"Success from {url}: {resp.StatusCode}, {resp.ContentLength} bytes");
+                            statusCode = resp.StatusCode;
+                            ApplySdkHttpActivityStatus(activity, statusCode);
 
-                            if (!string.IsNullOrEmpty(responseData))
+                            string? responseData = await ReadResponse(resp, url, cancellationToken).ConfigureAwait(false);
+
+                            if (LogResponses)
+                                Log(SeverityEnum.Debug, $"Response from {url} (status {resp.StatusCode}): {responseData}");
+
+                            if (resp.StatusCode >= 200 && resp.StatusCode <= 299)
                             {
-                                Log(SeverityEnum.Debug, "Deserializing response body");
-                                return JsonSerializer.Deserialize<T>(responseData, _JsonOptions);
+                                Log(SeverityEnum.Debug, $"Success from {url}: {resp.StatusCode}, {resp.ContentLength} bytes");
+
+                                if (!string.IsNullOrEmpty(responseData))
+                                {
+                                    Log(SeverityEnum.Debug, "Deserializing response body");
+                                    return JsonSerializer.Deserialize<T>(responseData, _JsonOptions);
+                                }
+                                else
+                                {
+                                    Log(SeverityEnum.Debug, "Empty response body, returning null");
+                                    return default(T);
+                                }
                             }
                             else
                             {
-                                Log(SeverityEnum.Debug, "Empty response body, returning null");
+                                Log(SeverityEnum.Warn, $"Non-success from {url}: {resp.StatusCode}, {resp.ContentLength} bytes");
                                 return default(T);
                             }
                         }
                         else
                         {
-                            Log(SeverityEnum.Warn, $"Non-success from {url}: {resp.StatusCode}, {resp.ContentLength} bytes");
+                            activity?.SetStatus(ActivityStatusCode.Error, "No response");
+                            Log(SeverityEnum.Warn, $"No response from {url}");
                             return default(T);
                         }
                     }
-                    else
-                    {
-                        Log(SeverityEnum.Warn, $"No response from {url}");
-                        return default(T);
-                    }
                 }
+            }
+            catch (Exception e)
+            {
+                DocumentAtomDiagnostics.RecordException(activity, e);
+                throw;
+            }
+            finally
+            {
+                DocumentAtomDiagnostics.RecordSdkHttpClientRequest(
+                    "POST",
+                    route,
+                    statusCode,
+                    jsonBytes.Length,
+                    DocumentAtomDiagnostics.GetElapsedSeconds(startTicks));
+
+                activity?.Dispose();
             }
         }
 
@@ -210,52 +243,83 @@ namespace DocumentAtom.Sdk
             if (string.IsNullOrEmpty(url))
                 throw new ArgumentNullException(nameof(url));
 
-            using (RestRequest req = new RestRequest(url, HttpMethod.Get))
+            string route = GetRouteFromUrl(url);
+            long startTicks = Stopwatch.GetTimestamp();
+            int statusCode = 0;
+            Activity? activity = DocumentAtomDiagnostics.StartSdkHttpClientActivity("GET", route);
+
+            try
             {
-                req.TimeoutMilliseconds = TimeoutMs;
+                activity?.SetTag("url.scheme", GetSchemeFromUrl(url));
+                activity?.SetTag("server.address", GetHostFromUrl(url));
 
-                if (!string.IsNullOrEmpty(AccessKey))
-                    req.Authorization.BearerToken = AccessKey;
-
-                if (LogRequests)
-                    Log(SeverityEnum.Debug, $"GET request to {url}");
-
-                using (RestResponse resp = await req.SendAsync(cancellationToken).ConfigureAwait(false))
+                using (RestRequest req = new RestRequest(url, HttpMethod.Get))
                 {
-                    if (resp != null)
+                    req.TimeoutMilliseconds = TimeoutMs;
+
+                    if (!string.IsNullOrEmpty(AccessKey))
+                        req.Authorization.BearerToken = AccessKey;
+
+                    if (LogRequests)
+                        Log(SeverityEnum.Debug, $"GET request to {url}");
+
+                    using (RestResponse resp = await req.SendAsync(cancellationToken).ConfigureAwait(false))
                     {
-                        string? responseData = await ReadResponse(resp, url, cancellationToken).ConfigureAwait(false);
-
-                        if (LogResponses)
-                            Log(SeverityEnum.Debug, $"Response from {url} (status {resp.StatusCode}): {responseData}");
-
-                        if (resp.StatusCode >= 200 && resp.StatusCode <= 299)
+                        if (resp != null)
                         {
-                            Log(SeverityEnum.Debug, $"Success from {url}: {resp.StatusCode}, {resp.ContentLength} bytes");
+                            statusCode = resp.StatusCode;
+                            ApplySdkHttpActivityStatus(activity, statusCode);
 
-                            if (!string.IsNullOrEmpty(responseData))
+                            string? responseData = await ReadResponse(resp, url, cancellationToken).ConfigureAwait(false);
+
+                            if (LogResponses)
+                                Log(SeverityEnum.Debug, $"Response from {url} (status {resp.StatusCode}): {responseData}");
+
+                            if (resp.StatusCode >= 200 && resp.StatusCode <= 299)
                             {
-                                Log(SeverityEnum.Debug, "Deserializing response body");
-                                return JsonSerializer.Deserialize<T>(responseData, _JsonOptions);
+                                Log(SeverityEnum.Debug, $"Success from {url}: {resp.StatusCode}, {resp.ContentLength} bytes");
+
+                                if (!string.IsNullOrEmpty(responseData))
+                                {
+                                    Log(SeverityEnum.Debug, "Deserializing response body");
+                                    return JsonSerializer.Deserialize<T>(responseData, _JsonOptions);
+                                }
+                                else
+                                {
+                                    Log(SeverityEnum.Debug, "Empty response body, returning null");
+                                    return default(T);
+                                }
                             }
                             else
                             {
-                                Log(SeverityEnum.Debug, "Empty response body, returning null");
+                                Log(SeverityEnum.Warn, $"Non-success from {url}: {resp.StatusCode}, {resp.ContentLength} bytes");
                                 return default(T);
                             }
                         }
                         else
                         {
-                            Log(SeverityEnum.Warn, $"Non-success from {url}: {resp.StatusCode}, {resp.ContentLength} bytes");
+                            activity?.SetStatus(ActivityStatusCode.Error, "No response");
+                            Log(SeverityEnum.Warn, $"No response from {url}");
                             return default(T);
                         }
                     }
-                    else
-                    {
-                        Log(SeverityEnum.Warn, $"No response from {url}");
-                        return default(T);
-                    }
                 }
+            }
+            catch (Exception e)
+            {
+                DocumentAtomDiagnostics.RecordException(activity, e);
+                throw;
+            }
+            finally
+            {
+                DocumentAtomDiagnostics.RecordSdkHttpClientRequest(
+                    "GET",
+                    route,
+                    statusCode,
+                    -1,
+                    DocumentAtomDiagnostics.GetElapsedSeconds(startTicks));
+
+                activity?.Dispose();
             }
         }
 
@@ -270,42 +334,73 @@ namespace DocumentAtom.Sdk
             if (string.IsNullOrEmpty(url))
                 throw new ArgumentNullException(nameof(url));
 
-            using (RestRequest req = new RestRequest(url, HttpMethod.Get))
+            string route = GetRouteFromUrl(url);
+            long startTicks = Stopwatch.GetTimestamp();
+            int statusCode = 0;
+            Activity? activity = DocumentAtomDiagnostics.StartSdkHttpClientActivity("GET", route);
+
+            try
             {
-                req.TimeoutMilliseconds = TimeoutMs;
+                activity?.SetTag("url.scheme", GetSchemeFromUrl(url));
+                activity?.SetTag("server.address", GetHostFromUrl(url));
 
-                if (!string.IsNullOrEmpty(AccessKey))
-                    req.Authorization.BearerToken = AccessKey;
-
-                if (LogRequests)
-                    Log(SeverityEnum.Debug, $"GET request to {url}");
-
-                using (RestResponse resp = await req.SendAsync(cancellationToken).ConfigureAwait(false))
+                using (RestRequest req = new RestRequest(url, HttpMethod.Get))
                 {
-                    if (resp != null)
+                    req.TimeoutMilliseconds = TimeoutMs;
+
+                    if (!string.IsNullOrEmpty(AccessKey))
+                        req.Authorization.BearerToken = AccessKey;
+
+                    if (LogRequests)
+                        Log(SeverityEnum.Debug, $"GET request to {url}");
+
+                    using (RestResponse resp = await req.SendAsync(cancellationToken).ConfigureAwait(false))
                     {
-                        string? responseData = await ReadResponse(resp, url, cancellationToken).ConfigureAwait(false);
-
-                        if (LogResponses)
-                            Log(SeverityEnum.Debug, $"Response from {url} (status {resp.StatusCode}): {responseData}");
-
-                        if (resp.StatusCode >= 200 && resp.StatusCode <= 299)
+                        if (resp != null)
                         {
-                            Log(SeverityEnum.Debug, $"Success from {url}: {resp.StatusCode}, {resp.ContentLength} bytes");
-                            return responseData;
+                            statusCode = resp.StatusCode;
+                            ApplySdkHttpActivityStatus(activity, statusCode);
+
+                            string? responseData = await ReadResponse(resp, url, cancellationToken).ConfigureAwait(false);
+
+                            if (LogResponses)
+                                Log(SeverityEnum.Debug, $"Response from {url} (status {resp.StatusCode}): {responseData}");
+
+                            if (resp.StatusCode >= 200 && resp.StatusCode <= 299)
+                            {
+                                Log(SeverityEnum.Debug, $"Success from {url}: {resp.StatusCode}, {resp.ContentLength} bytes");
+                                return responseData;
+                            }
+                            else
+                            {
+                                Log(SeverityEnum.Warn, $"Non-success from {url}: {resp.StatusCode}, {resp.ContentLength} bytes");
+                                return null;
+                            }
                         }
                         else
                         {
-                            Log(SeverityEnum.Warn, $"Non-success from {url}: {resp.StatusCode}, {resp.ContentLength} bytes");
+                            activity?.SetStatus(ActivityStatusCode.Error, "No response");
+                            Log(SeverityEnum.Warn, $"No response from {url}");
                             return null;
                         }
                     }
-                    else
-                    {
-                        Log(SeverityEnum.Warn, $"No response from {url}");
-                        return null;
-                    }
                 }
+            }
+            catch (Exception e)
+            {
+                DocumentAtomDiagnostics.RecordException(activity, e);
+                throw;
+            }
+            finally
+            {
+                DocumentAtomDiagnostics.RecordSdkHttpClientRequest(
+                    "GET",
+                    route,
+                    statusCode,
+                    -1,
+                    DocumentAtomDiagnostics.GetElapsedSeconds(startTicks));
+
+                activity?.Dispose();
             }
         }
 
@@ -320,40 +415,71 @@ namespace DocumentAtom.Sdk
             if (string.IsNullOrEmpty(url))
                 throw new ArgumentNullException(nameof(url));
 
-            using (RestRequest req = new RestRequest(url, HttpMethod.Get))
+            string route = GetRouteFromUrl(url);
+            long startTicks = Stopwatch.GetTimestamp();
+            int statusCode = 0;
+            Activity? activity = DocumentAtomDiagnostics.StartSdkHttpClientActivity("GET", route);
+
+            try
             {
-                req.TimeoutMilliseconds = TimeoutMs;
+                activity?.SetTag("url.scheme", GetSchemeFromUrl(url));
+                activity?.SetTag("server.address", GetHostFromUrl(url));
 
-                if (!string.IsNullOrEmpty(AccessKey))
-                    req.Authorization.BearerToken = AccessKey;
-
-                if (LogRequests)
-                    Log(SeverityEnum.Debug, $"GET request to {url}");
-
-                using (RestResponse resp = await req.SendAsync(cancellationToken).ConfigureAwait(false))
+                using (RestRequest req = new RestRequest(url, HttpMethod.Get))
                 {
-                    if (resp != null)
-                    {
-                        if (LogResponses)
-                            Log(SeverityEnum.Debug, $"Response from {url} (status {resp.StatusCode})");
+                    req.TimeoutMilliseconds = TimeoutMs;
 
-                        if (resp.StatusCode >= 200 && resp.StatusCode <= 299)
+                    if (!string.IsNullOrEmpty(AccessKey))
+                        req.Authorization.BearerToken = AccessKey;
+
+                    if (LogRequests)
+                        Log(SeverityEnum.Debug, $"GET request to {url}");
+
+                    using (RestResponse resp = await req.SendAsync(cancellationToken).ConfigureAwait(false))
+                    {
+                        if (resp != null)
                         {
-                            Log(SeverityEnum.Debug, $"Success from {url}: {resp.StatusCode}");
-                            return true;
+                            statusCode = resp.StatusCode;
+                            ApplySdkHttpActivityStatus(activity, statusCode);
+
+                            if (LogResponses)
+                                Log(SeverityEnum.Debug, $"Response from {url} (status {resp.StatusCode})");
+
+                            if (resp.StatusCode >= 200 && resp.StatusCode <= 299)
+                            {
+                                Log(SeverityEnum.Debug, $"Success from {url}: {resp.StatusCode}");
+                                return true;
+                            }
+                            else
+                            {
+                                Log(SeverityEnum.Warn, $"Non-success from {url}: {resp.StatusCode}");
+                                return false;
+                            }
                         }
                         else
                         {
-                            Log(SeverityEnum.Warn, $"Non-success from {url}: {resp.StatusCode}");
+                            activity?.SetStatus(ActivityStatusCode.Error, "No response");
+                            Log(SeverityEnum.Warn, $"No response from {url}");
                             return false;
                         }
                     }
-                    else
-                    {
-                        Log(SeverityEnum.Warn, $"No response from {url}");
-                        return false;
-                    }
                 }
+            }
+            catch (Exception e)
+            {
+                DocumentAtomDiagnostics.RecordException(activity, e);
+                throw;
+            }
+            finally
+            {
+                DocumentAtomDiagnostics.RecordSdkHttpClientRequest(
+                    "GET",
+                    route,
+                    statusCode,
+                    -1,
+                    DocumentAtomDiagnostics.GetElapsedSeconds(startTicks));
+
+                activity?.Dispose();
             }
         }
 
@@ -399,6 +525,48 @@ namespace DocumentAtom.Sdk
         #endregion
 
         #region Private-Methods
+
+        private static void ApplySdkHttpActivityStatus(Activity? activity, int statusCode)
+        {
+            if (activity == null) return;
+
+            activity.SetTag("http.response.status_code", statusCode);
+
+            if (statusCode >= 200 && statusCode <= 399)
+                activity.SetStatus(ActivityStatusCode.Ok);
+            else
+                activity.SetStatus(ActivityStatusCode.Error, statusCode.ToString());
+        }
+
+        private static string GetRouteFromUrl(string url)
+        {
+            if (Uri.TryCreate(url, UriKind.Absolute, out Uri? uri))
+            {
+                if (!String.IsNullOrEmpty(uri.AbsolutePath)) return uri.AbsolutePath;
+            }
+
+            return "unknown";
+        }
+
+        private static string GetSchemeFromUrl(string url)
+        {
+            if (Uri.TryCreate(url, UriKind.Absolute, out Uri? uri))
+            {
+                if (!String.IsNullOrEmpty(uri.Scheme)) return uri.Scheme;
+            }
+
+            return "unknown";
+        }
+
+        private static string GetHostFromUrl(string url)
+        {
+            if (Uri.TryCreate(url, UriKind.Absolute, out Uri? uri))
+            {
+                if (!String.IsNullOrEmpty(uri.Host)) return uri.Host;
+            }
+
+            return "unknown";
+        }
 
         #endregion
     }

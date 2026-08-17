@@ -139,6 +139,8 @@ artifacts/
 *.tmp
 *.tmp_proj
 *.log
+Docker/logs/*
+!Docker/logs/.gitkeep
 *.vspscc
 *.vssscc
 .builds

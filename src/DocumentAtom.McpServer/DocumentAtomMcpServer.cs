@@ -1,13 +1,16 @@
 namespace DocumentAtom.McpServer
 {
     using System;
+    using System.Collections.Concurrent;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.IO;
     using System.Net;
     using System.Runtime.Loader;
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
+    using DocumentAtom.Core.Diagnostics;
     using DocumentAtom.McpServer.Classes;
     using DocumentAtom.McpServer.Registrations;
     using DocumentAtom.Sdk;
@@ -37,6 +40,7 @@ namespace DocumentAtom.McpServer
         private static Task? _McpHttpServerTask = null;
         private static Task? _McpTcpServerTask = null;
         private static Task? _McpWebsocketServerTask = null;
+        private static readonly ConcurrentDictionary<string, Activity> _McpRequestActivities = new ConcurrentDictionary<string, Activity>();
 
         private static CancellationTokenSource _TokenSource = new CancellationTokenSource();
         private static CancellationToken _Token;
@@ -349,22 +353,62 @@ namespace DocumentAtom.McpServer
 
         private static void ClientConnected(object? sender, ClientConnection e)
         {
+            DocumentAtomDiagnostics.AddMcpServerConnection(e.Type.ToString(), 1);
             _Logging.Debug(_Header + "client connection started with session ID " + e.SessionId + " (" + e.Type + ")");
         }
 
         private static void ClientDisconnected(object? sender, ClientConnection e)
         {
+            DocumentAtomDiagnostics.AddMcpServerConnection(e.Type.ToString(), -1);
             _Logging.Debug(_Header + "client connection terminated with session ID " + e.SessionId + " (" + e.Type + ")");
         }
 
         private static void ClientRequestReceived(object? sender, JsonRpcRequestEventArgs e)
         {
+            if (!e.IsNotification)
+            {
+                string transport = e.Client.Type.ToString();
+                DocumentAtomDiagnostics.AddMcpServerActiveRequest(e.Method, transport, 1);
+
+                Activity? activity = DocumentAtomDiagnostics.StartMcpServerActivity(e.Method, transport);
+                if (activity != null)
+                {
+                    activity.SetTag("rpc.jsonrpc.request_id", e.RequestId?.ToString());
+                    activity.SetTag("client.session_id", e.Client.SessionId);
+
+                    string? key = BuildMcpRequestKey(e.Client.SessionId, e.RequestId, e.Method);
+                    if (key != null) _McpRequestActivities[key] = activity;
+                    else activity.Dispose();
+                }
+            }
+
             _Logging.Debug(_Header + "client session " + e.Client.SessionId + " request " + e.Method);
         }
 
         private static void ClientResponseSent(object? sender, JsonRpcResponseEventArgs e)
         {
+            string transport = e.Client.Type.ToString();
+            string outcome = e.IsError ? "error" : "ok";
+
+            DocumentAtomDiagnostics.RecordMcpServerRequest(e.Method, transport, outcome, e.Duration.TotalSeconds);
+            DocumentAtomDiagnostics.AddMcpServerActiveRequest(e.Method, transport, -1);
+
+            string? key = BuildMcpRequestKey(e.Client.SessionId, e.RequestId, e.Method);
+            if (key != null && _McpRequestActivities.TryRemove(key, out Activity? activity))
+            {
+                activity.SetTag("rpc.jsonrpc.request_id", e.RequestId?.ToString());
+                if (e.IsError) activity.SetStatus(ActivityStatusCode.Error);
+                else activity.SetStatus(ActivityStatusCode.Ok);
+                activity.Dispose();
+            }
+
             _Logging.Debug(_Header + "client session " + e.Client.SessionId + " request " + e.Method + " completed (" + e.Duration.TotalMilliseconds + "ms)");
+        }
+
+        private static string? BuildMcpRequestKey(string? sessionId, object? requestId, string? method)
+        {
+            if (requestId == null) return null;
+            return (sessionId ?? String.Empty) + "|" + requestId.ToString() + "|" + (method ?? String.Empty);
         }
 
         private static void RegisterMcpTools()

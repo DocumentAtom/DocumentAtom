@@ -2,6 +2,7 @@ namespace DocumentAtom.DataIngestion.Processors
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.IO;
     using System.Linq;
     using System.Runtime.CompilerServices;
@@ -9,6 +10,7 @@ namespace DocumentAtom.DataIngestion.Processors
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
+    using DocumentAtom.Core.Diagnostics;
     using DocumentAtom.DataIngestion.Chunkers;
     using DocumentAtom.DataIngestion.Metadata;
     using DocumentAtom.DataIngestion.Readers;
@@ -127,48 +129,71 @@ namespace DocumentAtom.DataIngestion.Processors
             if (string.IsNullOrEmpty(path)) throw new ArgumentNullException(nameof(path));
             if (!File.Exists(path)) throw new FileNotFoundException("File not found.", path);
 
-            Log($"Processing document: {path}");
+            long startTicks = Stopwatch.GetTimestamp();
+            long chunkCount = 0;
+            Activity? activity = DocumentAtomDiagnostics.DataIngestionActivitySource.StartActivity(
+                "documentatom.ingestion.process",
+                ActivityKind.Internal);
+            activity?.SetTag("documentatom.input.kind", "file");
 
-            IngestionDocument document = await _Reader.ReadAsync(path, cancellationToken).ConfigureAwait(false);
-
-            Log($"Read document with {document.Elements.Count} elements");
-
-            HashSet<string>? seenHashes = _Options.RemoveDuplicates ? new HashSet<string>() : null;
-            int duplicatesRemoved = 0;
-
-            await foreach (IngestionChunk chunk in _Chunker.ChunkAsync(document, cancellationToken).ConfigureAwait(false))
+            try
             {
-                // Skip empty chunks
-                if (_Options.SkipEmptyChunks && string.IsNullOrWhiteSpace(chunk.Content))
-                {
-                    continue;
-                }
+                Log($"Processing document: {path}");
 
-                // Check minimum length
-                if (chunk.Content.Length < _Options.MinimumChunkLength)
-                {
-                    continue;
-                }
+                IngestionDocument document = await _Reader.ReadAsync(path, cancellationToken).ConfigureAwait(false);
 
-                // Check for duplicates
-                if (seenHashes != null)
-                {
-                    string hash = ComputeHash(chunk.Content);
-                    chunk.Metadata[AtomMetadataKeys.ComputedSha256] = hash;
+                Log($"Read document with {document.Elements.Count} elements");
 
-                    if (!seenHashes.Add(hash))
+                HashSet<string>? seenHashes = _Options.RemoveDuplicates ? new HashSet<string>() : null;
+                int duplicatesRemoved = 0;
+
+                await foreach (IngestionChunk chunk in _Chunker.ChunkAsync(document, cancellationToken).ConfigureAwait(false))
+                {
+                    // Skip empty chunks
+                    if (_Options.SkipEmptyChunks && string.IsNullOrWhiteSpace(chunk.Content))
                     {
-                        duplicatesRemoved++;
                         continue;
                     }
+
+                    // Check minimum length
+                    if (chunk.Content.Length < _Options.MinimumChunkLength)
+                    {
+                        continue;
+                    }
+
+                    // Check for duplicates
+                    if (seenHashes != null)
+                    {
+                        string hash = ComputeHash(chunk.Content);
+                        chunk.Metadata[AtomMetadataKeys.ComputedSha256] = hash;
+
+                        if (!seenHashes.Add(hash))
+                        {
+                            duplicatesRemoved++;
+                            continue;
+                        }
+                    }
+
+                    chunkCount++;
+                    yield return chunk;
                 }
 
-                yield return chunk;
-            }
+                if (duplicatesRemoved > 0)
+                {
+                    Log($"Removed {duplicatesRemoved} duplicate chunks");
+                }
 
-            if (duplicatesRemoved > 0)
+                activity?.SetStatus(ActivityStatusCode.Ok);
+            }
+            finally
             {
-                Log($"Removed {duplicatesRemoved} duplicate chunks");
+                DocumentAtomDiagnostics.RecordDataIngestion(
+                    "file",
+                    "ok",
+                    chunkCount,
+                    DocumentAtomDiagnostics.GetElapsedSeconds(startTicks));
+
+                activity?.Dispose();
             }
         }
 
@@ -188,48 +213,72 @@ namespace DocumentAtom.DataIngestion.Processors
         {
             if (data == null || data.Length == 0) throw new ArgumentNullException(nameof(data));
 
-            Log($"Processing document from byte array ({data.Length} bytes)");
+            long startTicks = Stopwatch.GetTimestamp();
+            long chunkCount = 0;
+            Activity? activity = DocumentAtomDiagnostics.DataIngestionActivitySource.StartActivity(
+                "documentatom.ingestion.process",
+                ActivityKind.Internal);
+            activity?.SetTag("documentatom.input.kind", "bytes");
+            activity?.SetTag("documentatom.input.size", data.LongLength);
 
-            IngestionDocument document = await _Reader.ReadAsync(data, contentType, originalFilename, cancellationToken).ConfigureAwait(false);
-
-            Log($"Read document with {document.Elements.Count} elements");
-
-            HashSet<string>? seenHashes = _Options.RemoveDuplicates ? new HashSet<string>() : null;
-            int duplicatesRemoved = 0;
-
-            await foreach (IngestionChunk chunk in _Chunker.ChunkAsync(document, cancellationToken).ConfigureAwait(false))
+            try
             {
-                // Skip empty chunks
-                if (_Options.SkipEmptyChunks && string.IsNullOrWhiteSpace(chunk.Content))
-                {
-                    continue;
-                }
+                Log($"Processing document from byte array ({data.Length} bytes)");
 
-                // Check minimum length
-                if (chunk.Content.Length < _Options.MinimumChunkLength)
-                {
-                    continue;
-                }
+                IngestionDocument document = await _Reader.ReadAsync(data, contentType, originalFilename, cancellationToken).ConfigureAwait(false);
 
-                // Check for duplicates
-                if (seenHashes != null)
-                {
-                    string hash = ComputeHash(chunk.Content);
-                    chunk.Metadata[AtomMetadataKeys.ComputedSha256] = hash;
+                Log($"Read document with {document.Elements.Count} elements");
 
-                    if (!seenHashes.Add(hash))
+                HashSet<string>? seenHashes = _Options.RemoveDuplicates ? new HashSet<string>() : null;
+                int duplicatesRemoved = 0;
+
+                await foreach (IngestionChunk chunk in _Chunker.ChunkAsync(document, cancellationToken).ConfigureAwait(false))
+                {
+                    // Skip empty chunks
+                    if (_Options.SkipEmptyChunks && string.IsNullOrWhiteSpace(chunk.Content))
                     {
-                        duplicatesRemoved++;
                         continue;
                     }
+
+                    // Check minimum length
+                    if (chunk.Content.Length < _Options.MinimumChunkLength)
+                    {
+                        continue;
+                    }
+
+                    // Check for duplicates
+                    if (seenHashes != null)
+                    {
+                        string hash = ComputeHash(chunk.Content);
+                        chunk.Metadata[AtomMetadataKeys.ComputedSha256] = hash;
+
+                        if (!seenHashes.Add(hash))
+                        {
+                            duplicatesRemoved++;
+                            continue;
+                        }
+                    }
+
+                    chunkCount++;
+                    yield return chunk;
                 }
 
-                yield return chunk;
-            }
+                if (duplicatesRemoved > 0)
+                {
+                    Log($"Removed {duplicatesRemoved} duplicate chunks");
+                }
 
-            if (duplicatesRemoved > 0)
+                activity?.SetStatus(ActivityStatusCode.Ok);
+            }
+            finally
             {
-                Log($"Removed {duplicatesRemoved} duplicate chunks");
+                DocumentAtomDiagnostics.RecordDataIngestion(
+                    "bytes",
+                    "ok",
+                    chunkCount,
+                    DocumentAtomDiagnostics.GetElapsedSeconds(startTicks));
+
+                activity?.Dispose();
             }
         }
 
@@ -243,13 +292,43 @@ namespace DocumentAtom.DataIngestion.Processors
             if (string.IsNullOrEmpty(path)) throw new ArgumentNullException(nameof(path));
             if (!File.Exists(path)) throw new FileNotFoundException("File not found.", path);
 
-            Log($"Processing document: {path}");
+            long startTicks = Stopwatch.GetTimestamp();
+            string outcome = "ok";
+            List<IngestionChunk>? chunks = null;
 
-            IngestionDocument document = _Reader.Read(path);
+            using (Activity? activity = DocumentAtomDiagnostics.DataIngestionActivitySource.StartActivity(
+                "documentatom.ingestion.process",
+                ActivityKind.Internal))
+            {
+                activity?.SetTag("documentatom.input.kind", "file");
 
-            Log($"Read document with {document.Elements.Count} elements");
+                try
+                {
+                    Log($"Processing document: {path}");
 
-            return ProcessDocument(document);
+                    IngestionDocument document = _Reader.Read(path);
+
+                    Log($"Read document with {document.Elements.Count} elements");
+
+                    chunks = ProcessDocument(document);
+                    activity?.SetStatus(ActivityStatusCode.Ok);
+                    return chunks;
+                }
+                catch (Exception e)
+                {
+                    outcome = "error";
+                    DocumentAtomDiagnostics.RecordException(activity, e);
+                    throw;
+                }
+                finally
+                {
+                    DocumentAtomDiagnostics.RecordDataIngestion(
+                        "file",
+                        outcome,
+                        chunks?.Count ?? 0,
+                        DocumentAtomDiagnostics.GetElapsedSeconds(startTicks));
+                }
+            }
         }
 
         /// <summary>
@@ -263,13 +342,44 @@ namespace DocumentAtom.DataIngestion.Processors
         {
             if (data == null || data.Length == 0) throw new ArgumentNullException(nameof(data));
 
-            Log($"Processing document from byte array ({data.Length} bytes)");
+            long startTicks = Stopwatch.GetTimestamp();
+            string outcome = "ok";
+            List<IngestionChunk>? chunks = null;
 
-            IngestionDocument document = _Reader.Read(data, contentType, originalFilename);
+            using (Activity? activity = DocumentAtomDiagnostics.DataIngestionActivitySource.StartActivity(
+                "documentatom.ingestion.process",
+                ActivityKind.Internal))
+            {
+                activity?.SetTag("documentatom.input.kind", "bytes");
+                activity?.SetTag("documentatom.input.size", data.LongLength);
 
-            Log($"Read document with {document.Elements.Count} elements");
+                try
+                {
+                    Log($"Processing document from byte array ({data.Length} bytes)");
 
-            return ProcessDocument(document);
+                    IngestionDocument document = _Reader.Read(data, contentType, originalFilename);
+
+                    Log($"Read document with {document.Elements.Count} elements");
+
+                    chunks = ProcessDocument(document);
+                    activity?.SetStatus(ActivityStatusCode.Ok);
+                    return chunks;
+                }
+                catch (Exception e)
+                {
+                    outcome = "error";
+                    DocumentAtomDiagnostics.RecordException(activity, e);
+                    throw;
+                }
+                finally
+                {
+                    DocumentAtomDiagnostics.RecordDataIngestion(
+                        "bytes",
+                        outcome,
+                        chunks?.Count ?? 0,
+                        DocumentAtomDiagnostics.GetElapsedSeconds(startTicks));
+                }
+            }
         }
 
         /// <summary>

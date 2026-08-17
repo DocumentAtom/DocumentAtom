@@ -1,5 +1,7 @@
 namespace DocumentAtom.Core.Chunking
 {
+    using System.Diagnostics;
+    using DocumentAtom.Core.Diagnostics;
     using DocumentAtom.Core.Enums;
     using SerializableDataTables;
     using SharpToken;
@@ -58,22 +60,51 @@ namespace DocumentAtom.Core.Chunking
         {
             if (config == null) throw new ArgumentNullException(nameof(config));
 
-            List<string> rawChunks = GetRawChunks(type, text, orderedList, unorderedList, table, config);
-
+            long startTicks = Stopwatch.GetTimestamp();
+            string outcome = "ok";
             List<Chunk> results = new List<Chunk>();
 
-            for (int i = 0; i < rawChunks.Count; i++)
+            using (Activity? activity = DocumentAtomDiagnostics.CoreActivitySource.StartActivity(
+                "documentatom.chunking",
+                ActivityKind.Internal))
             {
-                string chunkText = rawChunks[i];
+                activity?.SetTag("documentatom.atom.type", type.ToString());
+                activity?.SetTag("documentatom.chunk.strategy", config.Strategy.ToString());
 
-                if (!string.IsNullOrEmpty(config.ContextPrefix))
-                    chunkText = config.ContextPrefix + chunkText;
+                try
+                {
+                    List<string> rawChunks = GetRawChunks(type, text, orderedList, unorderedList, table, config);
 
-                Chunk chunk = Chunking.Chunk.FromText(chunkText, i);
-                results.Add(chunk);
+                    for (int i = 0; i < rawChunks.Count; i++)
+                    {
+                        string chunkText = rawChunks[i];
+
+                        if (!string.IsNullOrEmpty(config.ContextPrefix))
+                            chunkText = config.ContextPrefix + chunkText;
+
+                        Chunk chunk = Chunking.Chunk.FromText(chunkText, i);
+                        results.Add(chunk);
+                    }
+
+                    activity?.SetStatus(ActivityStatusCode.Ok);
+                    return results;
+                }
+                catch (Exception e)
+                {
+                    outcome = "error";
+                    DocumentAtomDiagnostics.RecordException(activity, e);
+                    throw;
+                }
+                finally
+                {
+                    DocumentAtomDiagnostics.RecordChunking(
+                        type.ToString(),
+                        config.Strategy.ToString(),
+                        outcome,
+                        results.Count,
+                        DocumentAtomDiagnostics.GetElapsedSeconds(startTicks));
+                }
             }
-
-            return results;
         }
 
         /// <summary>

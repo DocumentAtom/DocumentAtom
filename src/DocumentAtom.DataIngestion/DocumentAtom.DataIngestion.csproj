@@ -10,7 +10,7 @@
 		<DocumentationFile>DocumentAtom.DataIngestion.xml</DocumentationFile>
 		<Description>Microsoft.Extensions.AI.DataIngestion integration for DocumentAtom document parsing library. Provides adapters for using DocumentAtom's document processing capabilities in standard .NET AI/RAG pipelines.</Description>
 		<PackageTags>document;parsing;ingestion;rag;ai;vector;embedding;chunking;microsoft;extensions;datatable;pdf;docx;xlsx;pptx</PackageTags>
-		<PackageReleaseNotes>v3.1.0 - Dependency updates (Microsoft.Extensions.AI 10.9.0)</PackageReleaseNotes>
+		<PackageReleaseNotes>v3.1.1 - Added ActivitySource and Meter diagnostics for ingestion processing</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>

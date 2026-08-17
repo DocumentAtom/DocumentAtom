@@ -800,6 +800,221 @@
             <param name="ordered">True for numbered list, false for bulleted list.</param>
             <returns>List containing a single chunked text segment.</returns>
         </member>
+        <member name="T:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics">
+            <summary>
+            Shared telemetry instruments for DocumentAtom. The source names are the stable contract that
+            an observing host subscribes to with OpenTelemetry, Prometheus exporters, or another listener.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.Version">
+            <summary>
+            DocumentAtom telemetry version.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.CoreSourceName">
+            <summary>
+            Meter and activity source name for core parsing operations.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.ServerSourceName">
+            <summary>
+            Meter and activity source name for the REST server.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.McpServerSourceName">
+            <summary>
+            Meter and activity source name for the MCP server.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.SdkSourceName">
+            <summary>
+            Meter and activity source name for the C# SDK.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.DataIngestionSourceName">
+            <summary>
+            Meter and activity source name for data ingestion operations.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.CoreMeter">
+            <summary>
+            Core parser meter.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.CoreActivitySource">
+            <summary>
+            Core parser activity source.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.ServerMeter">
+            <summary>
+            REST server meter.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.ServerActivitySource">
+            <summary>
+            REST server activity source.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.McpServerMeter">
+            <summary>
+            MCP server meter.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.McpServerActivitySource">
+            <summary>
+            MCP server activity source.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.SdkMeter">
+            <summary>
+            C# SDK meter.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.SdkActivitySource">
+            <summary>
+            C# SDK activity source.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.DataIngestionMeter">
+            <summary>
+            Data ingestion meter.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.DataIngestionActivitySource">
+            <summary>
+            Data ingestion activity source.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.GetElapsedSeconds(System.Int64)">
+            <summary>
+            Calculate elapsed seconds from a <see cref="M:System.Diagnostics.Stopwatch.GetTimestamp"/> value.
+            </summary>
+            <param name="startTicks">Start timestamp.</param>
+            <returns>Elapsed seconds.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.RecordException(System.Diagnostics.Activity,System.Exception)">
+            <summary>
+            Record an exception event and error status on an activity.
+            </summary>
+            <param name="activity">Activity.</param>
+            <param name="exception">Exception.</param>
+        </member>
+        <member name="M:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.StartHttpServerActivity(System.String,System.String,System.String)">
+            <summary>
+            Start a REST server span.
+            </summary>
+            <param name="method">HTTP method.</param>
+            <param name="route">Matched route.</param>
+            <param name="scheme">URL scheme.</param>
+            <returns>Activity, or null when no listener is sampling.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.AddHttpServerActiveRequest(System.String,System.String,System.Int64)">
+            <summary>
+            Track active REST server requests.
+            </summary>
+            <param name="method">HTTP method.</param>
+            <param name="scheme">URL scheme.</param>
+            <param name="delta">Delta.</param>
+        </member>
+        <member name="M:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.RecordHttpServerRequest(System.String,System.String,System.Int32,System.Int64,System.Double)">
+            <summary>
+            Record a completed REST server request.
+            </summary>
+            <param name="method">HTTP method.</param>
+            <param name="route">Matched route.</param>
+            <param name="statusCode">HTTP status code.</param>
+            <param name="requestBodyBytes">Request body bytes.</param>
+            <param name="elapsedSeconds">Elapsed seconds.</param>
+        </member>
+        <member name="M:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.StartMcpServerActivity(System.String,System.String)">
+            <summary>
+            Start a detached MCP server span. The span is not installed as Activity.Current.
+            </summary>
+            <param name="method">RPC method.</param>
+            <param name="transport">Transport.</param>
+            <returns>Activity, or null when no listener is sampling.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.AddMcpServerActiveRequest(System.String,System.String,System.Int64)">
+            <summary>
+            Track active MCP requests.
+            </summary>
+            <param name="method">RPC method.</param>
+            <param name="transport">Transport.</param>
+            <param name="delta">Delta.</param>
+        </member>
+        <member name="M:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.AddMcpServerConnection(System.String,System.Int64)">
+            <summary>
+            Track open MCP client connections.
+            </summary>
+            <param name="transport">Transport.</param>
+            <param name="delta">Delta.</param>
+        </member>
+        <member name="M:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.RecordMcpServerRequest(System.String,System.String,System.String,System.Double)">
+            <summary>
+            Record a completed MCP request.
+            </summary>
+            <param name="method">RPC method.</param>
+            <param name="transport">Transport.</param>
+            <param name="outcome">Outcome.</param>
+            <param name="elapsedSeconds">Elapsed seconds.</param>
+        </member>
+        <member name="M:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.StartSdkHttpClientActivity(System.String,System.String)">
+            <summary>
+            Start an SDK HTTP client span.
+            </summary>
+            <param name="method">HTTP method.</param>
+            <param name="route">Route path.</param>
+            <returns>Activity, or null when no listener is sampling.</returns>
+        </member>
+        <member name="M:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.RecordSdkHttpClientRequest(System.String,System.String,System.Int32,System.Int64,System.Double)">
+            <summary>
+            Record a completed SDK HTTP client request.
+            </summary>
+            <param name="method">HTTP method.</param>
+            <param name="route">Route path.</param>
+            <param name="statusCode">HTTP status code, or 0 when unavailable.</param>
+            <param name="requestBodyBytes">Request body bytes.</param>
+            <param name="elapsedSeconds">Elapsed seconds.</param>
+        </member>
+        <member name="M:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.RecordProcessorExtraction(System.String,System.String,System.String,System.Int64,System.Double)">
+            <summary>
+            Record a completed processor extraction operation.
+            </summary>
+            <param name="processor">Processor name.</param>
+            <param name="inputKind">Input kind.</param>
+            <param name="outcome">Outcome.</param>
+            <param name="atomCount">Atom count.</param>
+            <param name="elapsedSeconds">Elapsed seconds.</param>
+        </member>
+        <member name="M:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.RecordTypeDetection(System.String,System.String,System.Int64,System.Double)">
+            <summary>
+            Record a completed type detection operation.
+            </summary>
+            <param name="documentType">Detected document type.</param>
+            <param name="outcome">Outcome.</param>
+            <param name="inputBytes">Input bytes.</param>
+            <param name="elapsedSeconds">Elapsed seconds.</param>
+        </member>
+        <member name="M:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.RecordChunking(System.String,System.String,System.String,System.Int64,System.Double)">
+            <summary>
+            Record a completed chunking operation.
+            </summary>
+            <param name="atomType">Atom type.</param>
+            <param name="strategy">Chunking strategy.</param>
+            <param name="outcome">Outcome.</param>
+            <param name="chunkCount">Chunk count.</param>
+            <param name="elapsedSeconds">Elapsed seconds.</param>
+        </member>
+        <member name="M:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics.RecordDataIngestion(System.String,System.String,System.Int64,System.Double)">
+            <summary>
+            Record a completed data ingestion operation.
+            </summary>
+            <param name="inputKind">Input kind.</param>
+            <param name="outcome">Outcome.</param>
+            <param name="chunkCount">Chunk count.</param>
+            <param name="elapsedSeconds">Elapsed seconds.</param>
+        </member>
         <member name="T:DocumentAtom.Core.Enums.AtomTypeEnum">
             <summary>
             Atom type.
