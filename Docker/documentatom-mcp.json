@@ -11,16 +11,6 @@
     "DataDirectory": "/usr/share/tesseract-ocr/5/tessdata",
     "Language": "eng"
   },
-  "Telemetry": {
-    "Enable": true,
-    "ServiceName": "DocumentAtom.McpServer",
-    "OtlpEndpoint": "http://otel-collector:4317",
-    "OtlpProtocol": "grpc",
-    "MetricExportIntervalMs": 15000,
-    "TracesSamplingRatio": 1.0,
-    "EnableRuntimeMetrics": true,
-    "EnableProcessMetrics": true
-  },
   "DocumentAtom": {
     "Endpoint": "http://localhost:8000",
     "AccessKey": null
@@ -46,5 +36,21 @@
     "Requests": false,
     "DatabaseQueries": false,
     "McpOperations": false
+  },
+  "Telemetry": {
+    "Enable": true,
+    "ServiceName": "DocumentAtom.McpServer",
+    "OtlpEndpoint": "http://otel-collector:4317",
+    "OtlpProtocol": "grpc",
+    "OtlpHeaders": null,
+    "OtlpTimeoutMs": 10000,
+    "MetricExportIntervalMs": 15000,
+    "TracesSamplingRatio": 1,
+    "EnablePrometheus": false,
+    "PrometheusHostname": "localhost",
+    "PrometheusPort": 9464,
+    "PrometheusPath": "/metrics",
+    "EnableRuntimeMetrics": true,
+    "EnableProcessMetrics": true
   }
 }
