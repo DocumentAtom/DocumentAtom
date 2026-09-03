@@ -1,9 +1,8 @@
 "use client";
 
 import React from "react";
-import { Card, Col, Row, Tag, Typography } from "antd";
+import { Button, Card, Col, Row, Tag, Typography } from "antd";
 import { ExportOutlined, KeyOutlined, LinkOutlined } from "@ant-design/icons";
-import DocuAtomButton from "#/components/base/button/Button";
 import DocuAtomFlex from "#/components/base/flex/Flex";
 import { observabilityServices } from "#/constants/config";
 
@@ -23,12 +22,13 @@ const Observability = () => {
         backends behind it.
       </Paragraph>
 
-      <Row gutter={[16, 16]}>
+      <Row gutter={[16, 16]} align="stretch">
         {observabilityServices.map((svc) => (
-          <Col key={svc.name} xs={24} sm={12} lg={8}>
+          <Col key={svc.name} xs={24} sm={12} lg={8} style={{ display: "flex" }}>
             <Card
               size="small"
-              style={{ height: "100%" }}
+              style={{ width: "100%", display: "flex", flexDirection: "column" }}
+              styles={{ body: { flex: 1, display: "flex", flexDirection: "column" } }}
               title={
                 <DocuAtomFlex align="center" gap={8} justify="space-between">
                   <span>{svc.name}</span>
@@ -40,7 +40,7 @@ const Observability = () => {
                 </DocuAtomFlex>
               }
             >
-              <DocuAtomFlex vertical gap={10}>
+              <DocuAtomFlex vertical gap={10} style={{ flex: 1 }}>
                 <Text type="secondary">{svc.description}</Text>
 
                 <DocuAtomFlex align="center" gap={8}>
@@ -56,20 +56,21 @@ const Observability = () => {
                 </DocuAtomFlex>
 
                 {svc.linkable ? (
-                  <DocuAtomButton
+                  <Button
                     type="primary"
                     icon={<ExportOutlined />}
                     onClick={() =>
                       window.open(svc.url, "_blank", "noopener,noreferrer")
                     }
+                    style={{ marginTop: "auto", color: "#ffffff" }}
                     aria-label={`Open ${svc.name} in a new window`}
                   >
                     Open {svc.name}
-                  </DocuAtomButton>
+                  </Button>
                 ) : (
-                  <DocuAtomButton type="default" disabled>
+                  <Button type="default" disabled style={{ marginTop: "auto" }}>
                     OTLP ingest endpoint
-                  </DocuAtomButton>
+                  </Button>
                 )}
               </DocuAtomFlex>
             </Card>

@@ -14,7 +14,9 @@ html {
 .ant-layout {
   background: transparent;
 }
-a {
+/* Plain links use the primary color, but never antd buttons rendered as <a> (href buttons),
+   which must keep their own text color (e.g. white on a solid primary button). */
+a:not(.ant-btn) {
   color: var(--ant-color-primary);
 }
 
