@@ -9,7 +9,7 @@
 		<DocumentationFile>DocumentAtom.Core.xml</DocumentationFile>
 		<Description>Core classes for DocumentAtom including text processing utilities. DocumentAtom provides a light, fast library for breaking input documents into constituent parts (atoms), useful for AI, machine learning, processing, analytics, and general analysis.</Description>
 		<PackageTags>semantic cell chunk text processing extract extraction doc docx xlsx pptx ppt png csv json xml keynote pages numbers text txt rtf pdf ai llm rag parse parsing parser word excel powerpoint</PackageTags>
-		<PackageReleaseNotes>v3.1.1 - Added ActivitySource and Meter diagnostics for processors, chunking, and type detection</PackageReleaseNotes>
+		<PackageReleaseNotes>v3.1.2 - OpenTelemetry export pipeline (OTLP), runtime/process metrics, bundled Prometheus/Tempo/Loki/Grafana stack, and TELEMETRY.md</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>

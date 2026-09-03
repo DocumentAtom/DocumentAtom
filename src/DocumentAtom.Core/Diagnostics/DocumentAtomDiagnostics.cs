@@ -15,7 +15,7 @@ namespace DocumentAtom.Core.Diagnostics
         /// <summary>
         /// DocumentAtom telemetry version.
         /// </summary>
-        public const string Version = "3.1.1";
+        public const string Version = "3.1.2";
 
         /// <summary>
         /// Meter and activity source name for core parsing operations.

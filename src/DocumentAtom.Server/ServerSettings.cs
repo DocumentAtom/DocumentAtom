@@ -1,6 +1,7 @@
 ﻿namespace DocumentAtom.Server
 {
     using System;
+    using DocumentAtom.Telemetry;
     using WatsonWebserver.Core;
 
     /// <summary>
@@ -74,6 +75,22 @@
             }
         }
 
+        /// <summary>
+        /// OpenTelemetry export settings.
+        /// </summary>
+        public TelemetrySettings Telemetry
+        {
+            get
+            {
+                return _Telemetry;
+            }
+            set
+            {
+                if (value == null) throw new ArgumentNullException(nameof(Telemetry));
+                _Telemetry = value;
+            }
+        }
+
         #endregion
 
         #region Private-Members
@@ -82,6 +99,7 @@
         private TesseractSettings _Tesseract = new TesseractSettings();
         private WebserverSettings _Webserver = new WebserverSettings("localhost", 8000, false);
         private CorsSettings _Cors = new CorsSettings();
+        private TelemetrySettings _Telemetry = new TelemetrySettings();
 
         #endregion
 

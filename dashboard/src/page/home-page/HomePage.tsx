@@ -4,6 +4,7 @@ import DocuAtomTabs from "#/components/base/tabs/Tabs";
 import React, { useState } from "react";
 import TypeDetection from "./components/TypeDetection";
 import AtomExtraction from "./components/AtomExtraction";
+import Observability from "./components/Observability";
 import styles from "./home-page.module.scss";
 
 const HomePage = () => {
@@ -16,6 +17,10 @@ const HomePage = () => {
     {
       key: "atom-extraction",
       label: "Atom Extraction",
+    },
+    {
+      key: "observability",
+      label: "Observability",
     },
   ];
 
@@ -31,11 +36,9 @@ const HomePage = () => {
         />
       }
     >
-      {selectedTab === "type-detection" ? (
-        <TypeDetection />
-      ) : (
-        <AtomExtraction />
-      )}
+      {selectedTab === "type-detection" && <TypeDetection />}
+      {selectedTab === "atom-extraction" && <AtomExtraction />}
+      {selectedTab === "observability" && <Observability />}
     </PageContainer>
   );
 };

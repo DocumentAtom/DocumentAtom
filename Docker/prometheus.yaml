@@ -1,0 +1,20 @@
+# Prometheus scrape config for the DocumentAtom reference observability stack.
+#
+# Scrapes the collector's Prometheus exporter (metrics arrive at the collector over OTLP). To
+# scrape a DocumentAtom process's in-process endpoint directly instead of going through the
+# collector, enable Telemetry.EnablePrometheus in the process settings and add a job pointing at
+# its PrometheusPort (default 9464) — shown commented below.
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: otel-collector
+    static_configs:
+      - targets: ["otel-collector:8889"]
+
+  # Direct in-process scrape of a DocumentAtom host (no collector in the path):
+  # - job_name: documentatom
+  #   static_configs:
+  #     - targets: ["host.docker.internal:9464"]

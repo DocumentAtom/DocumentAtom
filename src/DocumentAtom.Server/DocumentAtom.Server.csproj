@@ -14,6 +14,7 @@
 		<ProjectReference Include="..\DocumentAtom.Core\DocumentAtom.Core.csproj" />
 		<ProjectReference Include="..\DocumentAtom.Text\DocumentAtom.Text.csproj" />
 		<ProjectReference Include="..\DocumentAtom.Documents\DocumentAtom.Documents.csproj" />
+		<ProjectReference Include="..\DocumentAtom.Telemetry\DocumentAtom.Telemetry.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

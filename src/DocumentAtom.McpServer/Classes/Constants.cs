@@ -87,6 +87,21 @@ namespace DocumentAtom.McpServer.Classes
         /// </summary>
         public static string ConsoleLoggingEnvironmentVariable = "MCP_CONSOLE_LOGGING";
 
+        /// <summary>
+        /// Environment variable to enable or disable OpenTelemetry export. Accepts "true"/"false" or "1"/"0".
+        /// </summary>
+        public static string TelemetryEnableEnvironmentVariable = "DOCUMENTATOM_TELEMETRY_ENABLE";
+
+        /// <summary>
+        /// Environment variable for the OTLP exporter endpoint.
+        /// </summary>
+        public static string TelemetryOtlpEndpointEnvironmentVariable = "DOCUMENTATOM_OTLP_ENDPOINT";
+
+        /// <summary>
+        /// Environment variable for the OTLP exporter protocol ("grpc" or "http").
+        /// </summary>
+        public static string TelemetryOtlpProtocolEnvironmentVariable = "DOCUMENTATOM_OTLP_PROTOCOL";
+
         #endregion
     }
 }

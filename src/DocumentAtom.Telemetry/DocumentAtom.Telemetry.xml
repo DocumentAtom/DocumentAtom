@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DocumentAtom.Telemetry</name>
+    </assembly>
+    <members>
+        <member name="T:DocumentAtom.Telemetry.TelemetryHost">
+            <summary>
+            Owns the OpenTelemetry export pipeline for a DocumentAtom process. DocumentAtom domain, HTTP, MCP,
+            SDK, and ingestion code emit through the BCL <c>Meter</c>/<c>ActivitySource</c> instruments declared
+            in <see cref="T:DocumentAtom.Core.Diagnostics.DocumentAtomDiagnostics"/>; this host subscribes to those instruments by name and
+            exports them over OTLP (and, optionally, an in-process Prometheus scrape endpoint). Instruments are
+            no-ops until a host like this one subscribes, so the emit-side code carries no OpenTelemetry
+            dependency. Dispose the host on shutdown to flush and release exporters.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Telemetry.TelemetryHost.ServiceName">
+            <summary>
+            Service name reported as the <c>service.name</c> resource attribute.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Telemetry.TelemetryHost.Start(DocumentAtom.Telemetry.TelemetrySettings,System.String)">
+            <summary>
+            Start the export pipeline for the supplied settings. Returns null when telemetry is disabled or
+            settings are null, in which case the process emits nothing over the wire.
+            </summary>
+            <param name="settings">Telemetry settings.</param>
+            <param name="defaultServiceName">Service name to use when <see cref="P:DocumentAtom.Telemetry.TelemetrySettings.ServiceName"/> is not set.</param>
+            <returns>A started <see cref="T:DocumentAtom.Telemetry.TelemetryHost"/>, or null when disabled.</returns>
+        </member>
+        <member name="M:DocumentAtom.Telemetry.TelemetryHost.Dispose">
+            <summary>
+            Flush pending telemetry and release the export pipeline.
+            </summary>
+        </member>
+        <member name="T:DocumentAtom.Telemetry.TelemetrySettings">
+            <summary>
+            OpenTelemetry export settings. These settings control how the process exports the metrics and
+            traces that DocumentAtom already emits through <c>System.Diagnostics.Metrics.Meter</c> and
+            <c>System.Diagnostics.ActivitySource</c>. When <see cref="P:DocumentAtom.Telemetry.TelemetrySettings.Enable"/> is false the process emits
+            nothing over the wire and instrument overhead remains near zero.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Telemetry.TelemetrySettings.Enable">
+            <summary>
+            Enable OpenTelemetry export. Default is true. When false, no OTLP or Prometheus exporter is
+            started and no telemetry leaves the process.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Telemetry.TelemetrySettings.ServiceName">
+            <summary>
+            Logical service name reported as the <c>service.name</c> resource attribute. When null or empty
+            the host supplies a default based on the component (for example "DocumentAtom.Server").
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Telemetry.TelemetrySettings.OtlpEndpoint">
+            <summary>
+            OTLP exporter endpoint for both metrics and traces. Default is "http://localhost:4317" (gRPC).
+            Use the collector's HTTP/protobuf port (4318) when <see cref="P:DocumentAtom.Telemetry.TelemetrySettings.OtlpProtocol"/> is "http".
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Telemetry.TelemetrySettings.OtlpProtocol">
+            <summary>
+            OTLP protocol. Valid values are "grpc" (default) and "http" (HTTP/protobuf).
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Telemetry.TelemetrySettings.OtlpHeaders">
+            <summary>
+            Optional OTLP headers in "key1=value1,key2=value2" form, used to authenticate against hosted
+            backends such as Grafana Cloud or Honeycomb. Default is null.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Telemetry.TelemetrySettings.OtlpTimeoutMs">
+            <summary>
+            OTLP export timeout in milliseconds. Default is 10000. Minimum is 1000, maximum is 120000.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Telemetry.TelemetrySettings.MetricExportIntervalMs">
+            <summary>
+            Metric export interval in milliseconds for the periodic OTLP metric reader. Default is 15000.
+            Minimum is 1000, maximum is 300000.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Telemetry.TelemetrySettings.TracesSamplingRatio">
+            <summary>
+            Trace sampling ratio applied by a parent-based, ratio sampler. Default is 1.0 (sample all).
+            Minimum is 0.0, maximum is 1.0.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Telemetry.TelemetrySettings.EnablePrometheus">
+            <summary>
+            Enable an in-process Prometheus scrape endpoint (an HttpListener) in addition to OTLP. Default
+            is false. Useful when Prometheus scrapes the process directly instead of a collector.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Telemetry.TelemetrySettings.PrometheusHostname">
+            <summary>
+            Hostname for the in-process Prometheus scrape endpoint. Default is "localhost".
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Telemetry.TelemetrySettings.PrometheusPort">
+            <summary>
+            Port for the in-process Prometheus scrape endpoint. Default is 9464. Minimum is 1, maximum is 65535.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Telemetry.TelemetrySettings.PrometheusPath">
+            <summary>
+            Path for the in-process Prometheus scrape endpoint. Default is "/metrics".
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Telemetry.TelemetrySettings.EnableRuntimeMetrics">
+            <summary>
+            Include .NET runtime metrics (GC, heap, thread pool, JIT) via OpenTelemetry.Instrumentation.Runtime.
+            Default is true.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.Telemetry.TelemetrySettings.EnableProcessMetrics">
+            <summary>
+            Include process-level metrics (working set, uptime, thread count) as observable gauges.
+            Default is true.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.Telemetry.TelemetrySettings.#ctor">
+            <summary>
+            OpenTelemetry export settings.
+            </summary>
+        </member>
+    </members>
+</doc>

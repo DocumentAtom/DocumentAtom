@@ -6,7 +6,7 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-Write-Host "DocumentAtom v3.0.0 NuGet Publish Script" -ForegroundColor Cyan
+Write-Host "DocumentAtom v3.1.2 NuGet Publish Script" -ForegroundColor Cyan
 Write-Host "========================================" -ForegroundColor Cyan
 Write-Host ""
 

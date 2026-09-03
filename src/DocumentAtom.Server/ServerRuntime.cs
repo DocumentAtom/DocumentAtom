@@ -6,6 +6,7 @@ namespace DocumentAtom.Server
     using System.Runtime.Loader;
     using System.Text;
     using System.Threading;
+    using DocumentAtom.Telemetry;
     using SerializationHelper;
     using SyslogLogging;
     using WatsonWebserver;
@@ -31,6 +32,7 @@ namespace DocumentAtom.Server
         private static Serializer _Serializer = new Serializer();
         private static ServerSettings _Settings = new ServerSettings();
         private static LoggingModule _Logging = null;
+        private static TelemetryHost _Telemetry = null;
 
         private static Webserver _RestServer = null;
         private static ServerRuntimeContext _Context = null;
@@ -88,6 +90,8 @@ namespace DocumentAtom.Server
             while (!waitHandleSignal);
 
             _Logging.Info(_Header + "stopping at " + DateTime.UtcNow);
+
+            _Telemetry?.Dispose();
         }
 
         #endregion
@@ -185,6 +189,16 @@ namespace DocumentAtom.Server
             }
 
             _Logging.Debug(_Header + "logging initialized");
+
+            #endregion
+
+            #region Telemetry
+
+            _Telemetry = TelemetryHost.Start(_Settings.Telemetry, "DocumentAtom.Server");
+            if (_Telemetry != null)
+                Console.WriteLine("Telemetry export enabled to  : " + _Settings.Telemetry.OtlpEndpoint + " (" + _Settings.Telemetry.OtlpProtocol + ")");
+            else
+                Console.WriteLine("Telemetry export disabled");
 
             #endregion
 

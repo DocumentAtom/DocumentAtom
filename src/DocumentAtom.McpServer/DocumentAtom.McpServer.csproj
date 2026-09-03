@@ -16,6 +16,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\..\sdk\csharp\src\DocumentAtom.Sdk\DocumentAtom.Sdk.csproj" />
+		<ProjectReference Include="..\DocumentAtom.Telemetry\DocumentAtom.Telemetry.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>

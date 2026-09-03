@@ -11,6 +11,16 @@
     "DataDirectory": "/usr/share/tesseract-ocr/5/tessdata",
     "Language": "eng"
   },
+  "Telemetry": {
+    "Enable": true,
+    "ServiceName": "DocumentAtom.McpServer",
+    "OtlpEndpoint": "http://otel-collector:4317",
+    "OtlpProtocol": "grpc",
+    "MetricExportIntervalMs": 15000,
+    "TracesSamplingRatio": 1.0,
+    "EnableRuntimeMetrics": true,
+    "EnableProcessMetrics": true
+  },
   "DocumentAtom": {
     "Endpoint": "http://localhost:8000",
     "AccessKey": null

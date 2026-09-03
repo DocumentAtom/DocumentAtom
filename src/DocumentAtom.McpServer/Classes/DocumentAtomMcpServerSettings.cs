@@ -1,6 +1,7 @@
 namespace DocumentAtom.McpServer.Classes
 {
     using System;
+    using DocumentAtom.Telemetry;
 
     /// <summary>
     /// DocumentAtom MCP Server settings.
@@ -70,6 +71,11 @@ namespace DocumentAtom.McpServer.Classes
         /// Debug settings.
         /// </summary>
         public DebugSettings Debug { get; set; } = new DebugSettings();
+
+        /// <summary>
+        /// OpenTelemetry export settings.
+        /// </summary>
+        public TelemetrySettings Telemetry { get; set; } = new TelemetrySettings();
 
         #endregion
 

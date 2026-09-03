@@ -1,0 +1,16 @@
+# Grafana dashboard provisioning for the DocumentAtom reference observability stack.
+# All DocumentAtom dashboards live in a single top-level "DocumentAtom" folder, organized by
+# domain (HTTP, MCP, Processing, Ingestion, Runtime). No subfolders.
+
+apiVersion: 1
+
+providers:
+  - name: DocumentAtom
+    orgId: 1
+    folder: DocumentAtom
+    type: file
+    disableDeletion: false
+    editable: true
+    options:
+      path: /var/lib/grafana/dashboards
+      foldersFromFilesStructure: false

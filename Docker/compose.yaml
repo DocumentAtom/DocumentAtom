@@ -8,7 +8,7 @@ services:
 
   documentatom-server:
     container_name: 'documentatom-server'
-    image: 'jchristn77/documentatom:v3.0.0'
+    image: 'jchristn77/documentatom:v3.1.2'
     ports:
       - '8000:8000'
     stdin_open: true
@@ -16,6 +16,8 @@ services:
     volumes:
       - ./documentatom.json:/app/documentatom.json
       - ./logs/:/app/logs/
+    depends_on:
+      - otel-collector
     healthcheck:
       test: curl --fail http://localhost:8000
       interval: 10s
@@ -30,13 +32,19 @@ services:
 
   documentatom-dashboard:
     container_name: 'documentatom-dashboard'
-    image: 'jchristn77/documentatom-ui:v3.0.0'
+    image: 'jchristn77/documentatom-ui:v3.1.2'
     ports:
       - '3000:3000'
     stdin_open: true
     tty: true
     environment:
       - DOCUMENTATOM_SERVER_URL=http://documentatom-server:8000
+      # Observability links surfaced in the dashboard's Observability tab. These are the addresses
+      # the operator's browser uses, so they default to localhost host ports published below.
+      - NEXT_PUBLIC_GRAFANA_URL=http://localhost:3001
+      - NEXT_PUBLIC_PROMETHEUS_URL=http://localhost:9090
+      - NEXT_PUBLIC_TEMPO_URL=http://localhost:3200
+      - NEXT_PUBLIC_LOKI_URL=http://localhost:3100
     depends_on:
       - documentatom-server
     healthcheck:
@@ -54,21 +62,123 @@ services:
 
   documentatom-mcp:
     container_name: 'documentatom-mcp'
-    image: 'jchristn77/documentatom-mcp:v3.0.0'
+    image: 'jchristn77/documentatom-mcp:v3.1.2'
     ports:
       - '8200:8200'
       - '8201:8201'
       - '8202:8202'
     stdin_open: true
     tty: true
+    environment:
+      - DOCUMENTATOM_OTLP_ENDPOINT=http://otel-collector:4317
+      - DOCUMENTATOM_OTLP_PROTOCOL=grpc
     volumes:
       - ./documentatom-mcp.json:/app/documentatom.json
       - ./logs/:/app/logs/
       - ./backups/:/app/backups/
     depends_on:
       - documentatom-server
+      - otel-collector
     healthcheck:
       test: curl --fail http://localhost:8200
       interval: 10s
       timeout: 5s
       retries: 2
+
+  #
+  # OpenTelemetry Collector
+  # Receives OTLP (gRPC 4317 / HTTP 4318) from DocumentAtom processes and fans metrics to
+  # Prometheus, traces to Tempo, and logs to Loki.
+  #
+
+  otel-collector:
+    container_name: 'documentatom-otel-collector'
+    image: 'otel/opentelemetry-collector-contrib:0.109.0'
+    command: ['--config=/etc/otel-collector-config.yaml']
+    ports:
+      - '4317:4317'   # OTLP gRPC
+      - '4318:4318'   # OTLP HTTP
+      - '8889:8889'   # Prometheus exporter (scraped by Prometheus)
+    volumes:
+      - ./otel-collector-config.yaml:/etc/otel-collector-config.yaml
+    depends_on:
+      - prometheus
+      - tempo
+      - loki
+
+  #
+  # Prometheus
+  # Scrapes metrics from the collector's Prometheus exporter.
+  #
+
+  prometheus:
+    container_name: 'documentatom-prometheus'
+    image: 'prom/prometheus:v2.55.1'
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yaml'
+      - '--enable-feature=exemplar-storage'
+    ports:
+      - '9090:9090'
+    volumes:
+      - ./prometheus.yaml:/etc/prometheus/prometheus.yaml
+      - documentatom-prometheus-data:/prometheus
+
+  #
+  # Tempo
+  # Stores distributed traces forwarded by the collector.
+  #
+
+  tempo:
+    container_name: 'documentatom-tempo'
+    image: 'grafana/tempo:2.6.1'
+    command: ['-config.file=/etc/tempo.yaml']
+    ports:
+      - '3200:3200'   # Tempo query API
+    volumes:
+      - ./tempo.yaml:/etc/tempo.yaml
+      - documentatom-tempo-data:/var/tempo
+
+  #
+  # Loki
+  # Aggregates logs forwarded by the collector.
+  #
+
+  loki:
+    container_name: 'documentatom-loki'
+    image: 'grafana/loki:3.2.1'
+    command: ['-config.file=/etc/loki/local-config.yaml']
+    ports:
+      - '3100:3100'
+    volumes:
+      - documentatom-loki-data:/loki
+
+  #
+  # Grafana
+  # Dashboards for DocumentAtom metrics and traces. Grafana's default port 3000 is used by the
+  # DocumentAtom dashboard, so Grafana is published on host port 3001.
+  # Login: admin / admin
+  #
+
+  grafana:
+    container_name: 'documentatom-grafana'
+    image: 'grafana/grafana:11.3.0'
+    ports:
+      - '3001:3000'
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_DEFAULT_THEME=dark
+    volumes:
+      - ./grafana/provisioning:/etc/grafana/provisioning
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+      - documentatom-grafana-data:/var/lib/grafana
+    depends_on:
+      - prometheus
+      - tempo
+      - loki
+
+volumes:
+  documentatom-prometheus-data:
+  documentatom-tempo-data:
+  documentatom-loki-data:
+  documentatom-grafana-data:

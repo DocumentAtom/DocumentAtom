@@ -14,6 +14,7 @@ namespace DocumentAtom.McpServer
     using DocumentAtom.McpServer.Classes;
     using DocumentAtom.McpServer.Registrations;
     using DocumentAtom.Sdk;
+    using DocumentAtom.Telemetry;
     using SyslogLogging;
     using Voltaic;
 
@@ -32,6 +33,7 @@ namespace DocumentAtom.McpServer
 
         private static DocumentAtomMcpServerSettings _Settings = new DocumentAtomMcpServerSettings();
         private static LoggingModule _Logging = null!;
+        private static TelemetryHost? _Telemetry = null;
         private static DocumentAtomSdk? _McpSdk = null;
         private static SerializationHelper.Serializer _Serializer = new SerializationHelper.Serializer();
         private static McpHttpServer? _McpHttpServer = null;
@@ -83,6 +85,8 @@ namespace DocumentAtom.McpServer
             while (!waitHandleSignal);
 
             _Logging.Info(_Header + "stopping at " + DateTime.UtcNow);
+
+            _Telemetry?.Dispose();
         }
 
         #endregion
@@ -219,6 +223,21 @@ namespace DocumentAtom.McpServer
                 }
             }
 
+            string? telemetryEnable = Environment.GetEnvironmentVariable(Constants.TelemetryEnableEnvironmentVariable);
+            if (!String.IsNullOrEmpty(telemetryEnable))
+            {
+                if (telemetryEnable.Equals("true", StringComparison.OrdinalIgnoreCase) || telemetryEnable.Equals("1"))
+                    _Settings.Telemetry.Enable = true;
+                else if (telemetryEnable.Equals("false", StringComparison.OrdinalIgnoreCase) || telemetryEnable.Equals("0"))
+                    _Settings.Telemetry.Enable = false;
+            }
+
+            string? otlpEndpoint = Environment.GetEnvironmentVariable(Constants.TelemetryOtlpEndpointEnvironmentVariable);
+            if (!String.IsNullOrEmpty(otlpEndpoint)) _Settings.Telemetry.OtlpEndpoint = otlpEndpoint;
+
+            string? otlpProtocol = Environment.GetEnvironmentVariable(Constants.TelemetryOtlpProtocolEnvironmentVariable);
+            if (!String.IsNullOrEmpty(otlpProtocol)) _Settings.Telemetry.OtlpProtocol = otlpProtocol;
+
             #endregion
 
             #region Logging
@@ -260,6 +279,16 @@ namespace DocumentAtom.McpServer
             }
 
             _Logging.Debug(_Header + "logging initialized");
+
+            #endregion
+
+            #region Telemetry
+
+            _Telemetry = TelemetryHost.Start(_Settings.Telemetry, "DocumentAtom.McpServer");
+            if (_Telemetry != null)
+                _Logging.Debug(_Header + "telemetry export enabled to " + _Settings.Telemetry.OtlpEndpoint + " (" + _Settings.Telemetry.OtlpProtocol + ")");
+            else
+                _Logging.Debug(_Header + "telemetry export disabled");
 
             #endregion
 

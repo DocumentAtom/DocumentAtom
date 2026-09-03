@@ -79,6 +79,21 @@
             Environment variable for console logging.
             </summary>
         </member>
+        <member name="F:DocumentAtom.McpServer.Classes.Constants.TelemetryEnableEnvironmentVariable">
+            <summary>
+            Environment variable to enable or disable OpenTelemetry export. Accepts "true"/"false" or "1"/"0".
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.McpServer.Classes.Constants.TelemetryOtlpEndpointEnvironmentVariable">
+            <summary>
+            Environment variable for the OTLP exporter endpoint.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.McpServer.Classes.Constants.TelemetryOtlpProtocolEnvironmentVariable">
+            <summary>
+            Environment variable for the OTLP exporter protocol ("grpc" or "http").
+            </summary>
+        </member>
         <member name="T:DocumentAtom.McpServer.Classes.DebugSettings">
             <summary>
             Debug settings.
@@ -187,6 +202,11 @@
         <member name="P:DocumentAtom.McpServer.Classes.DocumentAtomMcpServerSettings.Debug">
             <summary>
             Debug settings.
+            </summary>
+        </member>
+        <member name="P:DocumentAtom.McpServer.Classes.DocumentAtomMcpServerSettings.Telemetry">
+            <summary>
+            OpenTelemetry export settings.
             </summary>
         </member>
         <member name="M:DocumentAtom.McpServer.Classes.DocumentAtomMcpServerSettings.#ctor">
