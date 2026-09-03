@@ -14,12 +14,14 @@ COPY DocumentAtom.Server/DocumentAtom.Server.csproj ./DocumentAtom.Server/
 COPY DocumentAtom.Core/DocumentAtom.Core.csproj ./DocumentAtom.Core/
 COPY DocumentAtom.Text/DocumentAtom.Text.csproj ./DocumentAtom.Text/
 COPY DocumentAtom.Documents/DocumentAtom.Documents.csproj ./DocumentAtom.Documents/
+COPY DocumentAtom.Telemetry/DocumentAtom.Telemetry.csproj ./DocumentAtom.Telemetry/
 
 # Copy source code
 COPY DocumentAtom.Server/ ./DocumentAtom.Server/
 COPY DocumentAtom.Core/ ./DocumentAtom.Core/
 COPY DocumentAtom.Text/ ./DocumentAtom.Text/
 COPY DocumentAtom.Documents/ ./DocumentAtom.Documents/
+COPY DocumentAtom.Telemetry/ ./DocumentAtom.Telemetry/
 
 # Restore dependencies for the server project
 # Restore for the specific runtime based on TARGETARCH

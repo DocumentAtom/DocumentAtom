@@ -17,6 +17,7 @@ WORKDIR /repo
 COPY src/Directory.Build.props ./src/
 COPY src/DocumentAtom.Core/DocumentAtom.Core.csproj ./src/DocumentAtom.Core/
 COPY src/DocumentAtom.McpServer/DocumentAtom.McpServer.csproj ./src/DocumentAtom.McpServer/
+COPY src/DocumentAtom.Telemetry/DocumentAtom.Telemetry.csproj ./src/DocumentAtom.Telemetry/
 COPY sdk/csharp/src/DocumentAtom.Sdk/DocumentAtom.Sdk.csproj ./sdk/csharp/src/DocumentAtom.Sdk/
 
 # Restore dependencies
@@ -25,6 +26,7 @@ RUN dotnet restore "src/DocumentAtom.McpServer/DocumentAtom.McpServer.csproj" -p
 # Copy source code
 COPY src/DocumentAtom.Core/ ./src/DocumentAtom.Core/
 COPY src/DocumentAtom.McpServer/ ./src/DocumentAtom.McpServer/
+COPY src/DocumentAtom.Telemetry/ ./src/DocumentAtom.Telemetry/
 COPY sdk/csharp/src/DocumentAtom.Sdk/ ./sdk/csharp/src/DocumentAtom.Sdk/
 
 # Build the application
