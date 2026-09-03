@@ -59,9 +59,9 @@ const Observability = () => {
                   <DocuAtomButton
                     type="primary"
                     icon={<ExportOutlined />}
-                    href={svc.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    onClick={() =>
+                      window.open(svc.url, "_blank", "noopener,noreferrer")
+                    }
                     aria-label={`Open ${svc.name} in a new window`}
                   >
                     Open {svc.name}

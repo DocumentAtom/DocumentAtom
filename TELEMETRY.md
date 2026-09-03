@@ -121,6 +121,11 @@ so per-tool rates and latencies are available by filtering on that label.
 
 ### Data ingestion (`DocumentAtom.DataIngestion`)
 
+> These metrics are emitted only when a host application uses the optional
+> `DocumentAtom.DataIngestion` library (the RAG ingestion adapter). The DocumentAtom REST
+> server and MCP server do not perform ingestion, so the bundled stack ships no ingestion
+> dashboard; the instruments are documented here for applications that consume the library.
+
 | Instrument | Kind | Unit | Prometheus name | Key attributes |
 |---|---|---|---|---|
 | `documentatom.ingestion.documents` | Counter | `{document}` | `documentatom_ingestion_documents_total` | `documentatom.input.kind`, `outcome` |
@@ -268,7 +273,6 @@ organized by domain:
 - **DocumentAtom - HTTP** — REST server throughput, latency percentiles, errors, body sizes
 - **DocumentAtom - MCP** — RPC rates/latency by tool and transport, connections
 - **DocumentAtom - Processing** — extraction, type detection, and chunking by processor/strategy
-- **DocumentAtom - Ingestion** — data-ingestion documents, chunks, duration
 - **DocumentAtom - SDK** — outbound HTTP client rates, latency, errors
 - **DocumentAtom - Runtime** — process and .NET runtime health
 

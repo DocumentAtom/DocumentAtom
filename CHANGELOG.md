@@ -9,7 +9,7 @@ v3.1.2
 - Added `Telemetry` settings to the server and MCP configurations (OTLP endpoint/protocol/headers, sampling ratio, export interval, in-process Prometheus, runtime and process metrics); enabled by default to `http://localhost:4317`
 - Added `DOCUMENTATOM_TELEMETRY_ENABLE`, `DOCUMENTATOM_OTLP_ENDPOINT`, and `DOCUMENTATOM_OTLP_PROTOCOL` environment overrides for the MCP server
 - Added process (working set, uptime, thread count) and .NET runtime metrics
-- Added a bundled observability stack to `docker/compose.yaml` (OpenTelemetry Collector, Prometheus, Tempo, Loki, Grafana on host port 3001) with provisioned datasources and seven Grafana dashboards in a top-level `DocumentAtom` folder
+- Added a bundled observability stack to `docker/compose.yaml` (OpenTelemetry Collector, Prometheus, Tempo, Loki, Grafana on host port 3001) with provisioned datasources and Grafana dashboards (Overview, HTTP, MCP, Processing, SDK, Runtime) in a top-level `DocumentAtom` folder
 - Added an **Observability** tab to the dashboard UI with cards linking out to Grafana, Prometheus, Tempo, and Loki (name, default credentials, and URL)
 - Added `TELEMETRY.md` documenting the metrics/traces catalog, configuration, and integration with external observability stacks
 
