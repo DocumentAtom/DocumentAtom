@@ -30,6 +30,10 @@ namespace DocumentAtom.McpServer
         private static string _SoftwareVersion = Constants.Version;
         private static int _ProcessId = Environment.ProcessId;
         private static bool _ShowConfiguration = false;
+        private static bool _InstallRequested = false;
+        private static bool _UninstallRequested = false;
+        private static string _InstallTargets = "all";
+        private static string _InstallEndpoint = "";
 
         private static DocumentAtomMcpServerSettings _Settings = new DocumentAtomMcpServerSettings();
         private static LoggingModule _Logging = null!;
@@ -63,6 +67,13 @@ namespace DocumentAtom.McpServer
         {
             Welcome();
             ParseArguments(args);
+
+            if (_InstallRequested || _UninstallRequested)
+            {
+                int installExitCode = McpClientInstaller.Run(_UninstallRequested, _InstallTargets, _InstallEndpoint);
+                Environment.Exit(installExitCode);
+            }
+
             InitializeSettings();
             InitializeGlobals();
 
@@ -123,6 +134,31 @@ namespace DocumentAtom.McpServer
                     if (arg.Equals("--showconfig"))
                     {
                         _ShowConfiguration = true;
+                    }
+
+                    if (arg.StartsWith("--install="))
+                    {
+                        _InstallRequested = true;
+                        _InstallTargets = arg.Substring("--install=".Length);
+                    }
+                    else if (arg.Equals("--install"))
+                    {
+                        _InstallRequested = true;
+                    }
+
+                    if (arg.StartsWith("--uninstall="))
+                    {
+                        _UninstallRequested = true;
+                        _InstallTargets = arg.Substring("--uninstall=".Length);
+                    }
+                    else if (arg.Equals("--uninstall"))
+                    {
+                        _UninstallRequested = true;
+                    }
+
+                    if (arg.StartsWith("--endpoint="))
+                    {
+                        _InstallEndpoint = arg.Substring("--endpoint=".Length);
                     }
 
                     if (arg.Equals("--help") || arg.Equals("-h"))
@@ -501,7 +537,19 @@ namespace DocumentAtom.McpServer
             Console.WriteLine("Options:");
             Console.WriteLine("  --config=<file>        Settings file path (default: ./documentatom.json)");
             Console.WriteLine("  --showconfig           Display configuration and exit");
+            Console.WriteLine("  --install[=targets]    Register this MCP server with AI coding tools and exit");
+            Console.WriteLine("  --uninstall[=targets]  Remove this MCP server from AI coding tools and exit");
+            Console.WriteLine("  --endpoint=<url>       HTTP endpoint to register (default: " + McpClientInstaller.DefaultEndpoint + ")");
             Console.WriteLine("  --help, -h             Show this help message");
+            Console.WriteLine();
+            Console.WriteLine("Install / uninstall:");
+            Console.WriteLine("  'targets' is a comma-separated list of: claude, codex, gemini, cursor, mux (or 'all').");
+            Console.WriteLine("  When omitted, all supported tools are targeted. Configuration is written to each");
+            Console.WriteLine("  tool's per-user (global) config. Examples:");
+            Console.WriteLine("    DocumentAtom.McpServer --install");
+            Console.WriteLine("    DocumentAtom.McpServer --install=claude,cursor");
+            Console.WriteLine("    DocumentAtom.McpServer --install=mux --endpoint=http://localhost:8200/rpc");
+            Console.WriteLine("    DocumentAtom.McpServer --uninstall=all");
             Console.WriteLine();
             Console.WriteLine("Configuration:");
             Console.WriteLine("  Settings are read from documentatom.json file.");

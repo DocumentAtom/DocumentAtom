@@ -294,6 +294,38 @@
             Instantiate.
             </summary>
         </member>
+        <member name="T:DocumentAtom.McpServer.Classes.McpClientInstaller">
+            <summary>
+            Installs or removes DocumentAtom MCP server integration into supported AI coding tools
+            (Claude Code, OpenAI Codex, Gemini CLI, Cursor, and mux). All operations target the
+            per-user (global) configuration for each tool. The DocumentAtom MCP server exposes an
+            HTTP JSON-RPC transport, so the registered entry points each client at the HTTP endpoint.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.McpServer.Classes.McpClientInstaller.ServerName">
+            <summary>
+            Name used as the MCP server key/identifier in each client's configuration.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.McpServer.Classes.McpClientInstaller.DefaultEndpoint">
+            <summary>
+            Default HTTP JSON-RPC endpoint registered when no endpoint is supplied.
+            </summary>
+        </member>
+        <member name="F:DocumentAtom.McpServer.Classes.McpClientInstaller.SupportedTargets">
+            <summary>
+            Supported client targets.
+            </summary>
+        </member>
+        <member name="M:DocumentAtom.McpServer.Classes.McpClientInstaller.Run(System.Boolean,System.String,System.String)">
+            <summary>
+            Run the installer or uninstaller against one or more clients.
+            </summary>
+            <param name="uninstall">True to remove the integration, false to install it.</param>
+            <param name="targetsCsv">Comma-separated list of targets, or "all"/empty for every supported target.</param>
+            <param name="endpoint">HTTP JSON-RPC endpoint to register. If empty, the default endpoint is used.</param>
+            <returns>Zero on success, non-zero if one or more targets failed.</returns>
+        </member>
         <member name="T:DocumentAtom.McpServer.Classes.StorageSettings">
             <summary>
             Storage settings.
