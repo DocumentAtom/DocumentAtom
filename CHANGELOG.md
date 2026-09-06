@@ -1,5 +1,16 @@
 # Change Log
 
+## Unreleased
+
+### New Features
+- Added `--install` / `--uninstall` commands to `DocumentAtom.McpServer` to register (or remove) the MCP server in the per-user configuration of Claude Code, OpenAI Codex, Gemini CLI, Cursor, and mux; supports `--endpoint=<url>` and per-tool targeting (`--install=claude,cursor`), preserving existing entries
+- Added cross-platform install/uninstall scripts under `scripts/` (`windows/` PowerShell + CMD, `macos/` and `linux/` Bash) that wrap the install command
+- Added `MCP_API.md` documenting the MCP server transports, tool catalog, request/response schemas, and usage examples
+
+### Documentation
+- Documented the MCP install command, scripts, and `MCP_API.md` in `README.md`
+- Corrected the MCP server environment variable names in `README.md` (`MCP_WS_HOSTNAME`, `MCP_WS_PORT`, `MCP_CONSOLE_LOGGING`) and added the telemetry override variables
+
 ## Current Version
 
 v3.1.2

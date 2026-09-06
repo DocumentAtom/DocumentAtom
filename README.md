@@ -582,7 +582,37 @@ dotnet run
 Command-line options:
 - `--config=<file>` - Specify settings file path (default: `./documentatom.json`)
 - `--showconfig` - Display configuration and exit
+- `--install[=targets]` - Register this server with AI coding tools and exit
+- `--uninstall[=targets]` - Remove this server from AI coding tools and exit
+- `--endpoint=<url>` - HTTP endpoint to register during `--install` (default: `http://localhost:8200/rpc`)
 - `--help`, `-h` - Show help message
+
+### Registering with AI Coding Tools
+
+The MCP server can register itself with the per-user (global) configuration of common AI coding
+tools — **Claude Code, OpenAI Codex, Gemini CLI, Cursor, and mux** — pointing each at the HTTP
+endpoint (`http://localhost:8200/rpc` by default) under the name `documentatom`:
+
+```bash
+# Register with every supported tool
+dotnet run -- --install
+
+# Register with specific tools (comma-separated: claude, codex, gemini, cursor, mux, or all)
+dotnet run -- --install=claude,cursor
+
+# Use a custom endpoint
+dotnet run -- --install=mux --endpoint=http://localhost:8200/rpc
+
+# Remove the integration
+dotnet run -- --uninstall=all
+```
+
+Cross-platform one-command wrappers are provided under [`scripts/`](scripts/README.md) for Windows
+(PowerShell/CMD), macOS, and Linux. Existing entries in each tool's config are preserved; only the
+`documentatom` entry is added or removed.
+
+For full MCP protocol details — transports, tool catalog, request/response schemas, and usage
+examples — see [`MCP_API.md`](MCP_API.md).
 
 ### Running with Docker
 
@@ -665,9 +695,12 @@ The MCP server supports the following environment variables to override configur
 | `MCP_HTTP_PORT` | HTTP server port |
 | `MCP_TCP_ADDRESS` | TCP server address |
 | `MCP_TCP_PORT` | TCP server port |
-| `MCP_WEBSOCKET_HOSTNAME` | WebSocket server hostname |
-| `MCP_WEBSOCKET_PORT` | WebSocket server port |
-| `CONSOLE_LOGGING` | Enable console logging (1 or 0) |
+| `MCP_WS_HOSTNAME` | WebSocket server hostname |
+| `MCP_WS_PORT` | WebSocket server port |
+| `MCP_CONSOLE_LOGGING` | Enable console logging (1 or 0) |
+| `DOCUMENTATOM_TELEMETRY_ENABLE` | Enable/disable OpenTelemetry export (true/false) |
+| `DOCUMENTATOM_OTLP_ENDPOINT` | OTLP exporter endpoint |
+| `DOCUMENTATOM_OTLP_PROTOCOL` | OTLP exporter protocol (grpc or http) |
 
 ### Building Docker Images
 
