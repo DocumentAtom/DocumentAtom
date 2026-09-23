@@ -204,7 +204,21 @@ namespace DocumentAtom.Server
                     ["OverlapStrategy"] = EnumSchema("Strategy for handling chunk overlap boundaries.", OverlapStrategyValues(), false, "SlidingWindow"),
                     ["RowGroupSize"] = IntegerSchema("Rows per group when Strategy is RowGroupWithHeaders.", false, 1, null, 5),
                     ["ContextPrefix"] = StringSchema(null, "Optional text prepended to each generated chunk.", true, null, null, null),
-                    ["RegexPattern"] = StringSchema(null, "Required when Strategy is RegexBased. Regular expression used as the split delimiter.", true, 1, null, "\\n{2,}")
+                    ["RegexPattern"] = StringSchema(null, "Required when Strategy is RegexBased. Regular expression used as the split delimiter.", true, 1, null, "\\n{2,}"),
+                    ["OverlapCharacters"] = IntegerSchema("Alternative overlap expressed in characters, converted to an approximate token overlap. Takes precedence over OverlapCount but not OverlapPercentage.", true, 0, null, null),
+                    ["TokenizerKind"] = EnumSchema("Tokenizer family used to measure chunk sizes. Auto resolves from ModelId.", TokenizerKindValues(), false, "Auto"),
+                    ["ModelId"] = StringSchema(null, "Optional model identifier used to resolve the tokenizer family and token budget when TokenizerKind is Auto.", true, null, null, "text-embedding-3-small"),
+                    ["Format"] = EnumSchema("Content format selecting the separator ladder for the Recursive strategy.", ContentFormatValues(), false, "Plain"),
+                    ["Separators"] = ArraySchema(OpenApiSchemaMetadata.String(), "Explicit ordered separator ladder for the Recursive strategy. When supplied, overrides Format.", true),
+                    ["HierarchyAware"] = BooleanSchema("When true, markdown header hierarchy is honored and each chunk is stamped with its header breadcrumb.", false, false),
+                    ["ContextualizeHeaders"] = BooleanSchema("When true, the header breadcrumb is prepended into each chunk's text. Only meaningful when HierarchyAware is true.", false, false),
+                    ["HeaderContextSeparator"] = StringSchema(null, "Separator used to join header breadcrumb segments.", false, null, null, " > "),
+                    ["SmallChunkMode"] = EnumSchema("Policy for chunks smaller than MinChunkTokens.", SmallChunkModeValues(), false, "Keep"),
+                    ["MinChunkTokens"] = IntegerSchema("Minimum chunk size in tokens. When greater than zero and SmallChunkMode is not Keep, undersized chunks are merged or dropped.", false, 0, null, 0),
+                    ["TrimWhitespace"] = BooleanSchema("When true, leading and trailing whitespace is trimmed from each chunk.", false, true),
+                    ["ComputeTokenCounts"] = BooleanSchema("When true, each chunk's token count is computed.", false, true),
+                    ["ComputeOffsets"] = BooleanSchema("When true, each chunk's source character offsets are computed where the chunk is a literal substring.", false, true),
+                    ["ComputeHashes"] = BooleanSchema("When true, MD5, SHA1, and SHA256 hashes of each chunk are computed.", false, true)
                 });
 
             schemas["Atom"] = ObjectSchema(
@@ -242,8 +256,14 @@ namespace DocumentAtom.Server
                 "A text fragment generated from an atom by a chunking strategy.",
                 new Dictionary<string, OpenApiSchemaMetadata>
                 {
+                    ["GUID"] = StringSchema("uuid", "Unique chunk identifier.", false, null, null, "8f77d7a4-9046-4eb5-a61f-3e6ebdf90a21"),
+                    ["ParentGUID"] = StringSchema("uuid", "Identifier of the parent the chunk was produced from, when known.", true, null, null, null),
                     ["Position"] = IntegerSchema("Ordinal chunk index within the parent atom.", false, 0, null, 0),
-                    ["Length"] = IntegerSchema("Chunk text length.", false, 0, null, 128),
+                    ["Length"] = IntegerSchema("Chunk text length in characters.", false, 0, null, 128),
+                    ["TokenCount"] = IntegerSchema("Number of tokens in the chunk text as measured by the configured tokenizer. Zero when token counting is disabled.", false, 0, null, 42),
+                    ["StartOffset"] = IntegerSchema("Inclusive start character offset within the source text, or -1 when the chunk is not a literal substring or offsets are disabled.", false, null, null, 0),
+                    ["EndOffset"] = IntegerSchema("Exclusive end character offset within the source text, or -1 when the chunk is not a literal substring or offsets are disabled.", false, null, null, 128),
+                    ["HeaderContext"] = StringSchema(null, "Header breadcrumb describing where the chunk sits in the document hierarchy, or null when hierarchy tracking is not in effect.", true, null, null, "Guide > Setup > Windows"),
                     ["MD5Hash"] = StringSchema("byte", "Base64-encoded MD5 hash of the chunk text.", true, null, null, null),
                     ["SHA1Hash"] = StringSchema("byte", "Base64-encoded SHA1 hash of the chunk text.", true, null, null, null),
                     ["SHA256Hash"] = StringSchema("byte", "Base64-encoded SHA256 hash of the chunk text.", true, null, null, null),
@@ -656,12 +676,27 @@ namespace DocumentAtom.Server
 
         private static List<object> ChunkStrategyValues()
         {
-            return new List<object> { "FixedTokenCount", "SentenceBased", "ParagraphBased", "RegexBased", "WholeList", "ListEntry", "Row", "RowWithHeaders", "RowGroupWithHeaders", "KeyValuePairs", "WholeTable" };
+            return new List<object> { "FixedTokenCount", "SentenceBased", "ParagraphBased", "RegexBased", "WholeList", "ListEntry", "Row", "RowWithHeaders", "RowGroupWithHeaders", "KeyValuePairs", "WholeTable", "Recursive" };
         }
 
         private static List<object> OverlapStrategyValues()
         {
             return new List<object> { "SlidingWindow", "SentenceBoundaryAware", "SemanticBoundaryAware" };
+        }
+
+        private static List<object> TokenizerKindValues()
+        {
+            return new List<object> { "Auto", "Cl100kBase", "O200kBase", "BertWordPiece" };
+        }
+
+        private static List<object> ContentFormatValues()
+        {
+            return new List<object> { "Plain", "Markdown", "CSharp", "Python", "JavaScript", "Java" };
+        }
+
+        private static List<object> SmallChunkModeValues()
+        {
+            return new List<object> { "Keep", "MergeForward", "Drop" };
         }
 
         private static List<object> AtomTypeValues()

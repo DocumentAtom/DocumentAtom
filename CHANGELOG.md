@@ -1,17 +1,34 @@
 # Change Log
 
-## Unreleased
+## Current Version
+
+v3.2.0
 
 ### New Features
+- Migrated all chunking onto the **TextChunker** engine (NuGet `TextChunker` 0.1.0), replacing the in-house `SharpToken`-based strategy implementations with a capability-superset engine; the public `ChunkingEngine`, `ChunkingConfiguration`, and `Chunk` contracts are preserved
+- Added the `Recursive` chunking strategy (descending separator-ladder splitting), bringing the total to 12 strategies
+- Added selectable tokenizer families to `ChunkingConfiguration` via `TokenizerKind` (`Auto`, `Cl100kBase`, `O200kBase`, `BertWordPiece`) with `ModelId`-based resolution
+- Added character-based overlap (`OverlapCharacters`), hierarchy-aware chunking (`HierarchyAware`, `ContextualizeHeaders`, `HeaderContextSeparator`), recursive-format selection (`Format`, `Separators`), small-chunk handling (`SmallChunkMode`, `MinChunkTokens`), and per-run toggles (`TrimWhitespace`, `ComputeTokenCounts`, `ComputeOffsets`, `ComputeHashes`)
+- Enriched the `Chunk` output model with `GUID`, `ParentGUID`, `TokenCount`, `StartOffset`, `EndOffset`, and `HeaderContext`
+- Reworked the DataIngestion `HierarchyAwareChunker` onto TextChunker's native hierarchy-aware recursive chunking
 - Added `--install` / `--uninstall` commands to `DocumentAtom.McpServer` to register (or remove) the MCP server in the per-user configuration of Claude Code, OpenAI Codex, Gemini CLI, Cursor, and mux; supports `--endpoint=<url>` and per-tool targeting (`--install=claude,cursor`), preserving existing entries
 - Added cross-platform install/uninstall scripts under `scripts/` (`windows/` PowerShell + CMD, `macos/` and `linux/` Bash) that wrap the install command
 - Added `MCP_API.md` documenting the MCP server transports, tool catalog, request/response schemas, and usage examples
 
+### Fixes
+- Fixed fixed-token chunks occasionally exceeding the token budget, and normalized the percentage-overlap unit count, by delegating to TextChunker's strict token slicing
+- Table cells containing `|` are now escaped so serialized markdown tables remain valid
+
 ### Documentation
 - Documented the MCP install command, scripts, and `MCP_API.md` in `README.md`
 - Corrected the MCP server environment variable names in `README.md` (`MCP_WS_HOSTNAME`, `MCP_WS_PORT`, `MCP_CONSOLE_LOGGING`) and added the telemetry override variables
+- Updated `docker/compose.yaml` and README Docker image tags to `v3.2.0`
 
-## Current Version
+### Packaging
+- Bumped NuGet package versions from `3.1.2` to `3.2.0`
+- Replaced the `SharpToken` dependency with `TextChunker` 0.1.0 in `DocumentAtom.Core`
+
+## Previous Version
 
 v3.1.2
 
@@ -27,7 +44,7 @@ v3.1.2
 ### Packaging
 - Bumped NuGet package versions from `3.1.1` to `3.1.2`
 
-## Previous Version
+## Previous Versions
 
 v3.1.1
 
@@ -45,7 +62,7 @@ v3.1.1
 - Bumped the non-packable MCP server project patch version from `1.0.0` to `1.0.1`
 - Removed the unused direct `SixLabors.ImageSharp` dependency from `DocumentAtom.Documents`
 
-## Previous Versions
+## Older Versions
 
 v3.0.x
 

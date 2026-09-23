@@ -58,6 +58,13 @@ namespace DocumentAtom.Core.Enums
         /// <summary>
         /// Entire table as a single markdown table chunk.
         /// </summary>
-        WholeTable = 10
+        WholeTable = 10,
+
+        /// <summary>
+        /// Recursively split text using a descending ladder of separators (paragraphs, then lines,
+        /// then sentences, then words) until each piece fits the token budget.  Well suited to
+        /// structured content such as markdown or source code when paired with <see cref="ChunkStrategyEnum"/>-aware formats.
+        /// </summary>
+        Recursive = 11
     }
 }

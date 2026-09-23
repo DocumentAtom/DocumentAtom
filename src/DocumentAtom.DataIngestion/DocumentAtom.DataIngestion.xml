@@ -107,8 +107,9 @@
         <member name="T:DocumentAtom.DataIngestion.Chunkers.HierarchyAwareChunker">
             <summary>
             Chunker that preserves document hierarchy and context.
-            Delegates content splitting to ChunkingEngine while maintaining
-            header breadcrumbs, section grouping, and hierarchy metadata.
+            Reconstructs a markdown view of the document and delegates to TextChunker's native
+            hierarchy-aware, recursive chunking (via <see cref="T:DocumentAtom.Core.Chunking.ChunkingEngine"/>), which walks the
+            header hierarchy and stamps each chunk with its header breadcrumb.
             </summary>
         </member>
         <member name="P:DocumentAtom.DataIngestion.Chunkers.HierarchyAwareChunker.Options">

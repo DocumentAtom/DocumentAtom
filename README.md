@@ -527,7 +527,7 @@ dotnet run
 
 1. Pull the image from Docker Hub:
 ```bash
-docker pull jchristn77/documentatom:v3.1.2
+docker pull jchristn77/documentatom:v3.2.0
 ```
 
 2. Create a `documentatom.json` configuration file (see `Docker/documentatom.json` for an example)
@@ -535,19 +535,19 @@ docker pull jchristn77/documentatom:v3.1.2
 3. Run the container:
 ```bash
 # Windows
-docker run -p 8000:8000 -v .\documentatom.json:/app/documentatom.json -v .\logs\:/app/logs/ jchristn77/documentatom:v3.1.2
+docker run -p 8000:8000 -v .\documentatom.json:/app/documentatom.json -v .\logs\:/app/logs/ jchristn77/documentatom:v3.2.0
 
 # Linux/macOS
-docker run -p 8000:8000 -v ./documentatom.json:/app/documentatom.json -v ./logs/:/app/logs/ jchristn77/documentatom:v3.1.2
+docker run -p 8000:8000 -v ./documentatom.json:/app/documentatom.json -v ./logs/:/app/logs/ jchristn77/documentatom:v3.2.0
 ```
 
 Alternatively, use the provided scripts in the `Docker` directory:
 ```bash
 # Windows
-Dockerrun.bat v3.1.2
+Dockerrun.bat v3.2.0
 
 # Linux/macOS
-IMG_TAG=v3.1.2 ./Dockerrun.sh
+IMG_TAG=v3.2.0 ./Dockerrun.sh
 ```
 
 ## MCP Server and Docker
@@ -618,7 +618,7 @@ examples — see [`MCP_API.md`](MCP_API.md).
 
 1. Pull the image from Docker Hub:
 ```bash
-docker pull jchristn77/documentatom-mcp:v3.1.2
+docker pull jchristn77/documentatom-mcp:v3.2.0
 ```
 
 2. Create a `documentatom.json` configuration file with MCP server settings:
@@ -663,7 +663,7 @@ docker run -p 8200:8200 -p 8201:8201 -p 8202:8202 ^
   -v .\logs\:/app/logs/ ^
   -v .\temp\:/app/temp/ ^
   -v .\backups\:/app/backups/ ^
-  jchristn77/documentatom-mcp:v3.1.2
+  jchristn77/documentatom-mcp:v3.2.0
 
 # Linux/macOS
 docker run -p 8200:8200 -p 8201:8201 -p 8202:8202 \
@@ -671,7 +671,7 @@ docker run -p 8200:8200 -p 8201:8201 -p 8202:8202 \
   -v ./logs/:/app/logs/ \
   -v ./temp/:/app/temp/ \
   -v ./backups/:/app/backups/ \
-  jchristn77/documentatom-mcp:v3.1.2
+  jchristn77/documentatom-mcp:v3.2.0
 ```
 
 Alternatively, use the provided scripts in `src/DocumentAtom.McpServer`:
@@ -709,11 +709,11 @@ To build the Docker images locally:
 ```bash
 # Build DocumentAtom.Server image
 cd Docker
-Dockerbuild.bat v3.1.2 0  # 0 = don't push, 1 = push to Docker Hub
+Dockerbuild.bat v3.2.0 0  # 0 = don't push, 1 = push to Docker Hub
 
 # Build DocumentAtom.McpServer image (from src directory)
 cd src
-docker buildx build -f DocumentAtom.McpServer/Dockerfile --platform linux/amd64,linux/arm64/v8 --tag jchristn77/documentatom-mcp:v3.1.2 --push .
+docker buildx build -f DocumentAtom.McpServer/Dockerfile --platform linux/amd64,linux/arm64/v8 --tag jchristn77/documentatom-mcp:v3.2.0 --push .
 ```
 
 ## Version History

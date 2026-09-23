@@ -13,6 +13,17 @@ namespace DocumentAtom.Core.Chunking
         #region Public-Members
 
         /// <summary>
+        /// Globally unique identifier for this chunk.
+        /// </summary>
+        public Guid GUID { get; set; } = Guid.NewGuid();
+
+        /// <summary>
+        /// Identifier of the parent this chunk was produced from, when known.
+        /// Default is null.
+        /// </summary>
+        public Guid? ParentGUID { get; set; } = null;
+
+        /// <summary>
         /// Ordinal index (0, 1, 2, ...) within the parent atom's chunk list.
         /// Must be greater than or equal to zero.
         /// </summary>
@@ -30,7 +41,7 @@ namespace DocumentAtom.Core.Chunking
         }
 
         /// <summary>
-        /// Content length.
+        /// Content length in characters.
         /// Must be greater than or equal to zero.
         /// </summary>
         public int Length
@@ -45,6 +56,42 @@ namespace DocumentAtom.Core.Chunking
                 _Length = value;
             }
         }
+
+        /// <summary>
+        /// Number of tokens in the chunk text as measured by the configured tokenizer.
+        /// Zero when token counting is disabled.  Must be greater than or equal to zero.
+        /// </summary>
+        public int TokenCount
+        {
+            get
+            {
+                return _TokenCount;
+            }
+            set
+            {
+                if (value < 0) throw new ArgumentOutOfRangeException(nameof(TokenCount));
+                _TokenCount = value;
+            }
+        }
+
+        /// <summary>
+        /// Inclusive start character offset of the chunk within the source text, or -1 when the chunk
+        /// is not a literal substring of the source (for example serialized list or table content) or
+        /// when offset computation is disabled.
+        /// </summary>
+        public int StartOffset { get; set; } = -1;
+
+        /// <summary>
+        /// Exclusive end character offset of the chunk within the source text, or -1 when the chunk is
+        /// not a literal substring of the source or when offset computation is disabled.
+        /// </summary>
+        public int EndOffset { get; set; } = -1;
+
+        /// <summary>
+        /// Header breadcrumb describing where this chunk sits in the document hierarchy
+        /// (for example "Guide &gt; Setup &gt; Windows"), or null when hierarchy tracking is not in effect.
+        /// </summary>
+        public string HeaderContext { get; set; } = null;
 
         /// <summary>
         /// MD5 hash of the text content.
@@ -72,6 +119,7 @@ namespace DocumentAtom.Core.Chunking
 
         private int _Position = 0;
         private int _Length = 0;
+        private int _TokenCount = 0;
 
         #endregion
 
@@ -121,8 +169,20 @@ namespace DocumentAtom.Core.Chunking
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("Chunk" + Environment.NewLine);
+            sb.Append("| GUID          : " + GUID.ToString() + Environment.NewLine);
+
+            if (ParentGUID != null)
+                sb.Append("| Parent GUID   : " + ParentGUID.ToString() + Environment.NewLine);
+
             sb.Append("| Position      : " + Position.ToString() + Environment.NewLine);
             sb.Append("| Length        : " + Length.ToString() + Environment.NewLine);
+            sb.Append("| Token count   : " + TokenCount.ToString() + Environment.NewLine);
+
+            if (StartOffset >= 0)
+                sb.Append("| Offsets       : " + StartOffset.ToString() + "-" + EndOffset.ToString() + Environment.NewLine);
+
+            if (!string.IsNullOrEmpty(HeaderContext))
+                sb.Append("| Header context: " + HeaderContext + Environment.NewLine);
 
             if (MD5Hash != null)
                 sb.Append("| MD5 hash      : " + Convert.ToBase64String(MD5Hash) + Environment.NewLine);

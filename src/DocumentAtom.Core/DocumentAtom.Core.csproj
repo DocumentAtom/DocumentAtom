@@ -9,7 +9,7 @@
 		<DocumentationFile>DocumentAtom.Core.xml</DocumentationFile>
 		<Description>Core classes for DocumentAtom including text processing utilities. DocumentAtom provides a light, fast library for breaking input documents into constituent parts (atoms), useful for AI, machine learning, processing, analytics, and general analysis.</Description>
 		<PackageTags>semantic cell chunk text processing extract extraction doc docx xlsx pptx ppt png csv json xml keynote pages numbers text txt rtf pdf ai llm rag parse parsing parser word excel powerpoint</PackageTags>
-		<PackageReleaseNotes>v3.1.2 - OpenTelemetry export pipeline (OTLP), runtime/process metrics, bundled Prometheus/Tempo/Loki/Grafana stack, and TELEMETRY.md</PackageReleaseNotes>
+		<PackageReleaseNotes>v3.2.0 - Migrated chunking to the TextChunker engine (replaces SharpToken); added the Recursive strategy, selectable tokenizers, character overlap, hierarchy-aware chunking, and enriched Chunk output (token count, offsets, GUIDs, header context)</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -34,7 +34,7 @@
 	<ItemGroup>
 	  <PackageReference Include="SerializableDataTable" Version="1.1.0" />
 	  <PackageReference Include="SerializationHelper" Version="2.1.0" />
-	  <PackageReference Include="SharpToken" Version="2.0.6" />
+	  <PackageReference Include="TextChunker" Version="0.1.0" />
 	</ItemGroup>
 
 </Project>
