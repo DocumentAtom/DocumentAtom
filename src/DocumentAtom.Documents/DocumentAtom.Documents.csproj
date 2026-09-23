@@ -9,7 +9,7 @@
 		<DocumentationFile>DocumentAtom.Documents.xml</DocumentationFile>
 		<Description>Document format processors for DocumentAtom including Word, Excel, PowerPoint, PDF, images, and OCR. DocumentAtom provides a light, fast library for breaking input documents into constituent parts (atoms), useful for AI, machine learning, processing, analytics, and general analysis.</Description>
 		<PackageTags>semantic cell chunk text processing extract extraction doc docx xlsx pptx png pdf rtf image ocr ai llm rag parse parsing parser word excel powerpoint</PackageTags>
-		<PackageReleaseNotes>v3.2.0 - Aligned with the 3.2.0 TextChunker-based chunking engine</PackageReleaseNotes>
+		<PackageReleaseNotes>v3.2.1 - Aligned with the 3.2.1 release (TextChunker 0.2.0)</PackageReleaseNotes>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
 

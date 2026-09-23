@@ -2,6 +2,16 @@
 
 ## Current Version
 
+v3.2.1
+
+### Changes
+- Upgraded the `TextChunker` dependency from `0.1.0` to `0.2.0`
+
+### Packaging
+- Bumped NuGet package versions from `3.2.0` to `3.2.1`
+
+## Previous Version
+
 v3.2.0
 
 ### New Features
@@ -29,7 +39,7 @@ v3.2.0
 - Bumped NuGet package versions from `3.1.2` to `3.2.0`
 - Replaced the `SharpToken` dependency with `TextChunker` 0.1.0 in `DocumentAtom.Core`
 
-## Previous Version
+## Previous Versions
 
 v3.1.2
 

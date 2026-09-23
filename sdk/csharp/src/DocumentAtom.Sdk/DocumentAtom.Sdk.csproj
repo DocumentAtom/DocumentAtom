@@ -7,7 +7,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>DocumentAtom.Sdk</PackageId>
-    <Version>3.2.0</Version>
+    <Version>3.2.1</Version>
     <Authors>Joel Christner</Authors>
     <Description>C# SDK for DocumentAtom - Document atomization and processing library</Description>
     <PackageProjectUrl>https://github.com/documentatom/documentatom</PackageProjectUrl>
@@ -22,7 +22,7 @@
     <PackageIcon>icon.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>v3.2.0 - Aligned with the 3.2.0 TextChunker-based chunking release</PackageReleaseNotes>
+    <PackageReleaseNotes>v3.2.1 - Aligned with the 3.2.1 release (TextChunker 0.2.0)</PackageReleaseNotes>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <!-- Suppress nullable reference type warnings -->
