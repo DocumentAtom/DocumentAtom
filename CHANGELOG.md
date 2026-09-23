@@ -18,6 +18,7 @@ v3.2.0
 ### Fixes
 - Fixed fixed-token chunks occasionally exceeding the token budget, and normalized the percentage-overlap unit count, by delegating to TextChunker's strict token slicing
 - Table cells containing `|` are now escaped so serialized markdown tables remain valid
+- The REST atom routes now populate each chunk's `HeaderContext` from the atom hierarchy (`ParentGUID` / `HeaderLevel`) that the processor builds, so header breadcrumbs (for example `Authentication Requirements > AAA Model`) appear on chunks from the markdown/Word/etc. routes and not only via the DataIngestion pipeline; previously this field was always null on those routes because documents are atomized per element before chunking
 
 ### Documentation
 - Documented the MCP install command, scripts, and `MCP_API.md` in `README.md`

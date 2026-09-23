@@ -197,6 +197,58 @@ namespace DocumentAtom.Server
                 if (chunks != null && chunks.Count > 0)
                     atom.Chunks = chunks;
             }
+
+            // The atom routes atomize a document into separate header and body atoms before chunking, so
+            // an individual atom's text never carries both a heading and its section body. As a result the
+            // chunking engine cannot infer a header breadcrumb per chunk. Recover it from the atom hierarchy
+            // (ParentGUID/Quarks + HeaderLevel) that the processor already built, and stamp HeaderContext
+            // onto each chunk. Only null/empty values are filled, so engine-computed breadcrumbs (from
+            // whole-document or DataIngestion chunking) are preserved.
+            string separator = string.IsNullOrEmpty(config.HeaderContextSeparator) ? " > " : config.HeaderContextSeparator;
+            StampHeaderContext(atoms, new List<string>(), separator);
+        }
+
+        private static void StampHeaderContext(List<Atom> atoms, List<string> breadcrumb, string separator)
+        {
+            if (atoms == null) return;
+
+            foreach (Atom atom in atoms)
+            {
+                List<string> path = breadcrumb;
+
+                if (atom.HeaderLevel.HasValue && atom.HeaderLevel.Value > 0)
+                {
+                    string title = CleanHeaderTitle(atom.Text);
+                    if (!string.IsNullOrEmpty(title))
+                    {
+                        path = new List<string>(breadcrumb);
+                        path.Add(title);
+                    }
+                }
+
+                if (path.Count > 0 && atom.Chunks != null && atom.Chunks.Count > 0)
+                {
+                    string headerContext = string.Join(separator, path);
+                    foreach (DocumentAtom.Core.Chunking.Chunk chunk in atom.Chunks)
+                    {
+                        if (string.IsNullOrEmpty(chunk.HeaderContext))
+                            chunk.HeaderContext = headerContext;
+                    }
+                }
+
+                if (atom.Quarks != null && atom.Quarks.Count > 0)
+                    StampHeaderContext(atom.Quarks, path, separator);
+            }
+        }
+
+        private static string CleanHeaderTitle(string text)
+        {
+            if (string.IsNullOrEmpty(text)) return string.Empty;
+
+            string trimmed = text.Trim();
+            int index = 0;
+            while (index < trimmed.Length && trimmed[index] == '#') index++;
+            return trimmed.Substring(index).Trim();
         }
 
         private static void ApplyBaseSettings(ProcessorSettingsBase defaults, ApiProcessorSettings api)
