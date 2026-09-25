@@ -1,5 +1,17 @@
 # Change Log
 
+## Unreleased
+
+### Changes
+- Upgraded `Voltaic` from `0.6.1` to `2.0.0` in `DocumentAtom.McpServer` and `Test.Mcp`, addressing the v1.x and v2.x breaking changes:
+  - Removed the `includeDefaultMethods` constructor argument; the HTTP, TCP, and WebSocket MCP servers now publish only the DocumentAtom tools (no `ping`/`echo`/`getTime`/`getSessions`/`getClients` demo tools), and `ping` returns `{}`
+  - HTTP tools are callable only through `tools/call`; `Test.Mcp` now invokes tools via `tools/call`, reads the text content of the result, and verifies connectivity with `PingAsync`
+  - `Test.Mcp` omits the optional `contentType` argument instead of sending `null`, which the tool input schema rejects
+  - MCP clients using the stateless `2026-07-28` revision (such as Claude Code 2.1.x) now see the DocumentAtom tools on the `/rpc` endpoint
+- Upgraded `TextChunker` from `0.2.0` to `0.3.1`; `FixedTokenCount` windows now cut on word boundaries, so chunk boundaries may move
+- Upgraded `HtmlAgilityPack` (1.13.0), `Microsoft.Extensions.*` (10.0.12 / AI 10.10.x), `OpenTelemetry` (1.19.x), `PdfPig` (0.1.16), `Watson` (7.2.0), `Microsoft.NET.Test.Sdk` (18.10.1), and `NUnit3TestAdapter` (6.3.0)
+- Added the `mcpserver.http` and `mcpserver.tcp` Touchstone suites, which stand up the DocumentAtom MCP registrations on real Voltaic servers and cover the published tool list, `ping`, removed demo tools, bare tool calls, schema validation, and handler routing
+
 ## Current Version
 
 v3.2.1

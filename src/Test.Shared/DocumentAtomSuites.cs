@@ -72,6 +72,8 @@ namespace DocumentAtom.Testing.Shared
 
             // MCP server adapters
             McpServerSuites.Parameters(),
+            McpServerProtocolSuites.Http(),
+            McpServerProtocolSuites.Tcp(),
         };
     }
 }

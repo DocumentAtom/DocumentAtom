@@ -91,12 +91,26 @@ namespace DocumentAtom.Testing.Shared.Suites
                     ChunkingConfiguration cfg = new ChunkingConfiguration { Strategy = ChunkStrategyEnum.FixedTokenCount, FixedTokenCount = 10, OverlapCount = 3, OverlapStrategy = OverlapStrategyEnum.SemanticBoundaryAware };
                     Check.True(TextChunks(text, cfg).Count > 1);
                 })
-                .Case("Content.Preserved", "With no overlap and no trimming, recombining chunks reproduces the input", () =>
+                .Case("Content.Preserved", "With no overlap and no trimming, chunks cover every word of the input in order", () =>
                 {
+                    // TextChunker 0.3+ cuts fixed-token windows on word boundaries; the separating whitespace is not carried into either chunk
                     string text = "Hello world this is a test of chunking";
                     ChunkingConfiguration cfg = new ChunkingConfiguration { Strategy = ChunkStrategyEnum.FixedTokenCount, FixedTokenCount = 5, OverlapCount = 0, TrimWhitespace = false };
                     List<string> result = TextChunks(text, cfg);
-                    Check.Equal(text, string.Join(string.Empty, result));
+                    Check.True(result.Count > 1);
+                    Check.Equal(text, string.Join(" ", result.Select(c => c.Trim())));
+                    foreach (string chunk in result) Check.True(text.Contains(chunk), "Chunk is not an exact substring of the input: [" + chunk + "]");
+                })
+                .Case("Content.WordBoundaries", "Fixed-token chunks never split a word", () =>
+                {
+                    string text = string.Join(" ", Enumerable.Range(0, 60).Select(i => "word" + i));
+                    HashSet<string> words = new HashSet<string>(text.Split(' '));
+                    ChunkingConfiguration cfg = new ChunkingConfiguration { Strategy = ChunkStrategyEnum.FixedTokenCount, FixedTokenCount = 7, OverlapCount = 0 };
+                    List<string> result = TextChunks(text, cfg);
+                    Check.True(result.Count > 1);
+                    foreach (string chunk in result)
+                        foreach (string word in chunk.Split(' ', StringSplitOptions.RemoveEmptyEntries))
+                            Check.True(words.Contains(word), "Chunk split a word: [" + word + "]");
                 })
                 .Case("Overlap.NoInfiniteLoop", "Overlap greater than or equal to chunk size still terminates", () =>
                 {

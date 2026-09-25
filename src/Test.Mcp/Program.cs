@@ -2,6 +2,7 @@ namespace Test.Mcp
 {
     using System;
     using System.IO;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using GetSomeInput;
@@ -46,6 +47,7 @@ namespace Test.Mcp
                 return;
             }
 
+            await _McpClient.PingAsync(0, token).ConfigureAwait(false);
             Console.WriteLine("Connected successfully!");
             Console.WriteLine("");
 
@@ -112,6 +114,20 @@ namespace Test.Mcp
             Console.WriteLine("Debug mode: " + (_Debug ? "enabled" : "disabled"));
         }
 
+        static async Task<string> CallToolAsync(string toolName, object arguments, CancellationToken token = default)
+        {
+            // Voltaic 2.x exposes tools only through tools/call; bare tool-name calls return -32601
+            TextToolResult result = await _McpClient!.CallAsync<TextToolResult>(
+                "tools/call",
+                new { name = toolName, arguments = arguments },
+                60000,
+                token).ConfigureAwait(false);
+
+            string text = String.Join(Environment.NewLine, result.Content.Where(c => c.Text != null).Select(c => c.Text));
+            if (result.IsError) throw new InvalidOperationException("Tool " + toolName + " returned an error: " + text);
+            return text;
+        }
+
         static async Task TestImageProcess(CancellationToken token = default)
         {
             try
@@ -145,7 +161,7 @@ namespace Test.Mcp
                 };
 
                 Console.WriteLine("Sending image processing request...");
-                string result = await _McpClient!.CallAsync<string>("image/process", request, 60000, token).ConfigureAwait(false);
+                string result = await CallToolAsync("image/process", request, token).ConfigureAwait(false);
 
                 Console.WriteLine("Image processing result:");
                 Console.WriteLine(result);
@@ -192,7 +208,7 @@ namespace Test.Mcp
                 };
 
                 Console.WriteLine("Sending OCR extraction request...");
-                string result = await _McpClient!.CallAsync<string>("image/ocr", request, 60000, token).ConfigureAwait(false);
+                string result = await CallToolAsync("image/ocr", request, token).ConfigureAwait(false);
 
                 Console.WriteLine("OCR extraction result:");
                 Console.WriteLine(result);
@@ -245,7 +261,7 @@ namespace Test.Mcp
                     Console.WriteLine("OCR extraction enabled");
                 }
                 Console.WriteLine("Sending CSV processing request...");
-                string result = await _McpClient!.CallAsync<string>("csv/process", request, 60000, token).ConfigureAwait(false);
+                string result = await CallToolAsync("csv/process", request, token).ConfigureAwait(false);
 
                 Console.WriteLine("CSV processing result:");
                 Console.WriteLine(result);
@@ -300,7 +316,7 @@ namespace Test.Mcp
                     Console.WriteLine("OCR extraction enabled");
                 }
                 Console.WriteLine("Sending Excel processing request...");
-                string result = await _McpClient!.CallAsync<string>("excel/process", request, 60000, token).ConfigureAwait(false);
+                string result = await CallToolAsync("excel/process", request, token).ConfigureAwait(false);
 
                 Console.WriteLine("Excel processing result:");
                 Console.WriteLine(result);
@@ -347,7 +363,7 @@ namespace Test.Mcp
 
                 Console.WriteLine($"Processing HTML: {filename} ({htmlData.Length} bytes)");
                 Console.WriteLine("Sending HTML processing request...");
-                string result = await _McpClient!.CallAsync<string>("html/process", request, 60000, token).ConfigureAwait(false);
+                string result = await CallToolAsync("html/process", request, token).ConfigureAwait(false);
 
                 Console.WriteLine("HTML processing result:");
                 Console.WriteLine(result);
@@ -394,7 +410,7 @@ namespace Test.Mcp
 
                 Console.WriteLine($"Processing JSON: {filename} ({jsonData.Length} bytes)");
                 Console.WriteLine("Sending JSON processing request...");
-                string result = await _McpClient!.CallAsync<string>("json/process", request, 60000, token).ConfigureAwait(false);
+                string result = await CallToolAsync("json/process", request, token).ConfigureAwait(false);
 
                 Console.WriteLine("JSON processing result:");
                 Console.WriteLine(result);
@@ -441,7 +457,7 @@ namespace Test.Mcp
 
                 Console.WriteLine($"Processing Markdown: {filename} ({markdownData.Length} bytes)");
                 Console.WriteLine("Sending Markdown processing request...");
-                string result = await _McpClient!.CallAsync<string>("markdown/process", request, 60000, token).ConfigureAwait(false);
+                string result = await CallToolAsync("markdown/process", request, token).ConfigureAwait(false);
 
                 Console.WriteLine("Markdown processing result:");
                 Console.WriteLine(result);
@@ -488,7 +504,7 @@ namespace Test.Mcp
 
                 Console.WriteLine($"Processing image with OCR: {filename} ({imageData.Length} bytes)");
                 Console.WriteLine("Sending OCR processing request...");
-                string result = await _McpClient!.CallAsync<string>("ocr/process", request, 60000, token).ConfigureAwait(false);
+                string result = await CallToolAsync("ocr/process", request, token).ConfigureAwait(false);
 
                 Console.WriteLine("OCR processing result:");
                 Console.WriteLine(result);
@@ -543,7 +559,7 @@ namespace Test.Mcp
                     Console.WriteLine("OCR extraction enabled");
                 }
                 Console.WriteLine("Sending PDF processing request...");
-                string result = await _McpClient!.CallAsync<string>("pdf/process", request, 60000, token).ConfigureAwait(false);
+                string result = await CallToolAsync("pdf/process", request, token).ConfigureAwait(false);
 
                 Console.WriteLine("PDF processing result:");
                 Console.WriteLine(result);
@@ -598,7 +614,7 @@ namespace Test.Mcp
                     Console.WriteLine("OCR extraction enabled");
                 }
                 Console.WriteLine("Sending PowerPoint processing request...");
-                string result = await _McpClient!.CallAsync<string>("powerpoint/process", request, 60000, token).ConfigureAwait(false);
+                string result = await CallToolAsync("powerpoint/process", request, token).ConfigureAwait(false);
 
                 Console.WriteLine("PowerPoint processing result:");
                 Console.WriteLine(result);
@@ -653,7 +669,7 @@ namespace Test.Mcp
                     Console.WriteLine("OCR extraction enabled");
                 }
                 Console.WriteLine("Sending Rich Text processing request...");
-                string result = await _McpClient!.CallAsync<string>("richtext/process", request, 60000, token).ConfigureAwait(false);
+                string result = await CallToolAsync("richtext/process", request, token).ConfigureAwait(false);
 
                 Console.WriteLine("Rich Text processing result:");
                 Console.WriteLine(result);
@@ -700,7 +716,7 @@ namespace Test.Mcp
 
                 Console.WriteLine($"Processing text: {filename} ({textData.Length} bytes)");
                 Console.WriteLine("Sending text processing request...");
-                string result = await _McpClient!.CallAsync<string>("text/process", request, 60000, token).ConfigureAwait(false);
+                string result = await CallToolAsync("text/process", request, token).ConfigureAwait(false);
 
                 Console.WriteLine("Text processing result:");
                 Console.WriteLine(result);
@@ -747,11 +763,10 @@ namespace Test.Mcp
                     contentType = null;
                 }
 
-                object request = new
-                {
-                    data = base64Data,
-                    contentType = contentType
-                };
+                // Omit contentType when no hint is given; the tool schema declares it as a string, so null is rejected
+                object request = String.IsNullOrEmpty(contentType)
+                    ? (object)new { data = base64Data }
+                    : new { data = base64Data, contentType = contentType };
 
                 Console.WriteLine($"Detecting type for: {filename} ({fileData.Length} bytes)");
                 if (!string.IsNullOrEmpty(contentType))
@@ -759,7 +774,7 @@ namespace Test.Mcp
                     Console.WriteLine($"Content type hint: {contentType}");
                 }
                 Console.WriteLine("Sending type detection request...");
-                string result = await _McpClient!.CallAsync<string>("typedetection/detect", request, 60000, token).ConfigureAwait(false);
+                string result = await CallToolAsync("typedetection/detect", request, token).ConfigureAwait(false);
 
                 Console.WriteLine("Type detection result:");
                 Console.WriteLine(result);
@@ -814,7 +829,7 @@ namespace Test.Mcp
                     Console.WriteLine("OCR extraction enabled");
                 }
                 Console.WriteLine("Sending Word processing request...");
-                string result = await _McpClient!.CallAsync<string>("word/process", request, 60000, token).ConfigureAwait(false);
+                string result = await CallToolAsync("word/process", request, token).ConfigureAwait(false);
 
                 Console.WriteLine("Word processing result:");
                 Console.WriteLine(result);
@@ -861,7 +876,7 @@ namespace Test.Mcp
 
                 Console.WriteLine($"Processing XML: {filename} ({xmlData.Length} bytes)");
                 Console.WriteLine("Sending XML processing request...");
-                string result = await _McpClient!.CallAsync<string>("xml/process", request, 60000, token).ConfigureAwait(false);
+                string result = await CallToolAsync("xml/process", request, token).ConfigureAwait(false);
 
                 Console.WriteLine("XML processing result:");
                 Console.WriteLine(result);

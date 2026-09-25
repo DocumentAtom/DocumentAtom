@@ -57,8 +57,15 @@ The MCP server starts **three transports simultaneously**, all serving the same 
 - **TCP** exchanges newline / framed JSON-RPC messages over a raw socket.
 - **WebSocket** exchanges JSON-RPC messages as WebSocket text frames on `/mcp`.
 
-The MCP handshake methods (`initialize`, `tools/list`, `tools/call`, `ping`, …) are available on
-all three transports.
+The MCP protocol methods (`initialize`, `tools/list`, `tools/call`, `ping`, …) are available on
+all three transports. `ping` returns an empty result (`{}`), as the MCP specification requires.
+
+- On **HTTP**, the DocumentAtom operations are MCP tools. `tools/list` returns exactly the 15
+  DocumentAtom tools (no diagnostic tools such as `echo`, `getTime`, or `getSessions`), and a tool is
+  invoked only through `tools/call`. Calling a tool name as a bare JSON-RPC method (for example
+  `"method": "csv/process"`) returns `-32601` (method not found).
+- On **TCP** and **WebSocket**, the DocumentAtom operations are registered as JSON-RPC methods and
+  are invoked by name (for example `"method": "csv/process"`).
 
 > **There is no stdio transport.** Clients that only support locally-spawned stdio MCP servers
 > cannot launch this server directly; connect over HTTP or WebSocket instead. See
@@ -333,6 +340,11 @@ Errors are returned as JSON-RPC 2.0 error objects, for example:
 ```json
 { "jsonrpc": "2.0", "id": 3, "error": { "code": -32602, "message": "Text data is required" } }
 ```
+
+Over HTTP, `tools/call` arguments are validated against each tool's input schema before the tool
+runs. A missing required argument, or an argument of the wrong type (including `null` for an
+optional string such as `contentType`; omit the argument instead), returns `-32602` with a message
+naming the argument.
 
 Common causes:
 
