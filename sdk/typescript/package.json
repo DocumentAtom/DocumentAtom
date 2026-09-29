@@ -36,7 +36,7 @@
     "@types/superagent": {
       "form-data": "4.0.6"
     },
-    "js-yaml": "^4.3.0",
+    "js-yaml": "^4.3.2",
     "qs": "^6.16.0",
     "superagent": {
       "form-data": "4.0.6"
