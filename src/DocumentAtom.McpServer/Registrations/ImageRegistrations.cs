@@ -24,7 +24,7 @@ namespace DocumentAtom.McpServer.Registrations
         public static void RegisterHttpTools(McpHttpServer server, DocumentAtomSdk sdk, Serializer serializer)
         {
             server.RegisterTool(
-                "image/process",
+                "image_process",
                 "Process an image file and extract atoms",
                 new
                 {
@@ -49,7 +49,7 @@ namespace DocumentAtom.McpServer.Registrations
                 });
 
             server.RegisterTool(
-                "image/ocr",
+                "image_ocr",
                 "Extract text from an image using OCR",
                 new
                 {
@@ -88,7 +88,7 @@ namespace DocumentAtom.McpServer.Registrations
         /// <param name="serializer">Serializer instance.</param>
         public static void RegisterTcpMethods(McpTcpServer server, DocumentAtomSdk sdk, Serializer serializer)
         {
-            server.RegisterMethod("image/process", (args) =>
+            server.RegisterMethod("image_process", (args) =>
             {
                 if (!args.HasValue) throw new ArgumentException("Parameters required");
                 if (!args.ToJsonElement().TryGetProperty("data", out JsonElement dataProp))
@@ -101,7 +101,7 @@ namespace DocumentAtom.McpServer.Registrations
                 return serializer.SerializeJson(atoms, true);
             });
 
-            server.RegisterMethod("image/ocr", (args) =>
+            server.RegisterMethod("image_ocr", (args) =>
             {
                 if (!args.HasValue) throw new ArgumentException("Parameters required");
                 if (!args.ToJsonElement().TryGetProperty("data", out JsonElement dataProp))
@@ -127,7 +127,7 @@ namespace DocumentAtom.McpServer.Registrations
         /// <param name="serializer">Serializer instance.</param>
         public static void RegisterWebSocketMethods(McpWebsocketsServer server, DocumentAtomSdk sdk, Serializer serializer)
         {
-            server.RegisterMethod("image/process", (args) =>
+            server.RegisterMethod("image_process", (args) =>
             {
                 if (!args.HasValue) throw new ArgumentException("Parameters required");
                 if (!args.ToJsonElement().TryGetProperty("data", out JsonElement dataProp))
@@ -140,7 +140,7 @@ namespace DocumentAtom.McpServer.Registrations
                 return serializer.SerializeJson(atoms, true);
             });
 
-            server.RegisterMethod("image/ocr", (args) =>
+            server.RegisterMethod("image_ocr", (args) =>
             {
                 if (!args.HasValue) throw new ArgumentException("Parameters required");
                 if (!args.ToJsonElement().TryGetProperty("data", out JsonElement dataProp))

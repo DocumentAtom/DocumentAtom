@@ -1,8 +1,21 @@
 # Change Log
 
-## Unreleased
+## Current Version
+
+v3.3.0
+
+### Breaking Changes
+- MCP tool names now use underscores instead of slashes (for example `csv/process` is now `csv_process`, `image/ocr` is now `image_ocr`, and `typedetection/detect` is now `typedetection_detect`) on the HTTP, TCP, and WebSocket transports. Voltaic 2.2 rejects tool names containing `/`, and underscore names are portable across MCP clients and LLM tool-name rules
+- Over HTTP, `tools/call` argument-validation failures and tool exceptions are now returned as MCP tool results with `isError: true` instead of JSON-RPC `-32602` errors, per the current MCP specification
 
 ### Changes
+- Upgraded `Voltaic` from `2.0.0` to `2.2.1` in `DocumentAtom.McpServer` and `Test.Mcp`
+- Upgraded `SyslogLogging` from `2.2.2` to `2.3.1` and `Watson` from `7.2.0` to `7.2.2` in `DocumentAtom.Server` and `DocumentAtom.McpServer`
+- Upgraded `RestWrapper` from `3.3.0` to `3.3.1` in `DocumentAtom.Sdk`
+- Upgraded test dependencies: `Touchstone.*` (`0.1.12` to `0.2.0`), `NUnit` (`4.6.1` to `5.0.0`), and `Timestamps` (`1.0.12` to `1.0.13`)
+- Added `build-all.sh`, `build-server.sh`, `build-mcp.sh`, and `build-dashboard.sh` (macOS/Linux counterparts of the `.bat` image build scripts)
+- Resynced `sdk/typescript` and `dashboard` `package-lock.json` files (missing optional `@emnapi/*` entries broke `npm ci` in the dashboard image build)
+- Added the `tool-names-are-valid` case to the `mcpserver.http` suite, and updated the schema-validation cases to expect `isError` tool results
 - Upgraded `Voltaic` from `0.6.1` to `2.0.0` in `DocumentAtom.McpServer` and `Test.Mcp`, addressing the v1.x and v2.x breaking changes:
   - Removed the `includeDefaultMethods` constructor argument; the HTTP, TCP, and WebSocket MCP servers now publish only the DocumentAtom tools (no `ping`/`echo`/`getTime`/`getSessions`/`getClients` demo tools), and `ping` returns `{}`
   - HTTP tools are callable only through `tools/call`; `Test.Mcp` now invokes tools via `tools/call`, reads the text content of the result, and verifies connectivity with `PingAsync`
@@ -12,7 +25,13 @@
 - Upgraded `HtmlAgilityPack` (1.13.0), `Microsoft.Extensions.*` (10.0.12 / AI 10.10.x), `OpenTelemetry` (1.19.x), `PdfPig` (0.1.16), `Watson` (7.2.0), `Microsoft.NET.Test.Sdk` (18.10.1), and `NUnit3TestAdapter` (6.3.0)
 - Added the `mcpserver.http` and `mcpserver.tcp` Touchstone suites, which stand up the DocumentAtom MCP registrations on real Voltaic servers and cover the published tool list, `ping`, removed demo tools, bare tool calls, schema validation, and handler routing
 
-## Current Version
+### Packaging
+- Bumped NuGet package versions from `3.2.1` to `3.3.0`
+
+### Documentation
+- Updated `MCP_API.md` with the new tool names and the `isError` error model
+
+## Previous Version
 
 v3.2.1
 
@@ -22,7 +41,7 @@ v3.2.1
 ### Packaging
 - Bumped NuGet package versions from `3.2.0` to `3.2.1`
 
-## Previous Version
+## Previous Versions
 
 v3.2.0
 

@@ -9,7 +9,7 @@
 		<DocumentationFile>DocumentAtom.Core.xml</DocumentationFile>
 		<Description>Core classes for DocumentAtom including text processing utilities. DocumentAtom provides a light, fast library for breaking input documents into constituent parts (atoms), useful for AI, machine learning, processing, analytics, and general analysis.</Description>
 		<PackageTags>semantic cell chunk text processing extract extraction doc docx xlsx pptx ppt png csv json xml keynote pages numbers text txt rtf pdf ai llm rag parse parsing parser word excel powerpoint</PackageTags>
-		<PackageReleaseNotes>v3.2.1 - Upgraded the TextChunker engine to 0.2.0.  (v3.2.0 migrated chunking to TextChunker, replacing SharpToken, and added the Recursive strategy, selectable tokenizers, character overlap, hierarchy-aware chunking, and enriched Chunk output.)</PackageReleaseNotes>
+		<PackageReleaseNotes>v3.3.0 - Aligned with the 3.3.0 release (dependency refresh; MCP server tool names now use underscores)</PackageReleaseNotes>
 	</PropertyGroup>
 
 	<ItemGroup>

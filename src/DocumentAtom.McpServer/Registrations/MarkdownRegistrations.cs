@@ -24,7 +24,7 @@ namespace DocumentAtom.McpServer.Registrations
         public static void RegisterHttpTools(McpHttpServer server, DocumentAtomSdk sdk, Serializer serializer)
         {
             server.RegisterTool(
-                "markdown/process",
+                "markdown_process",
                 "Process a Markdown file and extract atoms",
                 new
                 {
@@ -61,7 +61,7 @@ namespace DocumentAtom.McpServer.Registrations
         /// <param name="serializer">Serializer instance.</param>
         public static void RegisterTcpMethods(McpTcpServer server, DocumentAtomSdk sdk, Serializer serializer)
         {
-            server.RegisterMethod("markdown/process", (args) =>
+            server.RegisterMethod("markdown_process", (args) =>
             {
                 if (!args.HasValue) throw new ArgumentException("Parameters required");
                 if (!args.ToJsonElement().TryGetProperty("data", out JsonElement dataProp))
@@ -87,7 +87,7 @@ namespace DocumentAtom.McpServer.Registrations
         /// <param name="serializer">Serializer instance.</param>
         public static void RegisterWebSocketMethods(McpWebsocketsServer server, DocumentAtomSdk sdk, Serializer serializer)
         {
-            server.RegisterMethod("markdown/process", (args) =>
+            server.RegisterMethod("markdown_process", (args) =>
             {
                 if (!args.HasValue) throw new ArgumentException("Parameters required");
                 if (!args.ToJsonElement().TryGetProperty("data", out JsonElement dataProp))

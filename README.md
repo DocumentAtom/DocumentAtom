@@ -27,6 +27,15 @@ SDKs are available for multiple languages in the `sdk/` directory:
 | Python | `sdk/python/` | Python SDK for data science workflows |
 | C# | `sdk/csharp/` | .NET SDK client library |
 
+## New in v3.3.0
+
+v3.3.0 refreshes dependencies (Voltaic 2.2.1, Watson 7.2.2, SyslogLogging 2.3.1, RestWrapper 3.3.1) and includes two MCP server changes that affect clients:
+
+- **Tool names use underscores.** `csv/process` is now `csv_process`, `image/ocr` is now `image_ocr`, `typedetection/detect` is now `typedetection_detect`, and so on. Update any client that hard-codes tool names.
+- **Tool errors are `isError` results.** Invalid `tools/call` arguments and tool failures now come back as MCP tool results with `isError: true` rather than JSON-RPC `-32602` errors, as the current MCP specification prescribes.
+
+See [`MCP_API.md`](MCP_API.md) for the full tool catalog and [`CHANGELOG.md`](CHANGELOG.md) for details.
+
 ## New in v3.1.1
 
 v3.1.1 adds built-in diagnostics for hosts that collect .NET `ActivitySource` traces and `Meter` metrics through OpenTelemetry, Prometheus exporters, or custom listeners.
@@ -706,14 +715,16 @@ The MCP server supports the following environment variables to override configur
 
 To build the Docker images locally:
 
-```bash
-# Build DocumentAtom.Server image
-cd Docker
-Dockerbuild.bat v3.2.1 0  # 0 = don't push, 1 = push to Docker Hub
+The build scripts in the repository root build multi-platform (`linux/amd64`, `linux/arm64/v8`) images, tag them with the supplied tag and `latest`, and push them to Docker Hub. Use the `.bat` scripts on Windows and the `.sh` scripts on macOS/Linux:
 
-# Build DocumentAtom.McpServer image (from src directory)
-cd src
-docker buildx build -f DocumentAtom.McpServer/Dockerfile --platform linux/amd64,linux/arm64/v8 --tag jchristn77/documentatom-mcp:v3.2.1 --push .
+```bash
+# Build all images (server, MCP server, dashboard)
+./build-all.sh v3.2.1          # Windows: build-all.bat v3.2.1
+
+# Or build individually
+./build-server.sh v3.2.1       # jchristn77/documentatom
+./build-mcp.sh v3.2.1          # jchristn77/documentatom-mcp
+./build-dashboard.sh v3.2.1    # jchristn77/documentatom-ui
 ```
 
 ## Version History

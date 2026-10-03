@@ -63,9 +63,9 @@ all three transports. `ping` returns an empty result (`{}`), as the MCP specific
 - On **HTTP**, the DocumentAtom operations are MCP tools. `tools/list` returns exactly the 15
   DocumentAtom tools (no diagnostic tools such as `echo`, `getTime`, or `getSessions`), and a tool is
   invoked only through `tools/call`. Calling a tool name as a bare JSON-RPC method (for example
-  `"method": "csv/process"`) returns `-32601` (method not found).
+  `"method": "csv_process"`) returns `-32601` (method not found).
 - On **TCP** and **WebSocket**, the DocumentAtom operations are registered as JSON-RPC methods and
-  are invoked by name (for example `"method": "csv/process"`).
+  are invoked by name (for example `"method": "csv_process"`).
 
 > **There is no stdio transport.** Clients that only support locally-spawned stdio MCP servers
 > cannot launch this server directly; connect over HTTP or WebSocket instead. See
@@ -229,7 +229,7 @@ curl -s http://localhost:8200/rpc \
     "id": 3,
     "method": "tools/call",
     "params": {
-      "name": "text/process",
+      "name": "text_process",
       "arguments": { "data": "SGVsbG8sIHdvcmxkIQ==" }
     }
   }'
@@ -248,21 +248,21 @@ the file bytes and is required. Tools that can rasterize/scan embedded images ac
 
 | Tool                    | Description                                         | Arguments                              |
 |-------------------------|-----------------------------------------------------|----------------------------------------|
-| `text/process`          | Process a text file and extract atoms               | `data`                                 |
-| `markdown/process`      | Process a Markdown file and extract atoms           | `data`                                 |
-| `csv/process`           | Process a CSV file and extract atoms                | `data`, `extractOcr?`                  |
-| `json/process`          | Process a JSON file and extract atoms               | `data`                                 |
-| `xml/process`           | Process an XML document and extract atoms           | `data`                                 |
-| `html/process`          | Process an HTML file and extract atoms              | `data`                                 |
-| `excel/process`         | Process an Excel (.xlsx) file and extract atoms     | `data`, `extractOcr?`                  |
-| `powerpoint/process`    | Process a PowerPoint (.pptx) file and extract atoms | `data`, `extractOcr?`                  |
-| `word/process`          | Process a Word (.docx) document and extract atoms   | `data`, `extractOcr?`                  |
-| `pdf/process`           | Process a PDF document and extract atoms            | `data`, `extractOcr?`                  |
-| `richtext/process`      | Process a Rich Text (.rtf) file and extract atoms   | `data`, `extractOcr?`                  |
-| `image/process`         | Process an image file and extract atoms             | `data`                                 |
-| `image/ocr`             | Extract text from an image using OCR                | `data`                                 |
-| `ocr/process`           | Process an image (PNG) and extract text using OCR   | `data`                                 |
-| `typedetection/detect`  | Detect a document's type from its content           | `data`, `contentType?`                 |
+| `text_process`          | Process a text file and extract atoms               | `data`                                 |
+| `markdown_process`      | Process a Markdown file and extract atoms           | `data`                                 |
+| `csv_process`           | Process a CSV file and extract atoms                | `data`, `extractOcr?`                  |
+| `json_process`          | Process a JSON file and extract atoms               | `data`                                 |
+| `xml_process`           | Process an XML document and extract atoms           | `data`                                 |
+| `html_process`          | Process an HTML file and extract atoms              | `data`                                 |
+| `excel_process`         | Process an Excel (.xlsx) file and extract atoms     | `data`, `extractOcr?`                  |
+| `powerpoint_process`    | Process a PowerPoint (.pptx) file and extract atoms | `data`, `extractOcr?`                  |
+| `word_process`          | Process a Word (.docx) document and extract atoms   | `data`, `extractOcr?`                  |
+| `pdf_process`           | Process a PDF document and extract atoms            | `data`, `extractOcr?`                  |
+| `richtext_process`      | Process a Rich Text (.rtf) file and extract atoms   | `data`, `extractOcr?`                  |
+| `image_process`         | Process an image file and extract atoms             | `data`                                 |
+| `image_ocr`             | Extract text from an image using OCR                | `data`                                 |
+| `ocr_process`           | Process an image (PNG) and extract text using OCR   | `data`                                 |
+| `typedetection_detect`  | Detect a document's type from its content           | `data`, `contentType?`                 |
 
 ### Argument reference
 
@@ -270,13 +270,13 @@ the file bytes and is required. Tools that can rasterize/scan embedded images ac
 |---------------|---------|----------|-------------------------------------------------------------------|
 | `data`        | string  | yes      | Base64-encoded file bytes.                                        |
 | `extractOcr`  | boolean | no       | When `true`, also extracts atoms from images via OCR (default `false`). |
-| `contentType` | string  | no       | Optional MIME/content-type hint for `typedetection/detect`.       |
+| `contentType` | string  | no       | Optional MIME/content-type hint for `typedetection_detect`.       |
 
 ---
 
 ## Response format
 
-### `*/process`, `image/*`, `ocr/process`
+### `*_process`, `image_*`, `ocr_process`
 
 These tools return a JSON **array of `Atom` objects**. An atom captures one constituent part of a
 document (a paragraph, list, table, image, etc.). Key fields:
@@ -313,7 +313,7 @@ Example (abridged):
 ]
 ```
 
-### `typedetection/detect`
+### `typedetection_detect`
 
 Returns a single `TypeResult` object:
 
@@ -335,16 +335,26 @@ Returns a single `TypeResult` object:
 
 ## Errors
 
-Errors are returned as JSON-RPC 2.0 error objects, for example:
+Protocol-level problems (malformed JSON-RPC, an unknown method, a request before `initialize`) are
+returned as JSON-RPC 2.0 error objects, for example:
 
 ```json
-{ "jsonrpc": "2.0", "id": 3, "error": { "code": -32602, "message": "Text data is required" } }
+{ "jsonrpc": "2.0", "id": 3, "error": { "code": -32601, "message": "Method not found" } }
+```
+
+Tool failures are returned as a normal MCP tool result with `isError: true`, as the MCP
+specification prescribes, so the calling model can see and correct them:
+
+```json
+{ "jsonrpc": "2.0", "id": 3, "result": { "isError": true, "content": [ { "type": "text", "text": "..." } ] } }
 ```
 
 Over HTTP, `tools/call` arguments are validated against each tool's input schema before the tool
 runs. A missing required argument, or an argument of the wrong type (including `null` for an
-optional string such as `contentType`; omit the argument instead), returns `-32602` with a message
-naming the argument.
+optional string such as `contentType`; omit the argument instead), returns an `isError` tool result
+whose text names the argument. An exception thrown inside a tool (for example invalid base64 or an
+unreachable REST server) is also returned as an `isError` result; its details are written to the
+MCP server log.
 
 Common causes:
 
@@ -365,5 +375,8 @@ Common causes:
   support a URL-based (remote) MCP server. Verify connectivity after installing.
 - **The REST server must be running.** The MCP server proxies to `DocumentAtom.Server`; ensure
   `DocumentAtom.Endpoint` points at a reachable REST endpoint.
+- **Tool names use underscores.** Since v3.3.0 the tools are named `<type>_process` (plus
+  `image_ocr` and `typedetection_detect`). Earlier releases used slash-separated names such as
+  `csv/process`, which current MCP tooling rejects; update any client that hard-codes tool names.
 - **Binary payloads are base64.** All file inputs are base64-encoded in `data`, and binary atom
   outputs (`Binary`, hash fields) are base64-encoded in responses.

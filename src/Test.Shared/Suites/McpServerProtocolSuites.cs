@@ -25,9 +25,9 @@ namespace DocumentAtom.Testing.Shared.Suites
     {
         private static readonly string[] _ExpectedTools = new[]
         {
-            "image/process", "image/ocr", "csv/process", "excel/process", "html/process", "json/process",
-            "markdown/process", "ocr/process", "pdf/process", "powerpoint/process", "richtext/process",
-            "text/process", "typedetection/detect", "word/process", "xml/process"
+            "image_process", "image_ocr", "csv_process", "excel_process", "html_process", "json_process",
+            "markdown_process", "ocr_process", "pdf_process", "powerpoint_process", "richtext_process",
+            "text_process", "typedetection_detect", "word_process", "xml_process"
         };
 
         private static readonly string[] _RemovedDemoTools = new[] { "ping", "echo", "getTime", "getSessions", "getClients" };
@@ -46,6 +46,20 @@ namespace DocumentAtom.Testing.Shared.Suites
                             Check.True(names.Contains(expected), "tools/list is missing " + expected);
                         foreach (string removed in _RemovedDemoTools)
                             Check.False(names.Contains(removed), "tools/list must not publish Voltaic demo tool " + removed);
+                    }, ct).ConfigureAwait(false);
+                })
+                .CaseAsync("tool-names-are-valid", "every published tool name uses only A-Z, a-z, 0-9, underscore, hyphen and dot", async ct =>
+                {
+                    await WithHttpServerAsync(async client =>
+                    {
+                        List<string> names = await ListToolNamesAsync(client, ct).ConfigureAwait(false);
+
+                        foreach (string name in names)
+                        {
+                            Check.True(name.Length >= 1 && name.Length <= 128, name + " must be 1 to 128 characters");
+                            Check.True(name.All(c => Char.IsAsciiLetterOrDigit(c) || c == '_' || c == '-' || c == '.'), name + " contains an invalid character");
+                            Check.False(name.Contains('/'), name + " must not contain a slash");
+                        }
                     }, ct).ConfigureAwait(false);
                 })
                 .CaseAsync("tools-have-input-schemas", "every published tool declares an object input schema requiring data", async ct =>
@@ -97,53 +111,53 @@ namespace DocumentAtom.Testing.Shared.Suites
                 {
                     await WithHttpServerAsync(async client =>
                     {
-                        JsonRpcResponse response = await client.CallAsync("csv/process", new { data = "YSxiCjEsMg==" }, 10000, ct).ConfigureAwait(false);
+                        JsonRpcResponse response = await client.CallAsync("csv_process", new { data = "YSxiCjEsMg==" }, 10000, ct).ConfigureAwait(false);
 
                         Check.NotNull(response.Error);
                         Check.Equal(-32601, response.Error!.Code);
                     }, ct).ConfigureAwait(false);
                 })
-                .CaseAsync("tools-call-missing-required-argument", "tools/call without the required data argument returns -32602", async ct =>
+                .CaseAsync("tools-call-missing-required-argument", "tools/call without the required data argument returns an isError tool result", async ct =>
                 {
                     await WithHttpServerAsync(async client =>
                     {
                         JsonRpcResponse response = await client.CallAsync(
                             "tools/call",
-                            new { name = "csv/process", arguments = new { extractOcr = true } },
+                            new { name = "csv_process", arguments = new { extractOcr = true } },
                             10000,
                             ct).ConfigureAwait(false);
 
-                        Check.NotNull(response.Error);
-                        Check.Equal(-32602, response.Error!.Code);
+                        Check.Null(response.Error);
+                        Check.True(IsToolError(response), "invalid arguments must surface as an isError tool result");
                     }, ct).ConfigureAwait(false);
                 })
-                .CaseAsync("tools-call-wrong-argument-type", "tools/call with a non-string data argument returns -32602", async ct =>
+                .CaseAsync("tools-call-wrong-argument-type", "tools/call with a non-string data argument returns an isError tool result", async ct =>
                 {
                     await WithHttpServerAsync(async client =>
                     {
                         JsonRpcResponse response = await client.CallAsync(
                             "tools/call",
-                            new { name = "text/process", arguments = new { data = 42 } },
+                            new { name = "text_process", arguments = new { data = 42 } },
                             10000,
                             ct).ConfigureAwait(false);
 
-                        Check.NotNull(response.Error);
-                        Check.Equal(-32602, response.Error!.Code);
+                        Check.Null(response.Error);
+                        Check.True(IsToolError(response), "invalid arguments must surface as an isError tool result");
                     }, ct).ConfigureAwait(false);
                 })
-                .CaseAsync("tools-call-null-optional-argument", "tools/call with a null value for an optional string argument returns -32602", async ct =>
+                .CaseAsync("tools-call-null-optional-argument", "tools/call with a null value for an optional string argument returns an isError tool result", async ct =>
                 {
                     await WithHttpServerAsync(async client =>
                     {
                         JsonRpcResponse response = await client.CallAsync(
                             "tools/call",
-                            new { name = "typedetection/detect", arguments = new { data = "YQ==", contentType = (string?)null } },
+                            new { name = "typedetection_detect", arguments = new { data = "YQ==", contentType = (string?)null } },
                             10000,
                             ct).ConfigureAwait(false);
 
-                        Check.NotNull(response.Error);
-                        Check.Equal(-32602, response.Error!.Code);
-                        Check.Contains("contentType", response.Error.Message);
+                        Check.Null(response.Error);
+                        Check.True(IsToolError(response), "invalid arguments must surface as an isError tool result");
+                        Check.Contains("contentType", GetToolResultText(response));
                     }, ct).ConfigureAwait(false);
                 })
                 .CaseAsync("tools-call-invalid-base64-fails", "tools/call routes to the DocumentAtom handler, which rejects invalid base64", async ct =>
@@ -152,7 +166,7 @@ namespace DocumentAtom.Testing.Shared.Suites
                     {
                         JsonRpcResponse response = await client.CallAsync(
                             "tools/call",
-                            new { name = "text/process", arguments = new { data = "!!! not base64 !!!" } },
+                            new { name = "text_process", arguments = new { data = "!!! not base64 !!!" } },
                             10000,
                             ct).ConfigureAwait(false);
 
@@ -165,7 +179,7 @@ namespace DocumentAtom.Testing.Shared.Suites
                     {
                         JsonRpcResponse response = await client.CallAsync(
                             "tools/call",
-                            new { name = "nonexistent/tool", arguments = new { data = "YQ==" } },
+                            new { name = "nonexistent_tool", arguments = new { data = "YQ==" } },
                             10000,
                             ct).ConfigureAwait(false);
 
@@ -201,7 +215,7 @@ namespace DocumentAtom.Testing.Shared.Suites
                     await WithTcpServerAsync(async client =>
                     {
                         Exception ex = await Check.ThrowsAsync<Exception>(
-                            () => client.CallAsync<string>("csv/process", null, 10000, ct)).ConfigureAwait(false);
+                            () => client.CallAsync<string>("csv_process", null, 10000, ct)).ConfigureAwait(false);
 
                         // The handler ran and rejected the missing parameters (internal error), rather than method-not-found
                         Check.Contains("-32603", ex.Message);
@@ -342,6 +356,24 @@ namespace DocumentAtom.Testing.Shared.Suites
             return doc.RootElement.ValueKind == JsonValueKind.Object
                 && doc.RootElement.TryGetProperty("isError", out JsonElement isError)
                 && isError.ValueKind == JsonValueKind.True;
+        }
+
+        private static bool IsToolError(JsonRpcResponse response)
+        {
+            return response.Error == null && IsFailure(response);
+        }
+
+        private static string GetToolResultText(JsonRpcResponse response)
+        {
+            if (response.Result == null) return String.Empty;
+
+            using JsonDocument doc = JsonDocument.Parse(JsonSerializer.Serialize(response.Result));
+            if (!doc.RootElement.TryGetProperty("content", out JsonElement content) || content.ValueKind != JsonValueKind.Array)
+                return String.Empty;
+
+            return String.Join(Environment.NewLine, content.EnumerateArray()
+                .Where(c => c.TryGetProperty("text", out JsonElement t) && t.ValueKind == JsonValueKind.String)
+                .Select(c => c.GetProperty("text").GetString()));
         }
 
         private static int GetFreePort()

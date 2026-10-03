@@ -9,7 +9,7 @@
 		<DocumentationFile>DocumentAtom.Text.xml</DocumentationFile>
 		<Description>Text format processors for DocumentAtom including plain text, CSV, JSON, XML, HTML, and Markdown. DocumentAtom provides a light, fast library for breaking input documents into constituent parts (atoms), useful for AI, machine learning, processing, analytics, and general analysis.</Description>
 		<PackageTags>semantic cell chunk text processing extract extraction csv json xml html markdown ai llm rag parse parsing parser</PackageTags>
-		<PackageReleaseNotes>v3.2.1 - Aligned with the 3.2.1 release (TextChunker 0.2.0)</PackageReleaseNotes>
+		<PackageReleaseNotes>v3.3.0 - Aligned with the 3.3.0 release (dependency refresh; MCP server tool names now use underscores)</PackageReleaseNotes>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
 

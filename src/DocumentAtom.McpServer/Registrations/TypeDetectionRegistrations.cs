@@ -24,7 +24,7 @@ namespace DocumentAtom.McpServer.Registrations
         public static void RegisterHttpTools(McpHttpServer server, DocumentAtomSdk sdk, Serializer serializer)
         {
             server.RegisterTool(
-                "typedetection/detect",
+                "typedetection_detect",
                 "Detect the type of a document based on its content",
                 new
                 {
@@ -68,7 +68,7 @@ namespace DocumentAtom.McpServer.Registrations
         /// <param name="serializer">Serializer instance.</param>
         public static void RegisterTcpMethods(McpTcpServer server, DocumentAtomSdk sdk, Serializer serializer)
         {
-            server.RegisterMethod("typedetection/detect", (args) =>
+            server.RegisterMethod("typedetection_detect", (args) =>
             {
                 if (!args.HasValue) throw new ArgumentException("Parameters required");
                 if (!args.ToJsonElement().TryGetProperty("data", out JsonElement dataProp))
@@ -100,7 +100,7 @@ namespace DocumentAtom.McpServer.Registrations
         /// <param name="serializer">Serializer instance.</param>
         public static void RegisterWebSocketMethods(McpWebsocketsServer server, DocumentAtomSdk sdk, Serializer serializer)
         {
-            server.RegisterMethod("typedetection/detect", (args) =>
+            server.RegisterMethod("typedetection_detect", (args) =>
             {
                 if (!args.HasValue) throw new ArgumentException("Parameters required");
                 if (!args.ToJsonElement().TryGetProperty("data", out JsonElement dataProp))

@@ -19,7 +19,7 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="Touchstone.XunitAdapter" Version="0.1.12" />
+		<PackageReference Include="Touchstone.XunitAdapter" Version="0.2.0" />
 	</ItemGroup>
 
 	<ItemGroup>
