@@ -87,7 +87,7 @@ wsl_check_repo() {
             wsl_log "system (for example ~/src) for best results." ;;
     esac
     _wsl_cr="$(printf '\r')"
-    _wsl_bad="$(find "$1/scripts" -name '*.sh' -type f -exec grep -l "$_wsl_cr" {} + 2>/dev/null | head -n 5)"
+    _wsl_bad="$(find "$1/scripts" -name '*.sh' -type f -exec grep -l "$_wsl_cr" {} + 2>/dev/null | head -n 5 || true)"
     if [ -n "$_wsl_bad" ]; then
         wsl_log "These scripts have Windows (CRLF) line endings and will not run under WSL:"
         wsl_log "$_wsl_bad"
@@ -126,8 +126,8 @@ wsl_win_exe() {
 
 # Prints the Windows host's address as seen from WSL 2 NAT networking.
 wsl_windows_host() {
-    _wsl_gw="$(ip route show default 2>/dev/null | awk '/default/ {print $3; exit}')"
-    [ -n "$_wsl_gw" ] || _wsl_gw="$(awk '/^nameserver/ {print $2; exit}' /etc/resolv.conf 2>/dev/null)"
+    _wsl_gw="$(ip route show default 2>/dev/null | awk '/default/ {print $3; exit}' || true)"
+    [ -n "$_wsl_gw" ] || _wsl_gw="$(awk '/^nameserver/ {print $2; exit}' /etc/resolv.conf 2>/dev/null || true)"
     printf '%s\n' "$_wsl_gw"
 }
 
@@ -159,7 +159,7 @@ wsl_resolve_local_url() {
 # Prints the Windows Startup folder as a WSL path.
 wsl_startup_dir() {
     _wsl_cmd="$(wsl_win_exe cmd.exe)"
-    _wsl_appdata="$(cd /mnt/c 2>/dev/null || true; "$_wsl_cmd" /c 'echo %APPDATA%' 2>/dev/null | tr -d '\r')"
+    _wsl_appdata="$(cd /mnt/c 2>/dev/null || true; "$_wsl_cmd" /c 'echo %APPDATA%' 2>/dev/null | tr -d '\r' || true)"
     [ -n "$_wsl_appdata" ] || wsl_die "Could not read %APPDATA% from Windows."
     printf '%s/Microsoft/Windows/Start Menu/Programs/Startup\n' "$(wslpath -u "$_wsl_appdata")"
 }
