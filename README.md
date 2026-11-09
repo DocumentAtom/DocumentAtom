@@ -617,7 +617,8 @@ dotnet run -- --uninstall=all
 ```
 
 Cross-platform one-command wrappers are provided under [`scripts/`](scripts/README.md) for Windows
-(PowerShell/CMD), macOS, and Linux. Existing entries in each tool's config are preserved; only the
+(PowerShell/CMD), macOS, Linux, WSL 1 (`scripts/wsl`), and WSL 2 (`scripts/wsl2`), each with
+`install`, `uninstall`, and `reinstall`. Existing entries in each tool's config are preserved; only the
 `documentatom` entry is added or removed.
 
 For full MCP protocol details — transports, tool catalog, request/response schemas, and usage

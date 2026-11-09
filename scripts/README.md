@@ -8,10 +8,15 @@ MCP server (HTTP JSON-RPC transport) under the name **`documentatom`**.
 
 ```
 scripts/
-├── windows/    install.ps1 · uninstall.ps1 · install.cmd · uninstall.cmd · _common.ps1
-├── macos/      install.sh  · uninstall.sh  · _common.sh
-└── linux/      install.sh  · uninstall.sh  · _common.sh
+├── windows/    install.ps1 · uninstall.ps1 · reinstall.ps1 · install.cmd · uninstall.cmd · reinstall.cmd · _common.ps1
+├── macos/      install.sh  · uninstall.sh  · reinstall.sh  · _common.sh
+├── linux/      install.sh  · uninstall.sh  · reinstall.sh  · _common.sh
+├── wsl/        install.sh  · uninstall.sh  · reinstall.sh  · _wsl-common.sh   (WSL 1)
+└── wsl2/       install.sh  · uninstall.sh  · reinstall.sh  · _wsl-common.sh   (WSL 2)
 ```
+
+`reinstall` runs `uninstall` and then `install` with the same options (only `--targets` /
+`-Targets` is passed to the uninstall step).
 
 ## How it works
 
@@ -85,6 +90,18 @@ scripts/linux/install.sh --help
 ```
 
 (Use `scripts/macos/…` on macOS — the scripts are identical.)
+
+### WSL / WSL 2
+
+Use `scripts/wsl2/…` on WSL 2 and `scripts/wsl/…` on WSL 1, with the same options as Linux
+(`install.sh`, `uninstall.sh`, `reinstall.sh`). They wrap the Linux scripts and fix the usual WSL
+problems: Windows PATH entries are dropped so the Linux `dotnet` is used, `~/.dotnet` is added to
+PATH, and CRLF checkouts are caught with a clear error. They configure the tools **inside the
+distro** (`~/.claude.json`, `~/.cursor/mcp.json`, ... in your WSL home); for tools that run on
+Windows, also run `scripts\windows\install.cmd` from Windows. On WSL 2 (NAT networking), a
+`localhost` endpoint that only answers on Windows is rewritten to the Windows host address; set
+`WSL_NO_HOST_REWRITE=1` to keep it as given. For best performance clone the repository into the
+Linux file system (for example `~/src`) rather than `/mnt/c`.
 
 ## Options
 
