@@ -79,6 +79,9 @@ BIN_DIR="$REPO_ROOT/src/DocumentAtom.McpServer/bin"
 
 echo "DocumentAtom MCP reinstall (WSL 2)"
 echo "[1/4] Checking for .NET..."
+# .NET (the SDK and the server) needs ICU. Install it now if it is missing (INSTALL_SYSTEM_PACKAGES=0
+# only reports it), before the dotnet check, whose ICU check would stop the script first.
+wsl_install_deps "DocumentAtom.McpServer" icu
 wsl_require_cmd dotnet "Install .NET 8 or later inside WSL: https://learn.microsoft.com/dotnet/core/install/linux"
 # Capture first: under 'set -o pipefail', 'dotnet --list-sdks | grep -q' can fail with SIGPIPE.
 SDKS="$(dotnet --list-sdks 2>/dev/null || true)"

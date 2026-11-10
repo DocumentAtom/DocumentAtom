@@ -30,9 +30,13 @@ args = sys.argv[1:]
 if name == 'uname':
     if args == ['-s']:
         print(os.environ['MOCK_UNAME'])
+    elif args == ['-m']:
+        print('x86_64')
     else:
         print('5.15.0-microsoft-standard-WSL2' if os.environ.get('MOCK_WSL2') else '6.0.0-generic')
     sys.exit(0)
+if name == 'ldconfig':
+    print(os.environ.get('MOCK_LDCACHE', '')); sys.exit(0)
 if name == 'ip':
     print('default via 172.20.0.1 dev eth0'); sys.exit(0)
 if name == 'curl':
@@ -275,6 +279,58 @@ with tempfile.TemporaryDirectory(prefix='documentatom scripts ') as temp:
             check(c[-1][2] == f'--endpoint={DEFAULT_ENDPOINT}', platform, a, c)
             p, c = run(platform, a)  # not WSL 2: unchanged
             check(c[-1][2] == f'--endpoint={DEFAULT_ENDPOINT}', platform, a, c)
+    # ICU. A fake ldconfig (off PATH, so every other run here has no ldconfig and skips the checks)
+    # reports MOCK_LDCACHE until the fake apt-get has "installed" something, then a cache with
+    # libicuuc. Fake sudo, apt-get and apt-cache live in their own directory, added to PATH only here.
+    (temp / 'ldc').mkdir()
+    (temp / 'apt').mkdir()
+    have_icu = '\tlibicuuc.so.74 (libc6,x86-64) => /usr/lib/x86_64-linux-gnu/libicuuc.so.74'
+    i386_icu = '\tlibicuuc.so.74 (libc6) => /usr/lib/i386-linux-gnu/libicuuc.so.74'
+    no_icu = '\tlibc.so.6 (libc6,x86-64) => /lib/libc.so.6'
+    apt_done = temp / 'apt-installed'
+    for d, name, body in [('ldc', 'ldconfig', f'#!/bin/sh\nif [ -f "{apt_done}" ]; then printf "%s\\n" "{have_icu}"; else printf "%s\\n" "$MOCK_LDCACHE"; fi\n'),
+                          ('apt', 'apt-get', f'#!/bin/sh\necho "[\\"apt-get\\", \\"$*\\"]" >> "$CALL_LOG"\n[ "$1" = install ] && touch "{apt_done}"\nexit 0\n'),
+                          ('apt', 'apt-cache', '#!/bin/sh\nprintf "libicu-dev\\nlibicu74\\nlibicu72\\n"\n'),
+                          ('apt', 'sudo', '#!/bin/sh\necho "[\\"sudo\\", \\"$1\\"]" >> "$CALL_LOG"\nexec "$@"\n')]:
+        (temp / d / name).write_text(body)
+        (temp / d / name).chmod(0o755)
+    ldconfig = str(temp / 'ldc/ldconfig')
+    apt_path = f'{temp / "apt"}:{fakes}:/usr/bin:/bin'
+
+    def run_icu(platform, a, *args, **env):
+        apt_done.unlink(missing_ok=True)
+        var = 'NATIVE_LDCONFIG' if platform == 'linux' else 'WSL_LDCONFIG'
+        log.unlink(missing_ok=True)
+        p, _ = run(platform, a, *args, **{var: ldconfig, **env})
+        entries = [json.loads(x) for x in log.read_text().splitlines()] if log.exists() else []
+        return p, [e for e in entries if e[0] == 'apt-get'], [e for e in entries if e[0] == 'dotnet' and e[1] == 'build']
+
+    for platform in ['linux', 'wsl', 'wsl2']:
+        for a in ACTIONS:
+            for cache in [no_icu, i386_icu]:
+                # Install-type scripts install ICU (the latest libicuNN from apt-cache), then build.
+                p, apt, build = run_icu(platform, a, MOCK_LDCACHE=cache, PATH=apt_path)
+                if a == 'uninstall':
+                    # uninstall installs nothing: it only checks, and stops before building.
+                    check(p.returncode == 1 and 'needs ICU (libicu)' in p.stderr and "Couldn't find a valid ICU package" in p.stderr
+                          and 'sudo apt install libicu74' in p.stderr and not apt and not build, platform, a, p.stderr)
+                else:
+                    check(p.returncode == 0 and apt == [['apt-get', 'update -qq'], ['apt-get', 'install -y -q libicu74']] and build,
+                          platform, a, p.stderr, apt)
+            if a != 'uninstall':
+                # INSTALL_SYSTEM_PACKAGES=0 reports and exits; so does a system without apt-get or dnf.
+                for env in [dict(INSTALL_SYSTEM_PACKAGES='0', PATH=apt_path), {}]:
+                    p, apt, build = run_icu(platform, a, MOCK_LDCACHE=no_icu, **env)
+                    check(p.returncode == 1 and 'needs system packages that are not installed' in p.stderr
+                          and 'libicu-dev' in p.stderr and not apt and not build, platform, a, env, p.stderr)
+                # --help installs nothing.
+                p, apt, build = run_icu(platform, a, '--help', MOCK_LDCACHE=no_icu, PATH=apt_path)
+                check(p.returncode == 0 and not apt and not build, platform, a)
+            # Nothing missing: nothing is installed; invariant globalization skips the check.
+            for env in [dict(MOCK_LDCACHE=have_icu), dict(MOCK_LDCACHE=no_icu, DOTNET_SYSTEM_GLOBALIZATION_INVARIANT='1')]:
+                p, apt, build = run_icu(platform, a, PATH=apt_path, **env)
+                check(p.returncode == 0 and not apt and build, platform, a, env, p.stderr)
+
     # WSL: CRLF checkouts fail clearly before anything runs.
     crlf = repo / 'scripts/linux/crlf-probe.sh'
     crlf.write_bytes(b'#!/bin/sh\r\necho hi\r\n')

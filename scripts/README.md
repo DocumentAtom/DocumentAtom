@@ -113,6 +113,19 @@ answers there; set `WSL_NO_HOST_REWRITE=1` to keep it. An endpoint you pass is u
 shares the Windows network, so nothing is rewritten there. For best performance clone the repository into the
 Linux file system (for example `~/src`) rather than `/mnt/c`.
 
+## Linux and WSL: ICU
+
+.NET needs ICU (`libicu`). Without it, `dotnet` fails with "Couldn't find a valid ICU package
+installed on the system". On Linux and WSL, `install.sh` and `reinstall.sh` install it when it is
+missing (`sudo apt-get install -y libicuNN` or `sudo dnf install -y libicu`). Set
+`INSTALL_SYSTEM_PACKAGES=0` to get the command printed instead. `uninstall.sh` only checks, and stops
+with ".NET needs ICU (libicu), and this system does not have it". To install it yourself:
+
+```bash
+sudo apt install libicu74      # Ubuntu 24.04 (libicu70 on 22.04; apt-cache pkgnames libicu lists them)
+sudo dnf install libicu        # Fedora
+```
+
 ## Options
 
 | Option                | Windows                     | macOS / Linux                | Default                      |

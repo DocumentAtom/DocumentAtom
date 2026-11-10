@@ -1,3 +1,4 @@
+#!/bin/bash
 if [ -z "${IMG_TAG}" ]; then
   IMG_TAG='v1.0.0'
 fi
