@@ -400,32 +400,58 @@ wsl_install_deps() {
     fi
 
     if [ "$_wd_pm" = apt ]; then
-        wsl_log "Installing the system packages $_wd_app needs (apt-get; sudo may ask for your password)..."
-        # shellcheck disable=SC2086 # empty or "sudo"
-        $_wd_sudo apt-get update -qq || wsl_die "apt-get update failed."
+        _wd_all="$_wd_req_deb$_wd_opt_deb"; [ "$_wd_apt_icu" = 1 ] && _wd_all="$_wd_all libicu"
+        wsl_log "$_wd_app needs these system packages:$_wd_all"
+        wsl_log "Installing them with apt-get. On a fresh distro this can take a few minutes; apt shows its progress below."
+        # Ask for the sudo password up front, so the prompt is not buried in apt output.
+        if [ -n "$_wd_sudo" ]; then $_wd_sudo -v || wsl_die "sudo failed; the packages were not installed."; fi
+        # sudo resets the environment, so pass the non-interactive settings through env: otherwise
+        # debconf or Ubuntu's needrestart can wait for an answer with no visible prompt. stdin is
+        # /dev/null for the same reason, and the lock timeout waits out unattended-upgrades (which
+        # often runs right after a WSL distro starts) instead of failing at once.
+        # shellcheck disable=SC2086 # _wd_sudo is empty or "sudo"
+        set -- $_wd_sudo env DEBIAN_FRONTEND=noninteractive NEEDRESTART_MODE=a NEEDRESTART_SUSPEND=1 \
+            apt-get -o DPkg::Lock::Timeout=300 -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold
+        _wd_timeout=""
+        # --foreground keeps sudo in the terminal's foreground process group; without it sudo (use_pty)
+        # is stopped by SIGTTOU and the script hangs. Skipped when timeout lacks it (busybox).
+        if command -v timeout >/dev/null 2>&1 && timeout --foreground 5 true >/dev/null 2>&1; then
+            _wd_timeout="timeout --foreground 300"
+        fi
+        wsl_log "Updating the package lists (apt-get update)..."
+        # shellcheck disable=SC2086 # _wd_timeout is empty or "timeout --foreground <seconds>"
+        if ! $_wd_timeout "$@" update </dev/null; then
+            # A stalled download ("Waiting for headers") is usually broken IPv6 inside WSL or a VPN.
+            wsl_log "apt-get update failed or timed out; retrying over IPv4..."
+            # shellcheck disable=SC2086
+            $_wd_timeout "$@" -o Acquire::ForceIPv4=true update </dev/null \
+                || wsl_die "apt-get update failed. Run 'sudo apt-get update' to see why (network, DNS or proxy), then run this script again."
+        fi
         if [ "$_wd_apt_icu" = 1 ]; then
             _wd_icu="$(apt-cache pkgnames libicu 2>/dev/null | awk '/^libicu[0-9]+(t64)?$/' | sort -V | tail -n 1 || true)"
             _wd_req_deb="$_wd_req_deb ${_wd_icu:-libicu-dev}"
         fi
         if [ -n "$_wd_req_deb" ]; then
+            wsl_log "Installing:$_wd_req_deb"
             # shellcheck disable=SC2086 # word-split package lists on purpose
-            DEBIAN_FRONTEND=noninteractive $_wd_sudo apt-get install -y -q $_wd_req_deb \
+            "$@" install -y $_wd_req_deb </dev/null \
                 || wsl_die "Could not install the required packages:$_wd_req_deb"
         fi
         if [ -n "$_wd_opt_deb" ]; then
+            wsl_log "Installing:$_wd_opt_deb"
             # shellcheck disable=SC2086 # word-split package lists on purpose
-            DEBIAN_FRONTEND=noninteractive $_wd_sudo apt-get install -y -q $_wd_opt_deb \
+            "$@" install -y $_wd_opt_deb </dev/null \
                 || wsl_log "Warning: could not install the optional packages:$_wd_opt_deb (copy to clipboard or opening links may not work)."
         fi
     else
         wsl_log "Installing the system packages $_wd_app needs (dnf; sudo may ask for your password)..."
         if [ -n "$_wd_req_rpm" ]; then
             # shellcheck disable=SC2086 # word-split package lists on purpose
-            $_wd_sudo dnf install -y $_wd_req_rpm || wsl_die "Could not install the required packages:$_wd_req_rpm"
+            $_wd_sudo dnf install -y $_wd_req_rpm </dev/null || wsl_die "Could not install the required packages:$_wd_req_rpm"
         fi
         if [ -n "$_wd_opt_rpm" ]; then
             # shellcheck disable=SC2086 # word-split package lists on purpose
-            $_wd_sudo dnf install -y $_wd_opt_rpm \
+            $_wd_sudo dnf install -y $_wd_opt_rpm </dev/null \
                 || wsl_log "Warning: could not install the optional packages:$_wd_opt_rpm (copy to clipboard or opening links may not work)."
         fi
     fi

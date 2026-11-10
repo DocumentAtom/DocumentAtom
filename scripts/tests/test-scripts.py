@@ -289,13 +289,18 @@ with tempfile.TemporaryDirectory(prefix='documentatom scripts ') as temp:
     no_icu = '\tlibc.so.6 (libc6,x86-64) => /lib/libc.so.6'
     apt_done = temp / 'apt-installed'
     for d, name, body in [('ldc', 'ldconfig', f'#!/bin/sh\nif [ -f "{apt_done}" ]; then printf "%s\\n" "{have_icu}"; else printf "%s\\n" "$MOCK_LDCACHE"; fi\n'),
-                          ('apt', 'apt-get', f'#!/bin/sh\necho "[\\"apt-get\\", \\"$*\\"]" >> "$CALL_LOG"\n[ "$1" = install ] && touch "{apt_done}"\nexit 0\n'),
+                          ('apt', 'apt-get', f'#!/bin/sh\necho "[\\"apt-get\\", \\"$*\\"]" >> "$CALL_LOG"\ncase " $* " in *" install "*) touch "{apt_done}" ;; esac\nexit 0\n'),
                           ('apt', 'apt-cache', '#!/bin/sh\nprintf "libicu-dev\\nlibicu74\\nlibicu72\\n"\n'),
-                          ('apt', 'sudo', '#!/bin/sh\necho "[\\"sudo\\", \\"$1\\"]" >> "$CALL_LOG"\nexec "$@"\n')]:
+                          ('apt', 'sudo', '#!/bin/sh\necho "[\\"sudo\\", \\"$1\\"]" >> "$CALL_LOG"\n[ "$1" = -v ] && exit 0\nexec "$@"\n')]:
         (temp / d / name).write_text(body)
         (temp / d / name).chmod(0o755)
     ldconfig = str(temp / 'ldc/ldconfig')
     apt_path = f'{temp / "apt"}:{fakes}:/usr/bin:/bin'
+
+    def apt_ok(apt):
+        # One update and one install of the latest libicuNN, both non-interactive with a lock timeout.
+        return (len(apt) == 2 and all('-o DPkg::Lock::Timeout=300' in x[1] for x in apt)
+                and apt[0][1].endswith(' update') and apt[1][1].endswith(' install -y libicu74'))
 
     def run_icu(platform, a, *args, **env):
         apt_done.unlink(missing_ok=True)
@@ -304,6 +309,16 @@ with tempfile.TemporaryDirectory(prefix='documentatom scripts ') as temp:
         p, _ = run(platform, a, *args, **{var: ldconfig, **env})
         entries = [json.loads(x) for x in log.read_text().splitlines()] if log.exists() else []
         return p, [e for e in entries if e[0] == 'apt-get'], [e for e in entries if e[0] == 'dotnet' and e[1] == 'build']
+
+    # The installer wraps apt-get in "timeout --foreground 300" when timeout supports it; cover that
+    # path with a fake timeout too (the machine running the tests may or may not have one).
+    (temp / 'tmo').mkdir()
+    (temp / 'tmo/timeout').write_text('#!/bin/sh\n[ "$1" = --foreground ] && shift\nshift\nexec "$@"\n')
+    (temp / 'tmo/timeout').chmod(0o755)
+    for platform in ['linux', 'wsl', 'wsl2']:
+        p, apt, build = run_icu(platform, 'install', MOCK_LDCACHE=no_icu, PATH=f'{temp / "tmo"}:{apt_path}')
+        check(p.returncode == 0 and apt_ok(apt) and build, platform, 'timeout', p.stderr, apt)
+        run(platform, 'uninstall')
 
     for platform in ['linux', 'wsl', 'wsl2']:
         for a in ACTIONS:
@@ -315,7 +330,7 @@ with tempfile.TemporaryDirectory(prefix='documentatom scripts ') as temp:
                     check(p.returncode == 1 and 'needs ICU (libicu)' in p.stderr and "Couldn't find a valid ICU package" in p.stderr
                           and 'sudo apt install libicu74' in p.stderr and not apt and not build, platform, a, p.stderr)
                 else:
-                    check(p.returncode == 0 and apt == [['apt-get', 'update -qq'], ['apt-get', 'install -y -q libicu74']] and build,
+                    check(p.returncode == 0 and apt_ok(apt) and build,
                           platform, a, p.stderr, apt)
             if a != 'uninstall':
                 # INSTALL_SYSTEM_PACKAGES=0 reports and exits; so does a system without apt-get or dnf.
