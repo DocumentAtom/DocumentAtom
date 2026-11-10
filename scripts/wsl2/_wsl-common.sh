@@ -15,10 +15,16 @@
 #   - Under WSL 2 NAT networking, 127.0.0.1 inside the distro is not the Windows host.
 
 WSL_ORIGINAL_PATH="$PATH"
+# shellcheck disable=SC2034 # read by the scripts that source this file
+WSL_ORIGINAL_DOTNET_ROOT="${DOTNET_ROOT:-}"
 
-# Prints 1 for WSL 1, 2 for WSL 2, or 0 when not running under WSL.
+# Prints 1 for WSL 1, 2 for WSL 2, or 0 when not running under WSL. A Microsoft kernel alone is not
+# enough: Docker Desktop containers on the WSL 2 backend have one too, but no WSL interop.
 wsl_version() {
-    _wsl_rel="$(uname -r 2>/dev/null)"
+    if [ -z "${WSL_DISTRO_NAME:-}" ] && [ ! -d /run/WSL ] && ! ls /proc/sys/fs/binfmt_misc/WSLInterop* >/dev/null 2>&1; then
+        echo 0; return 0
+    fi
+    _wsl_rel="$(uname -r 2>/dev/null || true)"
     case "$_wsl_rel" in
         *microsoft-standard*|*WSL2*) echo 2; return 0 ;;
         *Microsoft*) echo 1; return 0 ;;
@@ -32,14 +38,15 @@ wsl_version() {
 wsl_log() { printf '%s\n' "$*" >&2; }
 wsl_die() { printf 'Error: %s\n' "$*" >&2; exit 1; }
 
-# Fails outside WSL; warns when the flavor doesn't match this directory. WSL_SKIP_CHECK=1 skips both.
+# Fails outside WSL, and when the WSL version doesn't match this directory (scripts/wsl is WSL 1,
+# scripts/wsl2 is WSL 2). WSL_SKIP_CHECK=1 skips both checks.
 wsl_require() {
     [ "${WSL_SKIP_CHECK:-0}" = 1 ] && return 0
     _wsl_v="$(wsl_version)"
-    [ "$_wsl_v" != 0 ] || wsl_die "This script is for WSL. Use scripts/linux, scripts/macos or scripts/windows instead (or set WSL_SKIP_CHECK=1)."
+    [ "$_wsl_v" != 0 ] || wsl_die "This script is for WSL. Use scripts/linux, scripts/macos or scripts\\windows instead."
     case "${WSL_FLAVOR:-wsl2}" in
-        wsl) [ "$_wsl_v" = 1 ] || wsl_log "Note: this distro runs WSL 2; scripts/wsl2 is the better match. Continuing." ;;
-        wsl2) [ "$_wsl_v" = 2 ] || wsl_log "Note: this distro runs WSL 1; scripts/wsl is the better match. Continuing." ;;
+        wsl) [ "$_wsl_v" = 1 ] || wsl_die "This distro runs WSL 2. Use the same script in scripts/wsl2 instead." ;;
+        wsl2) [ "$_wsl_v" = 2 ] || wsl_die "This distro runs WSL 1. Use the same script in scripts/wsl instead." ;;
     esac
 }
 
@@ -57,12 +64,14 @@ wsl_sanitize_path() {
         IFS="$_wsl_ifs"
         PATH="$_wsl_new"
     fi
-    for _wsl_p in "$HOME/.local/bin" "$HOME/.dotnet/tools" "$HOME/.dotnet"; do
+    for _wsl_p in "$HOME/.local/bin" "$HOME/.dotnet/tools"; do
         [ -d "$_wsl_p" ] || continue
-        case ":$PATH:" in *":$_wsl_p:"*) ;; *) PATH="$_wsl_p:$PATH" ;; esac
+        case ":$PATH:" in *":$_wsl_p:"*) ;; *) PATH="$PATH:$_wsl_p" ;; esac
     done
-    if [ -z "${DOTNET_ROOT:-}" ] && [ -x "$HOME/.dotnet/dotnet" ]; then
-        DOTNET_ROOT="$HOME/.dotnet"; export DOTNET_ROOT
+    # A user-local .NET (dotnet-install.sh) is used only when no other Linux dotnet is on PATH.
+    if ! command -v dotnet >/dev/null 2>&1 && [ -x "$HOME/.dotnet/dotnet" ]; then
+        PATH="$HOME/.dotnet:$PATH"
+        if [ -z "${DOTNET_ROOT:-}" ]; then DOTNET_ROOT="$HOME/.dotnet"; export DOTNET_ROOT; fi
     fi
     export PATH
 }
@@ -91,7 +100,8 @@ wsl_check_repo() {
     if [ -n "$_wsl_bad" ]; then
         wsl_log "These scripts have Windows (CRLF) line endings and will not run under WSL:"
         wsl_log "$_wsl_bad"
-        wsl_die "Re-checkout with LF endings: git config core.autocrlf input && git rm -r --cached -q . && git reset --hard"
+        wsl_log "Commit or stash your changes first (the commands below discard uncommitted edits), then run:"
+        wsl_die "git config core.autocrlf input && git rm -r --cached -q . && git reset --hard"
     fi
 }
 
@@ -141,7 +151,7 @@ wsl_resolve_local_url() {
     [ "$(wsl_version)" = 2 ] || { printf '%s\n' "$_wsl_url"; return 0; }
     command -v curl >/dev/null 2>&1 || { printf '%s\n' "$_wsl_url"; return 0; }
     case "$_wsl_url" in
-        *://127.0.0.1:*|*://127.0.0.1/*|*://localhost:*|*://localhost/*) ;;
+        *://127.0.0.1|*://127.0.0.1:*|*://127.0.0.1/*|*://localhost|*://localhost:*|*://localhost/*) ;;
         *) printf '%s\n' "$_wsl_url"; return 0 ;;
     esac
     if curl -s -o /dev/null --max-time 2 "$_wsl_url" 2>/dev/null; then printf '%s\n' "$_wsl_url"; return 0; fi
@@ -154,6 +164,22 @@ wsl_resolve_local_url() {
         printf '%s\n' "$_wsl_alt"; return 0
     fi
     printf '%s\n' "$_wsl_url"
+}
+
+# Prints the launcher file name for <name> in this distro, so several distros can register the same
+# command without replacing each other's launcher. Usage: wsl_launcher_file <name>
+wsl_launcher_file() {
+    printf '%s-wsl-%s.vbs\n' "$1" "$(printf '%s' "${WSL_DISTRO_NAME:-default}" | tr -c 'A-Za-z0-9._-' '_')"
+}
+
+# Removes a launcher written by an older version of these helpers (<name>-wsl.vbs, one name for every
+# distro) when it belongs to this distro. Returns 0 when one was removed. Usage: wsl_startup_remove_legacy <dir> <name>
+wsl_startup_remove_legacy() {
+    _wsl_legacy="$1/$2-wsl.vbs"
+    [ -f "$_wsl_legacy" ] || return 1
+    grep -qF -- "-d \"\"${WSL_DISTRO_NAME:-}\"\"" "$_wsl_legacy" 2>/dev/null || return 1
+    rm -f "$_wsl_legacy"
+    wsl_log "Removed the older Windows Startup launcher: $_wsl_legacy"
 }
 
 # Prints the Windows Startup folder as a WSL path.
@@ -170,8 +196,9 @@ wsl_startup_dir() {
 wsl_startup_install() {
     _wsl_name="$1"; shift
     [ -n "${WSL_DISTRO_NAME:-}" ] || wsl_die "WSL_DISTRO_NAME is not set; run this from a WSL shell."
-    _wsl_dir="$(wsl_startup_dir)"
+    _wsl_dir="$(wsl_startup_dir)" || exit 1
     mkdir -p "$_wsl_dir"
+    wsl_startup_remove_legacy "$_wsl_dir" "$_wsl_name" || true
     _wsl_args=""
     for _wsl_a in "$@"; do
         _wsl_q="$(printf '%s' "$_wsl_a" | sed "s/'/'\\\\''/g")"
@@ -179,14 +206,37 @@ wsl_startup_install() {
     done
     # VBScript doubles quotes inside string literals.
     _wsl_line="wsl.exe -d \"\"$WSL_DISTRO_NAME\"\" --cd ~ --exec /bin/sh -lc \"\"exec$_wsl_args\"\""
-    printf 'CreateObject("WScript.Shell").Run "%s", 0, False\r\n' "$_wsl_line" > "$_wsl_dir/$_wsl_name-wsl.vbs"
-    wsl_log "Installed the Windows Startup launcher: $_wsl_dir/$_wsl_name-wsl.vbs"
+    printf 'CreateObject("WScript.Shell").Run "%s", 0, False\r\n' "$_wsl_line" > "$_wsl_dir/$(wsl_launcher_file "$_wsl_name")"
+    wsl_log "Installed the Windows Startup launcher: $_wsl_dir/$(wsl_launcher_file "$_wsl_name")"
 }
 
-# Usage: wsl_startup_remove <name>   (returns 1 when nothing was registered)
+# Usage: wsl_startup_remove <name>   (returns 1 when nothing was registered; exits when the Startup
+# folder cannot be found, rather than reporting "nothing registered")
 wsl_startup_remove() {
-    _wsl_file="$(wsl_startup_dir)/$1-wsl.vbs"
-    [ -f "$_wsl_file" ] || return 1
+    _wsl_dir="$(wsl_startup_dir)" || exit 1
+    _wsl_file="$_wsl_dir/$(wsl_launcher_file "$1")"
+    _wsl_removed=1
+    if wsl_startup_remove_legacy "$_wsl_dir" "$1"; then _wsl_removed=0; fi
+    [ -f "$_wsl_file" ] || return "$_wsl_removed"
     rm -f "$_wsl_file"
     wsl_log "Removed the Windows Startup launcher: $_wsl_file"
+}
+
+# Runs a launcher installed by wsl_startup_install now, the same way Windows runs it at login, so the
+# command keeps running after this terminal closes. Usage: wsl_startup_run <name>
+wsl_startup_run() {
+    _wsl_dir="$(wsl_startup_dir)" || exit 1
+    _wsl_file="$_wsl_dir/$(wsl_launcher_file "$1")"
+    [ -f "$_wsl_file" ] || wsl_die "No Windows Startup launcher named $1 is installed."
+    _wsl_wscript="$(wsl_win_exe wscript.exe)"
+    _wsl_winfile="$(wslpath -w "$_wsl_file")"
+    (cd /mnt/c 2>/dev/null || true; "$_wsl_wscript" "$_wsl_winfile")
+}
+
+# True when a launcher installed by wsl_startup_install exists. Usage: wsl_startup_exists <name>
+wsl_startup_exists() {
+    _wsl_dir="$( (wsl_startup_dir) 2>/dev/null || true)"
+    [ -n "$_wsl_dir" ] || return 1
+    [ -f "$_wsl_dir/$(wsl_launcher_file "$1")" ] && return 0
+    grep -qF -- "-d \"\"${WSL_DISTRO_NAME:-}\"\"" "$_wsl_dir/$1-wsl.vbs" 2>/dev/null
 }

@@ -8,22 +8,30 @@ MCP server (HTTP JSON-RPC transport) under the name **`documentatom`**.
 
 ```
 scripts/
-├── windows/    install.ps1 · uninstall.ps1 · reinstall.ps1 · install.cmd · uninstall.cmd · reinstall.cmd · _common.ps1
-├── macos/      install.sh  · uninstall.sh  · reinstall.sh  · _common.sh
-├── linux/      install.sh  · uninstall.sh  · reinstall.sh  · _common.sh
+├── windows/    install.ps1 · uninstall.ps1 · reinstall.ps1 · install.cmd · uninstall.cmd · reinstall.cmd
+├── macos/      install.sh  · uninstall.sh  · reinstall.sh
+├── linux/      install.sh  · uninstall.sh  · reinstall.sh
 ├── wsl/        install.sh  · uninstall.sh  · reinstall.sh  · _wsl-common.sh   (WSL 1)
 └── wsl2/       install.sh  · uninstall.sh  · reinstall.sh  · _wsl-common.sh   (WSL 2)
 ```
 
-`reinstall` runs `uninstall` and then `install` with the same options (only `--targets` /
-`-Targets` is passed to the uninstall step).
+Every script is self-contained and does the same steps on every OS: check for .NET, build the
+server, then register or remove the entry. `install` adds the `documentatom` entry (running it again
+replaces it), `uninstall` removes it and succeeds when nothing is registered, and `reinstall` removes
+the entry and adds it again with the given options. Unknown options, unknown targets and a
+non-`http(s)://` endpoint are rejected before anything is built or changed; `-h`/`--help` prints
+usage. Each script refuses to run on the wrong OS. The Windows `.cmd` files are launch shims that run the
+same-name `.ps1` next to them with the same arguments. Nothing is
+installed as a dotnet tool. `scripts/tests/test-scripts.py` checks all of this.
 
 ## How it works
 
-These scripts are thin wrappers around the `DocumentAtom.McpServer --install` / `--uninstall`
-command, which performs the actual configuration edits (robust JSON and TOML handling that
-preserves your existing settings). The scripts locate a compiled `DocumentAtom.McpServer.dll`,
-build it first if the .NET SDK is available (so you never run a stale binary), and then invoke it.
+The scripts run the `DocumentAtom.McpServer --install` / `--uninstall` command, which performs the
+actual configuration edits (robust JSON and TOML handling that preserves your existing settings).
+With the .NET SDK installed they first build the server (Release; `net10.0` with a .NET 10 SDK,
+otherwise `net8.0`) and run that build. A failed build stops `install` and `reinstall`;
+`uninstall` warns and removes the entry with an existing build instead. Without an SDK they run an
+existing build under `src/DocumentAtom.McpServer/bin` that the installed runtime can run.
 
 > Doing the config edits inside the (already tested) .NET tool — rather than reimplementing JSON
 > and TOML editing separately in PowerShell and Bash — guarantees identical, safe behavior across
@@ -31,9 +39,9 @@ build it first if the .NET SDK is available (so you never run a stale binary), a
 
 ## Prerequisites
 
-- **.NET SDK** (recommended) — lets the scripts build the server automatically. If only the .NET
-  **runtime** is present, a compiled `DocumentAtom.McpServer.dll` must already exist under
-  `src/DocumentAtom.McpServer/bin/…`.
+- **.NET 8 or 10 SDK** (recommended) — lets the scripts build the server. If only the .NET 8 or 10
+  **runtime** is present, a compiled `DocumentAtom.McpServer.dll` for that runtime must already
+  exist under `src/DocumentAtom.McpServer/bin/<Release|Debug>/<net8.0|net10.0>/`.
 - The target tools do **not** need to be installed for their config to be written; the scripts
   create the per-user config file/directory if missing.
 
@@ -89,18 +97,20 @@ scripts/linux/uninstall.sh --targets=cursor
 scripts/linux/install.sh --help
 ```
 
-(Use `scripts/macos/…` on macOS — the scripts are identical.)
+(Use `scripts/macos/…` on macOS; the scripts take the same options and refuse to run on the wrong OS.)
 
 ### WSL / WSL 2
 
 Use `scripts/wsl2/…` on WSL 2 and `scripts/wsl/…` on WSL 1, with the same options as Linux
-(`install.sh`, `uninstall.sh`, `reinstall.sh`). They wrap the Linux scripts and fix the usual WSL
-problems: Windows PATH entries are dropped so the Linux `dotnet` is used, `~/.dotnet` is added to
-PATH, and CRLF checkouts are caught with a clear error. They configure the tools **inside the
-distro** (`~/.claude.json`, `~/.cursor/mcp.json`, ... in your WSL home); for tools that run on
-Windows, also run `scripts\windows\install.cmd` from Windows. On WSL 2 (NAT networking), a
-`localhost` endpoint that only answers on Windows is rewritten to the Windows host address; set
-`WSL_NO_HOST_REWRITE=1` to keep it as given. For best performance clone the repository into the
+(`install.sh`, `uninstall.sh`, `reinstall.sh`); each refuses to run on the other WSL version. They
+handle the usual WSL problems: Windows PATH entries are dropped so the Linux `dotnet` is used (a
+Windows-only `dotnet` is reported), `~/.dotnet` is used when no other Linux .NET is installed, and
+CRLF checkouts are caught with a clear error. They configure the tools **inside the distro**
+(`~/.claude.json`, `~/.cursor/mcp.json`, ... in your WSL home); for tools that run on Windows, also
+run `scripts\windows\install.cmd` from Windows. On WSL 2 (NAT networking), when no `--endpoint` is
+given, the default `localhost` endpoint is rewritten to the Windows host address if only Windows
+answers there; set `WSL_NO_HOST_REWRITE=1` to keep it. An endpoint you pass is used as given. WSL 1
+shares the Windows network, so nothing is rewritten there. For best performance clone the repository into the
 Linux file system (for example `~/src`) rather than `/mnt/c`.
 
 ## Options
@@ -108,7 +118,7 @@ Linux file system (for example `~/src`) rather than `/mnt/c`.
 | Option                | Windows                     | macOS / Linux                | Default                      |
 |-----------------------|-----------------------------|------------------------------|------------------------------|
 | Targets               | `-Targets claude,cursor`    | `--targets=claude,cursor`    | `all`                        |
-| Endpoint (install)    | `-Endpoint <url>`           | `--endpoint=<url>`           | `http://localhost:8200/rpc`  |
+| Endpoint (install, reinstall) | `-Endpoint <url>`           | `--endpoint=<url>`           | `http://localhost:8200/rpc`  |
 
 Valid targets: `claude`, `codex`, `gemini`, `cursor`, `mux`, or `all`.
 
