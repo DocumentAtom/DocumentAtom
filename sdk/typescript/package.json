@@ -39,7 +39,9 @@
     "qs": "^6.16.0",
     "superagent": {
       "form-data": "4.0.6"
-    }
+    },
+    "glob": "^14.0.2",
+    "minimatch": "^11.0.1"
   },
   "devDependencies": {
     "@babel/core": "^8.0.1",
