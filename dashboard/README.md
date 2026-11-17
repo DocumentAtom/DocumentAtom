@@ -19,6 +19,8 @@
 npm install
 ```
 
+The dashboard uses the local TypeScript SDK in `../sdk/typescript`. npm doesn't install the dependencies of a local `file:` package, so `npm install` runs a `postinstall` step (`scripts/ensure-sdk-deps.mjs`) that installs the SDK's runtime dependencies whenever any are missing. If you change the SDK's dependencies, run `npm install` in `../sdk/typescript`, or run `npm install` again here.
+
 #### Start the production server (for using web ui locally):
 
 ```bash

@@ -3,10 +3,8 @@ WORKDIR /repo
 RUN apk add --no-cache curl
 COPY sdk/typescript/ ./sdk/typescript/
 COPY dashboard/ ./dashboard/
-RUN printf '#!/bin/sh\nexit 0' > /usr/local/bin/husky && chmod +x /usr/local/bin/husky
-WORKDIR /repo/sdk/typescript
-RUN npm ci --omit=dev
 WORKDIR /repo/dashboard
+# postinstall (scripts/ensure-sdk-deps.mjs) installs the SDK's runtime dependencies
 RUN npm ci
 RUN npm run build
 RUN npm prune --omit=dev
