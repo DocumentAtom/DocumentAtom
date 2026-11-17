@@ -4,7 +4,7 @@ import React from "react";
 import { Button, Card, Col, Row, Tag, Typography } from "antd";
 import { ExportOutlined, KeyOutlined, LinkOutlined } from "@ant-design/icons";
 import DocuAtomFlex from "#/components/base/flex/Flex";
-import { observabilityServices } from "#/constants/config";
+import { observabilityServices, ObservabilityServiceLink } from "#/constants/config";
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -23,7 +23,7 @@ const Observability = () => {
       </Paragraph>
 
       <Row gutter={[16, 16]} align="stretch">
-        {observabilityServices.map((svc) => (
+        {observabilityServices.map((svc: ObservabilityServiceLink) => (
           <Col key={svc.name} xs={24} sm={12} lg={8} style={{ display: "flex" }}>
             <Card
               size="small"

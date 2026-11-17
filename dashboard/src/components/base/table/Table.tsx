@@ -54,7 +54,9 @@ const DocuAtomTable = (props: TableProps) => {
     }),
   }));
 
+  // Reset resized column widths when the caller passes new columns.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setColumnsState(columns);
   }, [columns]);
 

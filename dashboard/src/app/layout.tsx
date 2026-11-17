@@ -26,7 +26,9 @@ export default function RootLayout({
 
   useEffect(() => {
     const savedTheme = localStorage.getItem(localStorageKeys.theme);
+    // localStorage is only readable after mount (not during server rendering).
     if (savedTheme) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setTheme(savedTheme as ThemeEnum);
     }
     setMounted(true);

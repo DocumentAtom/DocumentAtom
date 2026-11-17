@@ -39,7 +39,9 @@ const DashboardLayout = ({ children }: LayoutWrapperProps) => {
   const [serverUrl, setServerUrl] = useState(apiEndpointURL);
 
   useEffect(() => {
+    // localStorage is only readable after mount (not during server rendering).
     const savedUrl = localStorage.getItem(localStorageKeys.documentAtomAPIUrl);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setServerUrl(savedUrl || apiEndpointURL);
   }, []);
 

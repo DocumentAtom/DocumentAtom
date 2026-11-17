@@ -8,6 +8,9 @@ export default function StoreProvider({
 }: {
   children: React.ReactNode;
 }) {
+  // Lazily create one store per client, as recommended in the Redux Toolkit
+  // Next.js guide; reading the ref during render is intentional here.
+  /* eslint-disable react-hooks/refs */
   const storeRef = useRef<AppStore | null>(null);
   if (!storeRef.current) {
     // Create the store instance the first time this renders
@@ -15,4 +18,5 @@ export default function StoreProvider({
   }
 
   return <Provider store={storeRef.current}>{children}</Provider>;
+  /* eslint-enable react-hooks/refs */
 }

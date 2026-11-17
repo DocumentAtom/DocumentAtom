@@ -36,17 +36,6 @@ const LoginPage = ({ defaultServerUrl = "http://localhost:3000" }: LoginPageProp
   const [isError, setIsError] = useState(false);
   const [validateConnectivityMutation] = useValidateConnectivityMutation();
 
-  useEffect(() => {
-    // Check if there's a saved URL in localStorage
-    const savedUrl = localStorage.getItem(localStorageKeys.documentAtomAPIUrl);
-    if (savedUrl) {
-      setDocumentAtomAPIUrl(savedUrl);
-      form.setFieldsValue({ documentAtomAPIUrl: savedUrl });
-      // Optionally validate connectivity on mount
-      validateConnectivity(savedUrl, false);
-    }
-  }, [form]);
-
   const validateConnectivity = async (
     newURL: string,
     navigate: boolean = false
@@ -78,6 +67,21 @@ const LoginPage = ({ defaultServerUrl = "http://localhost:3000" }: LoginPageProp
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    // Check if there's a saved URL in localStorage. This only runs after mount
+    // because localStorage is unavailable during server rendering.
+    const savedUrl = localStorage.getItem(localStorageKeys.documentAtomAPIUrl);
+    if (savedUrl) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setDocumentAtomAPIUrl(savedUrl);
+      form.setFieldsValue({ documentAtomAPIUrl: savedUrl });
+      // Optionally validate connectivity on mount
+      validateConnectivity(savedUrl, false);
+    }
+    // Run once on mount: validateConnectivity is recreated every render.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form]);
 
   const handleSubmit = async () => {
     const values = await form.validateFields();

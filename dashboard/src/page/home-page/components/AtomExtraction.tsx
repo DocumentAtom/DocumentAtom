@@ -1,5 +1,5 @@
 "use client";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { App } from "antd";
 import { SettingOutlined, UploadOutlined } from "@ant-design/icons";
 import DocuAtomButton from "#/components/base/button/Button";
@@ -40,7 +40,7 @@ const FileExtraction = () => {
   const [processorSettings, setProcessorSettings] =
     useState<ApiProcessorSettings | null>(null);
   const [settingsModalOpen, setSettingsModalOpen] = useState(false);
-  const uniqueKey = useRef<string>(uuid());
+  const [uniqueKey, setUniqueKey] = useState<string>(() => uuid());
 
   // Initialize all mutation hooks
   const [extractExcel, { isLoading: isExcelLoading }] =
@@ -127,7 +127,7 @@ const FileExtraction = () => {
 
       // Store the response
       setResponseData(response);
-      uniqueKey.current = uuid();
+      setUniqueKey(uuid());
 
       // Log the response
       message.success("File extraction completed! Check console for results.");
@@ -164,7 +164,7 @@ const FileExtraction = () => {
               setFileType(value as FileExtractionType);
               setSelectedFile(null); // Reset file when type changes
               setResponseData(null);
-              uniqueKey.current = uuid();
+              setUniqueKey(uuid());
             }}
           />
         </DocuAtomFlex>
@@ -175,7 +175,7 @@ const FileExtraction = () => {
           onRemove={() => {
             setSelectedFile(null);
             setResponseData(null);
-            uniqueKey.current = uuid();
+            setUniqueKey(uuid());
           }}
           accept={acceptedFileTypes}
           disabled={!fileType}
@@ -204,7 +204,7 @@ const FileExtraction = () => {
 
       <ProcessorSettingsModal
         open={settingsModalOpen}
-        onOk={(settings) => {
+        onOk={(settings: ApiProcessorSettings | null) => {
           setProcessorSettings(settings);
           setSettingsModalOpen(false);
         }}
@@ -214,7 +214,7 @@ const FileExtraction = () => {
       {responseData && (
         <>
           <DocuAtomDivider />
-          <ResponseViewer value={responseData} uniqueKey={uniqueKey.current} />
+          <ResponseViewer value={responseData} uniqueKey={uniqueKey} />
         </>
       )}
     </div>

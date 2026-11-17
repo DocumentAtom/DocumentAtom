@@ -46,24 +46,25 @@ interface ProcessorSettingsModalProps {
   onCancel: () => void;
 }
 
+//eslint-disable-next-line max-lines-per-function
 const ProcessorSettingsModal: React.FC<ProcessorSettingsModalProps> = ({
   open,
   onOk,
   onCancel,
-}) => {
+}: ProcessorSettingsModalProps) => {
   const [settings, setSettings] =
     useState<ApiProcessorSettings>(DEFAULT_SETTINGS);
 
   const updateSettings = useCallback(
     (patch: Partial<ApiProcessorSettings>) => {
-      setSettings((prev) => ({ ...prev, ...patch }));
+      setSettings((prev: ApiProcessorSettings) => ({ ...prev, ...patch }));
     },
     []
   );
 
   const updateChunking = useCallback(
     (patch: Partial<NonNullable<ApiProcessorSettings["Chunking"]>>) => {
-      setSettings((prev) => ({
+      setSettings((prev: ApiProcessorSettings) => ({
         ...prev,
         Chunking: { ...prev.Chunking, ...patch },
       }));
@@ -102,7 +103,7 @@ const ProcessorSettingsModal: React.FC<ProcessorSettingsModalProps> = ({
         <Form.Item label="Extract Atoms From Images">
           <Switch
             checked={settings.ExtractAtomsFromImages ?? false}
-            onChange={(checked) =>
+            onChange={(checked: boolean) =>
               updateSettings({ ExtractAtomsFromImages: checked })
             }
           />
@@ -119,7 +120,7 @@ const ProcessorSettingsModal: React.FC<ProcessorSettingsModalProps> = ({
                   <Form.Item label="Enable Chunking">
                     <Switch
                       checked={settings.Chunking?.Enable ?? false}
-                      onChange={(checked) =>
+                      onChange={(checked: boolean) =>
                         updateChunking({ Enable: checked })
                       }
                     />
@@ -129,7 +130,7 @@ const ProcessorSettingsModal: React.FC<ProcessorSettingsModalProps> = ({
                     <Select
                       options={CHUNK_STRATEGY_OPTIONS}
                       value={settings.Chunking?.Strategy ?? "FixedTokenCount"}
-                      onChange={(value) =>
+                      onChange={(value: ChunkStrategyEnum) =>
                         updateChunking({ Strategy: value as ChunkStrategyEnum })
                       }
                       disabled={!settings.Chunking?.Enable}
@@ -140,7 +141,7 @@ const ProcessorSettingsModal: React.FC<ProcessorSettingsModalProps> = ({
                     <InputNumber
                       min={1}
                       value={settings.Chunking?.FixedTokenCount ?? 512}
-                      onChange={(value) =>
+                      onChange={(value: number | null) =>
                         updateChunking({
                           FixedTokenCount: value ?? 512,
                         })
@@ -154,7 +155,7 @@ const ProcessorSettingsModal: React.FC<ProcessorSettingsModalProps> = ({
                     <InputNumber
                       min={0}
                       value={settings.Chunking?.OverlapCount ?? 0}
-                      onChange={(value) =>
+                      onChange={(value: number | null) =>
                         updateChunking({ OverlapCount: value ?? 0 })
                       }
                       disabled={!settings.Chunking?.Enable}
@@ -168,7 +169,7 @@ const ProcessorSettingsModal: React.FC<ProcessorSettingsModalProps> = ({
                       value={
                         settings.Chunking?.OverlapStrategy ?? "SlidingWindow"
                       }
-                      onChange={(value) =>
+                      onChange={(value: OverlapStrategyEnum) =>
                         updateChunking({
                           OverlapStrategy: value as OverlapStrategyEnum,
                         })

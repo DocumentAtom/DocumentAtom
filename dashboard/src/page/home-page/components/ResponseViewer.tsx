@@ -98,7 +98,7 @@ const ResponseViewer = ({ value, uniqueKey }: ResponseViewerProps) => {
                 showRawJson ? "View formatted response" : "View raw JSON"
               }
               icon={showRawJson ? <ApartmentOutlined /> : <CodeOutlined />}
-              onClick={() => setShowRawJson((current) => !current)}
+              onClick={() => setShowRawJson((current: boolean) => !current)}
               type="text"
             />
           </Tooltip>

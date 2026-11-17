@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { App } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import DocuAtomButton from "#/components/base/button/Button";
@@ -17,7 +17,7 @@ const TypeDetection = () => {
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [responseData, setResponseData] = useState<any>(null);
   const [detectType, { isLoading }] = useTypeDetectionMutation();
-  const uniqueKey = useRef<string>(uuid());
+  const [uniqueKey, setUniqueKey] = useState<string>(() => uuid());
 
   const handleFileChange = (file: File) => {
     setSelectedFile(file);
@@ -37,7 +37,7 @@ const TypeDetection = () => {
 
       // Store the response
       setResponseData(response);
-      uniqueKey.current = uuid();
+      setUniqueKey(uuid());
       // Log the response
       message.success("Type detection completed! Check console for results.");
     } catch (error) {
@@ -71,7 +71,7 @@ const TypeDetection = () => {
       {responseData && (
         <>
           <DocuAtomDivider />
-          <ResponseViewer value={responseData} uniqueKey={uniqueKey.current} />
+          <ResponseViewer value={responseData} uniqueKey={uniqueKey} />
         </>
       )}
     </div>
