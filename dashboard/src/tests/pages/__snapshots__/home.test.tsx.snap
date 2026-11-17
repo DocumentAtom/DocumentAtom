@@ -84,6 +84,32 @@ exports[`HomePage Rendering should render home page with tabs 1`] = `
                 </span>
               </span>
             </a>
+            <a
+              aria-disabled="false"
+              aria-label="Join our Discord"
+              class="ant-btn css-dev-only-do-not-override-12q6fii css-var-_r_0_ ant-btn-text ant-btn-color-default ant-btn-variant-text ant-btn-icon-only"
+              href="https://discord.gg/tRAN8HgvK5"
+              rel="noopener noreferrer"
+              tabindex="0"
+              target="_blank"
+            >
+              <span
+                class="ant-btn-icon"
+              >
+                <svg
+                  aria-hidden="true"
+                  fill="currentColor"
+                  focusable="false"
+                  height="1em"
+                  viewBox="0 0 640 512"
+                  width="1em"
+                >
+                  <path
+                    d="M524.531 69.836a1.5 1.5 0 0 0-.764-.7A485.065 485.065 0 0 0 404.081 32.03a1.816 1.816 0 0 0-1.923.91 337.461 337.461 0 0 0-14.9 30.6 447.848 447.848 0 0 0-134.426 0 309.541 309.541 0 0 0-15.135-30.6 1.89 1.89 0 0 0-1.924-.91 483.689 483.689 0 0 0-119.688 37.107 1.712 1.712 0 0 0-.788.676C39.068 183.651 18.186 294.69 28.43 404.354a2.016 2.016 0 0 0 .765 1.375 487.666 487.666 0 0 0 146.825 74.189 1.9 1.9 0 0 0 2.063-.676A348.2 348.2 0 0 0 208.12 430.4a1.86 1.86 0 0 0-1.019-2.588 321.173 321.173 0 0 1-45.868-21.853 1.885 1.885 0 0 1-.185-3.126 251.047 251.047 0 0 0 9.109-7.137 1.819 1.819 0 0 1 1.9-.256c96.229 43.917 200.41 43.917 295.5 0a1.812 1.812 0 0 1 1.924.233 234.533 234.533 0 0 0 9.132 7.16 1.884 1.884 0 0 1-.162 3.126 301.407 301.407 0 0 1-45.89 21.83 1.875 1.875 0 0 0-1 2.611 391.055 391.055 0 0 0 30.014 48.815 1.864 1.864 0 0 0 2.063.7A486.048 486.048 0 0 0 610.7 405.729a1.882 1.882 0 0 0 .765-1.352c12.264-126.783-20.532-236.912-86.934-334.541zM222.491 337.58c-28.972 0-52.844-26.587-52.844-59.239s23.409-59.241 52.844-59.241c29.665 0 53.306 26.82 52.843 59.239 0 32.654-23.41 59.241-52.843 59.241zm195.38 0c-28.971 0-52.843-26.587-52.843-59.239s23.409-59.241 52.843-59.241c29.667 0 53.307 26.82 52.844 59.239 0 32.654-23.177 59.241-52.844 59.241z"
+                  />
+                </svg>
+              </span>
+            </a>
             <button
               aria-label="Switch to dark mode"
               aria-pressed="false"
@@ -278,6 +304,21 @@ exports[`HomePage Rendering should render home page with tabs 1`] = `
                             </div>
                           </div>
                           <div
+                            class="ant-tabs-tab"
+                            data-node-key="observability"
+                          >
+                            <div
+                              aria-controls="rc-tabs-test-panel-observability"
+                              aria-selected="false"
+                              class="ant-tabs-tab-btn"
+                              id="rc-tabs-test-tab-observability"
+                              role="tab"
+                              tabindex="-1"
+                            >
+                              Observability
+                            </div>
+                          </div>
+                          <div
                             class="ant-tabs-ink-bar ant-tabs-ink-bar-animated"
                           />
                         </div>
@@ -420,24 +461,24 @@ exports[`HomePage Rendering should render home page with tabs 1`] = `
 
 exports[`HomePage Snapshots should match snapshot for Atom Extraction tab 1`] = `
 <div
-  class="css-dev-only-do-not-override-12q6fii ant-app css-var-_r_1m_"
+  class="css-dev-only-do-not-override-12q6fii ant-app css-var-_r_26_"
 >
   <div
-    class="ant-layout css-dev-only-do-not-override-12q6fii css-var-_r_1m_"
+    class="ant-layout css-dev-only-do-not-override-12q6fii css-var-_r_26_"
     style="min-height: 100vh;"
   >
     <div
-      class="ant-layout css-dev-only-do-not-override-12q6fii css-var-_r_1m_"
+      class="ant-layout css-dev-only-do-not-override-12q6fii css-var-_r_26_"
     >
       <header
-        class="ant-layout-header header css-dev-only-do-not-override-12q6fii css-var-_r_1m_"
+        class="ant-layout-header header css-dev-only-do-not-override-12q6fii css-var-_r_26_"
       >
         <div
-          class="ant-flex css-dev-only-do-not-override-12q6fii css-var-_r_1m_ ant-flex-align-center"
+          class="ant-flex css-dev-only-do-not-override-12q6fii css-var-_r_26_ ant-flex-align-center"
           style="gap: 10px;"
         >
           <div
-            class="ant-flex css-dev-only-do-not-override-12q6fii css-var-_r_1m_ ant-flex-align-center"
+            class="ant-flex css-dev-only-do-not-override-12q6fii css-var-_r_26_ ant-flex-align-center"
             style="gap: 10px;"
           >
             <img
@@ -452,7 +493,7 @@ exports[`HomePage Snapshots should match snapshot for Atom Extraction tab 1`] = 
               width="35"
             />
             <span
-              class="ant-typography css-dev-only-do-not-override-12q6fii css-var-_r_1m_"
+              class="ant-typography css-dev-only-do-not-override-12q6fii css-var-_r_26_"
               style="font-size: 16px;"
             >
               DocumnetAtom
@@ -465,13 +506,13 @@ exports[`HomePage Snapshots should match snapshot for Atom Extraction tab 1`] = 
           http://localhost:3000
         </span>
         <div
-          class="headerActions ant-flex css-dev-only-do-not-override-12q6fii css-var-_r_1m_ ant-flex-align-center"
+          class="headerActions ant-flex css-dev-only-do-not-override-12q6fii css-var-_r_26_ ant-flex-align-center"
           style="gap: 10px;"
         >
           <a
             aria-disabled="false"
             aria-label="View on GitHub"
-            class="ant-btn css-dev-only-do-not-override-12q6fii css-var-_r_1m_ ant-btn-text ant-btn-color-default ant-btn-variant-text ant-btn-icon-only"
+            class="ant-btn css-dev-only-do-not-override-12q6fii css-var-_r_26_ ant-btn-text ant-btn-color-default ant-btn-variant-text ant-btn-icon-only"
             href="https://github.com/documentatom/documentatom"
             rel="noopener noreferrer"
             tabindex="0"
@@ -499,6 +540,32 @@ exports[`HomePage Snapshots should match snapshot for Atom Extraction tab 1`] = 
                   />
                 </svg>
               </span>
+            </span>
+          </a>
+          <a
+            aria-disabled="false"
+            aria-label="Join our Discord"
+            class="ant-btn css-dev-only-do-not-override-12q6fii css-var-_r_26_ ant-btn-text ant-btn-color-default ant-btn-variant-text ant-btn-icon-only"
+            href="https://discord.gg/tRAN8HgvK5"
+            rel="noopener noreferrer"
+            tabindex="0"
+            target="_blank"
+          >
+            <span
+              class="ant-btn-icon"
+            >
+              <svg
+                aria-hidden="true"
+                fill="currentColor"
+                focusable="false"
+                height="1em"
+                viewBox="0 0 640 512"
+                width="1em"
+              >
+                <path
+                  d="M524.531 69.836a1.5 1.5 0 0 0-.764-.7A485.065 485.065 0 0 0 404.081 32.03a1.816 1.816 0 0 0-1.923.91 337.461 337.461 0 0 0-14.9 30.6 447.848 447.848 0 0 0-134.426 0 309.541 309.541 0 0 0-15.135-30.6 1.89 1.89 0 0 0-1.924-.91 483.689 483.689 0 0 0-119.688 37.107 1.712 1.712 0 0 0-.788.676C39.068 183.651 18.186 294.69 28.43 404.354a2.016 2.016 0 0 0 .765 1.375 487.666 487.666 0 0 0 146.825 74.189 1.9 1.9 0 0 0 2.063-.676A348.2 348.2 0 0 0 208.12 430.4a1.86 1.86 0 0 0-1.019-2.588 321.173 321.173 0 0 1-45.868-21.853 1.885 1.885 0 0 1-.185-3.126 251.047 251.047 0 0 0 9.109-7.137 1.819 1.819 0 0 1 1.9-.256c96.229 43.917 200.41 43.917 295.5 0a1.812 1.812 0 0 1 1.924.233 234.533 234.533 0 0 0 9.132 7.16 1.884 1.884 0 0 1-.162 3.126 301.407 301.407 0 0 1-45.89 21.83 1.875 1.875 0 0 0-1 2.611 391.055 391.055 0 0 0 30.014 48.815 1.864 1.864 0 0 0 2.063.7A486.048 486.048 0 0 0 610.7 405.729a1.882 1.882 0 0 0 .765-1.352c12.264-126.783-20.532-236.912-86.934-334.541zM222.491 337.58c-28.972 0-52.844-26.587-52.844-59.239s23.409-59.241 52.844-59.241c29.665 0 53.306 26.82 52.843 59.239 0 32.654-23.41 59.241-52.843 59.241zm195.38 0c-28.971 0-52.843-26.587-52.843-59.239s23.409-59.241 52.843-59.241c29.667 0 53.307 26.82 52.844 59.239 0 32.654-23.177 59.241-52.844 59.241z"
+                />
+              </svg>
             </span>
           </a>
           <button
@@ -600,7 +667,7 @@ exports[`HomePage Snapshots should match snapshot for Atom Extraction tab 1`] = 
           >
             <button
               aria-label="Log out"
-              class="ant-btn css-dev-only-do-not-override-12q6fii css-var-_r_1m_ ant-btn-text ant-btn-color-default ant-btn-variant-text ant-btn-icon-only"
+              class="ant-btn css-dev-only-do-not-override-12q6fii css-var-_r_26_ ant-btn-text ant-btn-color-default ant-btn-variant-text ant-btn-icon-only"
               type="button"
             >
               <span
@@ -631,26 +698,26 @@ exports[`HomePage Snapshots should match snapshot for Atom Extraction tab 1`] = 
         </div>
       </header>
       <main
-        class="ant-layout-content css-dev-only-do-not-override-12q6fii css-var-_r_1m_"
+        class="ant-layout-content css-dev-only-do-not-override-12q6fii css-var-_r_26_"
         style="min-height: 280px; background: rgb(255, 255, 255);"
       >
         <main
-          class="ant-layout-content pageContainer css-dev-only-do-not-override-12q6fii css-var-_r_1m_"
+          class="ant-layout-content pageContainer css-dev-only-do-not-override-12q6fii css-var-_r_26_"
           style="height: auto;"
         >
           <div
-            class="pageTitleContainer pageTitleContainer ant-flex css-dev-only-do-not-override-12q6fii css-var-_r_1m_ ant-flex-wrap-wrap ant-flex-align-center ant-flex-justify-space-between ant-flex-gap-small"
+            class="pageTitleContainer pageTitleContainer ant-flex css-dev-only-do-not-override-12q6fii css-var-_r_26_ ant-flex-wrap-wrap ant-flex-align-center ant-flex-justify-space-between ant-flex-gap-small"
           >
             <div
-              class="ant-flex css-dev-only-do-not-override-12q6fii css-var-_r_1m_ ant-flex-align-center ant-flex-gap-small"
+              class="ant-flex css-dev-only-do-not-override-12q6fii css-var-_r_26_ ant-flex-align-center ant-flex-gap-small"
             >
               <span
-                class="ant-typography css-dev-only-do-not-override-12q6fii css-var-_r_1m_"
+                class="ant-typography css-dev-only-do-not-override-12q6fii css-var-_r_26_"
                 data-testid="heading"
                 style="font-weight: 600; font-size: 16px;"
               >
                 <div
-                  class="ant-tabs ant-tabs-top tabsContainer css-dev-only-do-not-override-12q6fii css-var-_r_1m_ ant-tabs-css-var"
+                  class="ant-tabs ant-tabs-top tabsContainer css-dev-only-do-not-override-12q6fii css-var-_r_26_ ant-tabs-css-var"
                 >
                   <div
                     aria-orientation="horizontal"
@@ -692,6 +759,21 @@ exports[`HomePage Snapshots should match snapshot for Atom Extraction tab 1`] = 
                             tabindex="0"
                           >
                             Atom Extraction
+                          </div>
+                        </div>
+                        <div
+                          class="ant-tabs-tab"
+                          data-node-key="observability"
+                        >
+                          <div
+                            aria-controls="rc-tabs-test-panel-observability"
+                            aria-selected="false"
+                            class="ant-tabs-tab-btn"
+                            id="rc-tabs-test-tab-observability"
+                            role="tab"
+                            tabindex="-1"
+                          >
+                            Observability
                           </div>
                         </div>
                         <div
@@ -769,11 +851,11 @@ exports[`HomePage Snapshots should match snapshot for Atom Extraction tab 1`] = 
               class="workflow"
             >
               <div
-                class="ant-flex css-dev-only-do-not-override-12q6fii css-var-_r_1m_ ant-flex-align-center"
+                class="ant-flex css-dev-only-do-not-override-12q6fii css-var-_r_26_ ant-flex-align-center"
                 style="gap: 20px;"
               >
                 <div
-                  class="ant-flex css-dev-only-do-not-override-12q6fii css-var-_r_1m_ ant-flex-align-center"
+                  class="ant-flex css-dev-only-do-not-override-12q6fii css-var-_r_26_ ant-flex-align-center"
                   style="gap: 20px;"
                 >
                   <label
@@ -782,7 +864,7 @@ exports[`HomePage Snapshots should match snapshot for Atom Extraction tab 1`] = 
                     File Type
                   </label>
                   <div
-                    class="ant-select ant-select-outlined css-var-_r_1m_ ant-select-css-var css-dev-only-do-not-override-12q6fii ant-select-single ant-select-show-arrow"
+                    class="ant-select ant-select-outlined css-var-_r_26_ ant-select-css-var css-dev-only-do-not-override-12q6fii ant-select-single ant-select-show-arrow"
                     style="width: 150px;"
                   >
                     <div
@@ -832,11 +914,11 @@ exports[`HomePage Snapshots should match snapshot for Atom Extraction tab 1`] = 
                   </div>
                 </div>
                 <div
-                  class="ant-divider css-dev-only-do-not-override-12q6fii css-var-_r_1m_ ant-divider-vertical ant-divider-rail"
+                  class="ant-divider css-dev-only-do-not-override-12q6fii css-var-_r_26_ ant-divider-vertical ant-divider-rail"
                   role="separator"
                 />
                 <span
-                  class="ant-upload-wrapper uploadContainer css-dev-only-do-not-override-12q6fii css-var-_r_1m_"
+                  class="ant-upload-wrapper uploadContainer css-dev-only-do-not-override-12q6fii css-var-_r_26_"
                 >
                   <div
                     class="ant-upload ant-upload-select ant-upload-disabled"
@@ -852,7 +934,7 @@ exports[`HomePage Snapshots should match snapshot for Atom Extraction tab 1`] = 
                         type="file"
                       />
                       <button
-                        class="ant-btn css-dev-only-do-not-override-12q6fii css-var-_r_1m_ ant-btn-default ant-btn-color-default ant-btn-variant-outlined"
+                        class="ant-btn css-dev-only-do-not-override-12q6fii css-var-_r_26_ ant-btn-default ant-btn-color-default ant-btn-variant-outlined"
                         disabled=""
                         type="button"
                       >
@@ -890,11 +972,11 @@ exports[`HomePage Snapshots should match snapshot for Atom Extraction tab 1`] = 
                   />
                 </span>
                 <div
-                  class="ant-divider css-dev-only-do-not-override-12q6fii css-var-_r_1m_ ant-divider-vertical ant-divider-rail"
+                  class="ant-divider css-dev-only-do-not-override-12q6fii css-var-_r_26_ ant-divider-vertical ant-divider-rail"
                   role="separator"
                 />
                 <button
-                  class="ant-btn css-dev-only-do-not-override-12q6fii css-var-_r_1m_ ant-btn-default ant-btn-color-default ant-btn-variant-outlined"
+                  class="ant-btn css-dev-only-do-not-override-12q6fii css-var-_r_26_ ant-btn-default ant-btn-color-default ant-btn-variant-outlined"
                   type="button"
                 >
                   <span
@@ -925,7 +1007,7 @@ exports[`HomePage Snapshots should match snapshot for Atom Extraction tab 1`] = 
                   </span>
                 </button>
                 <button
-                  class="ant-btn css-dev-only-do-not-override-12q6fii css-var-_r_1m_ ant-btn-primary ant-btn-color-primary ant-btn-variant-solid"
+                  class="ant-btn css-dev-only-do-not-override-12q6fii css-var-_r_26_ ant-btn-primary ant-btn-color-primary ant-btn-variant-solid"
                   disabled=""
                   type="button"
                 >
@@ -945,24 +1027,24 @@ exports[`HomePage Snapshots should match snapshot for Atom Extraction tab 1`] = 
 
 exports[`HomePage Snapshots should match snapshot for Type Detection tab 1`] = `
 <div
-  class="css-dev-only-do-not-override-12q6fii ant-app css-var-_r_1g_"
+  class="css-dev-only-do-not-override-12q6fii ant-app css-var-_r_1u_"
 >
   <div
-    class="ant-layout css-dev-only-do-not-override-12q6fii css-var-_r_1g_"
+    class="ant-layout css-dev-only-do-not-override-12q6fii css-var-_r_1u_"
     style="min-height: 100vh;"
   >
     <div
-      class="ant-layout css-dev-only-do-not-override-12q6fii css-var-_r_1g_"
+      class="ant-layout css-dev-only-do-not-override-12q6fii css-var-_r_1u_"
     >
       <header
-        class="ant-layout-header header css-dev-only-do-not-override-12q6fii css-var-_r_1g_"
+        class="ant-layout-header header css-dev-only-do-not-override-12q6fii css-var-_r_1u_"
       >
         <div
-          class="ant-flex css-dev-only-do-not-override-12q6fii css-var-_r_1g_ ant-flex-align-center"
+          class="ant-flex css-dev-only-do-not-override-12q6fii css-var-_r_1u_ ant-flex-align-center"
           style="gap: 10px;"
         >
           <div
-            class="ant-flex css-dev-only-do-not-override-12q6fii css-var-_r_1g_ ant-flex-align-center"
+            class="ant-flex css-dev-only-do-not-override-12q6fii css-var-_r_1u_ ant-flex-align-center"
             style="gap: 10px;"
           >
             <img
@@ -977,7 +1059,7 @@ exports[`HomePage Snapshots should match snapshot for Type Detection tab 1`] = `
               width="35"
             />
             <span
-              class="ant-typography css-dev-only-do-not-override-12q6fii css-var-_r_1g_"
+              class="ant-typography css-dev-only-do-not-override-12q6fii css-var-_r_1u_"
               style="font-size: 16px;"
             >
               DocumnetAtom
@@ -990,13 +1072,13 @@ exports[`HomePage Snapshots should match snapshot for Type Detection tab 1`] = `
           http://localhost:3000
         </span>
         <div
-          class="headerActions ant-flex css-dev-only-do-not-override-12q6fii css-var-_r_1g_ ant-flex-align-center"
+          class="headerActions ant-flex css-dev-only-do-not-override-12q6fii css-var-_r_1u_ ant-flex-align-center"
           style="gap: 10px;"
         >
           <a
             aria-disabled="false"
             aria-label="View on GitHub"
-            class="ant-btn css-dev-only-do-not-override-12q6fii css-var-_r_1g_ ant-btn-text ant-btn-color-default ant-btn-variant-text ant-btn-icon-only"
+            class="ant-btn css-dev-only-do-not-override-12q6fii css-var-_r_1u_ ant-btn-text ant-btn-color-default ant-btn-variant-text ant-btn-icon-only"
             href="https://github.com/documentatom/documentatom"
             rel="noopener noreferrer"
             tabindex="0"
@@ -1024,6 +1106,32 @@ exports[`HomePage Snapshots should match snapshot for Type Detection tab 1`] = `
                   />
                 </svg>
               </span>
+            </span>
+          </a>
+          <a
+            aria-disabled="false"
+            aria-label="Join our Discord"
+            class="ant-btn css-dev-only-do-not-override-12q6fii css-var-_r_1u_ ant-btn-text ant-btn-color-default ant-btn-variant-text ant-btn-icon-only"
+            href="https://discord.gg/tRAN8HgvK5"
+            rel="noopener noreferrer"
+            tabindex="0"
+            target="_blank"
+          >
+            <span
+              class="ant-btn-icon"
+            >
+              <svg
+                aria-hidden="true"
+                fill="currentColor"
+                focusable="false"
+                height="1em"
+                viewBox="0 0 640 512"
+                width="1em"
+              >
+                <path
+                  d="M524.531 69.836a1.5 1.5 0 0 0-.764-.7A485.065 485.065 0 0 0 404.081 32.03a1.816 1.816 0 0 0-1.923.91 337.461 337.461 0 0 0-14.9 30.6 447.848 447.848 0 0 0-134.426 0 309.541 309.541 0 0 0-15.135-30.6 1.89 1.89 0 0 0-1.924-.91 483.689 483.689 0 0 0-119.688 37.107 1.712 1.712 0 0 0-.788.676C39.068 183.651 18.186 294.69 28.43 404.354a2.016 2.016 0 0 0 .765 1.375 487.666 487.666 0 0 0 146.825 74.189 1.9 1.9 0 0 0 2.063-.676A348.2 348.2 0 0 0 208.12 430.4a1.86 1.86 0 0 0-1.019-2.588 321.173 321.173 0 0 1-45.868-21.853 1.885 1.885 0 0 1-.185-3.126 251.047 251.047 0 0 0 9.109-7.137 1.819 1.819 0 0 1 1.9-.256c96.229 43.917 200.41 43.917 295.5 0a1.812 1.812 0 0 1 1.924.233 234.533 234.533 0 0 0 9.132 7.16 1.884 1.884 0 0 1-.162 3.126 301.407 301.407 0 0 1-45.89 21.83 1.875 1.875 0 0 0-1 2.611 391.055 391.055 0 0 0 30.014 48.815 1.864 1.864 0 0 0 2.063.7A486.048 486.048 0 0 0 610.7 405.729a1.882 1.882 0 0 0 .765-1.352c12.264-126.783-20.532-236.912-86.934-334.541zM222.491 337.58c-28.972 0-52.844-26.587-52.844-59.239s23.409-59.241 52.844-59.241c29.665 0 53.306 26.82 52.843 59.239 0 32.654-23.41 59.241-52.843 59.241zm195.38 0c-28.971 0-52.843-26.587-52.843-59.239s23.409-59.241 52.843-59.241c29.667 0 53.307 26.82 52.844 59.239 0 32.654-23.177 59.241-52.844 59.241z"
+                />
+              </svg>
             </span>
           </a>
           <button
@@ -1125,7 +1233,7 @@ exports[`HomePage Snapshots should match snapshot for Type Detection tab 1`] = `
           >
             <button
               aria-label="Log out"
-              class="ant-btn css-dev-only-do-not-override-12q6fii css-var-_r_1g_ ant-btn-text ant-btn-color-default ant-btn-variant-text ant-btn-icon-only"
+              class="ant-btn css-dev-only-do-not-override-12q6fii css-var-_r_1u_ ant-btn-text ant-btn-color-default ant-btn-variant-text ant-btn-icon-only"
               type="button"
             >
               <span
@@ -1156,26 +1264,26 @@ exports[`HomePage Snapshots should match snapshot for Type Detection tab 1`] = `
         </div>
       </header>
       <main
-        class="ant-layout-content css-dev-only-do-not-override-12q6fii css-var-_r_1g_"
+        class="ant-layout-content css-dev-only-do-not-override-12q6fii css-var-_r_1u_"
         style="min-height: 280px; background: rgb(255, 255, 255);"
       >
         <main
-          class="ant-layout-content pageContainer css-dev-only-do-not-override-12q6fii css-var-_r_1g_"
+          class="ant-layout-content pageContainer css-dev-only-do-not-override-12q6fii css-var-_r_1u_"
           style="height: auto;"
         >
           <div
-            class="pageTitleContainer pageTitleContainer ant-flex css-dev-only-do-not-override-12q6fii css-var-_r_1g_ ant-flex-wrap-wrap ant-flex-align-center ant-flex-justify-space-between ant-flex-gap-small"
+            class="pageTitleContainer pageTitleContainer ant-flex css-dev-only-do-not-override-12q6fii css-var-_r_1u_ ant-flex-wrap-wrap ant-flex-align-center ant-flex-justify-space-between ant-flex-gap-small"
           >
             <div
-              class="ant-flex css-dev-only-do-not-override-12q6fii css-var-_r_1g_ ant-flex-align-center ant-flex-gap-small"
+              class="ant-flex css-dev-only-do-not-override-12q6fii css-var-_r_1u_ ant-flex-align-center ant-flex-gap-small"
             >
               <span
-                class="ant-typography css-dev-only-do-not-override-12q6fii css-var-_r_1g_"
+                class="ant-typography css-dev-only-do-not-override-12q6fii css-var-_r_1u_"
                 data-testid="heading"
                 style="font-weight: 600; font-size: 16px;"
               >
                 <div
-                  class="ant-tabs ant-tabs-top tabsContainer css-dev-only-do-not-override-12q6fii css-var-_r_1g_ ant-tabs-css-var"
+                  class="ant-tabs ant-tabs-top tabsContainer css-dev-only-do-not-override-12q6fii css-var-_r_1u_ ant-tabs-css-var"
                 >
                   <div
                     aria-orientation="horizontal"
@@ -1217,6 +1325,21 @@ exports[`HomePage Snapshots should match snapshot for Type Detection tab 1`] = `
                             tabindex="-1"
                           >
                             Atom Extraction
+                          </div>
+                        </div>
+                        <div
+                          class="ant-tabs-tab"
+                          data-node-key="observability"
+                        >
+                          <div
+                            aria-controls="rc-tabs-test-panel-observability"
+                            aria-selected="false"
+                            class="ant-tabs-tab-btn"
+                            id="rc-tabs-test-tab-observability"
+                            role="tab"
+                            tabindex="-1"
+                          >
+                            Observability
                           </div>
                         </div>
                         <div
@@ -1285,11 +1408,11 @@ exports[`HomePage Snapshots should match snapshot for Type Detection tab 1`] = `
               class="workflow"
             >
               <div
-                class="ant-flex css-dev-only-do-not-override-12q6fii css-var-_r_1g_ ant-flex-align-center"
+                class="ant-flex css-dev-only-do-not-override-12q6fii css-var-_r_1u_ ant-flex-align-center"
                 style="gap: 20px;"
               >
                 <span
-                  class="ant-upload-wrapper uploadContainer css-dev-only-do-not-override-12q6fii css-var-_r_1g_"
+                  class="ant-upload-wrapper uploadContainer css-dev-only-do-not-override-12q6fii css-var-_r_1u_"
                 >
                   <div
                     class="ant-upload ant-upload-select"
@@ -1304,7 +1427,7 @@ exports[`HomePage Snapshots should match snapshot for Type Detection tab 1`] = `
                         type="file"
                       />
                       <button
-                        class="ant-btn css-dev-only-do-not-override-12q6fii css-var-_r_1g_ ant-btn-default ant-btn-color-default ant-btn-variant-outlined"
+                        class="ant-btn css-dev-only-do-not-override-12q6fii css-var-_r_1u_ ant-btn-default ant-btn-color-default ant-btn-variant-outlined"
                         type="button"
                       >
                         <span
@@ -1341,7 +1464,7 @@ exports[`HomePage Snapshots should match snapshot for Type Detection tab 1`] = `
                   />
                 </span>
                 <button
-                  class="ant-btn css-dev-only-do-not-override-12q6fii css-var-_r_1g_ ant-btn-primary ant-btn-color-primary ant-btn-variant-solid"
+                  class="ant-btn css-dev-only-do-not-override-12q6fii css-var-_r_1u_ ant-btn-primary ant-btn-color-primary ant-btn-variant-solid"
                   disabled=""
                   type="button"
                 >
