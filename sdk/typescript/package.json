@@ -13,7 +13,7 @@
     "test:update": "jest -u",
     "test:coverage": "jest --coverage",
     "test:watch": "jest --watch",
-    "lint": "eslint src/**/*.{ts,tsx}",
+    "lint": "eslint src",
     "lint:fix": "npm run lint -- --fix",
     "format": "prettier --write 'src/**/*.{ts,tsx}'",
     "build:types": "tsc",
