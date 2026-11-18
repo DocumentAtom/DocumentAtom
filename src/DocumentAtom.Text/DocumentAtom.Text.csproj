@@ -11,6 +11,9 @@
 		<PackageTags>semantic cell chunk text processing extract extraction csv json xml html markdown ai llm rag parse parsing parser</PackageTags>
 		<PackageReleaseNotes>v3.3.0 - Aligned with the 3.3.0 release (dependency refresh; MCP server tool names now use underscores)</PackageReleaseNotes>
 		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
 	</PropertyGroup>
 
 	<ItemGroup>

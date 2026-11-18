@@ -10,6 +10,9 @@
 		<Description>Core classes for DocumentAtom including text processing utilities. DocumentAtom provides a light, fast library for breaking input documents into constituent parts (atoms), useful for AI, machine learning, processing, analytics, and general analysis.</Description>
 		<PackageTags>semantic cell chunk text processing extract extraction doc docx xlsx pptx ppt png csv json xml keynote pages numbers text txt rtf pdf ai llm rag parse parsing parser word excel powerpoint</PackageTags>
 		<PackageReleaseNotes>v3.3.0 - Aligned with the 3.3.0 release (dependency refresh; MCP server tool names now use underscores)</PackageReleaseNotes>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
 	</PropertyGroup>
 
 	<ItemGroup>

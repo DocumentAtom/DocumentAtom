@@ -11,6 +11,9 @@
 		<PackageReleaseNotes>v3.3.0 - Aligned with the 3.3.0 release (dependency refresh; MCP server tool names now use underscores)</PackageReleaseNotes>
 		<!-- Suppress metapackage warning since this is expected for metapackages with no lib output -->
 		<NoWarn>$(NoWarn);NU5128</NoWarn>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
 	</PropertyGroup>
 
 	<ItemGroup>
